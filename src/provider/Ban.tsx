@@ -38,7 +38,11 @@ const BanProvider: React.FC<Props> = (props) => {
       value={{
         banList,
         noBanList,
-        setBanList: (id: number) => setBanList((prev) => [...prev, id]),
+        setBanList: (id: number) => {
+          if (noBanList.includes(id)) return
+
+          setBanList((prev) => [...prev, id])
+        },
       }}
     >
       {props.children}
