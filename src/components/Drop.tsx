@@ -1,4 +1,3 @@
-// import { useAgents } from '../../hooks'
 import { getAgentSquareImage } from '../utils'
 import { join, pipe } from '@fxts/core'
 import { useState } from 'react'
@@ -9,15 +8,7 @@ type Props = {
 }
 
 const Drop: React.FC<Props> = (props) => {
-  // const { agents } = useAgents()
   const [agentId, setAgentId] = useState<number | null>(props.defaultValue ?? null)
-
-  // const agent = useMemo(() => {
-  //   return pipe(
-  //     agents,
-  //     find((agent) => agent.avatar.id === agentId)
-  //   )
-  // }, [agents, agentId])
 
   const onDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()

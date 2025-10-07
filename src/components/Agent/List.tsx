@@ -15,12 +15,10 @@ const List: React.FC<Props> = () => {
     setSelectRarity(value)
   }
 
-  console.log(banList)
-
   return (
-    <div className="p-4 flex flex-col gap-2 h-full">
+    <div className="p-4 flex flex-col gap-2 h-full bg-black">
       <Tabs value={selectRarity} onChange={onRarityChange} />
-      <ul className="grid grid-cols-3 gap-2 overflow-auto">
+      <ul className="grid grid-cols-3 gap-2 overflow-y-auto overflow-x-hidden scrollbar-hidden">
         {pipe(
           agents,
           filter((agent) => agent.avatar.rarity === selectRarity),

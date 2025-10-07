@@ -1,9 +1,13 @@
-const Refresh: React.FC = () => {
+type Props = {
+  className?: string
+  width?: number
+  height?: number
+}
+
+const Refresh: React.FC<Props> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -12,6 +16,7 @@ const Refresh: React.FC = () => {
       strokeLinejoin="round"
       aria-hidden="true"
       focusable="false"
+      className={props.className || ''}
     >
       <polyline points="23 4 23 10 17 10"></polyline>
       <polyline points="1 20 1 14 7 14"></polyline>
