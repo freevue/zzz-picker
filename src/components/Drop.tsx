@@ -1,13 +1,16 @@
 // import { useAgents } from '../../hooks'
-import { getAgentSquareImage } from '../../utils'
+import { getAgentSquareImage } from '../utils'
 import { join, pipe } from '@fxts/core'
 import { useState } from 'react'
 
-type Props = {}
+type Props = {
+  defaultValue?: number
+  onChange?: (id: number | null) => void
+}
 
-const Drop: React.FC<Props> = () => {
+const Drop: React.FC<Props> = (props) => {
   // const { agents } = useAgents()
-  const [agentId, setAgentId] = useState<number | null>(null)
+  const [agentId, setAgentId] = useState<number | null>(props.defaultValue ?? null)
 
   // const agent = useMemo(() => {
   //   return pipe(
@@ -22,8 +25,10 @@ const Drop: React.FC<Props> = () => {
 
     try {
       setAgentId(Number(agentId))
+      props.onChange?.(Number(agentId))
     } catch {
       setAgentId(null)
+      props.onChange?.(null)
     }
   }
   const onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -34,10 +39,18 @@ const Drop: React.FC<Props> = () => {
     <div
       onDragOver={onDragOver}
       onDrop={onDrop}
+      draggable={false}
       style={{}}
       className={pipe(['size-24', 'overflow-hidden', 'flex', 'items-start'], join(' '))}
     >
-      {agentId && <img className="block w-full" src={getAgentSquareImage(agentId)} alt="agent" />}
+      {agentId && (
+        <img
+          className="block w-full"
+          draggable={false}
+          src={getAgentSquareImage(agentId)}
+          alt="agent"
+        />
+      )}
     </div>
   )
 }

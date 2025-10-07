@@ -1,4 +1,4 @@
-import Drop from './Drop'
+import { Drop } from '../'
 import { map, pipe, range, sum, toArray } from '@fxts/core'
 import { useState } from 'react'
 

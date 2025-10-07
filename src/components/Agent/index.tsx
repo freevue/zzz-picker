@@ -1,5 +1,6 @@
 import type { AgentAvatar } from '../../types'
 import Avatar from './Avatar'
+import List from './List'
 import { concat, join, pipe } from '@fxts/core'
 import { useState } from 'react'
 
@@ -7,7 +8,11 @@ type Props = {
   disabled?: boolean
 } & AgentAvatar
 
-const Agent: React.FC<Props> = (props) => {
+type AgentType = {
+  List: React.FC
+} & React.FC<Props>
+
+const Agent: AgentType = (props) => {
   const [isDragging, setIsDragging] = useState(false)
 
   const onDragStart = (event: React.DragEvent<HTMLDivElement>) => {
@@ -38,7 +43,7 @@ const Agent: React.FC<Props> = (props) => {
       <Avatar {...props} />
       <p
         className={pipe(
-          ['text-xs font-bold', 'dark:text-white'],
+          ['text-md font-bold', 'dark:text-white'],
           concat(props.disabled ? ['opacity-50'] : ['opacity-80']),
           join(' ')
         )}
@@ -48,5 +53,7 @@ const Agent: React.FC<Props> = (props) => {
     </div>
   )
 }
+
+Agent.List = List
 
 export default Agent

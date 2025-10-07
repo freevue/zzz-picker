@@ -11,14 +11,14 @@ const Tabs: React.FC<Props> = (props) => {
   }
 
   return (
-    <ul className="flex gap-2">
+    <ul className="flex gap-2 w-full">
       {pipe(
         ['S', 'A'],
         map((item) => (
           <li
             key={item}
             className={pipe(
-              ['w-24', 'py-1', 'rounded-sm'],
+              ['flex-1', 'py-1', 'rounded-sm'],
               concat(
                 props.value === item
                   ? ['bg-primary', 'text-black']

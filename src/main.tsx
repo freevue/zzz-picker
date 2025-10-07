@@ -1,10 +1,12 @@
 import App from './App.tsx'
 import './index.css'
-import { AgentsProvider } from './provider'
+import { AgentsProvider, BanProvider } from './provider'
 import { createRoot } from 'react-dom/client'
 
 createRoot(document.getElementById('root')!).render(
   <AgentsProvider>
-    <App />
+    <BanProvider>
+      <App />
+    </BanProvider>
   </AgentsProvider>
 )
