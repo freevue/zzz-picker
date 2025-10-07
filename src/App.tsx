@@ -13,40 +13,43 @@ function App() {
   }
 
   return (
-    <div className="max-w-[1024px] mx-auto">
-      <div className="px-4 mb-8 py-8">
-        <div className="flex items-center justify-between">
-          <RineUp />
-          <div className="">
-            <h3 className="dark:text-white text-xl font-bold">Ban</h3>
-            <div className="flex gap-2">
-              <div className="border-1 border-gray-300 rounded-md overflow-hidden">
-                <Drop />
-              </div>
-              <div className="border-1 border-gray-300 rounded-md overflow-hidden">
-                <Drop />
+    <>
+      {/* <h1 className="text-4xl font-bold text-primary text-left fixed left-0 top-p p-2">엔강대</h1> */}
+      <div className="max-w-[1024px] ml-auto pb-10 pr-4">
+        <div className="px-4 mb-8 py-8">
+          <div className="flex items-center justify-between">
+            <RineUp />
+            <div className="">
+              <h3 className="dark:text-white text-xl font-bold">Ban</h3>
+              <div className="flex gap-2">
+                <div className="border-1 border-gray-300 rounded-md overflow-hidden">
+                  <Drop />
+                </div>
+                <div className="border-1 border-gray-300 rounded-md overflow-hidden">
+                  <Drop />
+                </div>
               </div>
             </div>
+            <RineUp />
           </div>
-          <RineUp />
+        </div>
+        <div className="px-4">
+          <Tabs value={selectRarity} onChange={onRarityChange} />
+          <ul className="flex flex-wrap gap-2 mt-2">
+            {pipe(
+              agents,
+              filter((agent) => agent.avatar.rarity === selectRarity),
+              map((agent) => (
+                <li key={agent.avatar.id}>
+                  <Agent {...agent.avatar} disabled={agent.is_teaser} />
+                </li>
+              )),
+              toArray
+            )}
+          </ul>
         </div>
       </div>
-      <div className="px-4">
-        <Tabs value={selectRarity} onChange={onRarityChange} />
-        <ul className="flex flex-wrap gap-2 mt-2">
-          {pipe(
-            agents,
-            filter((agent) => agent.avatar.rarity === selectRarity),
-            map((agent) => (
-              <li key={agent.avatar.id}>
-                <Agent {...agent.avatar} disabled={agent.is_teaser} />
-              </li>
-            )),
-            toArray
-          )}
-        </ul>
-      </div>
-    </div>
+    </>
   )
 }
 
