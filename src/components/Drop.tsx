@@ -41,7 +41,7 @@ const Drop: React.FC<Props> = (props) => {
       onDrop={onDrop}
       draggable={false}
       style={{}}
-      className={pipe(['size-24', 'overflow-hidden', 'flex', 'items-start'], join(' '))}
+      className={pipe(['size-32', 'overflow-hidden', 'flex', 'items-start'], join(' '))}
     >
       {agentId && (
         <img

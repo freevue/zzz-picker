@@ -18,7 +18,7 @@ const Round: React.FC<{ title: string }> = (props) => {
 
   return (
     <div className="flex flex-col">
-      <h2 className="text-lg font-bold dark:text-white">{props.title}</h2>
+      <h2 className="text-2xl font-bold dark:text-white">{props.title}</h2>
       <div className="flex gap-2">
         {pipe(
           3,
@@ -31,7 +31,7 @@ const Round: React.FC<{ title: string }> = (props) => {
                   onChange={onCostChange}
                   data-index={index}
                   type="number"
-                  className="block w-full py-1 px-1.5 text-sm focus:outline-none rounded-md dark:text-gray-300"
+                  className="block w-full py-1 px-1.5 text-xl focus:outline-none rounded-md dark:text-gray-300"
                   defaultValue={0}
                   min={0}
                   max={10}
@@ -42,10 +42,10 @@ const Round: React.FC<{ title: string }> = (props) => {
           toArray
         )}
       </div>
-      <p className="mt-2 opacity-70 px-1 text-sm dark:text-gray-300 items-center">
+      <p className="mt-2 opacity-70 px-1 text-xl dark:text-gray-300 items-center">
         Total Cost: {sum(totalCost)}
       </p>
-      <div className="flex gap-3 opacity-70 px-1 text-sm dark:text-gray-300 items-center w-full">
+      <div className="flex gap-3 opacity-70 px-1 text-xl dark:text-gray-300 items-center w-full">
         <label className="dark:text-gray-300 flex items-center gap-1">
           <span>Score:</span>
           <input type="text" placeholder="0" className="focus:outline-none px-1 py-0.5 w-20" />
@@ -66,12 +66,12 @@ const RineUp: React.FC = () => {
         <input
           type="text"
           placeholder="닉네임"
-          className="w-1/2 block flex-1 py-1 px-1.5 text-xl font-bold focus:outline-none rounded-md dark:placeholder:text-gray-500 text-primary"
+          className="w-1/2 block flex-1 py-1 px-1.5 text-3xl font-bold focus:outline-none rounded-md dark:placeholder:text-gray-500 text-primary"
         />
         <input
           type="text"
           placeholder="Total Score"
-          className="focus:outline-none px-1 py-0.5 dark:text-gray-300 text-sm w-1/2"
+          className="focus:outline-none px-1 py-0.5 dark:text-gray-300 text-xl w-1/2"
         />
       </div>
       {pipe(
