@@ -1,4 +1,4 @@
-import { Drop, Agent, RineUp, Ban } from './components'
+import { Agent, RineUp, Ban } from './components'
 
 function App() {
   return (
