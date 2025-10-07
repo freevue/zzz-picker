@@ -1,10 +1,10 @@
 import { Drop } from '../'
 import { Refresh } from '../../Icons'
-import { map, pipe, range, sum, toArray } from '@fxts/core'
+import { map, pipe, range, toArray } from '@fxts/core'
 import { useState } from 'react'
 
 const Round: React.FC<{ title: string }> = (props) => {
-  const [totalCost, setTotalCost] = useState<Array<number>>([0, 0, 0])
+  const [, setTotalCost] = useState<Array<number>>([0, 0, 0])
 
   const onCostChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const index = Number(event.target.dataset.index)
@@ -25,52 +25,58 @@ const Round: React.FC<{ title: string }> = (props) => {
           <Refresh className="stroke-gray-300 w-full h-full stroke-3" />
         </button>
       </div>
-      <div className="flex gap-2">
-        {pipe(
-          3,
-          range,
-          map((index) => (
-            <div key={index} className="border-1 border-gray-300 rounded-md overflow-hidden">
-              <Drop />
-              <label className="flex items-center text-xl p-1.5 gap-1 w-full border-t border-gray-300 dark:text-gray-300">
-                <span>Cost:</span>
-                <input
-                  onChange={onCostChange}
-                  data-index={index}
-                  type="number"
-                  className="block w-full focus:outline-none pl-0.5 border-b"
-                  defaultValue={0}
-                  min={0}
-                  max={10}
-                />
-              </label>
-            </div>
-          )),
-          toArray
-        )}
-      </div>
-      <p className="mt-2 opacity-70 px-1 text-xl dark:text-gray-300 items-center">
-        Total Cost: {sum(totalCost)}
-      </p>
-      <div className="flex gap-3 opacity-70 px-1 text-xl dark:text-gray-300 items-center w-full">
-        <label className="dark:text-gray-300 flex items-center gap-1">
-          <span>Score:</span>
-          <input
-            type="text"
-            placeholder="0"
-            className="focus:outline-none px-1 py-0.5 w-20 border-b"
-          />
-        </label>
-        <span>/</span>
-        <label className="dark:text-gray-300 flex items-center gap-1">
-          <span>Time:</span>
-          <input
-            type="text"
-            placeholder="00:00"
-            className="focus:outline-none px-1 py-0.5 w-20 border-b"
-          />
-        </label>
-      </div>
+      <table className="dark:text-gray-300 border-b border-gray-300">
+        <tbody>
+          <tr>
+            {pipe(
+              3,
+              range,
+              map((index) => (
+                <td
+                  key={index}
+                  className="border-1 border-gray-300 overflow-hidden border-r-0 last:border-r-1"
+                >
+                  <div className="overflow-hidden">
+                    <div className="p-1.5 border-b border-gray-300">
+                      <label className="flex items-center text-xl gap-1 w-full dark:text-gray-300">
+                        <input
+                          onChange={onCostChange}
+                          data-index={index}
+                          type="number"
+                          placeholder="Cost"
+                          className="block w-full focus:outline-none"
+                          min={0}
+                          max={10}
+                        />
+                      </label>
+                    </div>
+                    <Drop />
+                  </div>
+                </td>
+              )),
+              toArray
+            )}
+          </tr>
+          <tr>
+            <td className="border-l border-gray-300 p-1.5 text-xl">Score</td>
+            <td colSpan={2} className="border-l border-gray-300 p-1.5 text-xl border-r">
+              <input
+                type="number"
+                placeholder="0"
+                min={0}
+                max={70_000}
+                className="focus:outline-none w-full block"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td className="border-l border-gray-300 p-1.5 text-xl border-t">Time</td>
+            <td colSpan={2} className="border-l border-gray-300 p-1.5 text-xl border-t border-r">
+              <input type="text" placeholder="00:00" className="focus:outline-none w-full block" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   )
 }
@@ -87,11 +93,17 @@ const RineUp: React.FC = () => {
         map((item) => <Round title={item} key={item} />),
         toArray
       )}
-      <input
-        type="text"
-        placeholder="Total Score"
-        className="focus:outline-none px-1 py-0.5 dark:text-gray-300 text-xl w-1/2 border-b"
-      />
+      <p className="mt-2 opacity-70 text-xl dark:text-gray-300 items-center">Total Cost: 0</p>
+      <label className="flex items-center gap-1 text-2xl dark:text-white font-semibold">
+        <span>Total Score:</span>
+        <input
+          type="number"
+          placeholder="0"
+          min={0}
+          max={500_000}
+          className="focus:outline-none flex-1 px-1 py-0.5 border-b text-primary appearance-none"
+        />
+      </label>
     </div>
   )
 }

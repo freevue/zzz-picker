@@ -10,7 +10,7 @@ const Ban: React.FC = () => {
   }
 
   return (
-    <div className="flex gap-10 mt-4 pt-4 border-t border-gray-300">
+    <div className="flex gap-10 mt-8 pt-8 border-t border-gray-300">
       <div className="flex-1">
         <h3 className="dark:text-white text-2xl font-bold">Ban</h3>
         <div className="flex gap-2">
@@ -24,7 +24,7 @@ const Ban: React.FC = () => {
       </div>
       <div className="flex-1">
         <h3 className="dark:text-white text-2xl font-extrabold flex items-end gap-1">
-          No Ban <span className="text-xl opacity-80">(Pick-up)</span>
+          Allow Agent <span className="text-xl opacity-80">(Pick-up)</span>
         </h3>
         <div className="flex gap-2">
           {pipe(
