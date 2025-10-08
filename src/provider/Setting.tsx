@@ -121,13 +121,11 @@ const SettingProvider: React.FC<Props> = (props) => {
     )
   }, [])
   useEffect(() => {
-    if (allowAgent.length === 0) return
-
     pipe(
       window.location.search,
       (query) => new URLSearchParams(query),
       (data) => {
-        data.set('allowAgent', allowAgent.join(','))
+        data.set('allowAgent', allowAgent.length === 0 ? '' : allowAgent.join(','))
 
         window.history.replaceState(null, '', `?${data.toString()}`)
       }
