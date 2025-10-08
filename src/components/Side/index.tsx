@@ -1,8 +1,8 @@
 import Nickname from './Nickname'
 import Pick from './Pick'
-import Score from './Score'
-import Time from './Time'
+import Round from './Round'
 import TotalScore from './TotalScore'
+import { Edit } from '@/Icons'
 
 export type Side = 'A' | 'B'
 
@@ -10,46 +10,14 @@ type Props = {}
 
 const Side: React.FC<Props> = () => {
   return (
-    <div className="w-2xl">
+    <div className="w-3xl">
       <div className="flex w-full gap-4 items-center">
         <Nickname side="A" />
         <span className="text-2xl font-bold dark:text-white/70">VS</span>
         <Nickname side="B" />
       </div>
-      <div className="mt-8 flex flex-col gap-2">
-        <h3 className="text-2xl font-bold dark:text-white text-center">1라운드</h3>
-        <div className="flex justify-between">
-          <Pick side="A" />
-          <Pick side="B" />
-        </div>
-        <div className="flex justify-between">
-          <Time side="A" />
-          <p className="text-2xl text-center font-bold flex-1/4 dark:text-white/70">시간</p>
-          <Time side="B" />
-        </div>
-        <div className="flex justify-between">
-          <Score side="A" />
-          <p className="text-2xl text-center font-bold flex-1/4 dark:text-white/70">점수</p>
-          <Score side="B" />
-        </div>
-      </div>
-      <div className="flex flex-col gap-2 mt-4">
-        <h3 className="text-2xl font-bold dark:text-white text-center">2라운드</h3>
-        <div className="flex justify-between">
-          <Pick side="A" />
-          <Pick side="B" />
-        </div>
-        <div className="flex justify-between">
-          <Time side="A" />
-          <p className="text-2xl text-center font-bold flex-1/4 dark:text-white/70">시간</p>
-          <Time side="B" />
-        </div>
-        <div className="flex justify-between">
-          <Score side="A" />
-          <p className="text-2xl text-center font-bold flex-1/4 dark:text-white/70">점수</p>
-          <Score side="B" />
-        </div>
-      </div>
+      <Round>1라운드</Round>
+      <Round>2라운드</Round>
       <div className="flex flex-col gap-2 mt-12">
         <h3 className="text-2xl font-bold dark:text-white text-center">종합</h3>
         <div>

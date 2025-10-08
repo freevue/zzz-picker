@@ -1,3 +1,5 @@
 export { default as Dialog } from './Dialog'
 export { default as Drop } from './Drop'
 export { default as Count } from './Count'
+export { default as Input } from './Input'
+export { default as Time } from './Time'
