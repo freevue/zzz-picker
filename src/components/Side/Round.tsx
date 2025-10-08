@@ -18,7 +18,7 @@ const Round: React.FC<Props> = (props) => {
   return (
     <>
       <div className="mt-12 flex flex-col gap-2">
-        <h3 className="text-2xl font-bold dark:text-white text-center">{props.children}</h3>
+        <h3 className="text-3xl font-bold dark:text-white text-center">{props.children}</h3>
         <div className="flex justify-between items-center">
           <Pick side="A" round={props.round} />
           <div className="flex items-center">
