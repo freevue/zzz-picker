@@ -4,9 +4,11 @@ import { useAgents, useBan } from '@/hooks'
 import { filter, map, pipe, toArray, includes } from '@fxts/core'
 import { useState } from 'react'
 
-type Props = {}
+export type Props = {
+  onClick?: (id: number) => void
+}
 
-const List: React.FC<Props> = () => {
+const List: React.FC<Props> = (props) => {
   const { agents } = useAgents()
   const { banList } = useBan()
   const [selectRarity, setSelectRarity] = useState<'S' | 'A'>('S')
@@ -27,6 +29,7 @@ const List: React.FC<Props> = () => {
               <Agent
                 {...agent.avatar}
                 disabled={agent.is_teaser || pipe(banList, includes(agent.avatar.id))}
+                onClick={props.onClick}
               />
             </li>
           )),

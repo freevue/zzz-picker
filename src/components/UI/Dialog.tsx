@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 
 type Props = {
   children: React.ReactNode
+  className?: string
   onClose?: () => void
 }
 
@@ -37,7 +38,9 @@ const Dialog: React.FC<Props> = (props) => {
       className="bg-base/50 fixed top-0 left-0 w-full h-full z-30 backdrop-blur-sm flex items-center justify-center"
       onClick={onBgClick}
     >
-      <div onClick={onContentClick}>{props.children}</div>
+      <div onClick={onContentClick} className={props.className || ''}>
+        {props.children}
+      </div>
     </div>
   )
 }

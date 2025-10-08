@@ -1,15 +1,16 @@
 import type { AgentAvatar } from '../../types'
 import Avatar from './Avatar'
-import List from './List'
+import List, { type Props as ListProps } from './List'
 import { concat, join, pipe } from '@fxts/core'
 import { useState } from 'react'
 
 type Props = {
   disabled?: boolean
+  onClick?: (id: number) => void
 } & AgentAvatar
 
 type AgentType = {
-  List: React.FC
+  List: React.FC<ListProps>
 } & React.FC<Props>
 
 const Agent: AgentType = (props) => {
@@ -39,6 +40,7 @@ const Agent: AgentType = (props) => {
       onDrag={onDrag}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
+      onClick={() => props.onClick?.(props.id)}
     >
       <Avatar {...props} />
       <p
