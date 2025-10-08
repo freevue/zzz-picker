@@ -1,5 +1,7 @@
 import type { Side } from '.'
 import Drop from './Drop'
+import Score from './Score'
+import Time from './Time'
 import { pipe, join, concat, map, toArray, zipWithIndex, findIndex } from '@fxts/core'
 import { useState } from 'react'
 
@@ -31,7 +33,7 @@ const Pick: React.FC<Props> = (props) => {
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-2">
       <div className={pipe(['flex'], concat(props.side === 'A' ? ['pl-4'] : ['pr-4']), join(' '))}>
         {pipe(
           agentList,
@@ -42,7 +44,9 @@ const Pick: React.FC<Props> = (props) => {
           toArray
         )}
       </div>
-    </>
+      <Time {...props} />
+      <Score {...props} />
+    </div>
   )
 }
 
