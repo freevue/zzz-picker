@@ -1,9 +1,8 @@
 import Nickname from './Nickname'
 import Round from './Round'
 import TotalScore from './TotalScore'
-import { useSetting, useScore } from '@/hooks'
-import { entries, map, pipe, sum, toArray, zipWithIndex } from '@fxts/core'
-import { useMemo } from 'react'
+import { useSetting } from '@/hooks'
+import { map, pipe, toArray, zipWithIndex } from '@fxts/core'
 
 export type Side = 'A' | 'B'
 
@@ -11,7 +10,6 @@ type Props = {}
 
 const Side: React.FC<Props> = () => {
   const { roundList } = useSetting()
-  const { score } = useScore()
 
   return (
     <div className="w-3xl">
