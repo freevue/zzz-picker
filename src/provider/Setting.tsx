@@ -75,6 +75,7 @@ const SettingProvider: React.FC<Props> = (props) => {
       window.location.search,
       (query) => new URLSearchParams(query),
       (data) => {
+        setBanCount(count)
         data.set('banCount', count.toString())
 
         window.history.replaceState(null, '', `?${data.toString()}`)
@@ -86,6 +87,7 @@ const SettingProvider: React.FC<Props> = (props) => {
       window.location.search,
       (query) => new URLSearchParams(query),
       (data) => {
+        setTotalCost(count)
         data.set('totalCost', count.toString())
 
         window.history.replaceState(null, '', `?${data.toString()}`)
