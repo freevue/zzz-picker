@@ -2,13 +2,13 @@ import Nickname from './Nickname'
 import Round from './Round'
 import TotalScore from './TotalScore'
 import { useSetting, useScore, usePick } from '@/hooks'
-import { entries, map, pipe, sum, toArray, zipWithIndex } from '@fxts/core'
+import { map, pipe, toArray, zipWithIndex } from '@fxts/core'
 
 type Props = {}
 
 const Side: React.FC<Props> = () => {
   const { roundList, totalCost: settingTotalCost } = useSetting()
-  const { score } = useScore()
+  const { totalScore } = useScore()
   const { totalCost } = usePick()
 
   return (
@@ -33,21 +33,11 @@ const Side: React.FC<Props> = () => {
           <h3 className="text-3xl font-bold dark:text-white text-center">종합</h3>
           <div className="flex items-end justify-between gap-12">
             <p className="flex-3/4 text-right dark:text-white text-3xl font-semibold">
-              {pipe(
-                score,
-                entries,
-                map(([, score]) => score.A.score),
-                sum
-              )}
+              {totalScore.A}
             </p>
             <p className="text-xl text-center font-bold flex-2/4 dark:text-white/70">라운드 점수</p>
             <p className="flex-3/4 text-left dark:text-white text-3xl font-semibold">
-              {pipe(
-                score,
-                entries,
-                map(([, score]) => score.B.score),
-                sum
-              )}
+              {totalScore.B}
             </p>
           </div>
           <div className="flex items-end justify-between gap-12">

@@ -1,6 +1,7 @@
 import { useSetting } from '@/hooks'
-import { pipe, map, fromEntries } from '@fxts/core'
-import { createContext, useEffect, useState } from 'react'
+import type { Side } from '@/types'
+import { pipe, map, fromEntries, sum, values } from '@fxts/core'
+import { createContext, useEffect, useMemo, useState } from 'react'
 
 type Props = {
   children: React.ReactNode
@@ -11,18 +12,20 @@ type Score = {
 }
 
 type ScoreContextType = {
-  score: Record<string, Record<'A' | 'B', Score>>
-  setScore: (round: string, side: 'A' | 'B', score: Score) => void
+  score: Record<string, Record<Side, Score>>
+  totalScore: Record<Side, number>
+  setScore: (round: string, side: Side, score: Score) => void
 }
 
 export const ScoreContext = createContext<ScoreContextType>({
   score: {},
+  totalScore: { A: 0, B: 0 },
   setScore: () => {},
 })
 
 const ScoreProvider: React.FC<Props> = (props) => {
   const { roundList } = useSetting()
-  const [score, setScore] = useState<Record<string, Record<'A' | 'B', Score>>>({})
+  const [score, setScore] = useState<Record<string, Record<Side, Score>>>({})
 
   useEffect(() => {
     pipe(
@@ -43,7 +46,23 @@ const ScoreProvider: React.FC<Props> = (props) => {
     <ScoreContext.Provider
       value={{
         score,
-        setScore: (round: string, side: 'A' | 'B', score: Score) => {
+        totalScore: useMemo(() => {
+          return {
+            A: pipe(
+              score,
+              values,
+              map((score) => score.A.score),
+              sum
+            ),
+            B: pipe(
+              score,
+              values,
+              map((score) => score.B.score),
+              sum
+            ),
+          }
+        }, [score]),
+        setScore: (round: string, side: Side, score: Score) => {
           setScore((prev) => ({ ...prev, [round]: { ...prev[round], [side]: score } }))
         },
       }}
