@@ -14,6 +14,7 @@ type Props = {
   id: number | null
   cost: number
   onChange?: (index: number, pick: Pick) => void
+  onCostChange?: (index: number, cost: number) => void
 }
 
 const AgentCard: React.FC<Props> = (props) => {
@@ -38,7 +39,7 @@ const AgentCard: React.FC<Props> = (props) => {
     setIsOpen(false)
   }
   const onCostChange = (cost: number) => {
-    props.onChange?.(props.index, { agent: props.id, cost })
+    props.onCostChange?.(props.index, cost)
   }
 
   return (

@@ -1,16 +1,18 @@
 import { DEFAULT_PICKS } from '@/constant'
 import { useSetting } from '@/hooks'
 import type { Side, AgentPick } from '@/types'
-import { fromEntries, map, pipe } from '@fxts/core'
-import { createContext, useEffect, useState } from 'react'
+import { fromEntries, map, pipe, sum, values, flat } from '@fxts/core'
+import { createContext, useEffect, useMemo, useState } from 'react'
 
 type PickContextType = {
   pickList: Record<string, Record<Side, AgentPick>>
+  totalCost: Record<Side, number>
   onPickChange: (round: string, side: Side, list: AgentPick) => void
 }
 
 export const PickContext = createContext<PickContextType>({
   pickList: {},
+  totalCost: { A: 0, B: 0 },
   onPickChange: () => {},
 })
 
@@ -40,6 +42,26 @@ const PickProvider: React.FC<Props> = (props) => {
     <PickContext.Provider
       value={{
         pickList,
+        totalCost: useMemo(() => {
+          return {
+            A: pipe(
+              pickList,
+              values,
+              map((pick) => pick.A),
+              flat,
+              map((pick) => pick.cost),
+              sum
+            ),
+            B: pipe(
+              pickList,
+              values,
+              map((pick) => pick.B),
+              flat,
+              map((pick) => pick.cost),
+              sum
+            ),
+          }
+        }, [pickList]),
         onPickChange: (round: string, side: Side, list: AgentPick) => {
           setPickList((prev) => ({
             ...prev,

@@ -53,7 +53,19 @@ const Pick: React.FC<Props> = (props) => {
       }
     )
   }
+  const onCostChange = (index: number, cost: number) => {
+    pipe(
+      [...pickList[props.round][props.side]] as AgentPick,
+      (list) => {
+        list[index] = { ...list[index], cost }
 
+        return list
+      },
+      (list) => {
+        onPickChange(props.round, props.side, list)
+      }
+    )
+  }
   const onEditClick = () => {
     setIsRecordDialogOpen(true)
   }
@@ -74,6 +86,7 @@ const Pick: React.FC<Props> = (props) => {
                 id={agent}
                 cost={cost}
                 onChange={onChange}
+                onCostChange={onCostChange}
                 {...props}
               />
             )),

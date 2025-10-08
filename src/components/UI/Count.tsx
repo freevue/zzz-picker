@@ -1,6 +1,6 @@
 import { Minus, Plus } from '@/Icons'
 import { isUndefined } from '@fxts/core'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 type Props = {
   name?: string
@@ -11,7 +11,6 @@ type Props = {
 }
 
 const Count: React.FC<Props> = (props) => {
-  const timeout = useRef<NodeJS.Timeout | null>(null)
   const [count, setCount] = useState<number>(props.defaultValue || 0)
 
   const onButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -31,15 +30,7 @@ const Count: React.FC<Props> = (props) => {
     setCount(props.defaultValue || 0)
   }, [props.defaultValue])
   useEffect(() => {
-    if (timeout.current) clearTimeout(timeout.current)
-
-    timeout.current = setTimeout(() => {
-      props.onChange?.(count)
-    }, 500)
-
-    return () => {
-      if (timeout.current) clearTimeout(timeout.current)
-    }
+    props.onChange?.(count)
   }, [count])
 
   return (

@@ -1,14 +1,15 @@
 import Nickname from './Nickname'
 import Round from './Round'
 import TotalScore from './TotalScore'
-import { useSetting, useScore } from '@/hooks'
+import { useSetting, useScore, usePick } from '@/hooks'
 import { entries, map, pipe, sum, toArray, zipWithIndex } from '@fxts/core'
 
 type Props = {}
 
 const Side: React.FC<Props> = () => {
-  const { roundList } = useSetting()
+  const { roundList, totalCost: settingTotalCost } = useSetting()
   const { score } = useScore()
+  const { totalCost } = usePick()
 
   return (
     <div className="w-3xl overflow-auto scrollbar-hidden">
@@ -50,9 +51,13 @@ const Side: React.FC<Props> = () => {
             </p>
           </div>
           <div className="flex items-end justify-between gap-12">
-            <p className="flex-3/4 text-right dark:text-white text-3xl font-semibold">{0}</p>
+            <p className="flex-3/4 text-right dark:text-white text-3xl font-semibold">
+              {settingTotalCost - totalCost.A}
+            </p>
             <p className="text-xl text-center flex-2/4 font-bold dark:text-white/70">잔여 Cost</p>
-            <p className="flex-3/4 text-left dark:text-white text-3xl font-semibold">{0}</p>
+            <p className="flex-3/4 text-left dark:text-white text-3xl font-semibold">
+              {settingTotalCost - totalCost.B}
+            </p>
           </div>
           <div className="flex items-end justify-between gap-12 mt-10 pb-10">
             <TotalScore side="A" />
