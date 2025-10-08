@@ -1,6 +1,6 @@
 import Agent from '.'
-import { useAgents, useBan } from '../../hooks'
 import Tabs from './Tabs'
+import { useAgents, useBan } from '@/hooks'
 import { filter, map, pipe, toArray, includes } from '@fxts/core'
 import { useState } from 'react'
 
@@ -16,7 +16,7 @@ const List: React.FC<Props> = () => {
   }
 
   return (
-    <div className="p-4 flex flex-col gap-2 h-full bg-black">
+    <div className="p-4 flex flex-col gap-4 h-full">
       <Tabs value={selectRarity} onChange={onRarityChange} />
       <ul className="grid grid-cols-3 gap-2 overflow-y-auto overflow-x-hidden scrollbar-hidden">
         {pipe(

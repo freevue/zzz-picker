@@ -1,4 +1,4 @@
-import { getAgentSquareImage } from '../utils'
+import { getAgentSquareImage } from '@/utils'
 import { join, pipe } from '@fxts/core'
 import { useState } from 'react'
 

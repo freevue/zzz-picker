@@ -1,5 +1,5 @@
-import { Drop } from '../'
-import { Refresh } from '../../Icons'
+import { Refresh } from '@/Icons'
+import { UI } from '@/components'
 import { map, pipe, range, toArray } from '@fxts/core'
 import { useState } from 'react'
 
@@ -50,7 +50,7 @@ const Round: React.FC<{ title: string }> = (props) => {
                         />
                       </label>
                     </div>
-                    <Drop />
+                    <UI.Drop />
                   </div>
                 </td>
               )),

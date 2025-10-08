@@ -1,5 +1,5 @@
-import { Drop } from '../'
-import { useBan } from '../../hooks'
+import { UI } from '@/components'
+import { useBan } from '@/hooks'
 import { map, pipe, toArray } from '@fxts/core'
 
 const Ban: React.FC = () => {
@@ -15,10 +15,10 @@ const Ban: React.FC = () => {
         <h3 className="dark:text-white text-2xl font-bold">Ban</h3>
         <div className="flex gap-2">
           <div className="border-1 border-gray-300 rounded-md overflow-hidden">
-            <Drop onChange={onBanChange} />
+            <UI.Drop onChange={onBanChange} />
           </div>
           <div className="border-1 border-gray-300 rounded-md overflow-hidden">
-            <Drop onChange={onBanChange} />
+            <UI.Drop onChange={onBanChange} />
           </div>
         </div>
       </div>
@@ -31,7 +31,7 @@ const Ban: React.FC = () => {
             noBanList,
             map((id) => (
               <div className="border-1 border-gray-300 rounded-md overflow-hidden" key={id}>
-                <Drop defaultValue={id} />
+                <UI.Drop defaultValue={id} />
               </div>
             )),
             toArray
