@@ -1,5 +1,5 @@
 import { useAgents, useSetting } from '@/hooks'
-import { filter, findIndex, map, pipe, range, toArray } from '@fxts/core'
+import { findIndex, map, pipe, range, toArray } from '@fxts/core'
 import { createContext, useEffect, useState } from 'react'
 
 type AgentID = number | null
