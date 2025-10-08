@@ -23,7 +23,7 @@ const BanProvider: React.FC<Props> = (props) => {
   const { agents } = useAgents()
   const { banCount } = useSetting()
   const [banList, setBanList] = useState<Array<AgentID>>([null, null])
-  const [noBanList, setNoBanList] = useState<Array<number>>([])
+  const [noBanList] = useState<Array<number>>([])
 
   useEffect(() => {
     // pipe(
