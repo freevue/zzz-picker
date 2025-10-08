@@ -1,1 +1,4 @@
 export { default as Refresh } from './Refresh'
+export { default as Cross } from './Cross'
+export { default as Plus } from './Plus'
+export { default as Info } from './Info'

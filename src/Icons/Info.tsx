@@ -2,7 +2,7 @@ type Props = {
   className?: string
 }
 
-const Refresh: React.FC<Props> = (props) => {
+const Info: React.FC<Props> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -16,12 +16,11 @@ const Refresh: React.FC<Props> = (props) => {
       focusable="false"
       className={props.className || ''}
     >
-      <polyline points="23 4 23 10 17 10"></polyline>
-      <polyline points="1 20 1 14 7 14"></polyline>
-      <path d="M3.51 9a9 9 0 0 1 14.13-3.36L23 10"></path>
-      <path d="M20.49 15a9 9 0 0 1-14.13 3.36L1 14"></path>
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="16" x2="12" y2="12"></line>
+      <line x1="12" y1="8" x2="12" y2="8"></line>
     </svg>
   )
 }
 
-export default Refresh
+export default Info
