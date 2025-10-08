@@ -7,7 +7,7 @@ type Props = {
 
 const TotalScore: React.FC<Props> = (props) => {
   return (
-    <div className="flex-3/4 border-b-2 border-primary p-2">
+    <div className="flex-3/4 border-b-4 border-primary p-2">
       <label className="block w-full">
         <input
           type="number"
@@ -16,7 +16,7 @@ const TotalScore: React.FC<Props> = (props) => {
             [
               'dark:placeholder:text-white/50',
               'focus:outline-none',
-              'placeholder:text-2xl',
+              'placeholder:text-xl',
               'placeholder:font-medium',
               'text-primary',
               'text-3xl',

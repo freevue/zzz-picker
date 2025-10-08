@@ -7,34 +7,26 @@ type Props = {
 
 const Time: React.FC<Props> = (props) => {
   return (
-    <div className="">
-      <label
+    <label className={pipe(['flex-3/4'], join(' '))}>
+      <input
+        type="text"
+        placeholder="시간을 입력해주세요."
         className={pipe(
-          ['flex', 'w-full', 'gap-4'],
-          concat(props.side === 'A' ? ['flex-row-reverse'] : []),
+          [
+            'text-md',
+            'font-bold',
+            'dark:text-white',
+            'border-b-2',
+            'border-white/70',
+            'focus:outline-none',
+            'block',
+            'w-full',
+          ],
+          concat(props.side === 'A' ? ['text-right'] : []),
           join(' ')
         )}
-      >
-        <span className="text-xl font-bold dark:text-white/70">시간</span>
-        <input
-          type="text"
-          placeholder="시간을 입력해주세요."
-          className={pipe(
-            [
-              'text-md',
-              'flex-1',
-              'font-bold',
-              'dark:text-white',
-              'border-b-2',
-              'border-white/70',
-              'focus:outline-none',
-            ],
-            concat(props.side === 'A' ? ['text-right'] : []),
-            join(' ')
-          )}
-        />
-      </label>
-    </div>
+      />
+    </label>
   )
 }
 

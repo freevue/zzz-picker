@@ -1,7 +1,5 @@
 import type { Side } from '.'
 import Drop from './Drop'
-import Score from './Score'
-import Time from './Time'
 import { pipe, join, concat, map, toArray, zipWithIndex, findIndex } from '@fxts/core'
 import { useState } from 'react'
 
@@ -44,8 +42,8 @@ const Pick: React.FC<Props> = (props) => {
           toArray
         )}
       </div>
-      <Time {...props} />
-      <Score {...props} />
+      {/* <Time {...props} />
+      <Score {...props} /> */}
     </div>
   )
 }

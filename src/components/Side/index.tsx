@@ -1,5 +1,7 @@
 import Nickname from './Nickname'
 import Pick from './Pick'
+import Score from './Score'
+import Time from './Time'
 import TotalScore from './TotalScore'
 
 export type Side = 'A' | 'B'
@@ -20,12 +22,32 @@ const Side: React.FC<Props> = () => {
           <Pick side="A" />
           <Pick side="B" />
         </div>
+        <div className="flex justify-between">
+          <Time side="A" />
+          <p className="text-2xl text-center font-bold flex-1/4 dark:text-white/70">시간</p>
+          <Time side="B" />
+        </div>
+        <div className="flex justify-between">
+          <Score side="A" />
+          <p className="text-2xl text-center font-bold flex-1/4 dark:text-white/70">점수</p>
+          <Score side="B" />
+        </div>
       </div>
       <div className="flex flex-col gap-2 mt-4">
         <h3 className="text-2xl font-bold dark:text-white text-center">2라운드</h3>
         <div className="flex justify-between">
           <Pick side="A" />
           <Pick side="B" />
+        </div>
+        <div className="flex justify-between">
+          <Time side="A" />
+          <p className="text-2xl text-center font-bold flex-1/4 dark:text-white/70">시간</p>
+          <Time side="B" />
+        </div>
+        <div className="flex justify-between">
+          <Score side="A" />
+          <p className="text-2xl text-center font-bold flex-1/4 dark:text-white/70">점수</p>
+          <Score side="B" />
         </div>
       </div>
       <div className="flex flex-col gap-2 mt-12">

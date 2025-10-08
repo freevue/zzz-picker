@@ -6,7 +6,7 @@ function App() {
       <Header />
       <div className="pt-16 pr-[300px] h-full ml-auto w-fit flex">
         <RuleBook />
-        <div className="flex flex-col h-full p-4 mb-auto overflow-auto scrollbar-hidden">
+        <div className="flex flex-col h-full p-4 gap-10 mb-auto overflow-auto scrollbar-hidden">
           <Side />
           <div className="mt-auto">
             <Ban />
