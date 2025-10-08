@@ -53,7 +53,7 @@ const Count: React.FC<Props> = (props) => {
       >
         <Minus className="dark:stroke-white size-5" />
       </button>
-      <p className="text-md font-bold text-center dark:text-white px-4 flex-1">{count}</p>
+      <p className="text-md font-bold text-center dark:text-white flex-1">{count}</p>
       <button
         className="size-8 cursor-pointer flex items-center justify-center bg-gray-700"
         value="1"

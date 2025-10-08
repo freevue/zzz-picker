@@ -1,3 +1,11 @@
+export type Pick = {
+  agent: number | null
+  cost: number
+}
+
+export type Side = 'A' | 'B'
+export type AgentPick = [Pick, Pick, Pick]
+
 export type AgentAvatar = {
   avatar_profession: number
   awaken_state: string

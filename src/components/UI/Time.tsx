@@ -17,6 +17,7 @@ const Time: React.FC<Props> = (props) => {
           className="w-full h-8 px-4 focus:outline-none dark:text-white dark:placeholder:text-gray-700 text-right"
           value={props.defaultValue}
           onChange={props.onChange}
+          autoComplete="off"
         />
       </div>
       <p className="dark:text-white text-2xl font-bold">분</p>
@@ -27,6 +28,7 @@ const Time: React.FC<Props> = (props) => {
           className="w-full h-8 px-4 focus:outline-none dark:text-white dark:placeholder:text-gray-700 text-right"
           value={props.defaultValue}
           onChange={props.onChange}
+          autoComplete="off"
         />
       </div>
       <p className="dark:text-white text-2xl font-bold">초</p>

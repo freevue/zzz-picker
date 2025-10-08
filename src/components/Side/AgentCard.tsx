@@ -1,7 +1,8 @@
-import type { Side } from '.'
 import AgentDialog from './AgentDialog'
 import { Plus, Cross } from '@/Icons'
 import { UI } from '@/components'
+import { useSetting } from '@/hooks'
+import type { Side, Pick } from '@/types'
 import { getAgentSquareImage } from '@/utils'
 import { pipe, join, concat } from '@fxts/core'
 import { useState } from 'react'
@@ -10,44 +11,40 @@ import { createPortal } from 'react-dom'
 type Props = {
   side: Side
   index: number
-  defaultValue?: number | null
-  onChange?: (id: number | null, index: number) => void
+  id: number | null
+  cost: number
+  onChange?: (index: number, pick: Pick) => void
 }
 
-const Drop: React.FC<Props> = (props) => {
+const AgentCard: React.FC<Props> = (props) => {
   const [isOpen, setIsOpen] = useState(false)
+  const { totalCost } = useSetting()
 
-  const onDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault()
-
-    const agentId = event.dataTransfer.getData('text/plain')
-
+  const onDrop = (value: string) => {
     try {
-      props.onChange?.(Number(agentId), props.index)
+      props.onChange?.(props.index, { agent: Number(value), cost: 0 })
     } catch {
-      props.onChange?.(null, props.index)
+      props.onChange?.(props.index, { agent: null, cost: 0 })
     }
   }
-  const onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault()
-  }
   const onDelete = () => {
-    props.onChange?.(null, props.index)
+    props.onChange?.(props.index, { agent: null, cost: 0 })
   }
   const onOpenAgentDialog = () => {
     setIsOpen(true)
   }
   const onAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    props.onChange?.(Number(event.currentTarget.value), props.index)
+    props.onChange?.(props.index, { agent: Number(event.currentTarget.value), cost: 0 })
     setIsOpen(false)
+  }
+  const onCostChange = (cost: number) => {
+    props.onChange?.(props.index, { agent: props.id, cost })
   }
 
   return (
     <>
-      <div
+      <UI.Drop
         onDrop={onDrop}
-        onDragOver={onDragOver}
-        draggable={false}
         className={pipe(
           [
             'w-24',
@@ -70,11 +67,11 @@ const Drop: React.FC<Props> = (props) => {
             join(' ')
           )}
         >
-          {props.defaultValue ? (
+          {props.id ? (
             <div className="w-full h-full group relative">
               <img
                 draggable={false}
-                src={getAgentSquareImage(props.defaultValue)}
+                src={getAgentSquareImage(props.id)}
                 alt=""
                 className="block w-full scale-125"
               />
@@ -97,9 +94,9 @@ const Drop: React.FC<Props> = (props) => {
           )}
         </div>
         <div className="absolute bottom-0 left-0 w-full bg-base">
-          <UI.Count />
+          <UI.Count min={0} max={totalCost} defaultValue={props.cost} onChange={onCostChange} />
         </div>
-      </div>
+      </UI.Drop>
       {isOpen &&
         createPortal(
           <AgentDialog onClose={() => setIsOpen(false)} onClick={onAgentClick} />,
@@ -109,4 +106,4 @@ const Drop: React.FC<Props> = (props) => {
   )
 }
 
-export default Drop
+export default AgentCard

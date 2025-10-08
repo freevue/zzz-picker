@@ -16,6 +16,7 @@ const Input: React.FC<Props> = (props) => {
         className="w-full h-8 px-4 focus:outline-none dark:text-white dark:placeholder:text-gray-700"
         value={props.defaultValue}
         onChange={props.onChange}
+        autoComplete="off"
       />
     </div>
   )

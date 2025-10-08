@@ -4,8 +4,6 @@ import TotalScore from './TotalScore'
 import { useSetting, useScore } from '@/hooks'
 import { entries, map, pipe, sum, toArray, zipWithIndex } from '@fxts/core'
 
-export type Side = 'A' | 'B'
-
 type Props = {}
 
 const Side: React.FC<Props> = () => {
@@ -14,7 +12,7 @@ const Side: React.FC<Props> = () => {
 
   return (
     <div className="w-3xl overflow-auto scrollbar-hidden">
-      <div className="flex w-full gap-4 items-center sticky top-0 bg-base z-10 p-4">
+      <div className="flex w-full gap-4 items-center sticky top-0 bg-black z-10 p-4">
         <Nickname side="A" />
         <span className="text-2xl font-bold dark:text-white/70">VS</span>
         <Nickname side="B" />

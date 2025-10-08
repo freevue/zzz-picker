@@ -1,26 +1,14 @@
-import { getAgentSquareImage } from '@/utils'
-import { join, pipe } from '@fxts/core'
-import { useState } from 'react'
-
 type Props = {
-  defaultValue?: number
-  onChange?: (id: number | null) => void
+  onDrop?: (agentId: string) => void
+  className?: string
+  children: React.ReactNode
 }
 
 const Drop: React.FC<Props> = (props) => {
-  const [agentId, setAgentId] = useState<number | null>(props.defaultValue ?? null)
-
   const onDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
-    const agentId = event.dataTransfer.getData('text/plain')
 
-    try {
-      setAgentId(Number(agentId))
-      props.onChange?.(Number(agentId))
-    } catch {
-      setAgentId(null)
-      props.onChange?.(null)
-    }
+    props.onDrop?.(event.dataTransfer.getData('text/plain'))
   }
   const onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
@@ -31,17 +19,9 @@ const Drop: React.FC<Props> = (props) => {
       onDragOver={onDragOver}
       onDrop={onDrop}
       draggable={false}
-      style={{}}
-      className={pipe(['size-32', 'overflow-hidden', 'flex', 'items-start'], join(' '))}
+      className={props.className || ''}
     >
-      {agentId && (
-        <img
-          className="block w-full"
-          draggable={false}
-          src={getAgentSquareImage(agentId)}
-          alt="agent"
-        />
-      )}
+      {props.children}
     </div>
   )
 }

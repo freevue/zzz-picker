@@ -1,4 +1,4 @@
-import type { Side } from '.'
+import type { Side } from '@/types'
 import { pipe, join, concat } from '@fxts/core'
 
 type Props = {

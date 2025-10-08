@@ -1,7 +1,7 @@
-import type { Side } from '.'
-import Drop from './Drop'
+import AgentCard from './AgentCard'
 import RecordDialog from './RecordDialog'
-import { useScore } from '@/hooks'
+import { useScore, usePick } from '@/hooks'
+import type { Side, AgentPick, Pick as PickType } from '@/types'
 import { pipe, join, concat, map, toArray, zipWithIndex, findIndex } from '@fxts/core'
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
@@ -11,12 +11,10 @@ type Props = {
   round: string
 }
 
-type AgentID = number | null
-
 const Pick: React.FC<Props> = (props) => {
   const { score } = useScore()
+  const { pickList, onPickChange } = usePick()
   const [isRecordDialogOpen, setIsRecordDialogOpen] = useState(false)
-  const [agentList, setAgentList] = useState<[AgentID, AgentID, AgentID]>([null, null, null])
   const { setScore } = useScore()
 
   const onClose = () => {
@@ -26,22 +24,34 @@ const Pick: React.FC<Props> = (props) => {
     setScore(props.round, props.side, { score, time })
     setIsRecordDialogOpen(false)
   }
-  const onChange = (id: AgentID, index: number) => {
-    setAgentList((prev) => {
-      const findAgentIndex = pipe(
-        prev,
-        findIndex((agentId) => agentId === id)
-      )
-      const newList: [AgentID, AgentID, AgentID] = [...prev]
+  const onChange = (index: number, pick: PickType) => {
+    const currentAgentIndex = pipe(
+      pickList[props.round][props.side],
+      map(({ agent }) => agent),
+      findIndex((agent) => agent === pick.agent)
+    )
 
-      if (findAgentIndex !== -1) {
-        newList[findAgentIndex] = null
+    pipe(
+      [...pickList[props.round][props.side]] as AgentPick,
+      (list) => {
+        list[index] = pick
+
+        if (currentAgentIndex === index) {
+          return list
+        }
+        if (currentAgentIndex !== -1) {
+          list[index] = { ...pickList[props.round][props.side][currentAgentIndex] }
+          list[currentAgentIndex] = { agent: null, cost: 0 }
+
+          return list
+        }
+
+        return list
+      },
+      (list) => {
+        onPickChange(props.round, props.side, list)
       }
-
-      newList[index] = id
-
-      return newList
-    })
+    )
   }
 
   const onEditClick = () => {
@@ -55,15 +65,16 @@ const Pick: React.FC<Props> = (props) => {
           className={pipe(['flex'], concat(props.side === 'A' ? ['pl-4'] : ['pr-4']), join(' '))}
         >
           {pipe(
-            agentList,
+            pickList?.[props.round]?.[props.side] || [],
             zipWithIndex,
-            map(([index, agentId]) => (
-              <Drop
+            map(([index, { agent, cost }]) => (
+              <AgentCard
                 key={index}
-                {...props}
                 index={index}
-                defaultValue={agentId}
+                id={agent}
+                cost={cost}
                 onChange={onChange}
+                {...props}
               />
             )),
             toArray
