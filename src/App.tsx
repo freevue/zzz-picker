@@ -1,4 +1,4 @@
-import { Agent, Ban, Header, Side, RuleBook } from './components'
+import { Header, Side, RuleBook } from './components'
 
 function App() {
   return (
@@ -8,9 +8,6 @@ function App() {
         <RuleBook />
         <div className="flex flex-col h-full p-4 gap-10 mb-auto overflow-auto scrollbar-hidden">
           <Side />
-          <div className="mt-auto">
-            <Ban />
-          </div>
         </div>
       </div>
       {/* <div className="fixed top-0 right-0 w-[300px] h-full bg-base z-20">
