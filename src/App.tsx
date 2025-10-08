@@ -11,7 +11,7 @@ function App() {
         <div className="flex p-4">
           <Side />
         </div>
-        {/* <Ban /> */}
+        <Ban />
       </div>
       <div className="fixed top-0 right-0 w-[300px] h-full bg-base z-20">
         <Agent.List />

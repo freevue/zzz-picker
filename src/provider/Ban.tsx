@@ -2,14 +2,15 @@ import { useAgents } from '../hooks'
 import { filter, map, pipe, toArray } from '@fxts/core'
 import { createContext, useEffect, useState } from 'react'
 
+type AgentID = number | null
 type Context = {
-  banList: Array<number>
+  banList: [AgentID, AgentID]
   noBanList: Array<number>
-  setBanList: (id: number) => void
+  setBanList: (id: number | null, index: number) => void
 }
 
 export const BanContext = createContext<Context>({
-  banList: [],
+  banList: [null, null],
   noBanList: [],
   setBanList: () => {},
 })
@@ -20,7 +21,7 @@ type Props = {
 
 const BanProvider: React.FC<Props> = (props) => {
   const { agents } = useAgents()
-  const [banList, setBanList] = useState<Array<number>>([])
+  const [banList, setBanList] = useState<[AgentID, AgentID]>([null, null])
   const [noBanList, setNoBanList] = useState<Array<number>>([])
 
   useEffect(() => {
@@ -38,10 +39,15 @@ const BanProvider: React.FC<Props> = (props) => {
       value={{
         banList,
         noBanList,
-        setBanList: (id: number) => {
-          if (noBanList.includes(id)) return
+        setBanList: (id: number | null, index: number) => {
+          if (id && noBanList.includes(id)) return
 
-          setBanList((prev) => [...prev, id])
+          setBanList((prev) => {
+            const newList: [AgentID, AgentID] = [...prev]
+            newList[index] = id
+
+            return newList
+          })
         },
       }}
     >

@@ -1,13 +1,11 @@
-import type { Side } from '.'
 import { Plus, Cross } from '@/Icons'
 import { AgentDialog } from '@/components'
 import { getAgentSquareImage } from '@/utils'
-import { pipe, join, concat } from '@fxts/core'
+import { pipe, join } from '@fxts/core'
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 
 type Props = {
-  side: Side
   index: number
   defaultValue?: number | null
   onChange?: (id: number | null, index: number) => void
@@ -49,21 +47,19 @@ const Drop: React.FC<Props> = (props) => {
         draggable={false}
         className={pipe(
           [
-            'size-24',
+            'size-32',
             'border-2',
             'border-white',
             'border-r-0',
             'last:border-r-2',
             'overflow-hidden',
           ],
-          concat(props.side === 'A' ? ['skew-x-12'] : ['-skew-x-12']),
           join(' ')
         )}
       >
         <div
           className={pipe(
             ['w-full', 'h-full', 'flex', 'items-center', 'justify-center'],
-            concat(props.side === 'A' ? ['-skew-x-12'] : ['skew-x-12']),
             join(' ')
           )}
         >

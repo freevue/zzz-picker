@@ -40,7 +40,7 @@ const Agent: AgentType = (props) => {
       onDrag={onDrag}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
-      onClick={() => props.onClick?.(props.id)}
+      onClick={() => !props.disabled && props.onClick?.(props.id)}
     >
       <Avatar {...props} />
       <p
