@@ -7,6 +7,7 @@ type SettingContextType = {
   banCount: number
   totalCost: number
   allowAgent: number[]
+  roundList: string[]
   onSettingToggle: () => void
 }
 
@@ -14,6 +15,7 @@ export const SettingContext = createContext<SettingContextType>({
   banCount: 2,
   totalCost: 20,
   allowAgent: [],
+  roundList: [],
   onSettingToggle: () => {},
 })
 
@@ -66,6 +68,7 @@ const SettingProvider: React.FC<Props> = (props) => {
   const [totalCost, setTotalCost] = useState(20)
   const [isOpen, setIsOpen] = useState(false)
   const [allowAgent, setAllowAgent] = useState<number[]>([])
+  const [roundList] = useState<string[]>(['1라운드', '2라운드'])
 
   const onBanCountChange = (count: number) => {
     pipe(
@@ -135,6 +138,7 @@ const SettingProvider: React.FC<Props> = (props) => {
         banCount,
         totalCost,
         allowAgent,
+        roundList,
         onSettingToggle: () => {
           setIsOpen((prev) => !prev)
         },

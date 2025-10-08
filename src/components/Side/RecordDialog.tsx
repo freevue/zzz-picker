@@ -1,13 +1,22 @@
 import { UI } from '@/components'
+import { pipe } from '@fxts/core'
 
 type Props = {
   onClose: () => void
+  onSubmit: (score: number, time: string) => void
 }
 
 const RecordDialog: React.FC<Props> = (props) => {
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    console.log(event.target)
+
+    pipe(new FormData(event.currentTarget), (data) => {
+      const score = data.get('score')
+      const minute = data.get('time-minute')
+      const second = data.get('time-second')
+
+      props.onSubmit(Number(score), `${minute}분 ${second}초`)
+    })
   }
 
   return (
@@ -20,14 +29,14 @@ const RecordDialog: React.FC<Props> = (props) => {
         <div className="flex p-4 mb-4">
           <h2 className="text-2xl flex-1/3 font-black dark:text-white italic">Score</h2>
           <div className="flex-2/3 flex items-center gap-2">
-            <UI.Input className="flex-1" />
+            <UI.Input className="flex-1" name="score" />
             <p className="dark:text-white text-2xl font-bold">점</p>
           </div>
         </div>
         <div className="flex p-4">
           <h2 className="text-2xl flex-1/3 font-black dark:text-white italic">Time</h2>
           <div className="flex-2/3">
-            <UI.Time />
+            <UI.Time name="time" />
           </div>
         </div>
         <button

@@ -1,12 +1,16 @@
 import Nickname from './Nickname'
 import Round from './Round'
 import TotalScore from './TotalScore'
+import { useSetting } from '@/hooks'
+import { map, pipe, toArray, zipWithIndex } from '@fxts/core'
 
 export type Side = 'A' | 'B'
 
 type Props = {}
 
 const Side: React.FC<Props> = () => {
+  const { roundList } = useSetting()
+
   return (
     <div className="w-3xl">
       <div className="flex w-full gap-4 items-center">
@@ -14,8 +18,16 @@ const Side: React.FC<Props> = () => {
         <span className="text-2xl font-bold dark:text-white/70">VS</span>
         <Nickname side="B" />
       </div>
-      <Round>1라운드</Round>
-      <Round>2라운드</Round>
+      {pipe(
+        roundList,
+        zipWithIndex,
+        map(([index, round]) => (
+          <Round key={index} round={round}>
+            {round}
+          </Round>
+        )),
+        toArray
+      )}
       <div className="flex flex-col gap-2 mt-16">
         <h3 className="text-2xl font-bold dark:text-white text-center">종합</h3>
         <div>

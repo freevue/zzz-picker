@@ -42,8 +42,6 @@ const Pick: React.FC<Props> = (props) => {
           toArray
         )}
       </div>
-      {/* <Time {...props} />
-      <Score {...props} /> */}
     </div>
   )
 }

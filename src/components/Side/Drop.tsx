@@ -1,6 +1,6 @@
 import type { Side } from '.'
+import AgentDialog from './AgentDialog'
 import { Plus, Cross } from '@/Icons'
-import { AgentDialog } from '@/components'
 import { getAgentSquareImage } from '@/utils'
 import { pipe, join, concat } from '@fxts/core'
 import { useState } from 'react'
@@ -36,8 +36,8 @@ const Drop: React.FC<Props> = (props) => {
   const onOpenAgentDialog = () => {
     setIsOpen(true)
   }
-  const onChange = (id: number) => {
-    props.onChange?.(id, props.index)
+  const onAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    props.onChange?.(Number(event.currentTarget.value), props.index)
     setIsOpen(false)
   }
 
@@ -96,7 +96,7 @@ const Drop: React.FC<Props> = (props) => {
       </div>
       {isOpen &&
         createPortal(
-          <AgentDialog onClose={() => setIsOpen(false)} onChange={onChange} />,
+          <AgentDialog onClose={() => setIsOpen(false)} onClick={onAgentClick} />,
           document.body
         )}
     </>

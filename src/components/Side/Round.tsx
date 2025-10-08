@@ -1,14 +1,17 @@
 import Pick from './Pick'
 import RecordDialog from './RecordDialog'
 import { Edit } from '@/Icons'
+import { useScore } from '@/hooks'
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 
 type Props = {
   children: React.ReactNode
+  round: string
 }
 
 const Round: React.FC<Props> = (props) => {
+  const { score, setScore } = useScore()
   const [isRecordDialogOpen, setIsRecordDialogOpen] = useState(false)
 
   const onEditClick = () => {
@@ -17,12 +20,18 @@ const Round: React.FC<Props> = (props) => {
   const onClose = () => {
     setIsRecordDialogOpen(false)
   }
+  const onSubmit = (score: number, time: string) => {
+    setScore(props.round, { score, time })
+    setIsRecordDialogOpen(false)
+  }
 
   return (
     <>
       <div className="mt-12 flex flex-col gap-2">
         <h3 className="text-2xl font-bold dark:text-white text-center">{props.children}</h3>
-        <p className="text-md font-medium text-center dark:text-white/70">0 점 / 0분 0초</p>
+        <p className="text-md font-medium text-center dark:text-white/70">
+          {score[props.round]?.score} 점 / {score[props.round]?.time}
+        </p>
         <div className="flex justify-between items-center">
           <Pick side="A" />
           <button
@@ -35,7 +44,8 @@ const Round: React.FC<Props> = (props) => {
           <Pick side="B" />
         </div>
       </div>
-      {isRecordDialogOpen && createPortal(<RecordDialog onClose={onClose} />, document.body)}
+      {isRecordDialogOpen &&
+        createPortal(<RecordDialog onClose={onClose} onSubmit={onSubmit} />, document.body)}
     </>
   )
 }
