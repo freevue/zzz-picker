@@ -5,7 +5,7 @@ export type Side = 'A' | 'B'
 
 type Props = {}
 
-const Side: React.FC<Props> = (props) => {
+const Side: React.FC<Props> = () => {
   return (
     <div className="w-2xl">
       <div className="flex w-full gap-4 items-center mb-4">

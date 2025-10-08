@@ -1,4 +1,4 @@
-import { Agent, Ban, Header, RuleBook, Side } from './components'
+import { Agent, Ban, Header, Side } from './components'
 
 function App() {
   return (
