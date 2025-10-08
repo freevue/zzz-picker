@@ -1,6 +1,7 @@
 import type { Side } from '.'
 import AgentDialog from './AgentDialog'
 import { Plus, Cross } from '@/Icons'
+import { UI } from '@/components'
 import { getAgentSquareImage } from '@/utils'
 import { pipe, join, concat } from '@fxts/core'
 import { useState } from 'react'
@@ -49,12 +50,14 @@ const Drop: React.FC<Props> = (props) => {
         draggable={false}
         className={pipe(
           [
-            'size-24',
+            'w-24',
+            'h-36',
             'border-2',
             'border-white',
             'border-r-0',
             'last:border-r-2',
             'overflow-hidden',
+            'pb-10',
           ],
           concat(props.side === 'A' ? ['skew-x-12'] : ['-skew-x-12']),
           join(' ')
@@ -73,7 +76,7 @@ const Drop: React.FC<Props> = (props) => {
                 draggable={false}
                 src={getAgentSquareImage(props.defaultValue)}
                 alt=""
-                className="block w-full"
+                className="block w-full scale-125"
               />
               <button
                 type="button"
@@ -92,6 +95,9 @@ const Drop: React.FC<Props> = (props) => {
               <Plus className="block w-full stroke-white" />
             </button>
           )}
+        </div>
+        <div className="absolute bottom-0 left-0 w-full bg-base">
+          <UI.Count />
         </div>
       </div>
       {isOpen &&

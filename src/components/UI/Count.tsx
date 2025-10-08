@@ -3,6 +3,7 @@ import { isUndefined } from '@fxts/core'
 import { useEffect, useRef, useState } from 'react'
 
 type Props = {
+  name?: string
   defaultValue?: number
   onChange?: (count: number) => void
   min?: number
@@ -43,6 +44,7 @@ const Count: React.FC<Props> = (props) => {
 
   return (
     <div className="flex items-center w-full border-2 border-gray-700 rounded-md overflow-hidden">
+      <input type="hidden" name={props.name} value={count} />
       <button
         className="size-8 cursor-pointer flex items-center justify-center bg-gray-700"
         value="-1"

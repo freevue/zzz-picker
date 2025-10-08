@@ -15,7 +15,7 @@ const RecordDialog: React.FC<Props> = (props) => {
       const minute = data.get('time-minute')
       const second = data.get('time-second')
 
-      props.onSubmit(Number(score), `${minute}분 ${second}초`)
+      props.onSubmit(Number(score), `${minute || '00'}분 ${second || '00'}초`)
     })
   }
 

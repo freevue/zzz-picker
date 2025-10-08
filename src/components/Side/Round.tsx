@@ -1,9 +1,6 @@
 import Pick from './Pick'
-import RecordDialog from './RecordDialog'
-import { Edit } from '@/Icons'
+import { Refresh } from '@/Icons'
 import { useScore } from '@/hooks'
-import { useState } from 'react'
-import { createPortal } from 'react-dom'
 
 type Props = {
   children: React.ReactNode
@@ -11,41 +8,31 @@ type Props = {
 }
 
 const Round: React.FC<Props> = (props) => {
-  const { score, setScore } = useScore()
-  const [isRecordDialogOpen, setIsRecordDialogOpen] = useState(false)
+  const { setScore } = useScore()
 
-  const onEditClick = () => {
-    setIsRecordDialogOpen(true)
-  }
-  const onClose = () => {
-    setIsRecordDialogOpen(false)
-  }
-  const onSubmit = (score: number, time: string) => {
-    setScore(props.round, { score, time })
-    setIsRecordDialogOpen(false)
+  const onResetClick = () => {
+    setScore(props.round, 'A', { score: 0, time: '00분 00초' })
+    setScore(props.round, 'B', { score: 0, time: '00분 00초' })
   }
 
   return (
     <>
       <div className="mt-12 flex flex-col gap-2">
         <h3 className="text-2xl font-bold dark:text-white text-center">{props.children}</h3>
-        <p className="text-md font-medium text-center dark:text-white/70">
-          {score[props.round]?.score} 점 / {score[props.round]?.time}
-        </p>
         <div className="flex justify-between items-center">
-          <Pick side="A" />
-          <button
-            className="size-10 block cursor-pointer focus:outline-none group"
-            type="button"
-            onClick={onEditClick}
-          >
-            <Edit className="stroke-white block w-full group-hover:stroke-primary" />
-          </button>
-          <Pick side="B" />
+          <Pick side="A" round={props.round} />
+          <div className="flex items-center">
+            <button
+              className="size-8 block cursor-pointer focus:outline-none group"
+              type="button"
+              onClick={onResetClick}
+            >
+              <Refresh className="stroke-white block w-full group-hover:stroke-primary" />
+            </button>
+          </div>
+          <Pick side="B" round={props.round} />
         </div>
       </div>
-      {isRecordDialogOpen &&
-        createPortal(<RecordDialog onClose={onClose} onSubmit={onSubmit} />, document.body)}
     </>
   )
 }

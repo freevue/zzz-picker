@@ -1,8 +1,9 @@
 import Nickname from './Nickname'
 import Round from './Round'
 import TotalScore from './TotalScore'
-import { useSetting } from '@/hooks'
-import { map, pipe, toArray, zipWithIndex } from '@fxts/core'
+import { useSetting, useScore } from '@/hooks'
+import { entries, map, pipe, sum, toArray, zipWithIndex } from '@fxts/core'
+import { useMemo } from 'react'
 
 export type Side = 'A' | 'B'
 
@@ -10,6 +11,7 @@ type Props = {}
 
 const Side: React.FC<Props> = () => {
   const { roundList } = useSetting()
+  const { score } = useScore()
 
   return (
     <div className="w-3xl">
@@ -32,9 +34,9 @@ const Side: React.FC<Props> = () => {
         <h3 className="text-2xl font-bold dark:text-white text-center">종합</h3>
         <div>
           <div className="flex items-end justify-between gap-12">
-            <p className="flex-3/4 text-right text-primary text-3xl font-semibold">10</p>
+            <p className="flex-3/4 text-right text-primary text-3xl font-semibold">{0}</p>
             <p className="text-2xl text-center flex-1/4 font-bold dark:text-white/70">Cost</p>
-            <p className="flex-3/4 text-left text-primary text-3xl font-semibold">10</p>
+            <p className="flex-3/4 text-left text-primary text-3xl font-semibold">{0}</p>
           </div>
         </div>
         <div className="flex items-end justify-between gap-12">

@@ -11,8 +11,8 @@ type Score = {
 }
 
 type ScoreContextType = {
-  score: Record<string, Score>
-  setScore: (round: string, score: Score) => void
+  score: Record<string, Record<'A' | 'B', Score>>
+  setScore: (round: string, side: 'A' | 'B', score: Score) => void
 }
 
 export const ScoreContext = createContext<ScoreContextType>({
@@ -22,12 +22,18 @@ export const ScoreContext = createContext<ScoreContextType>({
 
 const ScoreProvider: React.FC<Props> = (props) => {
   const { roundList } = useSetting()
-  const [score, setScore] = useState<Record<string, Score>>({})
+  const [score, setScore] = useState<Record<string, Record<'A' | 'B', Score>>>({})
 
   useEffect(() => {
     pipe(
       roundList,
-      map((round) => [round, { score: 0, time: '00분 00초' }] as const),
+      map(
+        (round) =>
+          [
+            round,
+            { A: { score: 0, time: '00분 00초' }, B: { score: 0, time: '00분 00초' } },
+          ] as const
+      ),
       fromEntries,
       (data) => setScore(data)
     )
@@ -37,8 +43,8 @@ const ScoreProvider: React.FC<Props> = (props) => {
     <ScoreContext.Provider
       value={{
         score,
-        setScore: (round: string, score: Score) => {
-          setScore((prev) => ({ ...prev, [round]: score }))
+        setScore: (round: string, side: 'A' | 'B', score: Score) => {
+          setScore((prev) => ({ ...prev, [round]: { ...prev[round], [side]: score } }))
         },
       }}
     >
