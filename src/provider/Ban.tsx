@@ -50,7 +50,7 @@ const BanProvider: React.FC<Props> = (props) => {
         banList,
         noBanList,
         setBanList: (id: number | null, index: number) => {
-          if (id && noBanList.includes(id)) return
+          // if (id && noBanList.includes(id)) return
 
           setBanList((prev) => {
             const currentAgentIndex = pipe(
