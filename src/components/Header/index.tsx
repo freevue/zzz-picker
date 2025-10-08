@@ -1,10 +1,12 @@
 import Information from './Information'
-import { Info } from '@/Icons'
+import { Info, Setting } from '@/Icons'
+import useSetting from '@/hooks/useSetting'
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false)
+  const { onSettingToggle } = useSetting()
 
   const onInformationClick = () => {
     setIsOpen(true)
@@ -39,6 +41,15 @@ const Header = () => {
               onClick={onInformationClick}
             >
               <Info className="cursor-pointer stroke-white/70 block w-full" />
+            </button>
+          </li>
+          <li>
+            <button
+              className="size-5 block cursor-pointer focus:outline-none"
+              type="button"
+              onClick={onSettingToggle}
+            >
+              <Setting className="cursor-pointer stroke-white/70 block w-full" />
             </button>
           </li>
         </ul>
