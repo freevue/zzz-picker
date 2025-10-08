@@ -1,5 +1,6 @@
 import type { AgentAvatar } from '../../types'
 import Avatar from './Avatar'
+import Button, { type Props as ButtonProps } from './Button'
 import List, { type Props as ListProps } from './List'
 import { concat, join, pipe } from '@fxts/core'
 import { useState } from 'react'
@@ -11,6 +12,7 @@ type Props = {
 
 type AgentType = {
   List: React.FC<ListProps>
+  Button: React.FC<ButtonProps>
 } & React.FC<Props>
 
 const Agent: AgentType = (props) => {
@@ -57,5 +59,6 @@ const Agent: AgentType = (props) => {
 }
 
 Agent.List = List
+Agent.Button = Button
 
 export default Agent
