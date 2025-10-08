@@ -26,13 +26,13 @@ const BanProvider: React.FC<Props> = (props) => {
   const [noBanList, setNoBanList] = useState<Array<number>>([])
 
   useEffect(() => {
-    pipe(
-      agents,
-      filter((agent) => agent.is_up),
-      map((agent) => agent.avatar.id),
-      toArray,
-      (list) => setNoBanList(list)
-    )
+    // pipe(
+    //   agents,
+    //   filter((agent) => agent.is_up),
+    //   map((agent) => agent.avatar.id),
+    //   toArray,
+    //   (list) => setNoBanList(list)
+    // )
   }, [agents])
   useEffect(() => {
     pipe(
