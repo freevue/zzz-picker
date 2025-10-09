@@ -1,31 +1,32 @@
+export type Side = 'A' | 'B'
+export type SelectAgent = number | null
 export type Pick = {
-  agent: number | null
+  agent: SelectAgent
   cost: number
 }
+export type PickAgent = [Pick, Pick, Pick]
+export type BanAgent = Array<SelectAgent>
+export type AllowAgent = Array<SelectAgent>
 
-export type Side = 'A' | 'B'
-export type AgentPick = [Pick, Pick, Pick]
-
-export type AgentAvatar = {
-  avatar_profession: number
-  awaken_state: string
-  camp_name_mi18n: string
-  element_type: number
-  full_name_mi18n: string
-  group_icon_path: string
-  hollow_icon_path: string
-  id: number
-  level: number
-  name_mi18n: string
-  rank: number
-  rarity: string
-  sub_element_type: number
+export type RoundSide = {
+  pick: PickAgent
+  score: number
+  time: number
 }
+export type Round = Record<Side, RoundSide>
 
+export type AgentImage = {
+  square: string
+  rectangle: string
+  vertical: string
+  color: string
+}
 export type Agent = {
-  avatar: AgentAvatar
-  unlocked: boolean
-  is_up: boolean
-  is_teaser: boolean
-  is_top: boolean
+  isTeaser: boolean
+  isUp: boolean
+  name: string
+  fullName: string
+  id: number
+  rarity: string
+  images: AgentImage
 }
