@@ -32,12 +32,16 @@ const RuleBook = () => {
   return (
     <div className="dark:text-white p-4 bg-base w-md flex flex-col overflow-y-auto overflow-x-hidden scrollbar-hidden">
       <div className="mb-10">
-        <h2 className="text-3xl text-primary font-black mb-4">공용 무대</h2>
+        <UI.Typo.Heading primary className="mb-4">
+          공용 무대
+        </UI.Typo.Heading>
         <UI.Input defaultValue={commonStage} onChange={onStageChange} />
       </div>
       <Ban />
       <div className="mt-10 flex-1">
-        <h2 className="text-3xl text-primary font-black mb-4">경기 규칙</h2>
+        <UI.Typo.Heading primary className="mb-4">
+          경기 규칙
+        </UI.Typo.Heading>
         <div>
           <h3 className="text-xl text-white font-bold mb-2">Cost 설정</h3>
           <div className="mb-4">
