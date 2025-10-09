@@ -1,21 +1,28 @@
+import type { AllowAgent, Rarity } from '../types'
 import { UI, Agent, RarityTabs } from '@/components'
 import { useAgents } from '@/hooks'
 import { filter, includes, map, pipe, toArray } from '@fxts/core'
 import { createContext, useState, useEffect } from 'react'
 
-type SettingContextType = {
+type URLState = {
   banCount: number
   totalCost: number
-  allowAgent: number[]
-  roundList: string[]
-  onSettingToggle: () => void
+  allowAgent: AllowAgent
 }
+type SettingContextType = {
+  roundList: Array<string>
+  onSettingToggle: () => void
+} & URLState
 
-export const SettingContext = createContext<SettingContextType>({
+const DEFAULT_URL_STATE: URLState = {
   banCount: 2,
   totalCost: 20,
   allowAgent: [],
-  roundList: [],
+}
+
+export const SettingContext = createContext<SettingContextType>({
+  ...DEFAULT_URL_STATE,
+  roundList: ['1라운드', '2라운드'],
   onSettingToggle: () => {},
 })
 
@@ -24,13 +31,13 @@ type Props = {
 }
 
 type AllowAgentProps = {
-  allowAgent: number[]
+  allowAgent: AllowAgent
   onClick: (id: number) => void
 }
 
 const AllowAgent: React.FC<AllowAgentProps> = (props) => {
   const { agents } = useAgents()
-  const [selectRarity, setSelectRarity] = useState<'S' | 'A'>('S')
+  const [selectRarity, setSelectRarity] = useState<Rarity>('S')
 
   const onAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     props.onClick(Number(event.currentTarget.value))
@@ -39,20 +46,20 @@ const AllowAgent: React.FC<AllowAgentProps> = (props) => {
   return (
     <div className="flex-1 flex flex-col overflow-hidden p-4 gap-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl flex-1 font-black dark:text-white italic">Allow Agent</h2>
+        <UI.Typo.Heading primary>Allow Agent</UI.Typo.Heading>
         <RarityTabs className="flex-1" value={selectRarity} onChange={setSelectRarity} />
       </div>
       <ul className="grid grid-cols-5 gap-4 py-4 flex-1 overflow-y-auto scrollbar-hidden">
         {pipe(
           agents,
-          filter((agent) => agent.avatar.rarity === selectRarity),
+          filter((agent) => agent.rarity === selectRarity),
           map((agent) => (
-            <li key={agent.avatar.id} className="flex items-start justify-center">
+            <li key={agent.id} className="flex items-start justify-center">
               <Agent.Button
-                active={includes(agent.avatar.id, props.allowAgent)}
+                active={includes(agent.id, props.allowAgent)}
                 onClick={onAgentClick}
-                disabled={agent.is_teaser}
-                {...agent.avatar}
+                disabled={agent.isTeaser}
+                {...agent.images}
               />
             </li>
           )),
@@ -64,10 +71,12 @@ const AllowAgent: React.FC<AllowAgentProps> = (props) => {
 }
 
 const SettingProvider: React.FC<Props> = (props) => {
+  const [urlState, setUrlState] = useState<URLState>(DEFAULT_URL_STATE)
+
   const [banCount, setBanCount] = useState(2)
   const [totalCost, setTotalCost] = useState(20)
   const [isOpen, setIsOpen] = useState(false)
-  const [allowAgent, setAllowAgent] = useState<number[]>([])
+  const [allowAgent, setAllowAgent] = useState<AllowAgent>([])
   const [roundList] = useState<string[]>(['1라운드', '2라운드'])
 
   const onBanCountChange = (count: number) => {
