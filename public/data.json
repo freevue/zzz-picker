@@ -1,0 +1,620 @@
+[
+  {
+    "isTeaser": true,
+    "isUp": false,
+    "name": "루시아",
+    "fullName": "루시아 엘로웬",
+    "id": 1451,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1451.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1451.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1451.png",
+      "color": "#25999d"
+    }
+  },
+  {
+    "isTeaser": true,
+    "isUp": false,
+    "name": "마나토",
+    "fullName": "코마노 마나토",
+    "id": 1441,
+    "rarity": "A",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1441.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1441.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1441.png",
+      "color": "#b83a37"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": true,
+    "name": "오피 & 「도깨비불」",
+    "fullName": "오피 마그누손 & 「도깨비불」",
+    "id": 1301,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1301.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1301.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1301.png",
+      "color": "#fd7e17"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": true,
+    "name": "이블린",
+    "fullName": "이블린 슈발리에",
+    "id": 1321,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1321.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1321.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1321.png",
+      "color": "#9D5EF1",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/02/11/dca9628bb72a0ffb6a15db3e469a683c_5665899635763209682.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "앨리스",
+    "fullName": "앨리스 타임필드",
+    "id": 1401,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1401.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1401.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1401.png",
+      "color": "#debe8d",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/08/04/32db091567c2229f6631c421d99970d9_243151767784483536.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "「트리거」",
+    "fullName": "「트리거」",
+    "id": 1361,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1361.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1361.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1361.png",
+      "color": "#FFD632",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/03/31/294a060889760a0c8dadbd6978c8dd9e_5666870447379999515.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "「시드」",
+    "fullName": "「시드」",
+    "id": 1461,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1461.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1461.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1461.png",
+      "color": "#aed5dd",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/09/01/3263aa26c7bef10efee4b9580974ebef_8297097044880248551.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "리카온",
+    "fullName": "본 리카온",
+    "id": 1141,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1141.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1141.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1141.png",
+      "color": "#d0d3e0",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/05/28/39d825a9c0a623cd5a592c4e43efcd1c_3237848006865031722.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "그레이스",
+    "fullName": "그레이스 하워드",
+    "id": 1181,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1181.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1181.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1181.png",
+      "color": "#b75339",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/05/28/4bff09490f7351c0296b44cbcaf67cfc_6071083682226320290.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "콜레다",
+    "fullName": "콜레다 벨로보그",
+    "id": 1101,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1101.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1101.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1101.png",
+      "color": "#de643d"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "니콜",
+    "fullName": "니콜 데마라",
+    "id": 1031,
+    "rarity": "A",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1031.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1031.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1031.png",
+      "color": "#e6adaa"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "빌리",
+    "fullName": "빌리 키드",
+    "id": 1081,
+    "rarity": "A",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1081.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1081.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1081.png",
+      "color": "#af3e3a"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "세스",
+    "fullName": "세스 로웰",
+    "id": 1271,
+    "rarity": "A",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1271.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1271.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1271.png",
+      "color": "#136dd5",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/26/65638e28a79aff9f7520b14b72d8c7ee_1354144388039355676.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "엔비",
+    "fullName": "엔비 데마라",
+    "id": 1011,
+    "rarity": "A",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1011.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1011.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1011.png",
+      "color": "#c8e16c"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "코린",
+    "fullName": "코린 위크스",
+    "id": 1061,
+    "rarity": "A",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1061.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1061.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1061.png",
+      "color": "#c8d7bd"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "루시",
+    "fullName": "루시아나 드 몬테피오",
+    "id": 1151,
+    "rarity": "A",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1151.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1151.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1151.png",
+      "color": "#e8cda2",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/07/03/25d5c108b2a5ef14feae4579ac82f57d_4225105416917744756.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "소우카쿠",
+    "fullName": "소우카쿠",
+    "id": 1131,
+    "rarity": "A",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1131.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1131.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1131.png",
+      "color": "#28bdcc",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/05/28/451a967428fb1b57783228685d331bdc_7763821998389550678.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "파이퍼",
+    "fullName": "파이퍼 휠",
+    "id": 1281,
+    "rarity": "A",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1281.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1281.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1281.png",
+      "color": "#e9d892",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/07/02/102594259ff0844c16286931f27e3738_4518569069098264454.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "펄크라",
+    "fullName": "펄크라 페리니",
+    "id": 1351,
+    "rarity": "A",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1351.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1351.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1351.png",
+      "color": "#EB721B",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/03/11/2ba6ca9465dca27c6991fa3088ae4c5d_6437950224784601524.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "앤톤",
+    "fullName": "앤톤 이바노프",
+    "id": 1111,
+    "rarity": "A",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1111.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1111.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1111.png",
+      "color": "#ddc374"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "벤",
+    "fullName": "벤 비거",
+    "id": 1121,
+    "rarity": "A",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1121.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1121.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1121.png",
+      "color": "#a68d73"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "반인호",
+    "fullName": "반인호",
+    "id": 1421,
+    "rarity": "A",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1421.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1421.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1421.png",
+      "color": "#c84342",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/06/04/e8ab19111e36a76d123db1a258a8e468_4967652984696244086.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "네코마타",
+    "fullName": "네코미야 마나",
+    "id": 1021,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1021.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1021.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1021.png",
+      "color": "#a0351c"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "「11호」",
+    "fullName": "「11호」",
+    "id": 1041,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1041.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1041.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1041.png",
+      "color": "#febb2e"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "카이사르",
+    "fullName": "카이사르 킹",
+    "id": 1071,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1071.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1071.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1071.png",
+      "color": "#da8837",
+      "header": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/09/25/39451177/527e1b25a1f3e4b54b6cc6ad5407ff0f_7014667772359639697.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "미야비",
+    "fullName": "호시미 미야비",
+    "id": 1091,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1091.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1091.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1091.png",
+      "color": "#05777a",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/12/05/7c109fd5fa0272a3efd221eea41efc8a_3135483826882774474.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "라이터",
+    "fullName": "라이터",
+    "id": 1161,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1161.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1161.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1161.png",
+      "color": "#be3b2b",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/10/25/c56da0397bcfa10036b846b0c1a9ac32_4087206784704525051.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "버니스",
+    "fullName": "버니스 화이트",
+    "id": 1171,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1171.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1171.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1171.png",
+      "color": "#da8837",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/09/05/44ae11cc744728789fdc46b19b1abfb5_7821066120819804655.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "엘렌",
+    "fullName": "엘렌 조",
+    "id": 1191,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1191.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1191.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1191.png",
+      "color": "#c9becc",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/05/28/e33797f7ef84a06501bffbf1263e6c22_5212774832115001123.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "하루마사",
+    "fullName": "아사바 하루마사",
+    "id": 1201,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1201.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1201.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1201.png",
+      "color": "#e1c600",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/12/05/3362d499fb1518bba5ba111ffe86d900_5036860325310723023.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "리나",
+    "fullName": "알렉산드리나 세바스티안",
+    "id": 1211,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1211.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1211.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1211.png",
+      "color": "#c4c1b1",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/05/28/5861537250d67fe4adcdc86009150c67_8472512953737197419.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "야나기",
+    "fullName": "츠키시로 야나기",
+    "id": 1221,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1221.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1221.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1221.png",
+      "color": "#d55b68",
+      "header": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2024/11/17/39451177/0fdfdf25dd5bdb7d3e4fa11e75a77fb9_5079113181783280321.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "주연",
+    "fullName": "주연",
+    "id": 1241,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1241.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1241.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1241.png",
+      "color": "#4e7ebd",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/05/28/97da9558378b311eb40e733074a41830_5403854964936555699.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "청의",
+    "fullName": "청의",
+    "id": 1251,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1251.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1251.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1251.png",
+      "color": "#28c79d",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/12/9ef02e81d2d93044ae1fcd6c12a2d4c8_6806451031558329033.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "제인",
+    "fullName": "제인 도",
+    "id": 1261,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1261.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1261.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1261.png",
+      "color": "#86d4e8",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2024/08/26/5e211be492e1c6c7466e9ca60b61fc9c_5527212636164044079.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "휴고",
+    "fullName": "휴고 블라드",
+    "id": 1291,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1291.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1291.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1291.png",
+      "color": "#EECC7B",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/05/12/174dda409583635d02f44c23fe716d18_4578669566807483342.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "아스트라",
+    "fullName": "아스트라 야오",
+    "id": 1311,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1311.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1311.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1311.png",
+      "color": "#D12D4E",
+      "header": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/01/22/149234449/fd3d4e73035cb7ffa43007099fd757e5_3308082436742293758.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "비비안",
+    "fullName": "비비안 밴시",
+    "id": 1331,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1331.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1331.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1331.png",
+      "color": "#C77DFB",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/04/22/e98c6e14481ce6b6735de9ff56c3f605_5754928851060141836.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "의현",
+    "fullName": "의현",
+    "id": 1371,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1371.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1371.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1371.png",
+      "color": "#b7986f",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/06/04/e2e8892d6384f1cd3a78c3d8e7035b3e_6914282109524192693.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "0호·엔비",
+    "fullName": "0호·엔비",
+    "id": 1381,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1381.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1381.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1381.png",
+      "color": "#F7940A",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/03/11/62b75a19b9ff329eb329d55e47aa3a58_7652355708405427298.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "귤복복",
+    "fullName": "귤복복",
+    "id": 1391,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1391.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1391.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1391.png",
+      "color": "#e29737",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/06/23/2c63db4475cf55ee75cfd3b15c4fe547_569101222175571896.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "유즈하",
+    "fullName": "우키나미 유즈하",
+    "id": 1411,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1411.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1411.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1411.png",
+      "color": "#b92734",
+      "header": "https://act-upload.hoyoverse.com/event-ugc-hoyowiki/2025/07/16/24090565/fd523f08a3511cdf83d67e4999e947b0_7011532314802832586.png"
+    }
+  }
+]
