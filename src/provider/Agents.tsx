@@ -1,8 +1,9 @@
-import type { Agent as AgentType } from '../types'
+import type { Agent } from '../types'
+import { pipe } from '@fxts/core'
 import { createContext, useEffect, useState } from 'react'
 
 type Context = {
-  agents: Array<AgentType>
+  agents: Array<Agent>
 }
 
 export const AgentsContext = createContext<Context>({ agents: [] })
@@ -12,12 +13,17 @@ type Props = {
 }
 
 const AgentsProvider: React.FC<Props> = (props) => {
-  const [agents, setAgents] = useState<Array<AgentType>>([])
+  const [agents, setAgents] = useState<Array<Agent>>([])
 
   useEffect(() => {
-    fetch('/agents.json')
-      .then((res) => res.json())
-      .then((data) => setAgents(data))
+    pipe(
+      '/agents.json',
+      (url) => fetch(url),
+      (response) => response.json(),
+      (data) => {
+        setAgents(data)
+      }
+    )
   }, [])
 
   return <AgentsContext.Provider value={{ agents }}>{props.children}</AgentsContext.Provider>
