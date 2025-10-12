@@ -16,7 +16,10 @@ const AgentDialog: React.FC<Props> = (props) => {
   const [selectRarity, setSelectRarity] = useState<'S' | 'A'>('S')
 
   return (
-    <UI.Dialog onClose={props.onClose} className="w-xl bg-bg-content">
+    <UI.Dialog
+      onClose={props.onClose}
+      className="bg-bg-content border-1 border-secondary flex flex-col w-2xl"
+    >
       <div className="flex-1 flex flex-col h-full overflow-hidden p-4 gap-4">
         <div className="flex items-center justify-between gap-16">
           <UI.Typo.Heading primary>Agent List</UI.Typo.Heading>

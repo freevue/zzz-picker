@@ -16,13 +16,40 @@ const AgentDialog: React.FC<Props> = (props) => {
   const [selectRarity, setSelectRarity] = useState<'S' | 'A'>('S')
 
   return (
-    <UI.Dialog onClose={props.onClose} className="w-xl bg-bg-content">
-      <div className="flex-1 flex flex-col h-full overflow-hidden p-4 gap-4">
-        <div className="flex items-center justify-between gap-16">
+    <UI.Dialog
+      onClose={props.onClose}
+      className="bg-bg-content border-1 border-secondary flex flex-col w-2xl"
+    >
+      <div className="flex-1 flex flex-col h-full overflow-hidden p-4">
+        <div className="flex items-center justify-between gap-16 mb-10">
           <UI.Typo.Heading primary>Agent List</UI.Typo.Heading>
           <RarityTabs className="flex-1" value={selectRarity} onChange={setSelectRarity} />
         </div>
-        <div className="flex-1">
+        <div>
+          <UI.Typo.Heading className="text-xl font-bold dark:text-text-primary">
+            Allow Agent
+          </UI.Typo.Heading>
+          <ul className="grid grid-cols-5 gap-4 py-4">
+            {pipe(
+              state.allowAgent,
+              map((id) => agents.find((agent) => agent.id === id)!),
+              map((agent) => (
+                <li key={agent.id} className="flex items-start justify-center">
+                  <Agent.Button
+                    onClick={props.onClick}
+                    disabled={agent.isTeaser || includes(agent.id, banList)}
+                    {...agent}
+                  />
+                </li>
+              )),
+              toArray
+            )}
+          </ul>
+        </div>
+        <div>
+          <UI.Typo.Heading className="text-xl font-bold dark:text-text-primary">
+            All Agent
+          </UI.Typo.Heading>
           <ul className="grid grid-cols-5 gap-4 py-4">
             {pipe(
               agents,
