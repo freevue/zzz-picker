@@ -31,3 +31,26 @@ export type Agent = {
   rarity: Rarity
   images: AgentImage
 }
+
+export type URLState = {
+  banCount: number
+  totalCost: number
+  allowAgent: AllowAgent
+}
+
+export type CostWeight = {
+  used: number
+  rate: number
+}
+export type CostTable = {
+  agent: {
+    SPick: CostWeight
+    SAlways: CostWeight
+    AAlways: CostWeight
+  }
+  engine: {
+    SExclusive: CostWeight
+    S: CostWeight
+    A: CostWeight
+  }
+}
