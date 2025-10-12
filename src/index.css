@@ -74,23 +74,37 @@
   font-display: swap;
 }
 
+@theme {
+  --color-primary: #ffde00;
+  --color-secondary: #00d4ff;
+
+  --color-bg-base: #0a0a0a;
+  --color-bg-content: #1a1a1a;
+  --color-bg-content-hover: #242424;
+
+  --color-text-primary: #f5f5f5;
+  --color-text-secondary: #a0a0a0;
+  --color-text-muted: #666666;
+
+  --color-table-bg-highlight: #2a2a2a;
+  --color-table-bg-hover: #323232;
+  --color-table-border: #333333;
+  --color-table-border-highlight: #555555;
+  --color-table-text-highlight: #ffde00;
+  --color-table-text-accent: #00d4ff;
+}
+
 body {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
   font-family: 'Paperozi', sans-serif;
-  background-color: #000;
+  background-color: var(--color-bg-base);
 }
 #root {
   width: 100%;
   height: 100%;
 }
-
-@theme {
-  --color-primary: #ffde00;
-  --color-base: #111111;
-}
-
 .scrollbar-hidden {
   scrollbar-width: none;
 }
@@ -100,7 +114,6 @@ body {
 }
 
 @layer base {
-  /* Chrome, Safari, Edge, Opera */
   input[type='number']::-webkit-inner-spin-button,
   input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
