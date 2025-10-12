@@ -1,34 +1,24 @@
-import type { AllowAgent, Rarity } from '../types'
+import type { AllowAgent, Rarity, CostTable, URLState } from '../types'
 import { UI, Agent, RarityTabs } from '@/components'
+import { DEFAULT_COST_TABLE, DEFAULT_URL_STATE } from '@/constant'
 import { useAgents } from '@/hooks'
-import { filter, includes, map, pipe, toArray } from '@fxts/core'
+import { filter, includes, map, pipe, split, toArray } from '@fxts/core'
 import { createContext, useState, useEffect } from 'react'
 
-type URLState = {
-  banCount: number
-  totalCost: number
-  allowAgent: AllowAgent
-}
-type SettingContextType = {
+type Context = {
   roundList: Array<string>
+  costTable: CostTable
   onSettingToggle: () => void
+  onCostChange: (key: string, value: number) => void
 } & URLState
 
-const DEFAULT_URL_STATE: URLState = {
-  banCount: 2,
-  totalCost: 20,
-  allowAgent: [],
-}
-
-export const SettingContext = createContext<SettingContextType>({
+export const SettingContext = createContext<Context>({
   ...DEFAULT_URL_STATE,
   roundList: ['1라운드', '2라운드'],
+  costTable: DEFAULT_COST_TABLE,
   onSettingToggle: () => {},
+  onCostChange: () => {},
 })
-
-type Props = {
-  children: React.ReactNode
-}
 
 type AllowAgentProps = {
   allowAgent: AllowAgent
@@ -70,8 +60,13 @@ const AllowAgent: React.FC<AllowAgentProps> = (props) => {
   )
 }
 
+type Props = {
+  children: React.ReactNode
+}
+
 const SettingProvider: React.FC<Props> = (props) => {
   const [urlState, setUrlState] = useState<URLState>(DEFAULT_URL_STATE)
+  const [costTable, setCostTable] = useState<CostTable>(DEFAULT_COST_TABLE)
 
   const [banCount, setBanCount] = useState(2)
   const [totalCost, setTotalCost] = useState(20)
@@ -147,9 +142,19 @@ const SettingProvider: React.FC<Props> = (props) => {
         banCount,
         totalCost,
         allowAgent,
+        costTable,
         roundList,
         onSettingToggle: () => {
           setIsOpen((prev) => !prev)
+        },
+        onCostChange: (key, value) => {
+          function updateNested<T>(item: T, [first, ...rest]: Array<string>): T {
+            return rest.length === 0
+              ? { ...item, [first]: value }
+              : { ...item, [first]: updateNested(item[first as keyof T], rest) }
+          }
+
+          setCostTable((prev) => pipe(key, split('.'), toArray, (list) => updateNested(prev, list)))
         },
       }}
     >
