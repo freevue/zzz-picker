@@ -54,7 +54,7 @@ const Td: React.FC<Props> = (props) => {
               type="number"
               step="0.01"
               ref={input}
-              className="w-full text-center h-full block p-2 border-none outline-none text-secondary"
+              className="w-full text-center h-full block p-2 border-none outline-none text-lg font-medium text-secondary"
               defaultValue={props.value}
               onBlur={onBlur}
               name={props.name}
@@ -62,7 +62,11 @@ const Td: React.FC<Props> = (props) => {
           </label>
         </form>
       ) : (
-        <button onClick={onEditClick} className="w-full h-full cursor-pointer block" type="button">
+        <button
+          onClick={onEditClick}
+          className="w-full h-full cursor-pointer block text-text-primary text-lg font-medium"
+          type="button"
+        >
           {props.value}
         </button>
       )}

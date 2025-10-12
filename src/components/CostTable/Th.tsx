@@ -16,6 +16,8 @@ const Th: React.FC<Props> = (props) => {
           'border-table-bg-highlight',
           'border-b',
           'border-r',
+          'text-lg',
+          'font-bold',
         ],
         concat([props.className || '']),
         join(' ')
