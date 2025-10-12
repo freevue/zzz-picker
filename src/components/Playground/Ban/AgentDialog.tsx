@@ -1,7 +1,6 @@
 import { UI, RarityTabs, Agent } from '@/components'
 import { useAgents, useBan } from '@/hooks'
 import { useSetting } from '@/hooks'
-import type { Rarity } from '@/types'
 import { pipe, filter, map, toArray, includes } from '@fxts/core'
 import { useState } from 'react'
 
@@ -14,7 +13,7 @@ const AgentDialog: React.FC<Props> = (props) => {
   const { agents } = useAgents()
   const { banList } = useBan()
   const { state } = useSetting()
-  const [selectRarity, setSelectRarity] = useState<Rarity>('S')
+  const [selectRarity, setSelectRarity] = useState<'S' | 'A'>('S')
 
   return (
     <UI.Dialog onClose={props.onClose} className="w-xl bg-bg-content">

@@ -1,24 +1,9 @@
-import Pick from '../Pick'
-import { Refresh } from '@/Icons'
-import { DEFAULT_PICKS } from '@/constant'
-import { useScore, usePick } from '@/hooks'
-
 type Props = {
   children: React.ReactNode
   round: string
 }
 
 const Round: React.FC<Props> = (props) => {
-  const { setScore } = useScore()
-  const { onPickChange } = usePick()
-
-  const onResetClick = () => {
-    setScore(props.round, 'A', { score: 0, time: '00분 00초' })
-    setScore(props.round, 'B', { score: 0, time: '00분 00초' })
-    onPickChange(props.round, 'A', DEFAULT_PICKS)
-    onPickChange(props.round, 'B', DEFAULT_PICKS)
-  }
-
   return (
     <>
       <div className="">

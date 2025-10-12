@@ -1,18 +1,18 @@
-import { useAgents, useSetting } from '@/hooks'
+import { useSetting } from '@/hooks'
+import type { SelectAgent } from '@/types'
 import { findIndex, map, pipe, range, toArray } from '@fxts/core'
 import { createContext, useEffect, useState } from 'react'
 
-type AgentID = number | null
 type Context = {
-  banList: Array<AgentID>
-  noBanList: Array<number>
+  banList: Array<SelectAgent>
   setBanList: (id: number | null, index: number) => void
+  reset: () => void
 }
 
 export const BanContext = createContext<Context>({
   banList: [null, null],
-  noBanList: [],
   setBanList: () => {},
+  reset: () => {},
 })
 
 type Props = {
@@ -20,37 +20,34 @@ type Props = {
 }
 
 const BanProvider: React.FC<Props> = (props) => {
-  const { agents } = useAgents()
-  const { banCount } = useSetting()
-  const [banList, setBanList] = useState<Array<AgentID>>([null, null])
-  const [noBanList] = useState<Array<number>>([])
+  const { state } = useSetting()
+  const [banList, setBanList] = useState<Array<SelectAgent>>([null, null])
 
   useEffect(() => {
-    // pipe(
-    //   agents,
-    //   filter((agent) => agent.is_up),
-    //   map((agent) => agent.avatar.id),
-    //   toArray,
-    //   (list) => setNoBanList(list)
-    // )
-  }, [agents])
-  useEffect(() => {
     pipe(
-      banCount,
+      state.banCount,
       range,
       map(() => null),
       toArray,
       (list) => setBanList(list)
     )
-  }, [banCount])
+  }, [state.banCount])
 
   return (
     <BanContext.Provider
       value={{
         banList,
-        noBanList,
+        reset: () => {
+          pipe(
+            state.banCount,
+            range,
+            map(() => null),
+            toArray,
+            (list) => setBanList(list)
+          )
+        },
         setBanList: (id: number | null, index: number) => {
-          // if (id && noBanList.includes(id)) return
+          if (id && state.allowAgent.includes(id)) return
 
           setBanList((prev) => {
             const currentAgentIndex = pipe(

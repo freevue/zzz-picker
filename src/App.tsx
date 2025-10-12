@@ -12,7 +12,7 @@ function App() {
             <CostTable />
           </div>
           <ScoreProvider>
-            <div className="min-w-4xl p-4 w-4xl overflow-auto scrollbar-hidden">
+            <div className="min-w-4xl w-4xl overflow-auto scrollbar-hidden">
               <Playground />
             </div>
           </ScoreProvider>

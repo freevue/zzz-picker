@@ -1,37 +1,49 @@
+import Ban from './Ban'
 import Nickname from './Nickname'
 import Round from './Round'
-import TotalScore from './TotalScore'
-import { useSetting, useScore, usePick } from '@/hooks'
+import { Refresh } from '@/Icons'
+import { useBan, useSetting } from '@/hooks'
 import { map, pipe, toArray, zipWithIndex } from '@fxts/core'
 
 type Props = {}
 
 const Side: React.FC<Props> = () => {
-  const { roundList, totalCost: settingTotalCost } = useSetting()
-  const { totalScore } = useScore()
-  const { totalCost } = usePick()
+  const { roundList } = useSetting()
+  const { reset } = useBan()
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
   }
 
+  const onResetClick = () => {
+    reset()
+  }
+
   return (
     <form onSubmit={onSubmit} className="block w-full">
-      <div className="flex w-full gap-4 items-center sticky top-0 bg-black z-10">
+      <div className="flex w-full p-4  gap-4 items-center sticky top-0 bg-black z-10">
         <Nickname side="A" />
         <span className="text-2xl font-bold dark:text-text-secondary">VS</span>
         <Nickname side="B" />
       </div>
-      {pipe(
-        roundList,
-        zipWithIndex,
-        map(([index, round]) => (
-          <Round key={index} round={round}>
-            {round}
-          </Round>
-        )),
-        toArray
-      )}
+      <div className="p-4">
+        {pipe(
+          roundList,
+          zipWithIndex,
+          map(([index, round]) => (
+            <Round key={index} round={round}>
+              {round}
+            </Round>
+          )),
+          toArray
+        )}
+      </div>
+      <div className="sticky bottom-0 left-0 w-full p-4 bg-bg-base flex items-end justify-between">
+        <Ban />
+        <button type="reset" onClick={onResetClick} className="size-6 cursor-pointer group">
+          <Refresh className="w-full h-full stroke-text-secondary group-hover:stroke-secondary" />
+        </button>
+      </div>
       {/* <div className="p-4">
         <div className="flex flex-col gap-2 mt-16">
           <h3 className="text-3xl font-bold dark:text-white text-center">종합</h3>
