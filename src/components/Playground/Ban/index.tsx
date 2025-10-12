@@ -21,7 +21,7 @@ const AgentCard: React.FC<{ id: number | null; index: number }> = (props) => {
 
   return (
     <>
-      <div className="w-full h-full">
+      <div className="h-full">
         {props.id ? (
           <div className="relative w-full h-full flex items-start justify-center overflow-hidden group">
             <img src={getAgentSquareImage(props.id)} className="block w-full" alt="" />
@@ -57,13 +57,13 @@ const Ban = () => {
   const { state } = useSetting()
 
   return (
-    <div className="flex gap-4">
+    <div className="flex w-full flex-1 gap-4 overflow-hidden">
       {state.allowAgent.length > 0 && (
-        <div>
+        <div className="flex-1">
           <UI.Typo.Heading className="text-xl" primary>
             Allow
           </UI.Typo.Heading>
-          <ul className="flex border-l-2 border-text-primary mt-4">
+          <ul className="flex border-l-2 border-text-primary mt-4 w-full overflow-x-auto">
             {pipe(
               state.allowAgent,
               map((id) => (
@@ -79,7 +79,7 @@ const Ban = () => {
           </ul>
         </div>
       )}
-      <div>
+      <div className="flex-1">
         <UI.Typo.Heading className="text-xl" primary>
           Ban
         </UI.Typo.Heading>

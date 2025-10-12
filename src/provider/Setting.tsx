@@ -1,7 +1,7 @@
 import type { AllowAgent, Rarity, CostTable, URLState } from '../types'
 import { UI, Agent, RarityTabs } from '@/components'
 import { DEFAULT_COST_TABLE, DEFAULT_URL_STATE } from '@/constant'
-import { useAgents } from '@/hooks'
+import { useAgents, useSetting } from '@/hooks'
 import { each, entries, filter, includes, map, pipe, split, toArray } from '@fxts/core'
 import { createContext, useState, useEffect } from 'react'
 
@@ -28,17 +28,17 @@ export const SettingContext = createContext<Context>({
   onSettingChange: () => {},
 })
 
-type AllowAgentProps = {
-  allowAgent: AllowAgent
-  onClick: (id: number) => void
-}
-
-const AllowAgent: React.FC<AllowAgentProps> = (props) => {
+const AllowAgent: React.FC = () => {
   const { agents } = useAgents()
   const [selectRarity, setSelectRarity] = useState<Rarity>('S')
+  const { onSettingChange, state } = useSetting()
 
   const onAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    props.onClick(Number(event.currentTarget.value))
+    onSettingChange({
+      allowAgent: state.allowAgent.includes(Number(event.currentTarget.value))
+        ? state.allowAgent.filter((value) => value !== Number(event.currentTarget.value))
+        : [...state.allowAgent, Number(event.currentTarget.value)],
+    })
   }
 
   return (
@@ -54,7 +54,7 @@ const AllowAgent: React.FC<AllowAgentProps> = (props) => {
           map((agent) => (
             <li key={agent.id} className="flex items-start justify-center">
               <Agent.Button
-                active={includes(agent.id, props.allowAgent)}
+                active={includes(agent.id, state.allowAgent)}
                 onClick={onAgentClick}
                 disabled={agent.isTeaser}
                 {...agent}
@@ -81,51 +81,10 @@ const SettingProvider: React.FC<Props> = (props) => {
   const [roundList] = useState<string[]>(['1라운드', '2라운드'])
 
   const onInputChange = (value: number, name: string) => {
-    setSettingState((prev) => ({ ...prev, [name]: value }))
-  }
-  const onAllowAgentClick = (id: number) => {
-    setSettingState((prev) => {
-      return {
-        ...prev,
-        allowAgent: prev.allowAgent.includes(id)
-          ? prev.allowAgent.filter((value) => value !== id)
-          : [...prev.allowAgent, id],
-      }
-    })
-  }
-
-  useEffect(() => {
-    pipe(
-      window.location.search,
-      (query) => new URLSearchParams(query),
-      (data) => {
-        for (const [key, value] of data.entries()) {
-          if (key === 'allowAgent') {
-            setSettingState((prev) => ({ ...prev, allowAgent: value.split(',').map(Number) }))
-          } else {
-            setSettingState((prev) => ({ ...prev, [key]: Number(value) }))
-          }
-        }
-      }
-    )
-  }, [])
-
-  useEffect(() => {
-    setSettingState((prev) => ({
-      ...prev,
-      allowAgent: pipe(
-        agents,
-        filter((agent) => agent.isUp),
-        map((agent) => agent.id),
-        toArray
-      ),
-    }))
-  }, [agents])
-  useEffect(() => {
     const searchParams = new URLSearchParams()
 
     pipe(
-      settingState,
+      { ...settingState, [name]: value },
       entries,
       each(([key, value]) => {
         if (key === 'allowAgent') {
@@ -134,9 +93,39 @@ const SettingProvider: React.FC<Props> = (props) => {
           searchParams.set(key, value.toString())
         }
       }),
-      () => window.history.replaceState(null, '', `?${searchParams.toString()}`)
+      () => {
+        window.history.replaceState(null, '', `?${searchParams.toString()}`)
+        setSettingState((prev) => ({ ...prev, [name]: value }))
+      }
     )
-  }, [settingState])
+  }
+
+  useEffect(() => {
+    if (agents.length === 0) return
+
+    pipe(
+      window.location.search,
+      (query) => new URLSearchParams(query),
+      (data) => {
+        pipe(
+          data.has('allowAgent')
+            ? pipe(data.get('allowAgent')!, split(','), map(Number))
+            : pipe(
+                agents,
+                filter((agent) => agent.isUp),
+                map((agent) => agent.id)
+              ),
+          toArray,
+          (allowAgent) => ({
+            allowAgent,
+            totalCost: Number(data.get('totalCost')) || 0,
+            banCount: Number(data.get('banCount')) || 0,
+          }),
+          (state) => setSettingState(state)
+        )
+      }
+    )
+  }, [agents])
 
   return (
     <SettingContext.Provider
@@ -148,7 +137,23 @@ const SettingProvider: React.FC<Props> = (props) => {
           setIsOpen((prev) => !prev)
         },
         onSettingChange: (value) => {
-          setSettingState((prev) => ({ ...prev, ...value }))
+          const searchParams = new URLSearchParams()
+
+          pipe(
+            { ...settingState, ...value },
+            entries,
+            each(([key, value]) => {
+              if (key === 'allowAgent') {
+                value.length > 0 ? searchParams.set(key, value.join(',')) : searchParams.delete(key)
+              } else {
+                searchParams.set(key, value.toString())
+              }
+            }),
+            () => {
+              window.history.replaceState(null, '', `?${searchParams.toString()}`)
+              setSettingState((prev) => ({ ...prev, ...value }))
+            }
+          )
         },
         onCostChange: (key, value) => {
           function updateNested<T>(item: T, [first, ...rest]: Array<string>): T {
@@ -194,7 +199,7 @@ const SettingProvider: React.FC<Props> = (props) => {
               </div>
             </div>
           </div>
-          <AllowAgent allowAgent={settingState.allowAgent} onClick={onAllowAgentClick} />
+          <AllowAgent />
         </UI.Dialog>
       )}
     </SettingContext.Provider>

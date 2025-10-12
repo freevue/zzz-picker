@@ -5,28 +5,39 @@ import { join, pipe, map, toArray, zipWithIndex, concat } from '@fxts/core'
 import { useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 
+type PickState = {
+  id: SelectAgent
+  rate: number
+  engineRate: number
+}
 type Props = {
   side: Side
 }
 
+const DEFAULT_PICK_STATE = {
+  id: null,
+  rate: 0,
+  engineRate: 0,
+}
+const DEFAULT_PICK_LIST = new Map<number, PickState>([
+  [0, DEFAULT_PICK_STATE],
+  [1, DEFAULT_PICK_STATE],
+  [2, DEFAULT_PICK_STATE],
+])
+
 const Pick: React.FC<Props> = (props) => {
-  const [agentList, setAgentList] = useState<[SelectAgent, SelectAgent, SelectAgent]>([
-    null,
-    null,
-    null,
-  ])
+  const [pickList, setPickList] = useState<Map<number, PickState>>(DEFAULT_PICK_LIST)
+  const [isRecordDialogOpen, setIsRecordDialogOpen] = useState(false)
   const skew = useMemo(() => {
     if (props.side === 'A') return 'skew-x-12'
     if (props.side === 'B') return '-skew-x-12'
   }, [props.side])
   const onAgentSelected = (index: number) => (agent: SelectAgent) => {
-    setAgentList((prev) => {
-      const newList = [...prev]
-
-      newList[index] = agent
-
-      return newList as [SelectAgent, SelectAgent, SelectAgent]
-    })
+    // setAgentList((prev) => {
+    //   const newList = [...prev]
+    //   newList[index] = agent
+    //   return newList as [SelectAgent, SelectAgent, SelectAgent]
+    // })
   }
 
   return (
@@ -34,7 +45,7 @@ const Pick: React.FC<Props> = (props) => {
       <div className="p-4">
         <ul className="flex">
           {pipe(
-            agentList,
+            pickList,
             zipWithIndex,
             map(([index, agent]) => (
               <li
@@ -52,14 +63,18 @@ const Pick: React.FC<Props> = (props) => {
                   join(' ')
                 )}
               >
-                <Agent id={agent} side={props.side} onAgentSelected={onAgentSelected(index)} />
+                <Agent id={null} side={props.side} onAgentSelected={onAgentSelected(index)} />
               </li>
             )),
             toArray
           )}
         </ul>
       </div>
-      {createPortal(<RecordDialog onClose={() => {}} onSubmit={() => {}} />, document.body)}
+      {isRecordDialogOpen &&
+        createPortal(
+          <RecordDialog onClose={() => setIsRecordDialogOpen(false)} onSubmit={() => {}} />,
+          document.body
+        )}
     </>
   )
 }
