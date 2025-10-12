@@ -59,42 +59,46 @@ const Ban = () => {
   return (
     <div className="flex w-full flex-1 gap-4 overflow-hidden">
       {state.allowAgent.length > 0 && (
-        <div className="flex-1">
+        <div className="flex-1 overflow-hidden">
           <UI.Typo.Heading className="text-xl" primary>
             Allow
           </UI.Typo.Heading>
-          <ul className="flex border-l-2 border-text-primary mt-4 w-full overflow-x-auto">
+          <div className="w-full overflow-x-auto overflow-y-hidden mt-4">
+            <ul className="flex border-l-2 border-text-primary w-fit">
+              {pipe(
+                state.allowAgent,
+                map((id) => (
+                  <li
+                    key={id}
+                    className="border-2 size-24 border-text-primary border-l-0 overflow-hidden"
+                  >
+                    <img src={getAgentSquareImage(id)} className="block w-full" alt="" />
+                  </li>
+                )),
+                toArray
+              )}
+            </ul>
+          </div>
+        </div>
+      )}
+      <div className="flex-1 overflow-hidden">
+        <UI.Typo.Heading className="text-xl" primary>
+          Ban
+        </UI.Typo.Heading>
+        <div className="w-full overflow-x-auto overflow-y-hidden mt-4">
+          <ul className="flex border-l-2 border-text-primary w-fit">
             {pipe(
-              state.allowAgent,
-              map((id) => (
-                <li
-                  key={id}
-                  className="border-2 size-24 border-text-primary border-l-0 overflow-hidden"
-                >
-                  <img src={getAgentSquareImage(id)} className="block w-full" alt="" />
+              banList,
+              zipWithIndex,
+              map(([index, id]) => (
+                <li key={index} className="border-2 size-24 border-text-primary border-l-0">
+                  <AgentCard id={id} index={index} />
                 </li>
               )),
               toArray
             )}
           </ul>
         </div>
-      )}
-      <div className="flex-1">
-        <UI.Typo.Heading className="text-xl" primary>
-          Ban
-        </UI.Typo.Heading>
-        <ul className="flex border-l-2 border-text-primary mt-4">
-          {pipe(
-            banList,
-            zipWithIndex,
-            map(([index, id]) => (
-              <li key={index} className="border-2 size-24 border-text-primary border-l-0">
-                <AgentCard id={id} index={index} />
-              </li>
-            )),
-            toArray
-          )}
-        </ul>
       </div>
     </div>
   )
