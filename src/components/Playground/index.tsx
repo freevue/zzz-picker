@@ -26,7 +26,7 @@ const Side: React.FC<Props> = () => {
         <span className="text-2xl font-bold dark:text-text-secondary">VS</span>
         <Nickname side="B" />
       </div>
-      <div className="p-4">
+      <div className="p-4 flex flex-col gap-6">
         {pipe(
           roundList,
           zipWithIndex,

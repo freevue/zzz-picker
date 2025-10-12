@@ -1,3 +1,4 @@
+import Input from './Input'
 import { pipe, join } from '@fxts/core'
 
 type Props = {
@@ -10,28 +11,14 @@ type Props = {
 const Time: React.FC<Props> = (props) => {
   return (
     <div className={pipe([props.className, 'flex', 'items-center', 'gap-4'], join(' '))}>
-      <div className="flex items-center w-full border-2 border-gray-700 rounded-md overflow-hidden">
-        <input
-          name={`${props.name}-minute`}
-          type="text"
-          className="w-full h-8 px-4 focus:outline-none dark:text-white dark:placeholder:text-gray-700 text-right"
-          value={props.defaultValue}
-          onChange={props.onChange}
-          autoComplete="off"
-        />
+      <div className="flex gap-2 items-center">
+        <Input className="[&_input]:text-right" type="number" name={`${props.name}-minute`} />
+        <p className="dark:text-white text-2xl font-bold">분</p>
       </div>
-      <p className="dark:text-white text-2xl font-bold">분</p>
-      <div className="flex items-center w-full border-2 border-gray-700 rounded-md overflow-hidden">
-        <input
-          name={`${props.name}-second`}
-          type="text"
-          className="w-full h-8 px-4 focus:outline-none dark:text-white dark:placeholder:text-gray-700 text-right"
-          value={props.defaultValue}
-          onChange={props.onChange}
-          autoComplete="off"
-        />
+      <div className="flex gap-2 items-center">
+        <Input className="[&_input]:text-right" type="number" name={`${props.name}-second`} />
+        <p className="dark:text-white text-2xl font-bold">초</p>
       </div>
-      <p className="dark:text-white text-2xl font-bold">초</p>
     </div>
   )
 }
