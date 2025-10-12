@@ -21,6 +21,7 @@ export type AgentImage = {
   rectangle: string
   vertical: string
   color: string
+  header: string
 }
 export type Agent = {
   isTeaser: boolean
@@ -52,5 +53,13 @@ export type CostTable = {
     SExclusive: CostWeight
     S: CostWeight
     A: CostWeight
+  }
+}
+
+export type Boss = {
+  isOpen: boolean
+  name: string
+  images: {
+    rectangle: string
   }
 }
