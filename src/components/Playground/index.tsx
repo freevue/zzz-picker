@@ -12,13 +12,13 @@ const Side: React.FC<Props> = () => {
   const { totalCost } = usePick()
 
   return (
-    <div className="w-3xl overflow-auto scrollbar-hidden">
-      <div className="flex w-full gap-4 items-center sticky top-0 bg-black z-10 p-4">
+    <>
+      <div className="flex w-full gap-4 items-center sticky top-0 bg-black z-10">
         <Nickname side="A" />
-        <span className="text-2xl font-bold dark:text-white/70">VS</span>
+        <span className="text-2xl font-bold dark:text-text-secondary">VS</span>
         <Nickname side="B" />
       </div>
-      <div className="p-4">
+      {/* <div className="p-4">
         {pipe(
           roundList,
           zipWithIndex,
@@ -55,8 +55,8 @@ const Side: React.FC<Props> = () => {
             <TotalScore side="B" />
           </div>
         </div>
-      </div>
-    </div>
+      </div> */}
+    </>
   )
 }
 
