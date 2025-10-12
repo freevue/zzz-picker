@@ -52,34 +52,6 @@ const Side: React.FC<Props> = () => {
           <Refresh className="w-full h-full stroke-text-secondary group-hover:stroke-secondary" />
         </button>
       </div>
-      {/* <div className="p-4">
-        <div className="flex flex-col gap-2 mt-16">
-          <h3 className="text-3xl font-bold dark:text-white text-center">종합</h3>
-          <div className="flex items-end justify-between gap-12">
-            <p className="flex-3/4 text-right dark:text-white text-3xl font-semibold">
-              {totalScore.A}
-            </p>
-            <p className="text-xl text-center font-bold flex-2/4 dark:text-white/70">라운드 점수</p>
-            <p className="flex-3/4 text-left dark:text-white text-3xl font-semibold">
-              {totalScore.B}
-            </p>
-          </div>
-          <div className="flex items-end justify-between gap-12">
-            <p className="flex-3/4 text-right dark:text-white text-3xl font-semibold">
-              {settingTotalCost - totalCost.A}
-            </p>
-            <p className="text-xl text-center flex-2/4 font-bold dark:text-white/70">잔여 Cost</p>
-            <p className="flex-3/4 text-left dark:text-white text-3xl font-semibold">
-              {settingTotalCost - totalCost.B}
-            </p>
-          </div>
-          <div className="flex items-end justify-between gap-12 mt-10 pb-10">
-            <TotalScore side="A" />
-            <p className="text-2xl text-center font-bold flex-1/4 dark:text-white/70">총점</p>
-            <TotalScore side="B" />
-          </div>
-        </div>
-      </div> */}
     </form>
   )
 }
