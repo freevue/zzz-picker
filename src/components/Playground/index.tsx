@@ -11,24 +11,28 @@ const Side: React.FC<Props> = () => {
   const { totalScore } = useScore()
   const { totalCost } = usePick()
 
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+  }
+
   return (
-    <>
+    <form onSubmit={onSubmit} className="block w-full">
       <div className="flex w-full gap-4 items-center sticky top-0 bg-black z-10">
         <Nickname side="A" />
         <span className="text-2xl font-bold dark:text-text-secondary">VS</span>
         <Nickname side="B" />
       </div>
+      {pipe(
+        roundList,
+        zipWithIndex,
+        map(([index, round]) => (
+          <Round key={index} round={round}>
+            {round}
+          </Round>
+        )),
+        toArray
+      )}
       {/* <div className="p-4">
-        {pipe(
-          roundList,
-          zipWithIndex,
-          map(([index, round]) => (
-            <Round key={index} round={round}>
-              {round}
-            </Round>
-          )),
-          toArray
-        )}
         <div className="flex flex-col gap-2 mt-16">
           <h3 className="text-3xl font-bold dark:text-white text-center">종합</h3>
           <div className="flex items-end justify-between gap-12">
@@ -56,7 +60,7 @@ const Side: React.FC<Props> = () => {
           </div>
         </div>
       </div> */}
-    </>
+    </form>
   )
 }
 

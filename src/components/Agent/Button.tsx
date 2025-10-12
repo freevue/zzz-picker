@@ -1,5 +1,5 @@
-import type { AgentAvatar } from '../../types'
 import Avatar from './Avatar'
+import type { Agent } from '@/types'
 import { concat, join, pipe } from '@fxts/core'
 
 export type Props = {
@@ -7,7 +7,7 @@ export type Props = {
   active?: boolean
   onClick?: React.MouseEventHandler<HTMLButtonElement>
   className?: string
-} & AgentAvatar
+} & Agent
 
 const Button: React.FC<Props> = (props) => {
   return (
@@ -47,7 +47,7 @@ const Button: React.FC<Props> = (props) => {
           join(' ')
         )}
       >
-        {props.name_mi18n}
+        {props.name}
       </p>
     </button>
   )

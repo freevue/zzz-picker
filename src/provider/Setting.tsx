@@ -2,22 +2,30 @@ import type { AllowAgent, Rarity, CostTable, URLState } from '../types'
 import { UI, Agent, RarityTabs } from '@/components'
 import { DEFAULT_COST_TABLE, DEFAULT_URL_STATE } from '@/constant'
 import { useAgents } from '@/hooks'
-import { filter, includes, map, pipe, split, toArray } from '@fxts/core'
+import { each, entries, filter, includes, map, pipe, split, toArray } from '@fxts/core'
 import { createContext, useState, useEffect } from 'react'
 
+type DispatchSetting = {
+  banCount?: number
+  totalCost?: number
+  allowAgent?: AllowAgent
+}
 type Context = {
   roundList: Array<string>
   costTable: CostTable
+  state: URLState
   onSettingToggle: () => void
   onCostChange: (key: string, value: number) => void
-} & URLState
+  onSettingChange: (value: DispatchSetting) => void
+}
 
 export const SettingContext = createContext<Context>({
-  ...DEFAULT_URL_STATE,
   roundList: ['1라운드', '2라운드'],
   costTable: DEFAULT_COST_TABLE,
+  state: DEFAULT_URL_STATE,
   onSettingToggle: () => {},
   onCostChange: () => {},
+  onSettingChange: () => {},
 })
 
 type AllowAgentProps = {
@@ -34,12 +42,12 @@ const AllowAgent: React.FC<AllowAgentProps> = (props) => {
   }
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden p-4 gap-4">
-      <div className="flex items-center justify-between">
+    <div className="flex-1 flex flex-col overflow-hidden gap-4 mt-10">
+      <div className="flex items-center justify-between gap-16">
         <UI.Typo.Heading primary>Allow Agent</UI.Typo.Heading>
         <RarityTabs className="flex-1" value={selectRarity} onChange={setSelectRarity} />
       </div>
-      <ul className="grid grid-cols-5 gap-4 py-4 flex-1 overflow-y-auto scrollbar-hidden">
+      <ul className="grid grid-cols-5 gap-4 py-4 flex-1">
         {pipe(
           agents,
           filter((agent) => agent.rarity === selectRarity),
@@ -49,7 +57,7 @@ const AllowAgent: React.FC<AllowAgentProps> = (props) => {
                 active={includes(agent.id, props.allowAgent)}
                 onClick={onAgentClick}
                 disabled={agent.isTeaser}
-                {...agent.images}
+                {...agent}
               />
             </li>
           )),
@@ -65,50 +73,24 @@ type Props = {
 }
 
 const SettingProvider: React.FC<Props> = (props) => {
-  const [urlState, setUrlState] = useState<URLState>(DEFAULT_URL_STATE)
+  const { agents } = useAgents()
+  const [settingState, setSettingState] = useState<URLState>(DEFAULT_URL_STATE)
   const [costTable, setCostTable] = useState<CostTable>(DEFAULT_COST_TABLE)
 
-  const [banCount, setBanCount] = useState(2)
-  const [totalCost, setTotalCost] = useState(20)
   const [isOpen, setIsOpen] = useState(false)
-  const [allowAgent, setAllowAgent] = useState<AllowAgent>([])
   const [roundList] = useState<string[]>(['1라운드', '2라운드'])
 
-  const onBanCountChange = (count: number) => {
-    pipe(
-      window.location.search,
-      (query) => new URLSearchParams(query),
-      (data) => {
-        setBanCount(count)
-        data.set('banCount', count.toString())
-
-        window.history.replaceState(null, '', `?${data.toString()}`)
-      }
-    )
-  }
-  const onTotalCostChange = (count: number) => {
-    pipe(
-      window.location.search,
-      (query) => new URLSearchParams(query),
-      (data) => {
-        setTotalCost(count)
-        data.set('totalCost', count.toString())
-
-        window.history.replaceState(null, '', `?${data.toString()}`)
-      }
-    )
+  const onInputChange = (value: number, name: string) => {
+    setSettingState((prev) => ({ ...prev, [name]: value }))
   }
   const onAllowAgentClick = (id: number) => {
-    setAllowAgent((prev) => {
-      if (includes(id, prev)) {
-        return pipe(
-          prev,
-          filter((item) => item !== id),
-          toArray
-        )
+    setSettingState((prev) => {
+      return {
+        ...prev,
+        allowAgent: prev.allowAgent.includes(id)
+          ? prev.allowAgent.filter((value) => value !== id)
+          : [...prev.allowAgent, id],
       }
-
-      return [...prev, id]
     })
   }
 
@@ -117,35 +99,56 @@ const SettingProvider: React.FC<Props> = (props) => {
       window.location.search,
       (query) => new URLSearchParams(query),
       (data) => {
-        setBanCount(Number(data.get('banCount') || 2))
-        setTotalCost(Number(data.get('totalCost') || 20))
-        data.get('allowAgent') &&
-          setAllowAgent(data.get('allowAgent')!.split(',').map(Number) || [])
+        for (const [key, value] of data.entries()) {
+          if (key === 'allowAgent') {
+            setSettingState((prev) => ({ ...prev, allowAgent: value.split(',').map(Number) }))
+          } else {
+            setSettingState((prev) => ({ ...prev, [key]: Number(value) }))
+          }
+        }
       }
     )
   }, [])
-  useEffect(() => {
-    pipe(
-      window.location.search,
-      (query) => new URLSearchParams(query),
-      (data) => {
-        data.set('allowAgent', allowAgent.length === 0 ? '' : allowAgent.join(','))
 
-        window.history.replaceState(null, '', `?${data.toString()}`)
-      }
+  useEffect(() => {
+    setSettingState((prev) => ({
+      ...prev,
+      allowAgent: pipe(
+        agents,
+        filter((agent) => agent.isUp),
+        map((agent) => agent.id),
+        toArray
+      ),
+    }))
+  }, [agents])
+  useEffect(() => {
+    const searchParams = new URLSearchParams()
+
+    pipe(
+      settingState,
+      entries,
+      each(([key, value]) => {
+        if (key === 'allowAgent') {
+          value.length > 0 ? searchParams.set(key, value.join(',')) : searchParams.delete(key)
+        } else {
+          searchParams.set(key, value.toString())
+        }
+      }),
+      () => window.history.replaceState(null, '', `?${searchParams.toString()}`)
     )
-  }, [allowAgent])
+  }, [settingState])
 
   return (
     <SettingContext.Provider
       value={{
-        banCount,
-        totalCost,
-        allowAgent,
+        state: settingState,
         costTable,
         roundList,
         onSettingToggle: () => {
           setIsOpen((prev) => !prev)
+        },
+        onSettingChange: (value) => {
+          setSettingState((prev) => ({ ...prev, ...value }))
         },
         onCostChange: (key, value) => {
           function updateNested<T>(item: T, [first, ...rest]: Array<string>): T {
@@ -162,22 +165,36 @@ const SettingProvider: React.FC<Props> = (props) => {
       {isOpen && (
         <UI.Dialog
           onClose={() => setIsOpen(false)}
-          className="bg-base p-4 border-1 border-gray-700 rounded-md max-h-3/4 flex flex-col w-2xl"
+          className="bg-bg-content p-4 border-1 border-secondary flex flex-col w-2xl"
         >
-          <h2 className="text-3xl font-semibold dark:text-white mb-8">설정</h2>
-          <div className="flex p-4 mb-4">
-            <h2 className="text-2xl flex-1 font-black dark:text-white italic">Total Cost</h2>
-            <div className="flex-1">
-              <UI.Count min={0} max={30} defaultValue={totalCost} onChange={onTotalCostChange} />
+          <UI.Typo.Heading primary>설정</UI.Typo.Heading>
+          <div className="flex flex-col gap-4 mt-10">
+            <div className="flex mb-4">
+              <h2 className="text-2xl flex-1 font-black dark:text-white">Total Cost</h2>
+              <div className="flex-1">
+                <UI.Count
+                  min={0}
+                  max={30}
+                  defaultValue={settingState.totalCost}
+                  name="totalCost"
+                  onChange={onInputChange}
+                />
+              </div>
+            </div>
+            <div className="flex mb-4">
+              <h2 className="text-2xl flex-1 font-black dark:text-white">Ban Count</h2>
+              <div className="flex-1">
+                <UI.Count
+                  min={0}
+                  max={5}
+                  defaultValue={settingState.banCount}
+                  name="banCount"
+                  onChange={onInputChange}
+                />
+              </div>
             </div>
           </div>
-          <div className="flex p-4 mb-4">
-            <h2 className="text-2xl flex-1 font-black dark:text-white italic">Ban Count</h2>
-            <div className="flex-1">
-              <UI.Count min={0} max={5} defaultValue={banCount} onChange={onBanCountChange} />
-            </div>
-          </div>
-          <AllowAgent allowAgent={allowAgent} onClick={onAllowAgentClick} />
+          <AllowAgent allowAgent={settingState.allowAgent} onClick={onAllowAgentClick} />
         </UI.Dialog>
       )}
     </SettingContext.Provider>

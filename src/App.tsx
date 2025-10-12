@@ -1,19 +1,24 @@
-import { Header, Side, RuleBook } from './components'
+import { Header, Playground, CostTable } from './components'
 import { ScoreProvider, PickProvider } from './provider'
 
 function App() {
   return (
-    <>
-      <Header />
+    <div className="w-full h-full overflow-auto scrollbar-hidden">
+      {/* <div className="min-w-xs w-lg h-full"></div> */}
       <PickProvider>
-        <div className="pt-16 h-full ml-auto w-fit flex">
-          <RuleBook />
+        <div className="h-full ml-auto w-fit flex z-10 relative flex-1 overflow-auto scrollbar-hidden">
+          <div className="min-w-xl w-xl dark:text-white bg-bg-content flex flex-col gap-6 overflow-y-auto overflow-x-hidden scrollbar-hidden">
+            <Header />
+            <CostTable />
+          </div>
           <ScoreProvider>
-            <Side />
+            <div className="min-w-4xl p-4 w-4xl overflow-auto scrollbar-hidden">
+              <Playground />
+            </div>
           </ScoreProvider>
         </div>
       </PickProvider>
-    </>
+    </div>
   )
 }
 

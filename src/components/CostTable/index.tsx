@@ -8,7 +8,7 @@ const CostTable = () => {
   const { costTable } = useSetting()
 
   return (
-    <div>
+    <div className="p-4">
       <UI.Typo.Heading primary className="mb-4 flex items-center gap-4">
         Cost
       </UI.Typo.Heading>

@@ -35,7 +35,7 @@ const Dialog: React.FC<Props> = (props) => {
 
   return (
     <div
-      className="bg-base/50 fixed top-0 left-0 w-full h-full z-30 backdrop-blur-sm flex items-center justify-center"
+      className="bg-bg-content/50 fixed top-0 left-0 w-full h-full z-30 backdrop-blur-sm flex items-start py-24 justify-center overflow-y-auto"
       onClick={onBgClick}
     >
       <div onClick={onContentClick} className={props.className || ''}>

@@ -9,7 +9,7 @@ const Heading: React.FC<Props> = (props) => {
   return (
     <h1
       className={pipe(
-        ['text-3xl font-black'],
+        ['text-4xl font-black'],
         concat(props.primary ? ['text-primary'] : ['dark:text-white']),
         concat([props.className || '']),
         join(' ')
