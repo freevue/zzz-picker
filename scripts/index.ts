@@ -13,6 +13,14 @@ try {
   const context = await browser.newContext(BROWSER_CONTEXT)
   const page = await context.newPage()
 
+  await page.route('**/get_entry_page_list*', async (route) => {
+    const request = route.request()
+
+    await route.continue({
+      postData: JSON.stringify({ ...request.postDataJSON(), page_size: 50 }),
+      headers: { ...request.headers(), 'Content-Type': 'application/json' },
+    })
+  })
   page.on('response', async (response) => {
     if (!response.url().includes('get_entry_page_list')) return
 
