@@ -1,7 +1,8 @@
 import AgentSeleteDialog from './AgentSeleteDialog'
 import AgentSettingDialog from './AgentSettingDialog'
 import { Plus, Cross } from '@/Icons'
-import type { SelectAgent, Side } from '@/types'
+import { useSetting } from '@/hooks'
+import type { AgentCostSetting, SelectAgent, Side } from '@/types'
 import { getAgentSquareImage } from '@/utils'
 import { join, concat, pipe, isNumber } from '@fxts/core'
 import { useMemo, useState } from 'react'
@@ -10,21 +11,39 @@ import { createPortal } from 'react-dom'
 type Props = {
   id: SelectAgent
   side: Side
+  setting: AgentCostSetting
   onAgentSelected: (agent: SelectAgent) => void
+  onSetting: (setting: AgentCostSetting) => void
 }
 
 const Agent: React.FC<Props> = (props) => {
+  const { costTable } = useSetting()
   const [isSelectDialogOpen, setIsSelectDialogOpen] = useState(false)
   const [isAgentSettingDialogOpen, setIsAgentSettingDialogOpen] = useState(false)
   const skew = useMemo(() => {
     if (props.side === 'A') return '-skew-x-12'
     if (props.side === 'B') return 'skew-x-12'
   }, [props.side])
+  const totalCost = useMemo(() => {
+    const agentCost = pipe(
+      costTable.agent[props.setting.pickup],
+      ({ used, rate }) => used + rate * props.setting.agentRate
+    )
+
+    if (props.setting.engineType === null) return agentCost
+
+    const engineCost = pipe(
+      costTable.engine[props.setting.engineType],
+      ({ used, rate }) => used + rate * props.setting.engineRate
+    )
+
+    return agentCost + engineCost
+  }, [costTable, props.setting])
 
   const onAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    props.onAgentSelected(Number(event.currentTarget.value))
+    props.onAgentSelected(event.currentTarget.value ? Number(event.currentTarget.value) : null)
     setIsSelectDialogOpen(false)
   }
   const onCostClick = (event: React.MouseEvent<HTMLParagraphElement>) => {
@@ -56,9 +75,13 @@ const Agent: React.FC<Props> = (props) => {
             onClick={onCostClick}
             className="bg-bg-content/70 text-xl font-bold text-text-primary h-8 min-w-8 text-center cursor-pointer"
           >
-            71
+            {totalCost}
           </p>
-          <button className="size-8 group flex cursor-pointer bg-bg-content/70">
+          <button
+            className="size-8 group flex cursor-pointer bg-bg-content/70"
+            type="button"
+            onClick={onAgentClick}
+          >
             <Cross className="stroke-text-primary group-hover:stroke-secondary w-full h-full" />
           </button>
         </div>
@@ -102,8 +125,10 @@ const Agent: React.FC<Props> = (props) => {
         createPortal(
           <AgentSettingDialog
             id={props.id}
+            totalCost={totalCost}
+            setting={props.setting}
+            onSetting={props.onSetting}
             onClose={() => setIsAgentSettingDialogOpen(false)}
-            onCostChange={() => {}}
           />,
           document.body
         )}

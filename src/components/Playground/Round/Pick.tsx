@@ -1,18 +1,21 @@
 import Agent from './Agent'
 import RecordDialog from './RecordDialog'
-import type { SelectAgent, Side, RoundSelectAgentState } from '@/types'
+import { usePlay } from '@/hooks'
+import type { SelectAgent, Side, RoundSelectAgentState, AgentCostSetting } from '@/types'
 import { join, pipe, map, toArray, zipWithIndex, concat } from '@fxts/core'
 import { useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 type Props = {
   side: Side
+  round: string
   pickList: {
     [key in Side]: [RoundSelectAgentState, RoundSelectAgentState, RoundSelectAgentState]
   }
 }
 
 const Pick: React.FC<Props> = (props) => {
+  const { onSelect, onSetting } = usePlay()
   const [isRecordDialogOpen, setIsRecordDialogOpen] = useState(false)
   const skew = useMemo(() => {
     if (props.side === 'A') return 'skew-x-12'
@@ -22,11 +25,10 @@ const Pick: React.FC<Props> = (props) => {
     return props.pickList?.[props.side] || []
   }, [props.pickList, props.side])
   const onAgentSelected = (index: number) => (agent: SelectAgent) => {
-    // setAgentList((prev) => {
-    //   const newList = [...prev]
-    //   newList[index] = agent
-    //   return newList as [SelectAgent, SelectAgent, SelectAgent]
-    // })
+    onSelect(props.round, props.side, index, agent)
+  }
+  const onSettingChange = (index: number) => (setting: AgentCostSetting) => {
+    onSetting(props.round, props.side, index, setting)
   }
 
   return (
@@ -53,7 +55,13 @@ const Pick: React.FC<Props> = (props) => {
                   join(' ')
                 )}
               >
-                <Agent id={id} side={props.side} onAgentSelected={onAgentSelected(index)} />
+                <Agent
+                  id={id}
+                  side={props.side}
+                  setting={setting}
+                  onAgentSelected={onAgentSelected(index)}
+                  onSetting={onSettingChange(index)}
+                />
               </li>
             )),
             toArray

@@ -1,13 +1,15 @@
 import { UI } from '@/components'
-import { useAgents, useSetting } from '@/hooks'
+import { useAgents } from '@/hooks'
 import type { CostTable, AgentCostSetting } from '@/types'
 import { pipe, find, join, concat } from '@fxts/core'
 import { useEffect, useMemo, useState } from 'react'
 
 type Props = {
   id: number
+  totalCost: number
+  setting: AgentCostSetting
+  onSetting: (setting: AgentCostSetting) => void
   onClose: () => void
-  onCostChange: (cost: number) => void
 }
 
 const TabButton: React.FC<{
@@ -53,35 +55,13 @@ const TabButton: React.FC<{
 
 const AgentSettingDialog: React.FC<Props> = (props) => {
   const { agents } = useAgents()
-  const { costTable } = useSetting()
-  const [setting, setSetting] = useState<AgentCostSetting>({
-    pickup: 'AAlways',
-    agentRate: 0,
-    engineType: 'SExclusive',
-    engineRate: 0,
-  })
+  const [setting, setSetting] = useState<AgentCostSetting>(props.setting)
   const agent = useMemo(() => {
     return pipe(
       agents,
       find((agent) => agent.id === props.id)
     )!
   }, [props.id, agents])
-  const totalCost = useMemo(() => {
-    const agentCost = pipe(
-      costTable.agent[setting.pickup],
-      ({ used, rate }) => used + rate * setting.agentRate
-    )
-
-    if (setting.engineType === null) return agentCost
-
-    const engineCost = pipe(
-      costTable.engine[setting.engineType],
-      ({ used, rate }) => used + rate * setting.engineRate
-    )
-
-    return agentCost + engineCost
-  }, [costTable, setting])
-
   const onRateChange = (value: number, name: string) => {
     setSetting((prev) => ({ ...prev, [name]: value }))
   }
@@ -108,13 +88,13 @@ const AgentSettingDialog: React.FC<Props> = (props) => {
     }
   }, [props.id])
   useEffect(() => {
-    props.onCostChange(totalCost)
-  }, [totalCost, props.onCostChange])
+    props.onSetting(setting)
+  }, [setting])
 
   return (
     <UI.Dialog onClose={props.onClose} className="bg-bg-content border-1 border-secondary">
       <UI.Typo.Heading primary className="p-4 relative">
-        {agent.fullName} +{totalCost}
+        {agent.fullName} +{props.totalCost}
         <span className="absolute top-4 right-8 text-7xl font-black italic text-secondary">
           {agent.rarity}
         </span>

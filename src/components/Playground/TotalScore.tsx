@@ -1,8 +1,5 @@
 import { UI } from '@/components'
-import { useScore, usePlay, useSetting } from '@/hooks'
-import type { Side } from '@/types'
 import { pipe, join, concat } from '@fxts/core'
-import { useEffect, useState } from 'react'
 
 type Props = {}
 
@@ -19,7 +16,7 @@ const Record: React.FC<{ children: React.ReactNode; className?: string }> = (pro
     </p>
   )
 }
-const TotalScore: React.FC<Props> = (props) => {
+const TotalScore: React.FC<Props> = () => {
   return (
     <div>
       <UI.Typo.Heading className="text-center" primary>

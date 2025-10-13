@@ -17,7 +17,7 @@ const Round: React.FC<Props> = (props) => {
           {props.children}
         </UI.Typo.Heading>
         <div className="flex justify-between items-center">
-          <Pick side="A" pickList={pickList.get(props.round)!} />
+          <Pick side="A" round={props.round} pickList={pickList.get(props.round)!} />
           <div className="flex items-center">
             {/* <button
               className="size-8 block cursor-pointer focus:outline-none group"
@@ -27,7 +27,7 @@ const Round: React.FC<Props> = (props) => {
               <Refresh className="stroke-white block w-full group-hover:stroke-primary" />
             </button> */}
           </div>
-          <Pick side="B" pickList={pickList.get(props.round)!} />
+          <Pick side="B" round={props.round} pickList={pickList.get(props.round)!} />
         </div>
       </div>
     </>
