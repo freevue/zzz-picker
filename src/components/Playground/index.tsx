@@ -42,7 +42,7 @@ const Side: React.FC<Props> = () => {
       <div className="p-4 my-8">
         <TotalScore />
       </div>
-      <div className="sticky bottom-0 left-0 w-full p-4 bg-bg-base">
+      <div className="sticky bottom-0 left-0 w-full p-4 bg-bg-base/50 backdrop-blur-sm">
         <Ban />
         <button
           type="reset"

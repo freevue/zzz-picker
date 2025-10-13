@@ -45,7 +45,7 @@ const Pick: React.FC<Props> = (props) => {
       <div className="p-4">
         <ul className="flex">
           {pipe(
-            pickList,
+            [1401, 1461, 1031],
             zipWithIndex,
             map(([index, agent]) => (
               <li
@@ -53,7 +53,8 @@ const Pick: React.FC<Props> = (props) => {
                 className={pipe(
                   [
                     'border-2',
-                    'size-28',
+                    'w-28',
+                    'h-32',
                     'overflow-hidden',
                     'border-text-primary',
                     'border-r-0',
@@ -63,7 +64,7 @@ const Pick: React.FC<Props> = (props) => {
                   join(' ')
                 )}
               >
-                <Agent id={null} side={props.side} onAgentSelected={onAgentSelected(index)} />
+                <Agent id={agent} side={props.side} onAgentSelected={onAgentSelected(index)} />
               </li>
             )),
             toArray

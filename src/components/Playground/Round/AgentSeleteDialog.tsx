@@ -9,7 +9,7 @@ type Props = {
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-const AgentDialog: React.FC<Props> = (props) => {
+const AgentSeleteDialog: React.FC<Props> = (props) => {
   const { agents } = useAgents()
   const { banList } = useBan()
   const { state } = useSetting()
@@ -73,4 +73,4 @@ const AgentDialog: React.FC<Props> = (props) => {
   )
 }
 
-export default AgentDialog
+export default AgentSeleteDialog
