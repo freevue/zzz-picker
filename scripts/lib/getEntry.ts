@@ -1,5 +1,5 @@
+import { APIS } from '../constant'
 import { pipe } from '@fxts/core'
-import { APIS } from '~/constant'
 
 function getEntry(entryId: string | number) {
   return pipe(

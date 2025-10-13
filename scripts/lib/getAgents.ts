@@ -1,6 +1,6 @@
+import agents from '../assets/agents.json' with { type: 'json' }
+import icons from '../assets/icons.json'
 import { pipe, map, toArray } from '@fxts/core'
-import agents from '~/assets/agents.json' with { type: 'json' }
-import icons from '~/assets/icons.json'
 
 type AvatarIcons = {
   square_avatar: string
