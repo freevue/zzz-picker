@@ -8,7 +8,7 @@
     "build": "pnpm run crawling && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "crawling": "tsx --env-file=.env scripts/index.ts"
+    "crawling": "tsx scripts/index.ts"
   },
   "dependencies": {
     "@fxts/core": "^1.17.0",
