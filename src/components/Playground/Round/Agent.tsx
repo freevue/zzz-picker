@@ -100,7 +100,11 @@ const Agent: React.FC<Props> = (props) => {
       {isAgentSettingDialogOpen &&
         isNumber(props.id) &&
         createPortal(
-          <AgentSettingDialog id={props.id} onClose={() => setIsAgentSettingDialogOpen(false)} />,
+          <AgentSettingDialog
+            id={props.id}
+            onClose={() => setIsAgentSettingDialogOpen(false)}
+            onCostChange={() => {}}
+          />,
           document.body
         )}
     </>

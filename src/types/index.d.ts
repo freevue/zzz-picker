@@ -1,5 +1,9 @@
 export type Side = 'A' | 'B'
 export type SelectAgent = number | null
+export type RoundSelectAgentState = {
+  id: SelectAgent
+  setting: AgentCostSetting
+}
 export type Pick = {
   agent: SelectAgent
   cost: number
@@ -62,4 +66,11 @@ export type Boss = {
   images: {
     rectangle: string
   }
+}
+
+export type AgentCostSetting = {
+  pickup: keyof CostTable['agent']
+  agentRate: number
+  engineType: keyof CostTable['engine'] | null
+  engineRate: number
 }

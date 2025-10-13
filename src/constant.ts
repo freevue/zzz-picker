@@ -1,6 +1,11 @@
-import type { URLState, CostWeight, CostTable } from '@/types'
+import type { URLState, CostWeight, CostTable, AgentCostSetting } from '@/types'
 
-export const DEFAULT_PICKS = []
+export const DEFAULT_AGENT_COST_STATE: AgentCostSetting = {
+  pickup: 'AAlways',
+  agentRate: 0,
+  engineType: 'SExclusive',
+  engineRate: 0,
+}
 
 export const DEFAULT_COST_RATE = 0.05
 

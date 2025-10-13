@@ -1,37 +1,26 @@
 import Agent from './Agent'
 import RecordDialog from './RecordDialog'
-import type { SelectAgent, Side } from '@/types'
+import type { SelectAgent, Side, RoundSelectAgentState } from '@/types'
 import { join, pipe, map, toArray, zipWithIndex, concat } from '@fxts/core'
 import { useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 
-type PickState = {
-  id: SelectAgent
-  rate: number
-  engineRate: number
-}
 type Props = {
   side: Side
+  pickList: {
+    [key in Side]: [RoundSelectAgentState, RoundSelectAgentState, RoundSelectAgentState]
+  }
 }
-
-const DEFAULT_PICK_STATE = {
-  id: null,
-  rate: 0,
-  engineRate: 0,
-}
-const DEFAULT_PICK_LIST = new Map<number, PickState>([
-  [0, DEFAULT_PICK_STATE],
-  [1, DEFAULT_PICK_STATE],
-  [2, DEFAULT_PICK_STATE],
-])
 
 const Pick: React.FC<Props> = (props) => {
-  const [pickList, setPickList] = useState<Map<number, PickState>>(DEFAULT_PICK_LIST)
   const [isRecordDialogOpen, setIsRecordDialogOpen] = useState(false)
   const skew = useMemo(() => {
     if (props.side === 'A') return 'skew-x-12'
     if (props.side === 'B') return '-skew-x-12'
   }, [props.side])
+  const pickList = useMemo(() => {
+    return props.pickList?.[props.side] || []
+  }, [props.pickList, props.side])
   const onAgentSelected = (index: number) => (agent: SelectAgent) => {
     // setAgentList((prev) => {
     //   const newList = [...prev]
@@ -45,9 +34,9 @@ const Pick: React.FC<Props> = (props) => {
       <div className="p-4">
         <ul className="flex">
           {pipe(
-            [1401, 1461, 1031],
+            pickList,
             zipWithIndex,
-            map(([index, agent]) => (
+            map(([index, { id, setting }]) => (
               <li
                 key={index}
                 className={pipe(
@@ -64,7 +53,7 @@ const Pick: React.FC<Props> = (props) => {
                   join(' ')
                 )}
               >
-                <Agent id={agent} side={props.side} onAgentSelected={onAgentSelected(index)} />
+                <Agent id={id} side={props.side} onAgentSelected={onAgentSelected(index)} />
               </li>
             )),
             toArray

@@ -1,6 +1,6 @@
 import { UI } from '@/components'
 import { useAgents, useSetting } from '@/hooks'
-import type { CostTable } from '@/types'
+import type { CostTable, AgentCostSetting } from '@/types'
 import { pipe, find, join, concat } from '@fxts/core'
 import { useEffect, useMemo, useState } from 'react'
 
@@ -8,13 +8,6 @@ type Props = {
   id: number
   onClose: () => void
   onCostChange: (cost: number) => void
-}
-
-type Setting = {
-  pickup: keyof CostTable['agent']
-  agentRate: number
-  engineType: keyof CostTable['engine'] | null
-  engineRate: number
 }
 
 const TabButton: React.FC<{
@@ -61,7 +54,7 @@ const TabButton: React.FC<{
 const AgentSettingDialog: React.FC<Props> = (props) => {
   const { agents } = useAgents()
   const { costTable } = useSetting()
-  const [setting, setSetting] = useState<Setting>({
+  const [setting, setSetting] = useState<AgentCostSetting>({
     pickup: 'AAlways',
     agentRate: 0,
     engineType: 'SExclusive',
