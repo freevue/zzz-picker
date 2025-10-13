@@ -1,5 +1,5 @@
-import type { AgentAvatar } from '../../types'
 import Avatar from './Avatar'
+import type { Agent } from '@/types'
 import { concat, join, pipe } from '@fxts/core'
 import { useState } from 'react'
 
@@ -7,7 +7,7 @@ type Props = {
   disabled?: boolean
   onClick?: (id: number) => void
   className?: string
-} & AgentAvatar
+} & Agent
 
 const Dragable: React.FC<Props> = (props) => {
   const [isDragging, setIsDragging] = useState(false)
@@ -47,7 +47,7 @@ const Dragable: React.FC<Props> = (props) => {
           join(' ')
         )}
       >
-        {props.name_mi18n}
+        {props.name}
       </p>
     </div>
   )

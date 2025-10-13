@@ -1,11 +1,11 @@
-import type { AgentAvatar } from '@/types'
+import type { Agent } from '@/types'
 import { getAgentSquareImage } from '@/utils'
 import { concat, join, pipe } from '@fxts/core'
 import { useMemo } from 'react'
 
 type Props = {
   className?: string
-} & AgentAvatar
+} & Agent
 
 const Avatar: React.FC<Props> = (props) => {
   const avatarSrc = useMemo(() => getAgentSquareImage(props.id), [props.id])
@@ -23,7 +23,7 @@ const Avatar: React.FC<Props> = (props) => {
         className="block w-full select-none"
         draggable={false}
         src={avatarSrc}
-        alt={props.name_mi18n}
+        alt={props.name}
       />
     </div>
   )
