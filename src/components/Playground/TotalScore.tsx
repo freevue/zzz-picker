@@ -19,7 +19,7 @@ const Record: React.FC<{ children: React.ReactNode; className?: string }> = (pro
 }
 const TotalScore: React.FC<Props> = () => {
   const { state } = useSetting()
-  const { totalCost, roundTotalScore } = useScore()
+  const { totalScore, totalCost, roundTotalScore, roundTotalTimeBonus, costBonusRate } = useScore()
 
   return (
     <div>
@@ -54,17 +54,22 @@ const TotalScore: React.FC<Props> = () => {
           <Record className="text-left">{roundTotalScore.B}</Record>
         </div>
         <div className="flex items-center justify-between">
-          <Record className="text-right">0</Record>
+          <Record className="text-right">{roundTotalTimeBonus.A}</Record>
           <UI.Typo.Heading className="w-1/3 text-xl text-center">시간 보너스</UI.Typo.Heading>
-          <Record className="text-left">0</Record>
+          <Record className="text-left">{roundTotalTimeBonus.B}</Record>
+        </div>
+        <div className="flex items-center justify-between">
+          <Record className="text-right">{(costBonusRate.A * 100).toFixed(2)}%</Record>
+          <UI.Typo.Heading className="w-1/3 text-xl text-center">Cost 보너스 배율</UI.Typo.Heading>
+          <Record className="text-left">{(costBonusRate.B * 100).toFixed(2)}%</Record>
         </div>
         <div className="flex items-center justify-between mt-4">
           <UI.Typo.Heading className="flex-1 text-right" primary>
-            {roundTotalScore.A}
+            {Math.round(totalScore.A * costBonusRate.A)}
           </UI.Typo.Heading>
           <UI.Typo.Heading className="w-1/3 text-center">총 점수</UI.Typo.Heading>
           <UI.Typo.Heading className="flex-1 text-left" primary>
-            {roundTotalScore.B}
+            {Math.round(totalScore.B * costBonusRate.B)}
           </UI.Typo.Heading>
         </div>
       </div>
