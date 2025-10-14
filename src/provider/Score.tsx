@@ -104,8 +104,14 @@ const ScoreProvider: React.FC<Props> = (props) => {
         setTime: (round: string, side: Side, time: number) => {
           setScore((prev) => {
             const data = new Map(prev)
+            const currentRound = data.get(round)
 
-            data.set(round, { ...data.get(round)!, [side]: { ...data.get(round)![side], time } })
+            if (currentRound) {
+              data.set(round, {
+                ...currentRound,
+                [side]: { ...currentRound[side], time },
+              })
+            }
 
             return data
           })

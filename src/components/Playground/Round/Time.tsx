@@ -1,7 +1,6 @@
 import { useScore } from '@/hooks'
 import type { Side } from '@/types'
-import { pipe, concat, join } from '@fxts/core'
-import dayjs from 'dayjs'
+import { pipe, concat, join, isNumber } from '@fxts/core'
 import { useEffect, useMemo, useState } from 'react'
 
 type Props = {
@@ -11,17 +10,12 @@ type Props = {
 }
 
 const Time: React.FC<Props> = (props) => {
-  const { score, setTime } = useScore()
+  const { setTime } = useScore()
   const [minute, setMinute] = useState(0)
   const [second, setSecond] = useState(0)
 
-  const value = useMemo(() => {
-    return score.get(props.round)?.[props.side]?.time || 0
-  }, [score, props.round, props.side])
-  const timestamp = useMemo(() => {
-    console.log(dayjs(`${minute}:${second}`, 'm:s').format('mm:ss'))
-
-    return dayjs(`${minute}:${second}`, 'm:s')
+  const time = useMemo(() => {
+    return minute * 60 + second
   }, [minute, second])
 
   const onMinuteChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,8 +51,10 @@ const Time: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
-    console.log(timestamp)
-  }, [timestamp])
+    if (isNumber(time) && props.round && props.side) {
+      setTime(props.round, props.side, time)
+    }
+  }, [time, props.round, props.side])
 
   return (
     <div
