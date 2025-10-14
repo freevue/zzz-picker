@@ -1,7 +1,7 @@
 import { Plus } from '@/Icons'
+import { BossDialog } from '@/components'
 import { UI } from '@/components'
 import { useAgents } from '@/hooks'
-import { map, pipe, zipWithIndex } from '@fxts/core'
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 
@@ -45,36 +45,7 @@ const Boss: React.FC = () => {
       </div>
       {isOpen &&
         createPortal(
-          <UI.Dialog
-            onClose={() => setIsOpen(false)}
-            className="bg-bg-content p-4 border-1 border-secondary"
-          >
-            <UI.Typo.Heading primary>공용 무대</UI.Typo.Heading>
-            <ul className="flex flex-wrap gap-4 mt-10">
-              {pipe(
-                boss,
-                zipWithIndex,
-                map(([index, boss]) => (
-                  <li key={index}>
-                    <button
-                      className="cursor-pointer focus:outline-none group"
-                      value={index}
-                      type="button"
-                      onClick={onBossClick}
-                    >
-                      <div className="w-56 h-72 overflow-hidden border-2 border-text-primary flex items-center justify-center group-hover:border-secondary">
-                        <img src={boss.images.rectangle} alt={boss.name} />
-                      </div>
-                      <p className="text-text-primary text-xl text-center font-bold group-hover:text-secondary">
-                        {boss.name}
-                      </p>
-                    </button>
-                  </li>
-                ))
-              )}
-            </ul>
-            <div></div>
-          </UI.Dialog>,
+          <BossDialog onChange={onBossClick} onClose={() => setIsOpen(false)} />,
           document.body
         )}
     </>
