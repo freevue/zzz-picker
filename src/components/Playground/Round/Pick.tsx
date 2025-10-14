@@ -43,7 +43,11 @@ const Pick: React.FC<Props> = (props) => {
             join(' ')
           )}
         >
-          <Time className={props.side === 'A' ? '-ml-3.5' : 'justify-end -mr-3.5'} />
+          <Time
+            className={props.side === 'A' ? '-ml-3.5' : 'justify-end -mr-3.5'}
+            round={props.round}
+            side={props.side}
+          />
           <ul className="flex">
             {pipe(
               pickList,
@@ -81,6 +85,8 @@ const Pick: React.FC<Props> = (props) => {
             className={
               props.side === 'A' ? 'ml-auto [&_input]:text-right mr-3.5' : 'mr-auto ml-3.5'
             }
+            round={props.round}
+            side={props.side}
           />
         </div>
       </div>

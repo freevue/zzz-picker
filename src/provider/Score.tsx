@@ -9,14 +9,15 @@ type Props = {
 }
 type Score = {
   score: number
-  time: string
+  time: number
 }
 
 type Context = {
   score: Map<string, Record<Side, Score>>
   totalCost: Record<Side, number>
   totalScore: Record<Side, number>
-  setScore: (round: string, side: Side, score: Score) => void
+  setScore: (round: string, side: Side, score: number) => void
+  setTime: (round: string, side: Side, time: number) => void
 }
 
 export const ScoreContext = createContext<Context>({
@@ -24,6 +25,7 @@ export const ScoreContext = createContext<Context>({
   totalCost: { A: 0, B: 0 },
   totalScore: { A: 0, B: 0 },
   setScore: () => {},
+  setTime: () => {},
 })
 
 const ScoreProvider: React.FC<Props> = (props) => {
@@ -34,13 +36,7 @@ const ScoreProvider: React.FC<Props> = (props) => {
   useEffect(() => {
     pipe(
       roundList,
-      map(
-        (round) =>
-          [
-            round,
-            { A: { score: 0, time: '00분 00초' }, B: { score: 0, time: '00분 00초' } },
-          ] as const
-      ),
+      map((round) => [round, { A: { score: 0, time: 0 }, B: { score: 0, time: 0 } }] as const),
       toArray,
       (data) => setScore(new Map(data))
     )
@@ -89,11 +85,20 @@ const ScoreProvider: React.FC<Props> = (props) => {
         totalScore: useMemo(() => {
           return { A: 0, B: 0 }
         }, [score]),
-        setScore: (round: string, side: Side, score: Score) => {
+        setScore: (round: string, side: Side, score: number) => {
           setScore((prev) => {
             const data = new Map(prev)
 
-            data.set(round, { ...data.get(round)!, [side]: score })
+            data.set(round, { ...data.get(round)!, [side]: { ...data.get(round)![side], score } })
+
+            return data
+          })
+        },
+        setTime: (round: string, side: Side, time: number) => {
+          setScore((prev) => {
+            const data = new Map(prev)
+
+            data.set(round, { ...data.get(round)!, [side]: { ...data.get(round)![side], time } })
 
             return data
           })

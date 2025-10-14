@@ -1,7 +1,10 @@
+import type { Side } from '@/types'
 import { pipe, concat, join } from '@fxts/core'
 
 type Props = {
   className?: string
+  round: string
+  side: Side
 }
 
 const Time: React.FC<Props> = (props) => {
