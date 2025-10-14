@@ -1,7 +1,7 @@
 import { useSetting } from '@/hooks'
 import { usePlay } from '@/hooks'
 import type { Side, PickState } from '@/types'
-import { pipe, map, sum, values, toArray } from '@fxts/core'
+import { pipe, map, sum, toArray } from '@fxts/core'
 import { createContext, useEffect, useMemo, useState } from 'react'
 
 type Props = {
