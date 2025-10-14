@@ -15,7 +15,7 @@ type Score = {
 type Context = {
   score: Map<string, Record<Side, Score>>
   totalCost: Record<Side, number>
-  totalScore: Record<Side, number>
+  roundTotalScore: Record<Side, number>
   setScore: (round: string, side: Side, score: number) => void
   setTime: (round: string, side: Side, time: number) => void
 }
@@ -23,7 +23,7 @@ type Context = {
 export const ScoreContext = createContext<Context>({
   score: new Map(),
   totalCost: { A: 0, B: 0 },
-  totalScore: { A: 0, B: 0 },
+  roundTotalScore: { A: 0, B: 0 },
   setScore: () => {},
   setTime: () => {},
 })
@@ -82,8 +82,15 @@ const ScoreProvider: React.FC<Props> = (props) => {
 
           return result
         }, [pickList, costTable]),
-        totalScore: useMemo(() => {
-          return { A: 0, B: 0 }
+        roundTotalScore: useMemo(() => {
+          const result = { A: 0, B: 0 }
+
+          for (const [, { A, B }] of score) {
+            result.A += A.score
+            result.B += B.score
+          }
+
+          return result
         }, [score]),
         setScore: (round: string, side: Side, score: number) => {
           setScore((prev) => {
