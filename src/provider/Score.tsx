@@ -107,8 +107,8 @@ const ScoreProvider: React.FC<Props> = (props) => {
   }, [score])
   const costBonusRate = useMemo(() => {
     return {
-      A: 1 + (state.totalCost - totalCost.A) * DEFAULT_COST_RATE,
-      B: 1 + (state.totalCost - totalCost.B) * DEFAULT_COST_RATE,
+      A: (state.totalCost - totalCost.A) * DEFAULT_COST_RATE,
+      B: (state.totalCost - totalCost.B) * DEFAULT_COST_RATE,
     }
   }, [totalCost, state.totalCost])
 

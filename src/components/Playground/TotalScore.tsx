@@ -65,11 +65,11 @@ const TotalScore: React.FC<Props> = () => {
         </div>
         <div className="flex items-center justify-between mt-4">
           <UI.Typo.Heading className="flex-1 text-right" primary>
-            {Math.round(totalScore.A * costBonusRate.A)}
+            {Math.round(totalScore.A + totalScore.A * costBonusRate.A)}
           </UI.Typo.Heading>
           <UI.Typo.Heading className="w-1/3 text-center">총 점수</UI.Typo.Heading>
           <UI.Typo.Heading className="flex-1 text-left" primary>
-            {Math.round(totalScore.B * costBonusRate.B)}
+            {Math.round(totalScore.B + totalScore.B * costBonusRate.B)}
           </UI.Typo.Heading>
         </div>
       </div>
