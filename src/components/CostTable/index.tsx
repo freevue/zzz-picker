@@ -2,6 +2,7 @@ import Table from './Table'
 import Td from './Td'
 import Th from './Th'
 import { UI } from '@/components'
+import { DEFAULT_COST_RATE } from '@/constant'
 import { useSetting } from '@/hooks'
 
 const CostTable = () => {
@@ -58,6 +59,9 @@ const CostTable = () => {
             <Td name="engine.A.rate" value={costTable.engine.A.rate} />
           </tr>
         </Table>
+        <p className="text-sm text-text-secondary">
+          현재 Cost 배율은 1코스트당 {DEFAULT_COST_RATE * 100}% 입니다.
+        </p>
       </div>
     </div>
   )
