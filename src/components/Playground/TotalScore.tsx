@@ -59,9 +59,9 @@ const TotalScore: React.FC<Props> = () => {
           <Record className="text-left">{roundTotalTimeBonus.B}</Record>
         </div>
         <div className="flex items-center justify-between">
-          <Record className="text-right">{(costBonusRate.A * 100).toFixed(2)}%</Record>
+          <Record className="text-right">{(costBonusRate.A * 100).toFixed(0)}%</Record>
           <UI.Typo.Heading className="w-1/3 text-xl text-center">Cost 보너스 배율</UI.Typo.Heading>
-          <Record className="text-left">{(costBonusRate.B * 100).toFixed(2)}%</Record>
+          <Record className="text-left">{(costBonusRate.B * 100).toFixed(0)}%</Record>
         </div>
         <div className="flex items-center justify-between mt-4">
           <UI.Typo.Heading className="flex-1 text-right" primary>

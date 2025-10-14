@@ -58,6 +58,8 @@ function roundTotalCost(pickState: PickState[keyof PickState], costTable: CostTa
   )
 }
 function getTimeBonus(time: number) {
+  if (time <= 0) return 0
+
   return pipe(
     180 - time,
     (value) => {
