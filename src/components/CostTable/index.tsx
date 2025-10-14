@@ -5,12 +5,13 @@ import { UI } from '@/components'
 import { useSetting } from '@/hooks'
 
 const CostTable = () => {
-  const { costTable } = useSetting()
+  const { costTable, state } = useSetting()
 
   return (
     <div className="p-4">
-      <UI.Typo.Heading primary className="mb-4 flex items-center gap-4">
-        Cost
+      <UI.Typo.Heading primary className="mb-4 flex items-end justify-between">
+        Cost{' '}
+        <span className="text-xl font-bold text-secondary">[설정 Cost: {state.totalCost}]</span>
       </UI.Typo.Heading>
       <div className="flex flex-col gap-4">
         <Table>
