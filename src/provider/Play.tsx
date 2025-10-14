@@ -1,13 +1,8 @@
 import { DEFAULT_AGENT_COST_STATE } from '@/constant'
 import { useSetting } from '@/hooks'
-import type { Side, RoundSelectAgentState, SelectAgent, AgentCostSetting } from '@/types'
+import type { Side, SelectAgent, AgentCostSetting, PlayState, PickState } from '@/types'
 import { findIndex, map, pipe, toArray } from '@fxts/core'
 import { createContext, useEffect, useState } from 'react'
-
-type PickState = {
-  [key in Side]: [RoundSelectAgentState, RoundSelectAgentState, RoundSelectAgentState]
-}
-type PlayState = Map<string, PickState>
 
 type Context = {
   pickList: Map<string, PickState>

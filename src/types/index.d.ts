@@ -1,5 +1,9 @@
 export type Side = 'A' | 'B'
 export type SelectAgent = number | null
+export type PickState = {
+  [key in Side]: [RoundSelectAgentState, RoundSelectAgentState, RoundSelectAgentState]
+}
+export type PlayState = Map<string, PickState>
 export type RoundSelectAgentState = {
   id: SelectAgent
   setting: AgentCostSetting

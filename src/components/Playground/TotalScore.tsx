@@ -1,4 +1,5 @@
 import { UI } from '@/components'
+import { useScore, useSetting } from '@/hooks'
 import { pipe, join, concat } from '@fxts/core'
 
 type Props = {}
@@ -17,6 +18,9 @@ const Record: React.FC<{ children: React.ReactNode; className?: string }> = (pro
   )
 }
 const TotalScore: React.FC<Props> = () => {
+  const { state } = useSetting()
+  const { totalCost, totalScore } = useScore()
+
   return (
     <div>
       <UI.Typo.Heading className="text-center" primary>
@@ -24,9 +28,25 @@ const TotalScore: React.FC<Props> = () => {
       </UI.Typo.Heading>
       <div className="flex flex-col gap-4 mt-8">
         <div className="flex items-center justify-between">
-          <Record className="text-right">0</Record>
+          <Record
+            className={pipe(
+              ['text-right'],
+              concat(totalCost.A > state.totalCost ? ['text-red-500!'] : []),
+              join(' ')
+            )}
+          >
+            {totalCost.A}
+          </Record>
           <UI.Typo.Heading className="w-1/3 text-xl text-center">총 사용 Cost</UI.Typo.Heading>
-          <Record className="text-left">0</Record>
+          <Record
+            className={pipe(
+              ['text-left'],
+              concat(totalCost.B > state.totalCost ? ['text-red-500!'] : []),
+              join(' ')
+            )}
+          >
+            {totalCost.B}
+          </Record>
         </div>
         <div className="flex items-center justify-between">
           <Record className="text-right">0</Record>
@@ -40,11 +60,11 @@ const TotalScore: React.FC<Props> = () => {
         </div>
         <div className="flex items-center justify-between mt-4">
           <UI.Typo.Heading className="flex-1 text-right" primary>
-            0
+            {totalScore.A}
           </UI.Typo.Heading>
           <UI.Typo.Heading className="w-1/3 text-center">총 점수</UI.Typo.Heading>
           <UI.Typo.Heading className="flex-1 text-left" primary>
-            0
+            {totalScore.B}
           </UI.Typo.Heading>
         </div>
       </div>
