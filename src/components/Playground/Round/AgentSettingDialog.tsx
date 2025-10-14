@@ -141,6 +141,7 @@ const AgentSettingDialog: React.FC<Props> = (props) => {
               <UI.Count
                 min={0}
                 max={6}
+                step={1}
                 defaultValue={setting.agentRate}
                 name="agentRate"
                 onChange={onRateChange}
@@ -181,6 +182,7 @@ const AgentSettingDialog: React.FC<Props> = (props) => {
                 <UI.Count
                   min={0}
                   max={6}
+                  step={1}
                   defaultValue={setting.engineRate}
                   name="engineRate"
                   onChange={onRateChange}

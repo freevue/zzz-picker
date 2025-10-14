@@ -47,6 +47,7 @@ const Score: React.FC<Props> = (props) => {
           placeholder="라운드 점수"
           className="border-2 w-full px-4 py-2 border-text-primary block focus:outline-none focus:border-secondary"
           type="number"
+          step="1"
           name={`${props.round}-${props.side}-score`}
           onChange={onScoreChange}
           onFocus={onFocus}

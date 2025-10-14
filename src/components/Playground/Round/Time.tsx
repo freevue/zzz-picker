@@ -75,6 +75,7 @@ const Time: React.FC<Props> = (props) => {
           min={0}
           max={3}
           value={minute}
+          step="1"
         />
       </label>
       <span className="text-center">:</span>
@@ -89,6 +90,7 @@ const Time: React.FC<Props> = (props) => {
           min={0}
           max={59}
           value={second}
+          step="1"
         />
       </label>
     </div>

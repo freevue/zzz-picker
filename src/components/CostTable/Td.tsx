@@ -57,7 +57,7 @@ const Td: React.FC<Props> = (props) => {
               type="number"
               step="0.01"
               ref={input}
-              className="w-full text-center h-full block p-2 border-none outline-none text-lg font-medium text-secondary"
+              className="w-full text-center h-full block p-2 border-none outline-none text-lg font-medium text-secondary selection:bg-text-muted"
               defaultValue={props.value}
               onFocus={onFocus}
               onBlur={onBlur}
