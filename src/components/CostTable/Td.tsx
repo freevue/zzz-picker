@@ -38,6 +38,9 @@ const Td: React.FC<Props> = (props) => {
       }
     )
   }
+  const onFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+    event.target.select()
+  }
 
   useEffect(() => {
     if (isEdit) {
@@ -56,6 +59,7 @@ const Td: React.FC<Props> = (props) => {
               ref={input}
               className="w-full text-center h-full block p-2 border-none outline-none text-lg font-medium text-secondary"
               defaultValue={props.value}
+              onFocus={onFocus}
               onBlur={onBlur}
               name={props.name}
             />

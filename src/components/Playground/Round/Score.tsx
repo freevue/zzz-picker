@@ -30,19 +30,14 @@ const Score: React.FC<Props> = (props) => {
       }
     )
   }
+  const onFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+    event.target.select()
+  }
 
   return (
     <div
       className={pipe(
-        [
-          'text-xl',
-          'font-bold',
-          'dark:text-text-primary',
-          'flex',
-          'items-center',
-          'gap-2',
-          'w-2/3',
-        ],
+        ['text-xl', 'font-bold', 'dark:text-text-primary', 'flex', 'items-center', 'gap-2', 'w-56'],
         concat([props.className || '']),
         join(' ')
       )}
@@ -54,6 +49,7 @@ const Score: React.FC<Props> = (props) => {
           type="number"
           name={`${props.round}-${props.side}-score`}
           onChange={onScoreChange}
+          onFocus={onFocus}
           min={0}
           max={MAX_SCORE}
           value={value}

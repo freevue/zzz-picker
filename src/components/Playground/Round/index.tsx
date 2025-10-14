@@ -36,7 +36,7 @@ const Round: React.FC<Props> = (props) => {
         </UI.Typo.Heading>
         <div className="flex justify-between items-center">
           <Pick side="A" round={props.round} pickList={pickList.get(props.round)!} />
-          <div className="flex items-center flex-1">
+          <div className="flex items-center">
             <button
               className="h-22 overflow-hidden w-18 border-2 items-center justify-center border-text-primary hover:border-secondary flex cursor-pointer focus:outline-none group"
               type="button"
