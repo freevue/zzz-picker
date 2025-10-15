@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "crawling": "tsx scripts/index.ts"
+    "fetch": "tsx --env-file=.env scripts/index.ts"
   },
   "dependencies": {
     "@fxts/core": "^1.17.0",
