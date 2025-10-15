@@ -36,7 +36,7 @@ try {
         fromEntries
       )
 
-      pipe(
+      await pipe(
         getAgents(),
         map((agent) => ({
           ...agent,

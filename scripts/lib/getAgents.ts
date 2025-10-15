@@ -1,5 +1,5 @@
 import agents from '../assets/agents.json' with { type: 'json' }
-import icons from '../assets/icons.json'
+import icons from '../assets/icons.json' with { type: 'json' }
 import { pipe, map, toArray } from '@fxts/core'
 
 type AvatarIcons = {
@@ -8,6 +8,15 @@ type AvatarIcons = {
   vertical_painting: string
   vertical_painting_color: string
 }
+
+// pipe(
+//   'https://comm-api.game.naver.com/nng_main/v1/game/db/character/GM_NCR_007033/dataType/photo?offset=0&limit=50',
+//   fetch,
+//   (response) => response.json(),
+//   ({ result }) => {
+//     console.log(result.character)
+//   }
+// )
 
 function getAgents() {
   const { avatar_icon } = icons as { avatar_icon: Record<string, AvatarIcons> }
