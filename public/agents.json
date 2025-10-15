@@ -1,7 +1,22 @@
 [
   {
-    "isTeaser": true,
-    "isUp": false,
+    "isTeaser": false,
+    "isUp": true,
+    "name": "비비안",
+    "fullName": "비비안 밴시",
+    "id": 1331,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1331.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1331.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1331.png",
+      "color": "#C77DFB",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/04/22/e98c6e14481ce6b6735de9ff56c3f605_5754928851060141836.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": true,
     "name": "루시아",
     "fullName": "루시아 엘로웬",
     "id": 1451,
@@ -11,49 +26,6 @@
       "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1451.png",
       "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1451.png",
       "color": "#25999d"
-    }
-  },
-  {
-    "isTeaser": true,
-    "isUp": false,
-    "name": "마나토",
-    "fullName": "코마노 마나토",
-    "id": 1441,
-    "rarity": "A",
-    "images": {
-      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1441.png",
-      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1441.png",
-      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1441.png",
-      "color": "#b83a37"
-    }
-  },
-  {
-    "isTeaser": false,
-    "isUp": true,
-    "name": "오피 & 「도깨비불」",
-    "fullName": "오피 마그누손 & 「도깨비불」",
-    "id": 1301,
-    "rarity": "S",
-    "images": {
-      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1301.png",
-      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1301.png",
-      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1301.png",
-      "color": "#fd7e17"
-    }
-  },
-  {
-    "isTeaser": false,
-    "isUp": true,
-    "name": "이블린",
-    "fullName": "이블린 슈발리에",
-    "id": 1321,
-    "rarity": "S",
-    "images": {
-      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1321.png",
-      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1321.png",
-      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1321.png",
-      "color": "#9D5EF1",
-      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/02/11/dca9628bb72a0ffb6a15db3e469a683c_5665899635763209682.png"
     }
   },
   {
@@ -69,6 +41,20 @@
       "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1401.png",
       "color": "#debe8d",
       "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/08/04/32db091567c2229f6631c421d99970d9_243151767784483536.png"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
+    "name": "오피 & 「도깨비불」",
+    "fullName": "오피 마그누손 & 「도깨비불」",
+    "id": 1301,
+    "rarity": "S",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1301.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1301.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1301.png",
+      "color": "#fd7e17"
     }
   },
   {
@@ -329,6 +315,20 @@
   {
     "isTeaser": false,
     "isUp": false,
+    "name": "마나토",
+    "fullName": "코마노 마나토",
+    "id": 1441,
+    "rarity": "A",
+    "images": {
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1441.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1441.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1441.png",
+      "color": "#b83a37"
+    }
+  },
+  {
+    "isTeaser": false,
+    "isUp": false,
     "name": "네코마타",
     "fullName": "네코미야 마나",
     "id": 1021,
@@ -554,16 +554,16 @@
   {
     "isTeaser": false,
     "isUp": false,
-    "name": "비비안",
-    "fullName": "비비안 밴시",
-    "id": 1331,
+    "name": "이블린",
+    "fullName": "이블린 슈발리에",
+    "id": 1321,
     "rarity": "S",
     "images": {
-      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1331.png",
-      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1331.png",
-      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1331.png",
-      "color": "#C77DFB",
-      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/04/22/e98c6e14481ce6b6735de9ff56c3f605_5754928851060141836.png"
+      "square": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1321.png",
+      "rectangle": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_square_avatar/role_square_avatar_1321.png",
+      "vertical": "https://act-webstatic.hoyoverse.com/game_record/zzzv2/role_vertical_painting/role_vertical_painting_1321.png",
+      "color": "#9D5EF1",
+      "header": "https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/02/11/dca9628bb72a0ffb6a15db3e469a683c_5665899635763209682.png"
     }
   },
   {
