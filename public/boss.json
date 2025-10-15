@@ -3,21 +3,21 @@
     "isOpen": true,
     "name": "미아즈마 핀드·네임리스",
     "images": {
-      "rectangle": "/boss/miasma_priest.webp"
+      "rectangle": "/boss/miasmic_fiend.webp"
     }
   },
   {
     "isOpen": true,
     "name": "미지의 복합 침식체",
     "images": {
-      "rectangle": "/boss/miasmic_fiend.webp"
+      "rectangle": "/boss/unknown_corruption_complex.webp"
     }
   },
   {
     "isOpen": true,
     "name": "미아즈마 프리스트",
     "images": {
-      "rectangle": "/boss/unknown_corruption_complex.webp"
+      "rectangle": "/boss/miasma_priest.webp"
     }
   }
 ]
