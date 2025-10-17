@@ -1,13 +1,27 @@
 [
   {
     "isOpen": true,
+    "name": "노토리우스·죽음의 도살자",
+    "images": {
+      "rectangle": "/boss/notorious_dead_end_butcher.webp"
+    }
+  },
+  {
+    "isOpen": true,
+    "name": "「모독자」",
+    "images": {
+      "rectangle": "/boss/the_defiler.webp"
+    }
+  },
+  {
+    "isOpen": false,
     "name": "미아즈마 핀드·네임리스",
     "images": {
       "rectangle": "/boss/miasmic_fiend.webp"
     }
   },
   {
-    "isOpen": true,
+    "isOpen": false,
     "name": "미지의 복합 침식체",
     "images": {
       "rectangle": "/boss/unknown_corruption_complex.webp"
