@@ -1,6 +1,6 @@
 import { UI } from '@/components'
 import { useAgents } from '@/hooks'
-import { pipe, zipWithIndex, map } from '@fxts/core'
+import { pipe, zipWithIndex, map, filter } from '@fxts/core'
 
 type Props = {
   onChange: (event: React.MouseEvent<HTMLButtonElement>) => void
@@ -16,6 +16,7 @@ const BossDialog: React.FC<Props> = (props) => {
       <ul className="flex flex-wrap gap-4 mt-10">
         {pipe(
           boss,
+          filter(({ isOpen }) => isOpen),
           zipWithIndex,
           map(([index, boss]) => (
             <li key={index}>
