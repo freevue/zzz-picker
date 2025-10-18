@@ -1,4 +1,5 @@
 import { DEADLY_ASSAULT_KEY, API_KEY, BASE_URL, SHEET_ID, SHEET_RANGE } from './constant'
+import { DeadlyAssault } from './types'
 import { setSheetValues } from './utils'
 import { pipe } from '@fxts/core'
 
@@ -9,7 +10,7 @@ function getDeadlyAssault() {
     (response) => response.json() as Promise<{ values: Array<Array<string>> }>,
     ({ values }) => values,
     setSheetValues(DEADLY_ASSAULT_KEY)
-  )
+  ) as Promise<Array<DeadlyAssault>>
 }
 
 export default getDeadlyAssault

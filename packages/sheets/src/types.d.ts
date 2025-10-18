@@ -22,3 +22,20 @@ export type Agent = {
   labSquareImage: null | string
   labVerticalImage: null | string
 }
+
+export type Boss = {
+  bossId: number
+  nameKo: null | string
+  fullNameKo: string
+  nameEn: null | string
+  fullNameEn: string
+  image: string
+}
+
+export type DeadlyAssault = {
+  date: string
+  version: string
+  boss1: number
+  boss2: number
+  boss3: number
+}
