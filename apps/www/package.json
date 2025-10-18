@@ -1,0 +1,27 @@
+{
+  "name": "@zzz-picker/www",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@zzz-picker/components": "workspace:*",
+    "@zzz-picker/provider": "workspace:*",
+    "@zzz-picker/tailwind-config": "workspace:*",
+    "@tailwindcss/vite": "^4.1.14",
+    "dayjs": "^1.11.18",
+    "motion": "^12.23.22",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.6.0",
+    "@types/react": "^19.1.16",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.4",
+    "babel-plugin-react-compiler": "^19.1.0-rc.3",
+    "vite": "^7.1.7"
+  }
+}

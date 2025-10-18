@@ -1,0 +1,17 @@
+{
+  "name": "@zzz-picker/tailwind-config",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./src/index.css",
+  "exports": {
+    ".": "./src/index.css",
+    "./base": "./src/base.css",
+    "./theme": "./src/theme.css"
+  },
+  "files": [
+    "src"
+  ],
+  "dependencies": {
+    "tailwindcss": "^4.1.14"
+  }
+}

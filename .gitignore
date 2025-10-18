@@ -25,4 +25,5 @@ dist-ssr
 
 .env
 scripts/assets
+coverage
 # public/agents.json
