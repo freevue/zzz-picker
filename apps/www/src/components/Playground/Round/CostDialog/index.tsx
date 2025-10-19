@@ -1,7 +1,7 @@
 import { UI } from '@/components'
 import { PRETTY_AGENT_ID } from '@/constant'
 import { useAgent, usePlay } from '@/hooks'
-import { pipe, join, concat, map } from '@fxts/core'
+import { pipe, join, concat, map, zipWithIndex, toArray } from '@fxts/core'
 import { Form, Button } from '@zzz-picker/components'
 import type { Side, TypeEngine } from '@zzz-picker/provider'
 import { useMemo } from 'react'
@@ -11,6 +11,7 @@ type Props = {
   side: Side
   agentId: number
   index: number
+  totalCost: number
 }
 
 const CostDialog: React.FC<Props> = (props) => {
@@ -35,8 +36,7 @@ const CostDialog: React.FC<Props> = (props) => {
   return (
     <div className={pipe(['w-2xl', 'relative'], concat([]), join(' '))}>
       <UI.Typo.Heading primary className="">
-        {agent.fullNameKo} +
-        {currentCost.rate + (currentCost.engineType ? currentCost.engineRate : 0)}
+        {agent.fullNameKo} +{props.totalCost}
         <span
           className="absolute -top-2 -right-2 text-9xl font-black block scale-200 opacity-50 italic"
           style={{ color: agent.color || 'var(--color-secondary)' }}
@@ -86,8 +86,9 @@ const CostDialog: React.FC<Props> = (props) => {
                     { name: 'A급', value: 'A' },
                     { name: '미착용', value: null },
                   ],
-                  map((item) => (
-                    <li key={item.value} className="flex-1">
+                  zipWithIndex,
+                  map(([index, item]) => (
+                    <li key={index} className="flex-1">
                       <Button
                         className={pipe(
                           ['w-full', 'py-1', 'font-extrabold', 'text-lg'],
@@ -109,7 +110,8 @@ const CostDialog: React.FC<Props> = (props) => {
                         {item.name}
                       </Button>
                     </li>
-                  ))
+                  )),
+                  toArray
                 )}
               </ul>
             </div>

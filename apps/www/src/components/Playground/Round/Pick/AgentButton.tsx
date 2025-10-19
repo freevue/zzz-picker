@@ -1,6 +1,6 @@
 import CostDialog from '../CostDialog'
-import { useAgent, usePlay } from '@/hooks'
-import { concat, join, pipe } from '@fxts/core'
+import { useAgent, usePlay, useSetting } from '@/hooks'
+import { concat, join, pipe, sum } from '@fxts/core'
 import { Button, Dialog, Icons } from '@zzz-picker/components'
 import type { Side, TypePick } from '@zzz-picker/provider'
 import { useMemo, useState } from 'react'
@@ -13,14 +13,33 @@ type Props = {
 
 const AgentButton: React.FC<Props> = (props) => {
   const { setRoundPick } = usePlay()
-  const agent = useAgent(props.agent!)
+  const { costTable } = useSetting()
+  const agent = useAgent(props.agent!)!
   const [isOpen, setIsOpen] = useState(false)
+  const agentRarityKey = useMemo(() => {
+    if (agent.rarity === 'A') return 'AAlways'
+    if (agent.rarity === 'S' && agent.isPickup) return 'SPick'
+
+    return 'SAlways'
+  }, [agent])
   const totalCost = useMemo(() => {
+    const { used, rate } = costTable.agent[agentRarityKey]
+
     return pipe(
       props.setting,
-      (setting) => setting.rate + (setting.engineType ? setting.engineRate : 0)
+      (setting) => {
+        const engineList = setting.engineType
+          ? [
+              costTable.engine[setting.engineType].used,
+              costTable.engine[setting.engineType].rate * setting.engineRate,
+            ]
+          : [0]
+
+        return [used, setting.rate * rate, ...engineList]
+      },
+      sum
     )
-  }, [props.setting])
+  }, [props.setting, agentRarityKey, costTable])
 
   const onDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -32,11 +51,9 @@ const AgentButton: React.FC<Props> = (props) => {
 
   return (
     <>
-      <Button
-        type="button"
-        onClick={() => setIsOpen(true)}
+      <div
         className={pipe(
-          ['w-full', 'h-full', 'overflow-hidden', 'group/button', 'relative'],
+          ['relative', 'w-full', 'h-full', 'overflow-hidden'],
           concat(
             props.side === 'A'
               ? ['group-first/list:rounded-bl-2xl', 'group-last/list:rounded-tr-2xl']
@@ -45,16 +62,26 @@ const AgentButton: React.FC<Props> = (props) => {
           join(' ')
         )}
       >
-        <span className="absolute left-0 top-0 size-8 flex items-center justify-center bg-content/70 backdrop-blur-lg text-gray-50 font-bold text-lg">
-          {totalCost}
-        </span>
-        <div className="w-full h-full" style={{ backgroundColor: agent.color || 'transparent' }}>
-          <img
-            className="block w-full"
-            src={agent.chzzkSquareImage || agent.labSquareImage}
-            alt={agent.nameKo}
-          />
-        </div>
+        <Button
+          type="button"
+          onClick={() => setIsOpen(true)}
+          className={pipe(
+            ['group/button', 'relative', 'w-full', 'h-full', 'overflow-hidden'],
+            concat([]),
+            join(' ')
+          )}
+        >
+          <span className="absolute left-0 top-0 size-8 flex items-center justify-center bg-content/70 backdrop-blur-lg text-gray-50 font-bold text-lg">
+            {totalCost}
+          </span>
+          <div className="w-full h-full" style={{ backgroundColor: agent.color || 'transparent' }}>
+            <img
+              className="block w-full"
+              src={agent.chzzkSquareImage || agent.labSquareImage}
+              alt={agent.nameKo}
+            />
+          </div>
+        </Button>
         <Button
           type="button"
           className="absolute right-0 top-0 group size-8 flex items-center justify-center bg-content/70 backdrop-blur-lg text-gray-50 font-bold text-lg"
@@ -62,13 +89,14 @@ const AgentButton: React.FC<Props> = (props) => {
         >
           <Icons.Cross className="dark:stroke-gray-50 size-6 group-hover:stroke-secondary" />
         </Button>
-      </Button>
+      </div>
       <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <CostDialog
           roundId={props.roundId}
           side={props.side}
           agentId={props.agent!}
           index={props.index}
+          totalCost={totalCost}
         />
       </Dialog>
     </>
