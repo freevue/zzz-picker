@@ -1,5 +1,4 @@
 import { Header, Playground, CostTable, Boss } from './components'
-import { ScoreProvider, PlayProvider } from './provider'
 import { Play } from '@zzz-picker/provider'
 
 function App() {
@@ -12,13 +11,9 @@ function App() {
           <CostTable />
         </div>
         <Play>
-          <PlayProvider>
-            <ScoreProvider>
-              <div className="min-w-4xl w-4xl overflow-auto scrollbar-hidden">
-                <Playground />
-              </div>
-            </ScoreProvider>
-          </PlayProvider>
+          <div className="min-w-4xl w-4xl overflow-auto scrollbar-hidden min-h-screen">
+            <Playground />
+          </div>
         </Play>
       </div>
     </div>

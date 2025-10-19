@@ -20,26 +20,27 @@ const BossDialog: React.FC<Props> = (props) => {
           map((boss) => (
             <li key={boss.bossId} className="flex-1">
               <Button
-                className={pipe(
-                  [
-                    'overflow-hidden',
-                    'rounded-bl-2xl',
-                    'rounded-tr-2xl',
-                    'aspect-[3/4]',
-                    'border-2',
-                  ],
-                  concat(
-                    props.active === boss.bossId
-                      ? ['border-primary']
-                      : ['border-gray-50', 'hover:border-secondary']
-                  ),
-                  join(' ')
-                )}
+                className="w-full group"
                 type="button"
                 value={boss.bossId}
                 onClick={props.onChange}
               >
-                <img src={`/boss/${boss.image}`} alt={boss.fullNameEn} />
+                <img
+                  className={pipe(
+                    ['overflow-hidden', 'rounded-bl-2xl', 'rounded-tr-2xl', 'border-2'],
+                    concat(
+                      props.active === boss.bossId
+                        ? ['border-primary']
+                        : ['border-gray-50', 'hover:border-secondary']
+                    ),
+                    join(' ')
+                  )}
+                  src={`/boss/${boss.image}`}
+                  alt={boss.fullNameEn}
+                />
+                <span className="text-gray-50 text-lg font-extrabold mt-4 block w-full text-center group-hover:text-secondary">
+                  {boss.fullNameKo || boss.fullNameEn}
+                </span>
               </Button>
             </li>
           )),

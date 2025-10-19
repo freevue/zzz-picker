@@ -21,6 +21,7 @@ const DEFAULT_URL_STATE = {
   totalCost: 20,
   allowAgent: [] as Array<number>,
 }
+const DEFAULT_ROUND_LIST = ['1라운드', '2라운드']
 
 type Props = {
   children: React.ReactNode
@@ -31,6 +32,7 @@ type State = {
     totalCost: number
     allowAgent: Array<number>
   }
+  roundList: Array<string>
   setSaveSetting: (setting: {
     banCount?: number
     totalCost?: number
@@ -42,6 +44,7 @@ export const Context = createContext<State>({
   setting: {
     ...DEFAULT_URL_STATE,
   },
+  roundList: DEFAULT_ROUND_LIST,
   setSaveSetting: () => {},
 })
 
@@ -107,6 +110,7 @@ const Provider = (props: Props) => {
     <Context.Provider
       value={{
         setting: { ...saveSetting },
+        roundList: DEFAULT_ROUND_LIST,
         setSaveSetting: (setting) => {
           setSaveSetting((prev) => ({
             ...prev,

@@ -1,16 +1,16 @@
-import { useScore } from '@/hooks'
+import { usePlay2 } from '@/hooks'
 import type { Side } from '@/types'
-import { pipe, concat, join, isNumber } from '@fxts/core'
+import { pipe, concat, join } from '@fxts/core'
 import { useEffect, useMemo, useState } from 'react'
 
 type Props = {
-  className?: string
-  round: string
+  roundId: number
   side: Side
 }
 
 const Time: React.FC<Props> = (props) => {
-  const { setTime } = useScore()
+  const { setRoundResultTime } = usePlay2()
+
   const [minute, setMinute] = useState(0)
   const [second, setSecond] = useState(0)
 
@@ -51,46 +51,73 @@ const Time: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
-    if (isNumber(time) && props.round && props.side) {
-      setTime(props.round, props.side, time)
-    }
-  }, [time, props.round, props.side])
+    setRoundResultTime(props.roundId, props.side, time)
+  }, [time])
 
   return (
     <div
       className={pipe(
-        ['text-xl', 'font-bold', 'dark:text-text-primary', 'flex', 'items-center', 'gap-4', 'w-56'],
-        concat([props.className || '']),
+        ['text-xl', 'font-extrabold', 'dark:text-gray-50', 'w-60', 'flex', 'items-center', 'gap-4'],
         join(' ')
       )}
     >
       <label className="flex-1">
         <input
           placeholder="분"
-          className="border-2 w-full text-center px-4 py-2 border-text-primary block focus:outline-none focus:border-secondary"
+          className={pipe(
+            [
+              'border-2',
+              'w-full',
+              'text-center',
+              'px-4',
+              'py-2',
+              'border-gray-50',
+              'block',
+              'focus:outline-none',
+              'focus:border-secondary',
+            ],
+            concat(props.side === 'B' ? ['rounded-tl-2xl'] : []),
+            join(' ')
+          )}
           type="number"
-          name={`${props.round}-${props.side}-time-minute`}
+          name={`${props.roundId}-${props.side}-time-minute`}
           onChange={onMinuteChange}
           onFocus={onFocus}
           min={0}
           max={3}
           value={minute}
           step="1"
+          onWheel={(event) => event.currentTarget.blur()}
         />
       </label>
       <span className="text-center">:</span>
       <label className="flex-1">
         <input
           placeholder="초"
-          className="border-2 w-full text-center px-4 py-2 border-text-primary block focus:outline-none focus:border-secondary"
+          className={pipe(
+            [
+              'border-2',
+              'w-full',
+              'text-center',
+              'px-4',
+              'py-2',
+              'border-gray-50',
+              'block',
+              'focus:outline-none',
+              'focus:border-secondary',
+            ],
+            concat(props.side === 'A' ? ['rounded-tr-2xl'] : []),
+            join(' ')
+          )}
           type="number"
-          name={`${props.round}-${props.side}-time-second`}
+          name={`${props.roundId}-${props.side}-time-second`}
           onChange={onSecondChange}
           onFocus={onFocus}
           min={0}
           max={59}
           value={second}
           step="1"
+          onWheel={(event) => event.currentTarget.blur()}
         />
       </label>
     </div>
