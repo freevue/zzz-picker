@@ -1,27 +1,31 @@
 import CostDialog from '../CostDialog'
 import { useAgent, usePlay2 } from '@/hooks'
-import type { Side } from '@/types'
 import { concat, join, pipe } from '@fxts/core'
-import { Button, Dialog } from '@zzz-picker/components'
-import { useState } from 'react'
+import { Button, Dialog, Icons } from '@zzz-picker/components'
+import type { Side, TypePick } from '@zzz-picker/provider'
+import { useMemo, useState } from 'react'
 
 type Props = {
   side: Side
   index: number
   roundId: number
-  agentId: number
-}
+} & TypePick
 
 const AgentButton: React.FC<Props> = (props) => {
   const { setRoundPick } = usePlay2()
-  const agent = useAgent(props.agentId)
+  const agent = useAgent(props.agent!)
   const [isOpen, setIsOpen] = useState(false)
+  const totalCost = useMemo(() => {
+    return pipe(
+      props.setting,
+      (setting) => setting.rate + (setting.engineType ? setting.engineRate : 0)
+    )
+  }, [props.setting])
 
-  const onAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const onDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    setIsOpen(false)
-    setRoundPick(props.roundId, props.side, props.index, Number(event.currentTarget.value))
+    setRoundPick(props.roundId, props.side, props.index, null)
   }
 
   if (!agent) return null
@@ -32,7 +36,7 @@ const AgentButton: React.FC<Props> = (props) => {
         type="button"
         onClick={() => setIsOpen(true)}
         className={pipe(
-          ['w-full', 'h-full', 'overflow-hidden', 'group/button'],
+          ['w-full', 'h-full', 'overflow-hidden', 'group/button', 'relative'],
           concat(
             props.side === 'A'
               ? ['group-first/list:rounded-bl-2xl', 'group-last/list:rounded-tr-2xl']
@@ -41,6 +45,9 @@ const AgentButton: React.FC<Props> = (props) => {
           join(' ')
         )}
       >
+        <span className="absolute left-0 top-0 size-8 flex items-center justify-center bg-content/70 backdrop-blur-lg text-gray-50 font-bold text-lg">
+          {totalCost}
+        </span>
         <div className="w-full h-full" style={{ backgroundColor: agent.color || 'transparent' }}>
           <img
             className="block w-full"
@@ -48,9 +55,21 @@ const AgentButton: React.FC<Props> = (props) => {
             alt={agent.nameKo}
           />
         </div>
+        <Button
+          type="button"
+          className="absolute right-0 top-0 group size-8 flex items-center justify-center bg-content/70 backdrop-blur-lg text-gray-50 font-bold text-lg"
+          onClick={onDeleteClick}
+        >
+          <Icons.Cross className="dark:stroke-gray-50 size-6 group-hover:stroke-secondary" />
+        </Button>
       </Button>
       <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <CostDialog roundId={props.roundId} side={props.side} agentId={props.agentId} />
+        <CostDialog
+          roundId={props.roundId}
+          side={props.side}
+          agentId={props.agent!}
+          index={props.index}
+        />
       </Dialog>
     </>
   )

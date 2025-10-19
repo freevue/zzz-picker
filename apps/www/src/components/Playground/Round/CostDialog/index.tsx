@@ -1,85 +1,51 @@
 import { UI } from '@/components'
 import { PRETTY_AGENT_ID } from '@/constant'
-import { useAgent } from '@/hooks'
-import type { CostTable, AgentCostSetting } from '@/types'
-import { pipe, find, join, concat } from '@fxts/core'
-import type { Side } from '@zzz-picker/provider'
-import { useEffect, useMemo, useState } from 'react'
+import { useAgent, usePlay2 } from '@/hooks'
+import { pipe, join, concat, map } from '@fxts/core'
+import { Form, Button } from '@zzz-picker/components'
+import type { Side, TypeEngine } from '@zzz-picker/provider'
+import { useMemo } from 'react'
 
 type Props = {
   roundId: number
   side: Side
   agentId: number
-}
-
-const TabButton: React.FC<{
-  children: React.ReactNode
-  active: boolean
-  value?: string
-  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
-}> = (props) => {
-  return (
-    <button
-      type="button"
-      value={props.value}
-      onClick={props.onClick}
-      className={pipe(
-        [
-          'cursor-pointer',
-          'px-4',
-          'py-2',
-          'text-lg',
-          'border-2',
-          'w-full',
-          'min-w-fit',
-          'font-bold',
-        ],
-        concat(
-          props.active
-            ? ['bg-primary', 'border-primary', 'text-bg-content']
-            : [
-                'bg-transparent',
-                'border-text-primary',
-                'text-text-primary',
-                'hover:border-secondary',
-                'hover:text-secondary',
-              ]
-        ),
-        join(' ')
-      )}
-    >
-      {props.children}
-    </button>
-  )
+  index: number
 }
 
 const CostDialog: React.FC<Props> = (props) => {
   const agent = useAgent(props.agentId)!
-  const [setting, setSetting] = useState<AgentCostSetting>({
-    pickup: 'SPick',
-    agentRate: 0,
-    engineType: null,
-    engineRate: 0,
-  })
+  const { round, setRoundCostSetting } = usePlay2()
+  const currentCost = useMemo(() => {
+    return pipe(
+      round.get(props.roundId)!,
+      (round) => round[props.side].pickList[props.index].setting
+    )
+  }, [round, props.roundId, props.side, props.index])
 
-  const onRateChange = (value: number, name: string) => {}
-  const onPickupChange = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { value } = event.currentTarget!
+  const onRateChange = (value: number, name: string) => {
+    setRoundCostSetting(props.roundId, props.side, props.index, { ...currentCost, [name]: value })
   }
   const onEngineChange = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { value } = event.currentTarget!
+    const engineType = (event.currentTarget.value || null) as TypeEngine | null
+
+    setRoundCostSetting(props.roundId, props.side, props.index, { ...currentCost, engineType })
   }
 
   return (
-    <div className={pipe(['w-2xl'], concat([]), join(' '))}>
-      <UI.Typo.Heading primary className="p-4 relative">
+    <div className={pipe(['w-2xl', 'relative'], concat([]), join(' '))}>
+      <UI.Typo.Heading primary className="">
         {agent.fullNameKo} +
-        <span className="absolute top-4 right-8 text-7xl font-black italic text-secondary">
+        {currentCost.rate + (currentCost.engineType ? currentCost.engineRate : 0)}
+        <span
+          className="absolute -top-2 -right-2 text-9xl font-black block scale-200 opacity-50 italic"
+          style={{ color: agent.color || 'var(--color-secondary)' }}
+        >
           {agent.rarity}
         </span>
       </UI.Typo.Heading>
-      <div className="flex mt-8 items-end">
-        <div className="w-sm aspect-square overflow-hidden flex items-start justify-start">
+      <div className="flex mt-8 items-end relative z-10">
+        <div className="w-sm flex items-start justify-start">
           <img
             className={pipe(
               ['w-full', 'block'],
@@ -94,93 +60,73 @@ const CostDialog: React.FC<Props> = (props) => {
             alt={agent.nameKo}
           />
         </div>
-        <div className="p-8 w-fit">
+        <div className="flex-1">
           <UI.Typo.Heading primary className="text-2xl">
             Cost 설정
           </UI.Typo.Heading>
-          {/* <div className="mt-8 flex flex-col gap-8">
-            {agent.rarity === 'S' && (
-              <div>
-                <UI.Typo.Heading className="text-xl mb-2">등급 종류</UI.Typo.Heading>
-                <ul className="flex">
-                  <li className="flex-1">
-                    <TabButton
-                      active={setting.pickup === 'SPick'}
-                      value="SPick"
-                      onClick={onPickupChange}
-                    >
-                      픽업
-                    </TabButton>
-                  </li>
-                  <li className="flex-1">
-                    <TabButton
-                      active={setting.pickup === 'SAlways'}
-                      value="SAlways"
-                      onClick={onPickupChange}
-                    >
-                      상시
-                    </TabButton>
-                  </li>
-                </ul>
-                <p className="text-xs text-text-muted mt-2">
-                  아직 해당 데이터를 구하지 못했습니다.. (추가 예정)
-                </p>
-              </div>
-            )}
+          <div className="mt-8 flex flex-col gap-8">
             <div>
               <UI.Typo.Heading className="text-xl mb-2">캐릭터 돌파</UI.Typo.Heading>
-              <UI.Count
+              <Form.Count
                 min={0}
                 max={6}
                 step={1}
-                defaultValue={setting.agentRate}
-                name="agentRate"
+                value={currentCost.rate}
+                name="rate"
                 onChange={onRateChange}
               />
             </div>
             <div>
               <UI.Typo.Heading className="text-xl mb-2">엔진 종류</UI.Typo.Heading>
-              <ul className="flex">
-                <li className="flex-1 min-w-fit">
-                  <TabButton
-                    active={setting.engineType === 'SExclusive'}
-                    value="SExclusive"
-                    onClick={onEngineChange}
-                  >
-                    전용
-                  </TabButton>
-                </li>
-                <li className="flex-1 min-w-fit">
-                  <TabButton active={setting.engineType === 'S'} value="S" onClick={onEngineChange}>
-                    S급
-                  </TabButton>
-                </li>
-                <li className="flex-1 min-w-fit">
-                  <TabButton active={setting.engineType === 'A'} value="A" onClick={onEngineChange}>
-                    A급
-                  </TabButton>
-                </li>
-                <li className="flex-1 min-w-fit">
-                  <TabButton active={setting.engineType === null} onClick={onEngineChange}>
-                    미착용
-                  </TabButton>
-                </li>
+              <ul className={pipe(['flex', 'rounded-lg', 'overflow-hidden'], join(' '))}>
+                {pipe(
+                  [
+                    { name: '전용', value: 'SExclusive' },
+                    { name: 'S급', value: 'S' },
+                    { name: 'A급', value: 'A' },
+                    { name: '미착용', value: null },
+                  ],
+                  map((item) => (
+                    <li key={item.value} className="flex-1">
+                      <Button
+                        className={pipe(
+                          ['w-full', 'py-1', 'font-extrabold', 'text-lg'],
+                          concat(
+                            currentCost.engineType === item.value
+                              ? ['bg-primary']
+                              : [
+                                  'dark:text-gray-50',
+                                  'dark:bg-gray-600/70',
+                                  'dark:hover:bg-gray-600',
+                                ]
+                          ),
+                          join(' ')
+                        )}
+                        type="button"
+                        onClick={onEngineChange}
+                        value={item.value || ''}
+                      >
+                        {item.name}
+                      </Button>
+                    </li>
+                  ))
+                )}
               </ul>
             </div>
-            {setting.engineType && (
+            {currentCost.engineType && (
               <div>
                 <UI.Typo.Heading className="text-xl mb-2">엔진 돌파</UI.Typo.Heading>
-                <UI.Count
+                <Form.Count
                   min={0}
-                  max={6}
+                  max={5}
                   step={1}
-                  defaultValue={setting.engineRate}
+                  value={currentCost.engineRate}
                   name="engineRate"
                   onChange={onRateChange}
                 />
               </div>
             )}
-          </div> */}
+          </div>
         </div>
       </div>
     </div>

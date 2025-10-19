@@ -1,5 +1,6 @@
 import { Context as SettingContext } from './Setting'
-import { findIndex, map, pipe, range, toArray, zipWithIndex } from '@fxts/core'
+import { Context as StoreContext } from './Store'
+import { findIndex, isNull, map, pipe, range, toArray, when, zipWithIndex } from '@fxts/core'
 import { createContext, useContext, useEffect, useState } from 'react'
 
 export type SelectAgent = number | null
@@ -64,6 +65,12 @@ type State = {
   setRoundPick: (roundIndex: number, side: Side, index: number, agent: SelectAgent) => void
   setRoundResultScore: (roundIndex: number, side: Side, score: number) => void
   setRoundResultTime: (roundIndex: number, side: Side, time: number) => void
+  setRoundCostSetting: (
+    roundIndex: number,
+    side: Side,
+    index: number,
+    setting: TypePick['setting']
+  ) => void
   reset: () => void
 }
 
@@ -75,11 +82,13 @@ export const Context = createContext<State>({
   setRoundPick: () => {},
   setRoundResultScore: () => {},
   setRoundResultTime: () => {},
+  setRoundCostSetting: () => {},
   reset: () => {},
 })
 
 const Provider = (props: Props) => {
   const { setting, roundList } = useContext(SettingContext)
+  const { agent } = useContext(StoreContext)
   const [banList, setBanList] = useState<Array<SelectAgent>>([])
   const [round, setRound] = useState<Map<number, TypeRound>>(new Map())
 
@@ -129,22 +138,21 @@ const Provider = (props: Props) => {
 
           pipe(
             currentRound,
-            (round) => round[side].pickList,
+            (round) => [...round[side].pickList],
             (pickList) => {
-              const newPickList = [...pickList]
               const currentIndex = pipe(
                 pickList,
                 findIndex((pick) => pick.agent === agent)
               )
 
               if (currentIndex === -1) {
-                newPickList[index] = { agent, setting: DEFAULT_PICK.setting }
+                pickList[index] = { agent, setting: DEFAULT_PICK.setting }
               } else {
-                newPickList[index] = newPickList[currentIndex]
-                newPickList[currentIndex] = { agent: null, setting: DEFAULT_PICK.setting }
+                pickList[index] = pickList[currentIndex]
+                pickList[currentIndex] = { agent: null, setting: DEFAULT_PICK.setting }
               }
 
-              return newPickList
+              return pickList
             },
             (pickList) => {
               const newRound = new Map(round)
@@ -190,6 +198,32 @@ const Provider = (props: Props) => {
 
             return newRound
           })
+        },
+        setRoundCostSetting: (roundIndex, side, index, setting) => {
+          const currentRound = round.get(roundIndex)!
+
+          pipe(
+            currentRound,
+            (round) => [...round[side].pickList],
+            (pickList) => {
+              pickList[index] = { ...pickList[index], setting }
+
+              return pickList
+            },
+            (pickList) => {
+              const newRound = new Map(round)
+
+              newRound.set(roundIndex, {
+                ...currentRound!,
+                [side]: { ...currentRound![side], pickList },
+              })
+
+              return newRound
+            },
+            (round) => {
+              setRound(round)
+            }
+          )
         },
         reset: () => {
           setBanList([])

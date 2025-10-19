@@ -1,5 +1,5 @@
 import { UI } from '@/components'
-import { usePlay2, useScore, useSetting } from '@/hooks'
+import { usePlay2, useSetting2 } from '@/hooks'
 import { pipe, join, concat, map, sum } from '@fxts/core'
 import { animate, motion, useMotionValue, useTransform } from 'motion/react'
 import { useEffect, useMemo } from 'react'
@@ -29,9 +29,20 @@ const Record: React.FC<{ value: number; className?: string }> = (props) => {
   )
 }
 const TotalScore: React.FC<Props> = () => {
-  const { state } = useSetting()
-  const { totalCost, costBonusRate } = useScore()
+  const { costTable, setting } = useSetting2()
   const { round } = usePlay2()
+  const totalCost = useMemo(() => {
+    return {
+      A: 0,
+      B: 0,
+    }
+  }, [round])
+  const costBonusRate = useMemo(() => {
+    return {
+      A: 0,
+      B: 0,
+    }
+  }, [round])
   const roundTotalScore = useMemo(() => {
     return {
       A: pipe(
@@ -79,7 +90,7 @@ const TotalScore: React.FC<Props> = () => {
           <Record
             className={pipe(
               ['text-right'],
-              concat(totalCost.A > state.totalCost ? ['text-red-500!'] : []),
+              concat(totalCost.A > setting.totalCost ? ['text-red-500!'] : []),
               join(' ')
             )}
             value={totalCost.A}
@@ -88,7 +99,7 @@ const TotalScore: React.FC<Props> = () => {
           <Record
             className={pipe(
               ['text-left'],
-              concat(totalCost.B > state.totalCost ? ['text-red-500!'] : []),
+              concat(totalCost.B > setting.totalCost ? ['text-red-500!'] : []),
               join(' ')
             )}
             value={totalCost.B}

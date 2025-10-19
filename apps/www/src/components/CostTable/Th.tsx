@@ -12,8 +12,8 @@ const Th: React.FC<Props> = (props) => {
         [
           'p-2',
           'text-center',
-          'bg-table-bg-highlight',
-          'border-table-bg-highlight',
+          'bg-gray-600',
+          'border-gray-600',
           'border-b',
           'border-r',
           'text-lg',

@@ -3,11 +3,10 @@ import Td from './Td'
 import Th from './Th'
 import { UI } from '@/components'
 import { DEFAULT_COST_RATE } from '@/constant'
-import { useSetting, useSetting2 } from '@/hooks'
+import { useSetting2 } from '@/hooks'
 
 const CostTable = () => {
-  const { costTable } = useSetting()
-  const { setting } = useSetting2()
+  const { setting, costTable } = useSetting2()
 
   return (
     <div className="p-4">

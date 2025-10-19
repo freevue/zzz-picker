@@ -35,12 +35,7 @@ const Pick: React.FC<Props> = (props) => {
             map(([index, pick]) => (
               <li key={index} className={pipe(['size-30', 'group/list'], concat([]), join(' '))}>
                 {pick.agent ? (
-                  <AgentButton
-                    roundId={props.roundId}
-                    index={index}
-                    side={props.side}
-                    agentId={pick.agent}
-                  />
+                  <AgentButton roundId={props.roundId} index={index} side={props.side} {...pick} />
                 ) : (
                   <PickButton roundId={props.roundId} index={index} side={props.side} />
                 )}

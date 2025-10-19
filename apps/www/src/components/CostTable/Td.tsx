@@ -1,4 +1,4 @@
-import { useSetting } from '@/hooks'
+import { useSetting2 } from '@/hooks'
 import { pipe } from '@fxts/core'
 import { useEffect, useRef, useState } from 'react'
 
@@ -10,7 +10,7 @@ type Props = {
 const Td: React.FC<Props> = (props) => {
   const input = useRef<HTMLInputElement>(null)
   const [isEdit, setIsEdit] = useState(false)
-  const { onCostChange } = useSetting()
+  const { setCostTable } = useSetting2()
 
   const onEditClick = () => {
     setIsEdit(true)
@@ -20,7 +20,7 @@ const Td: React.FC<Props> = (props) => {
       Number(event.target.value),
       (value) => (isNaN(value) ? 0 : value),
       (value) => {
-        onCostChange(event.target.name, value)
+        setCostTable(event.target.name, value)
         setIsEdit(false)
       }
     )
@@ -33,7 +33,7 @@ const Td: React.FC<Props> = (props) => {
       (formData) => formData.get(props.name),
       (value) => (isNaN(Number(value)) ? 0 : Number(value)),
       (value) => {
-        onCostChange(props.name, value)
+        setCostTable(props.name, value)
         setIsEdit(false)
       }
     )
@@ -49,7 +49,7 @@ const Td: React.FC<Props> = (props) => {
   }, [isEdit])
 
   return (
-    <td className="text-center border-table-bg-highlight border-b border-r hover:bg-table-bg-hover">
+    <td className="text-center border-gray-600 border-b border-r hover:bg-gray-700">
       {isEdit ? (
         <form className="block w-full h-full relative" onSubmit={onSubmit}>
           <label className="block w-full h-full">
@@ -68,7 +68,7 @@ const Td: React.FC<Props> = (props) => {
       ) : (
         <button
           onClick={onEditClick}
-          className="w-full h-full cursor-pointer block text-text-primary text-lg font-medium"
+          className="w-full h-full cursor-pointer block text-text-gray-50 text-lg font-medium"
           type="button"
         >
           {props.value}

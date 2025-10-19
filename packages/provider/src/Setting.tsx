@@ -16,6 +16,52 @@ import {
 } from '@fxts/core'
 import { createContext, useContext, useEffect, useState } from 'react'
 
+export type CostWeight = {
+  used: number
+  rate: number
+}
+export type CostTable = {
+  agent: {
+    SPick: CostWeight
+    SAlways: CostWeight
+    AAlways: CostWeight
+  }
+  engine: {
+    SExclusive: CostWeight
+    S: CostWeight
+    A: CostWeight
+  }
+}
+export const DEFAULT_COST_TABLE: CostTable = {
+  agent: {
+    SPick: {
+      used: 1,
+      rate: 1,
+    },
+    SAlways: {
+      used: 1,
+      rate: 1,
+    },
+    AAlways: {
+      used: 0,
+      rate: 0,
+    },
+  },
+  engine: {
+    SExclusive: {
+      used: 1,
+      rate: 1,
+    },
+    S: {
+      used: 1,
+      rate: 0,
+    },
+    A: {
+      used: 0,
+      rate: 0,
+    },
+  },
+}
 const DEFAULT_URL_STATE = {
   banCount: 2,
   totalCost: 20,
@@ -33,6 +79,8 @@ type State = {
     allowAgent: Array<number>
   }
   roundList: Array<string>
+  costTable: CostTable
+  setCostTable: (key: string, value: number) => void
   setSaveSetting: (setting: {
     banCount?: number
     totalCost?: number
@@ -45,11 +93,14 @@ export const Context = createContext<State>({
     ...DEFAULT_URL_STATE,
   },
   roundList: DEFAULT_ROUND_LIST,
+  costTable: DEFAULT_COST_TABLE,
+  setCostTable: () => {},
   setSaveSetting: () => {},
 })
 
 const Provider = (props: Props) => {
   const [saveSetting, setSaveSetting] = useState(DEFAULT_URL_STATE)
+  const [costTable, setCostTable] = useState(DEFAULT_COST_TABLE)
   const { agent } = useContext(StoreContext)
 
   useEffect(() => {
@@ -111,6 +162,16 @@ const Provider = (props: Props) => {
       value={{
         setting: { ...saveSetting },
         roundList: DEFAULT_ROUND_LIST,
+        costTable,
+        setCostTable: (key, value) => {
+          function updateNested<T>(item: T, [first, ...rest]: Array<string>): T {
+            return rest.length === 0
+              ? { ...item, [first]: value }
+              : { ...item, [first]: updateNested(item[first as keyof T], rest) }
+          }
+
+          setCostTable((prev) => pipe(key, split('.'), toArray, (list) => updateNested(prev, list)))
+        },
         setSaveSetting: (setting) => {
           setSaveSetting((prev) => ({
             ...prev,
