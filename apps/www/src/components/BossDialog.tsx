@@ -1,6 +1,7 @@
 import { UI } from '@/components'
-import { useAgents } from '@/hooks'
-import { pipe, zipWithIndex, map, filter } from '@fxts/core'
+import { useStore } from '@/hooks'
+import { pipe, zipWithIndex, map, filter, toArray } from '@fxts/core'
+import { Button } from '@zzz-picker/components'
 
 type Props = {
   onChange: (event: React.MouseEvent<HTMLButtonElement>) => void
@@ -8,19 +9,20 @@ type Props = {
 }
 
 const BossDialog: React.FC<Props> = (props) => {
-  const { boss } = useAgents()
+  const { deadlyAssault } = useStore()
 
   return (
     <UI.Dialog onClose={props.onClose} className="bg-bg-content p-4 border-1 border-secondary">
-      <UI.Typo.Heading primary>공용 무대</UI.Typo.Heading>
+      <UI.Typo.Heading primary>Boss</UI.Typo.Heading>
       <ul className="flex flex-wrap gap-4 mt-10">
         {pipe(
-          boss,
-          filter(({ isOpen }) => isOpen),
-          zipWithIndex,
-          map(([index, boss]) => (
-            <li key={index}>
-              <button
+          deadlyAssault || [],
+          map((boss) => (
+            <li key={boss.bossId}>
+              <Button type="button" value={boss.bossId}>
+                <img src={`/boss/${boss.image}`} alt={boss.fullNameEn} />
+              </Button>
+              {/* <button
                 className="cursor-pointer focus:outline-none group"
                 value={index}
                 type="button"
@@ -32,9 +34,10 @@ const BossDialog: React.FC<Props> = (props) => {
                 <p className="text-text-primary text-xl text-center font-bold group-hover:text-secondary">
                   {boss.name}
                 </p>
-              </button>
+              </button> */}
             </li>
-          ))
+          )),
+          toArray
         )}
       </ul>
       <div></div>
