@@ -1,4 +1,4 @@
-import { StoreContext, SettingContext } from '@zzz-picker/provider'
+import { StoreContext, SettingContext, PlayContext } from '@zzz-picker/provider'
 import { useContext } from 'react'
 
 export { default as useAgents } from './useAgents'
@@ -19,4 +19,8 @@ export const useAgent = (id: number) => {
 
 export const useSetting2 = () => {
   return useContext(SettingContext)
+}
+
+export const usePlay2 = () => {
+  return useContext(PlayContext)
 }

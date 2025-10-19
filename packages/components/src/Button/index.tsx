@@ -13,7 +13,7 @@ const Button: React.FC<Props> = (props) => {
   return (
     <button
       className={pipe(
-        ['active:outline-none cursor-pointer'],
+        ['active:outline-none', 'cursor-pointer', 'focus:outline-none'],
         concat([
           'disabled:grayscale-75',
           'disabled:cursor-not-allowed',

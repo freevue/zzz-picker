@@ -2,21 +2,13 @@ import BottomSheet from './BottomSheet'
 import Nickname from './Nickname'
 import Round from './Round'
 import TotalScore from './TotalScore'
-import { useBan } from '@/hooks'
 import { map, pipe, toArray, zipWithIndex } from '@fxts/core'
 
 type Props = {}
 
 const Side: React.FC<Props> = () => {
-  // const { roundList } = useSetting()
-  const { reset } = useBan()
-
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-  }
-
-  const onResetClick = () => {
-    reset()
   }
 
   return (

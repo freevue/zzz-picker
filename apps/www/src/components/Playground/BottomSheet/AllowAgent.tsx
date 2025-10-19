@@ -8,10 +8,10 @@ const Agent: React.FC<{ id: number }> = (props) => {
   return agent ? (
     <li className="size-24 overflow-hidden">
       <img
-        src={agent.labSquareImage}
+        src={agent.chzzkSquareImage || agent.labSquareImage}
         style={{ backgroundColor: agent.color || 'transparent' }}
         className="block w-full"
-        alt=""
+        alt={agent.nameKo}
       />
     </li>
   ) : null

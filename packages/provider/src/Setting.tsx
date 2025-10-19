@@ -69,8 +69,10 @@ const Provider = (props: Props) => {
       toArray,
       (allowAgent) => {
         setSaveSetting((prev) => ({
-          banCount: Number(params.get('banCount')) || prev.banCount,
-          totalCost: Number(params.get('totalCost')) || prev.totalCost,
+          banCount: isNull(params.get('banCount')) ? prev.banCount : Number(params.get('banCount')),
+          totalCost: isNull(params.get('totalCost'))
+            ? prev.totalCost
+            : Number(params.get('totalCost')),
           allowAgent,
         }))
       }
