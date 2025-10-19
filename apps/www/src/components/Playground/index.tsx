@@ -2,15 +2,12 @@ import BottomSheet from './BottomSheet'
 import Nickname from './Nickname'
 import Round from './Round'
 import TotalScore from './TotalScore'
-import { Refresh } from '@/Icons'
-import { useBan, useSetting, useStore } from '@/hooks'
+import { useBan } from '@/hooks'
 import { map, pipe, toArray, zipWithIndex } from '@fxts/core'
-import { motion, AnimatePresence } from 'motion/react'
 
 type Props = {}
 
 const Side: React.FC<Props> = () => {
-  const { agent } = useStore()
   // const { roundList } = useSetting()
   const { reset } = useBan()
 
@@ -44,18 +41,7 @@ const Side: React.FC<Props> = () => {
       <div className="p-4 my-8">
         <TotalScore />
       </div>
-      <AnimatePresence>
-        {agent.size > 0 && (
-          <motion.div
-            initial={{ y: 100 }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="sticky bottom-0 left-0 w-full p-4 bg-bg-base/50 backdrop-blur-lg"
-          >
-            <BottomSheet />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <BottomSheet />
     </form>
   )
 }

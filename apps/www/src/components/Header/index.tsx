@@ -17,7 +17,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="sticky top-0 left-0 p-4 w-full h-16 bg-bg-content flex items-center">
+      <div className="sticky top-0 left-0 p-4 w-full h-16 flex items-center">
         <ul className="flex gap-4 items-center">
           <li>
             <a
