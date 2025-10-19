@@ -2,7 +2,7 @@ import { UI } from '@/components'
 import { DEFAULT_COST_RATE } from '@/constant'
 import { usePlay, useSetting, useStore } from '@/hooks'
 import type { Rarity } from '@/types'
-import { pipe, join, concat, map, sum, flatMap, toArray } from '@fxts/core'
+import { pipe, join, concat, map, sum, flatMap } from '@fxts/core'
 import { animate, motion, useMotionValue, useTransform } from 'motion/react'
 import { useEffect, useMemo } from 'react'
 

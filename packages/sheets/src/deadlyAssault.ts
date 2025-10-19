@@ -1,5 +1,5 @@
 import { DEADLY_ASSAULT_KEY, API_KEY, BASE_URL, SHEET_ID, SHEET_RANGE } from './constant'
-import { DeadlyAssault } from './types'
+import type { DeadlyAssault } from './types'
 import { setSheetValues } from './utils'
 import { pipe } from '@fxts/core'
 

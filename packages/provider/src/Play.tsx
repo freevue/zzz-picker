@@ -1,6 +1,5 @@
 import { Context as SettingContext } from './Setting'
-import { Context as StoreContext } from './Store'
-import { findIndex, isNull, map, pipe, range, toArray, when, zipWithIndex } from '@fxts/core'
+import { findIndex, map, pipe, range, toArray, zipWithIndex } from '@fxts/core'
 import { createContext, useContext, useEffect, useState } from 'react'
 
 export type SelectAgent = number | null
@@ -88,7 +87,6 @@ export const Context = createContext<State>({
 
 const Provider = (props: Props) => {
   const { setting, roundList } = useContext(SettingContext)
-  const { agent } = useContext(StoreContext)
   const [banList, setBanList] = useState<Array<SelectAgent>>([])
   const [round, setRound] = useState<Map<number, TypeRound>>(new Map())
 
