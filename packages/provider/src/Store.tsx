@@ -1,4 +1,4 @@
-import { filter, find, head, isNull, map, pipe, reduceLazy, toArray } from '@fxts/core'
+import { filter, head, isNull, map, pipe, reduceLazy, toArray } from '@fxts/core'
 import {
   getAgent,
   getBoss,
