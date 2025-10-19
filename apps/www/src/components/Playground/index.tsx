@@ -1,5 +1,6 @@
 import BottomSheet from './BottomSheet'
 import Nickname from './Nickname'
+import Reset from './Reset'
 import Round from './Round'
 import TotalScore from './TotalScore'
 import { usePlay } from '@/hooks'
@@ -26,6 +27,7 @@ const Side: React.FC = () => {
         <TotalScore />
       </div>
       <BottomSheet />
+      <Reset />
     </>
   )
 }

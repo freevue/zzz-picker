@@ -224,7 +224,16 @@ const Provider = (props: Props) => {
           )
         },
         reset: () => {
-          setBanList([])
+          pipe(
+            roundList,
+            zipWithIndex,
+            map(([index, name]) => [index, { ...DEFAULT_ROUND, name }] as const),
+            toArray,
+            (list) => {
+              setRound(new Map(list))
+              setBanList([])
+            }
+          )
         },
       }}
     >
