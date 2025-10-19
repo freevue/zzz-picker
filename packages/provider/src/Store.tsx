@@ -1,4 +1,4 @@
-import { head, isNull, map, pipe, reduceLazy, toArray } from '@fxts/core'
+import { filter, find, head, isNull, map, pipe, reduceLazy, toArray } from '@fxts/core'
 import {
   getAgent,
   getBoss,
@@ -7,6 +7,7 @@ import {
   type Boss,
   type DeadlyAssault,
 } from '@zzz-picker/sheets'
+import dayjs from 'dayjs'
 import { createContext, useEffect, useMemo, useState } from 'react'
 
 type Props = {
@@ -50,6 +51,8 @@ const Provider = (props: Props) => {
     )
     pipe(
       getDeadlyAssault(),
+      filter(({ date }) => dayjs(date).isBefore(dayjs())),
+      toArray,
       head as (list: Array<DeadlyAssault>) => DeadlyAssault,
       ({ boss1, boss2, boss3 }) => [boss1, boss2, boss3] as [number, number, number],
       (list) => setDeadlyAssault(list)
