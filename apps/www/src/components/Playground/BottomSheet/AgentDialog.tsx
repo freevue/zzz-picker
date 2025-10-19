@@ -1,6 +1,6 @@
 import AgentButton from './AgentButton'
 import { UI, RarityTabs } from '@/components'
-import { useStore, usePlay2, useSetting2 } from '@/hooks'
+import { useStore, usePlay, useSetting } from '@/hooks'
 import type { Rarity } from '@/types'
 import { pipe, filter, map, toArray, includes } from '@fxts/core'
 import { useState } from 'react'
@@ -12,8 +12,8 @@ type Props = {
 
 const AgentDialog: React.FC<Props> = (props) => {
   const { agent } = useStore()
-  const { banList } = usePlay2()
-  const { setting } = useSetting2()
+  const { banList } = usePlay()
+  const { setting } = useSetting()
   const [selectRarity, setSelectRarity] = useState<Rarity>('S')
 
   return (

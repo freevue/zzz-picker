@@ -1,6 +1,6 @@
 import AgentDialog from '../AgentDialog'
 import { Plus } from '@/Icons'
-import { usePlay2 } from '@/hooks'
+import { usePlay } from '@/hooks'
 import type { Side } from '@/types'
 import { concat, join, pipe } from '@fxts/core'
 import { Button, Dialog } from '@zzz-picker/components'
@@ -13,7 +13,7 @@ type Props = {
 }
 
 const PickButton: React.FC<Props> = (props) => {
-  const { setRoundPick } = usePlay2()
+  const { setRoundPick } = usePlay()
   const [isOpen, setIsOpen] = useState(false)
 
   const onAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {

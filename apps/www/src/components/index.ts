@@ -6,4 +6,3 @@ export { default as Boss } from './Boss'
 export { default as BossDialog } from './BossDialog'
 
 export * as UI from './UI'
-export * as Agent from './Agent'

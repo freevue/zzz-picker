@@ -1,7 +1,7 @@
 import AgentDialog from './AgentDialog'
 import { Plus, Cross } from '@/Icons'
 import { UI } from '@/components'
-import { useAgent, usePlay2 } from '@/hooks'
+import { useAgent, usePlay } from '@/hooks'
 import { pipe, zipWithIndex, map, toArray, join, concat, isNull } from '@fxts/core'
 import { Button, Dialog } from '@zzz-picker/components'
 import { useState } from 'react'
@@ -37,7 +37,7 @@ const AgentButton: React.FC<Props> = (props) => {
   )
 }
 const BanButton: React.FC<{ id: number | null; index: number }> = (props) => {
-  const { setBan } = usePlay2()
+  const { setBan } = usePlay()
   const [isAgentDialogOpen, setIsAgentDialogOpen] = useState(false)
 
   const onAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -99,7 +99,7 @@ const BanButton: React.FC<{ id: number | null; index: number }> = (props) => {
 }
 
 const BanAgent = () => {
-  const { banList } = usePlay2()
+  const { banList } = usePlay()
 
   if (banList.length === 0) {
     return null

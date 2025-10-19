@@ -1,4 +1,4 @@
-import { usePlay2 } from '@/hooks'
+import { usePlay } from '@/hooks'
 import type { Side } from '@/types'
 import { pipe, concat, join } from '@fxts/core'
 import { useMemo } from 'react'
@@ -10,7 +10,7 @@ type Props = {
 
 const MAX_SCORE = 70_000
 const Score: React.FC<Props> = (props) => {
-  const { round, setRoundResultScore } = usePlay2()
+  const { round, setRoundResultScore } = usePlay()
   const value = useMemo(() => {
     return round.get(props.roundId)?.[props.side]?.result.score || 0
   }, [round, props.roundId, props.side])

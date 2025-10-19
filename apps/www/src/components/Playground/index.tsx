@@ -2,17 +2,11 @@ import BottomSheet from './BottomSheet'
 import Nickname from './Nickname'
 import Round from './Round'
 import TotalScore from './TotalScore'
-import { usePlay2 } from '@/hooks'
-import { map, pipe, toArray, zipWithIndex } from '@fxts/core'
+import { usePlay } from '@/hooks'
+import { map, pipe, toArray } from '@fxts/core'
 
-type Props = {}
-
-const Side: React.FC<Props> = () => {
-  const { round } = usePlay2()
-
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-  }
+const Side: React.FC = () => {
+  const { round } = usePlay()
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { useSetting2 } from '@/hooks'
+import { useSetting } from '@/hooks'
 import { pipe } from '@fxts/core'
 import { useEffect, useRef, useState } from 'react'
 
@@ -10,7 +10,7 @@ type Props = {
 const Td: React.FC<Props> = (props) => {
   const input = useRef<HTMLInputElement>(null)
   const [isEdit, setIsEdit] = useState(false)
-  const { setCostTable } = useSetting2()
+  const { setCostTable } = useSetting()
 
   const onEditClick = () => {
     setIsEdit(true)

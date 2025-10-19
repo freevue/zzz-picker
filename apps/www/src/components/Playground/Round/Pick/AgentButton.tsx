@@ -1,5 +1,5 @@
 import CostDialog from '../CostDialog'
-import { useAgent, usePlay2 } from '@/hooks'
+import { useAgent, usePlay } from '@/hooks'
 import { concat, join, pipe } from '@fxts/core'
 import { Button, Dialog, Icons } from '@zzz-picker/components'
 import type { Side, TypePick } from '@zzz-picker/provider'
@@ -12,7 +12,7 @@ type Props = {
 } & TypePick
 
 const AgentButton: React.FC<Props> = (props) => {
-  const { setRoundPick } = usePlay2()
+  const { setRoundPick } = usePlay()
   const agent = useAgent(props.agent!)
   const [isOpen, setIsOpen] = useState(false)
   const totalCost = useMemo(() => {

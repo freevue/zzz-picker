@@ -1,13 +1,13 @@
 import AgentButton from './AgentButton'
 import { UI, RarityTabs } from '@/components'
-import { useSetting2, useStore } from '@/hooks'
+import { useSetting, useStore } from '@/hooks'
 import type { Rarity } from '@/types'
 import { pipe, map, toArray, filter, includes } from '@fxts/core'
 import { Form } from '@zzz-picker/components'
 import { useState } from 'react'
 
 const Setting: React.FC = () => {
-  const { setting, setSaveSetting } = useSetting2()
+  const { setting, setSaveSetting } = useSetting()
   const [selectRarity, setSelectRarity] = useState<Rarity>('S')
   const { agent } = useStore()
 

@@ -1,6 +1,6 @@
 import { UI } from '@/components'
 import { PRETTY_AGENT_ID } from '@/constant'
-import { useAgent, usePlay2 } from '@/hooks'
+import { useAgent, usePlay } from '@/hooks'
 import { pipe, join, concat, map } from '@fxts/core'
 import { Form, Button } from '@zzz-picker/components'
 import type { Side, TypeEngine } from '@zzz-picker/provider'
@@ -15,7 +15,7 @@ type Props = {
 
 const CostDialog: React.FC<Props> = (props) => {
   const agent = useAgent(props.agentId)!
-  const { round, setRoundCostSetting } = usePlay2()
+  const { round, setRoundCostSetting } = usePlay()
   const currentCost = useMemo(() => {
     return pipe(
       round.get(props.roundId)!,

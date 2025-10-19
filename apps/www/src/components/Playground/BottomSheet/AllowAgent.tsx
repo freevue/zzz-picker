@@ -1,5 +1,5 @@
 import { UI } from '@/components'
-import { useAgent, useSetting2 } from '@/hooks'
+import { useAgent, useSetting } from '@/hooks'
 import { pipe, map, toArray } from '@fxts/core'
 
 const Agent: React.FC<{ id: number }> = (props) => {
@@ -17,7 +17,7 @@ const Agent: React.FC<{ id: number }> = (props) => {
   ) : null
 }
 const AllowAgent = () => {
-  const { setting } = useSetting2()
+  const { setting } = useSetting()
 
   return setting.allowAgent.length ? (
     <div className="flex-1 overflow-hidden">

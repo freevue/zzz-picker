@@ -1,5 +1,5 @@
 import { UI } from '@/components'
-import { usePlay2, useSetting2 } from '@/hooks'
+import { usePlay, useSetting } from '@/hooks'
 import { pipe, join, concat, map, sum } from '@fxts/core'
 import { animate, motion, useMotionValue, useTransform } from 'motion/react'
 import { useEffect, useMemo } from 'react'
@@ -29,8 +29,8 @@ const Record: React.FC<{ value: number; className?: string }> = (props) => {
   )
 }
 const TotalScore: React.FC<Props> = () => {
-  const { costTable, setting } = useSetting2()
-  const { round } = usePlay2()
+  const { costTable, setting } = useSetting()
+  const { round } = usePlay()
   const totalCost = useMemo(() => {
     return {
       A: 0,

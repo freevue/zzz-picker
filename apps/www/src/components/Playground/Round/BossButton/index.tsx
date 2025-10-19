@@ -1,6 +1,6 @@
 import { Plus } from '@/Icons'
 import { BossDialog } from '@/components'
-import { usePlay2, useStore } from '@/hooks'
+import { usePlay, useStore } from '@/hooks'
 import { concat, join, pipe } from '@fxts/core'
 import { Button, Dialog } from '@zzz-picker/components'
 import type { SelectBoss } from '@zzz-picker/provider'
@@ -13,7 +13,7 @@ type Props = {
 
 const BossButton: React.FC<Props> = (props) => {
   const { boss } = useStore()
-  const { setRoundBossSelect } = usePlay2()
+  const { setRoundBossSelect } = usePlay()
   const [isOpen, setIsOpen] = useState(false)
   const bossData = useMemo(() => {
     if (props.boss === null) return undefined

@@ -11,10 +11,10 @@ export const useAgent = (id: number) => {
   return agent.get(id)
 }
 
-export const useSetting2 = () => {
+export const useSetting = () => {
   return useContext(SettingContext)
 }
 
-export const usePlay2 = () => {
+export const usePlay = () => {
   return useContext(PlayContext)
 }

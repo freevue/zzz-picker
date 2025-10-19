@@ -1,4 +1,4 @@
-import { usePlay2 } from '@/hooks'
+import { usePlay } from '@/hooks'
 import type { Side } from '@/types'
 import { pipe, concat, join } from '@fxts/core'
 import { useEffect, useMemo, useState } from 'react'
@@ -9,7 +9,7 @@ type Props = {
 }
 
 const Time: React.FC<Props> = (props) => {
-  const { setRoundResultTime } = usePlay2()
+  const { setRoundResultTime } = usePlay()
 
   const [minute, setMinute] = useState(0)
   const [second, setSecond] = useState(0)
