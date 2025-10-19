@@ -3,16 +3,17 @@ import Td from './Td'
 import Th from './Th'
 import { UI } from '@/components'
 import { DEFAULT_COST_RATE } from '@/constant'
-import { useSetting } from '@/hooks'
+import { useSetting, useSetting2 } from '@/hooks'
 
 const CostTable = () => {
-  const { costTable, state } = useSetting()
+  const { costTable } = useSetting()
+  const { setting } = useSetting2()
 
   return (
     <div className="p-4">
       <UI.Typo.Heading primary className="mb-4 flex items-end justify-between">
         Cost{' '}
-        <span className="text-xl font-bold text-secondary">[설정 Cost: {state.totalCost}]</span>
+        <span className="text-xl font-bold text-secondary">[설정 Cost: {setting.totalCost}]</span>
       </UI.Typo.Heading>
       <div className="flex flex-col gap-4">
         <Table>

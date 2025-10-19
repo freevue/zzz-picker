@@ -1,4 +1,4 @@
-import AgentDialog from '../AgentDialog'
+import CostDialog from '../CostDialog'
 import { useAgent, usePlay2 } from '@/hooks'
 import type { Side } from '@/types'
 import { concat, join, pipe } from '@fxts/core'
@@ -50,7 +50,7 @@ const AgentButton: React.FC<Props> = (props) => {
         </div>
       </Button>
       <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <AgentDialog onClick={onAgentClick} />
+        <CostDialog roundId={props.roundId} side={props.side} agentId={props.agentId} />
       </Dialog>
     </>
   )

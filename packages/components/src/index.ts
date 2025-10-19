@@ -1,2 +1,4 @@
 export { default as Dialog } from './Dialog'
 export { default as Button } from './Button'
+export * as Icons from './Icons'
+export * as Form from './Form'
