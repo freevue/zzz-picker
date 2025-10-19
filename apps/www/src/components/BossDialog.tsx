@@ -1,47 +1,52 @@
 import { UI } from '@/components'
 import { useStore } from '@/hooks'
-import { pipe, zipWithIndex, map, filter, toArray } from '@fxts/core'
+import { pipe, map, toArray, concat, join } from '@fxts/core'
 import { Button } from '@zzz-picker/components'
 
 type Props = {
+  active: number | null
   onChange: (event: React.MouseEvent<HTMLButtonElement>) => void
-  onClose: () => void
 }
 
 const BossDialog: React.FC<Props> = (props) => {
   const { deadlyAssault } = useStore()
 
   return (
-    <UI.Dialog onClose={props.onClose} className="bg-bg-content p-4 border-1 border-secondary">
+    <div className="w-2xl">
       <UI.Typo.Heading primary>Boss</UI.Typo.Heading>
-      <ul className="flex flex-wrap gap-4 mt-10">
+      <ul className="flex flex-wrap mt-8 w-full gap-8">
         {pipe(
           deadlyAssault || [],
           map((boss) => (
-            <li key={boss.bossId}>
-              <Button type="button" value={boss.bossId}>
-                <img src={`/boss/${boss.image}`} alt={boss.fullNameEn} />
-              </Button>
-              {/* <button
-                className="cursor-pointer focus:outline-none group"
-                value={index}
+            <li key={boss.bossId} className="flex-1">
+              <Button
+                className={pipe(
+                  [
+                    'overflow-hidden',
+                    'rounded-bl-2xl',
+                    'rounded-tr-2xl',
+                    'aspect-[3/4]',
+                    'border-2',
+                  ],
+                  concat(
+                    props.active === boss.bossId
+                      ? ['border-primary']
+                      : ['border-gray-50', 'hover:border-secondary']
+                  ),
+                  join(' ')
+                )}
                 type="button"
+                value={boss.bossId}
                 onClick={props.onChange}
               >
-                <div className="w-56 h-72 overflow-hidden border-2 border-text-primary flex items-center justify-center group-hover:border-secondary">
-                  <img src={boss.images.rectangle} alt={boss.name} />
-                </div>
-                <p className="text-text-primary text-xl text-center font-bold group-hover:text-secondary">
-                  {boss.name}
-                </p>
-              </button> */}
+                <img src={`/boss/${boss.image}`} alt={boss.fullNameEn} />
+              </Button>
             </li>
           )),
           toArray
         )}
       </ul>
-      <div></div>
-    </UI.Dialog>
+    </div>
   )
 }
 
