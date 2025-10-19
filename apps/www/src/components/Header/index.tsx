@@ -1,15 +1,18 @@
 import Information from './Information'
-import { Info, Setting } from '@/Icons'
-import useSetting from '@/hooks/useSetting'
+import Setting from './Setting'
+import { Info, Setting as SettingIcon } from '@/Icons'
+import { Dialog } from '@zzz-picker/components'
 import { useState } from 'react'
-import { createPortal } from 'react-dom'
 
 const Header = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const { onSettingToggle } = useSetting()
+  const [isInformationOpen, setIsInformationOpen] = useState(false)
+  const [isSettingOpen, setIsSettingOpen] = useState(false)
 
   const onInformationClick = () => {
-    setIsOpen(true)
+    setIsInformationOpen(true)
+  }
+  const onSettingClick = () => {
+    setIsSettingOpen(true)
   }
 
   return (
@@ -47,14 +50,19 @@ const Header = () => {
             <button
               className="size-5 block cursor-pointer focus:outline-none"
               type="button"
-              onClick={onSettingToggle}
+              onClick={onSettingClick}
             >
-              <Setting className="cursor-pointer stroke-white/70 block w-full" />
+              <SettingIcon className="cursor-pointer stroke-white/70 block w-full" />
             </button>
           </li>
         </ul>
       </div>
-      {isOpen && createPortal(<Information onClose={() => setIsOpen(false)} />, document.body)}
+      <Dialog isOpen={isInformationOpen} onClose={() => setIsInformationOpen(false)}>
+        <Information />
+      </Dialog>
+      <Dialog isOpen={isSettingOpen} onClose={() => setIsSettingOpen(false)}>
+        <Setting />
+      </Dialog>
     </>
   )
 }

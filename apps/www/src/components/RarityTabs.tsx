@@ -1,4 +1,5 @@
 import { concat, join, map, pipe, toArray } from '@fxts/core'
+import { Button } from '@zzz-picker/components'
 
 type Props = {
   onChange: (value: 'S' | 'A') => void
@@ -14,7 +15,7 @@ const Tabs: React.FC<Props> = (props) => {
   return (
     <ul
       className={pipe(
-        ['flex', 'gap-2'],
+        ['flex', 'rounded-lg', 'overflow-hidden'],
         concat(props.className ? [props.className] : []),
         join(' ')
       )}
@@ -22,26 +23,23 @@ const Tabs: React.FC<Props> = (props) => {
       {pipe(
         ['S', 'A'],
         map((item) => (
-          <li
-            key={item}
-            className={pipe(
-              ['flex-1', 'py-1', 'rounded-sm'],
-              concat(
-                props.value === item
-                  ? ['bg-primary', 'text-black']
-                  : ['dark:text-white', 'dark:bg-gray-700']
-              ),
-              join(' ')
-            )}
-          >
-            <button
-              className="active:outline-none block cursor-pointer text-center w-full text-md font-black italic opacity-90"
+          <li key={item} className="flex-1">
+            <Button
+              className={pipe(
+                ['w-full', 'py-1', 'font-extrabold', 'text-lg'],
+                concat(
+                  props.value === item
+                    ? ['bg-primary']
+                    : ['dark:text-gray-50', 'dark:bg-gray-600/70', 'dark:hover:bg-gray-600']
+                ),
+                join(' ')
+              )}
               type="button"
               onClick={onClick}
               value={item}
             >
               {item}
-            </button>
+            </Button>
           </li>
         )),
         toArray

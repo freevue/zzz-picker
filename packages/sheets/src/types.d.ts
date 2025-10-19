@@ -19,8 +19,8 @@ export type Agent = {
   chzzkSquareImage: null | string
   chzzkBannerImage: null | string
   zzzBannerImage: string
-  labSquareImage: null | string
-  labVerticalImage: null | string
+  labSquareImage: string
+  labVerticalImage: string
 }
 
 export type Boss = {

@@ -1,24 +1,40 @@
-/* Tailwind Theme Variables */
 @theme {
-  /* Main Colors - 눈에 부담이 적은 차분한 톤 */
-  --color-primary: #f59e0b; /* 부드러운 앰버 골드 */
-  --color-secondary: #06b6d4; /* 차분한 시안 블루 */
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
 
-  /* Background Colors - 깊이감 있는 다크 톤 */
-  --color-bg-base: #0a0a0a;
-  --color-bg-content: #1a1a1a;
-  --color-bg-content-hover: #242424;
+  --color-cyan-400: #22d3ee;
+  --color-cyan-500: #06b6d4;
 
-  /* Text Colors - 가독성 높은 그레이 스케일 */
-  --color-text-primary: #f5f5f5;
-  --color-text-secondary: #a3a3a3;
-  --color-text-muted: #737373;
+  --color-gray-50: #f5f5f5;
+  --color-gray-400: #a3a3a3;
+  --color-gray-500: #737373;
+  --color-gray-600: #525252;
+  --color-gray-700: #404040;
+  --color-gray-750: #323232;
+  --color-gray-800: #2a2a2a;
+  --color-gray-850: #242424;
+  --color-gray-900: #1a1a1a;
+  --color-gray-950: #0a0a0a;
 
-  /* Table Colors - 일관된 시각적 계층 */
-  --color-table-bg-highlight: #2a2a2a;
-  --color-table-bg-hover: #323232;
-  --color-table-border: #404040;
-  --color-table-border-highlight: #525252;
-  --color-table-text-highlight: #fbbf24; /* Primary와 조화로운 하이라이트 */
-  --color-table-text-accent: #22d3ee; /* Secondary와 조화로운 악센트 */
+  --color-primary: var(--color-amber-500);
+  --color-secondary: var(--color-cyan-500);
+
+  --color-base: var(--color-gray-900);
+  --color-content: var(--color-gray-750);
+  --color-content-hover: var(--color-gray-850);
+
+  --color-bg-base: var(--color-gray-950);
+  --color-bg-content: var(--color-gray-900);
+  --color-bg-content-hover: var(--color-gray-850);
+
+  --color-text-primary: var(--color-gray-50);
+  --color-text-secondary: var(--color-gray-400);
+  --color-text-muted: var(--color-gray-500);
+
+  --color-table-bg-highlight: var(--color-gray-800);
+  --color-table-bg-hover: var(--color-gray-750);
+  --color-table-border: var(--color-gray-700);
+  --color-table-border-highlight: var(--color-gray-600);
+  --color-table-text-highlight: var(--color-amber-400);
+  --color-table-text-accent: var(--color-cyan-400);
 }

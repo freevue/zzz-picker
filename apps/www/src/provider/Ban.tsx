@@ -1,4 +1,4 @@
-import { useSetting } from '@/hooks'
+import { useSetting, useSetting2 } from '@/hooks'
 import type { SelectAgent } from '@/types'
 import { findIndex, map, pipe, range, toArray } from '@fxts/core'
 import { createContext, useEffect, useState } from 'react'
@@ -20,18 +20,18 @@ type Props = {
 }
 
 const BanProvider: React.FC<Props> = (props) => {
-  const { state } = useSetting()
+  const { setting } = useSetting2()
   const [banList, setBanList] = useState<Array<SelectAgent>>([null, null])
 
   useEffect(() => {
     pipe(
-      state.banCount,
+      setting.banCount,
       range,
       map(() => null),
       toArray,
       (list) => setBanList(list)
     )
-  }, [state.banCount])
+  }, [setting.banCount])
 
   return (
     <BanContext.Provider
@@ -39,7 +39,7 @@ const BanProvider: React.FC<Props> = (props) => {
         banList,
         reset: () => {
           pipe(
-            state.banCount,
+            setting.banCount,
             range,
             map(() => null),
             toArray,
@@ -47,7 +47,7 @@ const BanProvider: React.FC<Props> = (props) => {
           )
         },
         setBanList: (id: number | null, index: number) => {
-          if (id && state.allowAgent.includes(id)) return
+          if (id && setting.allowAgent.includes(id)) return
 
           setBanList((prev) => {
             const currentAgentIndex = pipe(

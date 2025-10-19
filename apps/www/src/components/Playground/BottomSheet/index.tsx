@@ -1,7 +1,7 @@
 import AgentDialog from './AgentDialog'
 import { Plus, Cross } from '@/Icons'
 import { UI } from '@/components'
-import { useBan, useSetting } from '@/hooks'
+import { useBan, useSetting, useAgent, useSetting2 } from '@/hooks'
 import { getAgentSquareImage } from '@/utils'
 import { pipe, zipWithIndex, map, toArray } from '@fxts/core'
 import { useState } from 'react'
@@ -52,13 +52,22 @@ const AgentCard: React.FC<{ id: number | null; index: number }> = (props) => {
   )
 }
 
+const Agent: React.FC<{ id: number }> = (props) => {
+  const agent = useAgent(props.id)
+
+  return agent ? (
+    <li className="border-2 size-24 border-text-primary border-l-0 overflow-hidden">
+      <img src={agent.labSquareImage} className="block w-full" alt="" />
+    </li>
+  ) : null
+}
 const Ban = () => {
   const { banList } = useBan()
-  const { state } = useSetting()
+  const { setting } = useSetting2()
 
   return (
     <div className="flex w-full flex-1 gap-4 overflow-hidden">
-      {state.allowAgent.length > 0 && (
+      {setting.allowAgent.length > 0 && (
         <div className="flex-1 overflow-hidden">
           <UI.Typo.Heading className="text-xl" primary>
             Allow
@@ -66,15 +75,8 @@ const Ban = () => {
           <div className="w-full overflow-x-auto overflow-y-hidden mt-4">
             <ul className="flex border-l-2 border-text-primary w-fit">
               {pipe(
-                state.allowAgent,
-                map((id) => (
-                  <li
-                    key={id}
-                    className="border-2 size-24 border-text-primary border-l-0 overflow-hidden"
-                  >
-                    <img src={getAgentSquareImage(id)} className="block w-full" alt="" />
-                  </li>
-                )),
+                setting.allowAgent,
+                map((id) => <Agent id={id} key={id} />),
                 toArray
               )}
             </ul>
