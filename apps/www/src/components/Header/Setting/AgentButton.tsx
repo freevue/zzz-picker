@@ -18,7 +18,16 @@ const AgentButton: React.FC<Props> = (props) => {
   return (
     <Button
       className={pipe(
-        ['w-full', 'flex', 'flex-col', 'border-2', 'rounded-lg', 'overflow-hidden'],
+        [
+          'w-full',
+          'flex',
+          'flex-col',
+          'border-2',
+          'rounded-bl-2xl',
+          'rounded-tr-2xl',
+          'overflow-hidden',
+          'group',
+        ],
         concat(
           props.active
             ? ['border-primary', 'text-primary']
@@ -30,20 +39,23 @@ const AgentButton: React.FC<Props> = (props) => {
       disabled={props.disabled}
       value={props.id}
     >
-      <img
+      <div
         style={{ backgroundColor: agent.color || 'transparent' }}
         className={pipe(
-          ['w-full', 'block'],
+          ['w-full', 'overflow-hidden', 'transition-[border-radius]', 'duration-300'],
           concat(
-            props.id === PRETTY_AGENT_ID
-              ? ['animate-[twinkles_2s_infinite_linear]', 'shadow-xl/50', 'shadow-primary']
-              : []
+            props.active ? ['border-primary'] : ['rounded-bl-2xl', 'group-hover:rounded-none']
           ),
+          concat(props.id === PRETTY_AGENT_ID ? ['animate-[twinkles_2s_infinite_linear]'] : []),
           join(' ')
         )}
-        src={agent.chzzkSquareImage || agent.labSquareImage}
-        alt={agent.nameKo}
-      />
+      >
+        <img
+          className="block w-full"
+          src={agent.chzzkSquareImage || agent.labSquareImage}
+          alt={agent.nameKo}
+        />
+      </div>
       <span className="text-md font-bold">{agent.nameKo}</span>
     </Button>
   )
