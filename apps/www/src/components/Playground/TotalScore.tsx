@@ -15,9 +15,9 @@ function getAgentCostType(rarity: Rarity, isPickup: boolean) {
   return 'SAlways'
 }
 
-const Record: React.FC<{ value: number; className?: string }> = (props) => {
+const Record: React.FC<{ value: number; className?: string; fixed: number }> = (props) => {
   const count = useMotionValue(100)
-  const rounded = useTransform(() => Math.round(count.get()))
+  const rounded = useTransform(() => Number(count.get().toFixed(props.fixed)))
 
   useEffect(() => {
     const controls = animate(count, props.value, { duration: 1 })
@@ -142,6 +142,7 @@ const TotalScore: React.FC<Props> = () => {
               join(' ')
             )}
             value={totalCost.A}
+            fixed={2}
           />
           <UI.Typo.Heading className="w-1/3 text-xl text-center">총 사용 Cost</UI.Typo.Heading>
           <Record
@@ -151,36 +152,39 @@ const TotalScore: React.FC<Props> = () => {
               join(' ')
             )}
             value={totalCost.B}
+            fixed={2}
           />
         </div>
         <div className="flex items-center justify-between">
-          <Record className="text-right" value={roundTotalScore.A} />
+          <Record className="text-right" value={roundTotalScore.A} fixed={0} />
           <UI.Typo.Heading className="w-1/3 text-xl text-center">라운드 점수 합산</UI.Typo.Heading>
-          <Record className="text-left" value={roundTotalScore.B} />
+          <Record className="text-left" value={roundTotalScore.B} fixed={0} />
         </div>
         <div className="flex items-center justify-between">
-          <Record className="text-right" value={roundTotalTime.A * 333} />
+          <Record className="text-right" value={roundTotalTime.A * 333} fixed={0} />
           <UI.Typo.Heading className="w-1/3 text-xl text-center">시간 보너스</UI.Typo.Heading>
-          <Record className="text-left" value={roundTotalTime.B * 333} />
+          <Record className="text-left" value={roundTotalTime.B * 333} fixed={0} />
         </div>
         <div className="flex items-center justify-between">
           <Record
             className="text-right"
             value={(setting.totalCost - totalCost.A) * DEFAULT_COST_RATE * 100}
+            fixed={2}
           />
           <UI.Typo.Heading className="w-1/3 text-xl text-center">Cost 보너스 배율</UI.Typo.Heading>
           <Record
             className="text-left"
             value={(setting.totalCost - totalCost.B) * DEFAULT_COST_RATE * 100}
+            fixed={2}
           />
         </div>
         <div className="flex items-center justify-between mt-4">
           <UI.Typo.Heading className="flex-1 text-right" primary>
-            <Record value={Math.round(totalScore.A)} />
+            <Record value={Math.round(totalScore.A)} fixed={0} />
           </UI.Typo.Heading>
           <UI.Typo.Heading className="w-1/3 text-center">총 점수</UI.Typo.Heading>
           <UI.Typo.Heading className="flex-1 text-left" primary>
-            <Record value={Math.round(totalScore.B)} />
+            <Record value={Math.round(totalScore.B)} fixed={0} />
           </UI.Typo.Heading>
         </div>
       </div>

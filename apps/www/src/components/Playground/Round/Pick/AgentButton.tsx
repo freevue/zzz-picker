@@ -37,7 +37,8 @@ const AgentButton: React.FC<Props> = (props) => {
 
         return [used, setting.rate * rate, ...engineList]
       },
-      sum
+      sum,
+      (value) => Number((value * 100).toFixed(2)) / 100
     )
   }, [props.setting, agentRarityKey, costTable])
 
@@ -71,7 +72,7 @@ const AgentButton: React.FC<Props> = (props) => {
             join(' ')
           )}
         >
-          <span className="absolute left-0 top-0 size-8 flex items-center justify-center bg-content/70 backdrop-blur-lg text-gray-50 font-bold text-lg">
+          <span className="absolute left-0 top-0 h-8 min-w-8 w-fit px-2 flex items-center justify-center bg-content/70 backdrop-blur-lg text-gray-50 font-bold text-lg">
             {totalCost}
           </span>
           <div className="w-full h-full" style={{ backgroundColor: agent.color || 'transparent' }}>
