@@ -10,4 +10,18 @@
   input[type='number'] {
     -moz-appearance: none;
   }
+
+  img {
+    user-drag: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -moz-user-drag: none;
+    -moz-user-select: none;
+    -ms-user-drag: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+  }
 }
