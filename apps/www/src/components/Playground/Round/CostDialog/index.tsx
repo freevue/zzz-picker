@@ -119,7 +119,7 @@ const CostDialog: React.FC<Props> = (props) => {
               <div>
                 <UI.Typo.Heading className="text-xl mb-2">엔진 돌파</UI.Typo.Heading>
                 <Form.Count
-                  min={0}
+                  min={1}
                   max={5}
                   step={1}
                   value={currentCost.engineRate}
