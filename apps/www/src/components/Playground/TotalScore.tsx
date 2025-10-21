@@ -1,8 +1,8 @@
 import { UI } from '@/components'
-import { DEFAULT_COST_RATE } from '@/constant'
+import { DEFAULT_COST_RATE, DEFAULT_TIME_BONUS } from '@/constant'
 import { usePlay, useSetting, useStore } from '@/hooks'
 import type { Rarity } from '@/types'
-import { pipe, join, concat, map, sum, flatMap } from '@fxts/core'
+import { pipe, join, concat, map, sum, flatMap, filter } from '@fxts/core'
 import { animate, motion, useMotionValue, useTransform } from 'motion/react'
 import { useEffect, useMemo } from 'react'
 
@@ -102,14 +102,16 @@ const TotalScore: React.FC<Props> = () => {
       A: pipe(
         round,
         map(([, round]) => round.A.result.timer || 180),
-        sum,
-        (value) => 360 - value
+        filter((value) => 180 > value),
+        map((value) => (180 - value) * DEFAULT_TIME_BONUS),
+        sum
       ),
       B: pipe(
         round,
         map(([, round]) => round.B.result.timer || 180),
-        sum,
-        (value) => 360 - value
+        filter((value) => 180 > value),
+        map((value) => value * DEFAULT_TIME_BONUS),
+        sum
       ),
     }
   }, [round])
@@ -118,12 +120,12 @@ const TotalScore: React.FC<Props> = () => {
       A: sum([
         roundTotalScore.A,
         roundTotalScore.A * (setting.totalCost - totalCost.A) * DEFAULT_COST_RATE,
-        roundTotalTime.A * 333,
+        roundTotalTime.A,
       ]),
       B: sum([
         roundTotalScore.B,
         roundTotalScore.B * (setting.totalCost - totalCost.B) * DEFAULT_COST_RATE,
-        roundTotalTime.B * 333,
+        roundTotalTime.B,
       ]),
     }
   }, [roundTotalScore, roundTotalTime, totalCost])
@@ -161,9 +163,9 @@ const TotalScore: React.FC<Props> = () => {
           <Record className="text-left" value={roundTotalScore.B} fixed={0} />
         </div>
         <div className="flex items-center justify-between">
-          <Record className="text-right" value={roundTotalTime.A * 333} fixed={0} />
+          <Record className="text-right" value={roundTotalTime.A} fixed={0} />
           <UI.Typo.Heading className="w-1/3 text-xl text-center">시간 보너스</UI.Typo.Heading>
-          <Record className="text-left" value={roundTotalTime.B * 333} fixed={0} />
+          <Record className="text-left" value={roundTotalTime.B} fixed={0} />
         </div>
         <div className="flex items-center justify-between">
           <Record

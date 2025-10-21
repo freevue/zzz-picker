@@ -1,6 +1,8 @@
 import type { URLState, CostWeight, CostTable, AgentCostSetting } from '@/types'
 
 export const PRETTY_AGENT_ID = 156728
+export const DEFAULT_COST_RATE = 0.05
+export const DEFAULT_TIME_BONUS = 333
 
 export const DEFAULT_AGENT_COST_STATE: AgentCostSetting = {
   pickup: 'AAlways',
@@ -8,8 +10,6 @@ export const DEFAULT_AGENT_COST_STATE: AgentCostSetting = {
   engineType: 'SExclusive',
   engineRate: 0,
 }
-
-export const DEFAULT_COST_RATE = 0.05
 
 export const DEFAULT_URL_STATE: URLState = {
   banCount: 2,
