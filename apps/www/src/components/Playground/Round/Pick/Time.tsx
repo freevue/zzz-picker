@@ -1,7 +1,7 @@
 import { usePlay } from '@/hooks'
 import type { Side } from '@/types'
 import { pipe, concat, join } from '@fxts/core'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 type Props = {
   roundId: number
@@ -9,14 +9,26 @@ type Props = {
 }
 
 const Time: React.FC<Props> = (props) => {
-  const { setRoundResultTime } = usePlay()
+  const timerRef = useRef<NodeJS.Timeout | null>(null)
+
+  const { round, setRoundResultTime } = usePlay()
 
   const [minute, setMinute] = useState(0)
   const [second, setSecond] = useState(0)
 
+  const value = useMemo(() => {
+    return round.get(props.roundId)?.[props.side]?.result.timer
+  }, [round, props.roundId, props.side])
+
   const time = useMemo(() => {
     return minute * 60 + second
   }, [minute, second])
+  useEffect(() => {
+    if (value === 0) {
+      setMinute(0)
+      setSecond(0)
+    }
+  }, [value])
 
   const onMinuteChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     pipe(
@@ -51,7 +63,11 @@ const Time: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
-    setRoundResultTime(props.roundId, props.side, time)
+    timerRef.current && clearInterval(timerRef.current)
+    timerRef.current = setTimeout(() => {
+      timerRef.current = null
+      setRoundResultTime(props.roundId, props.side, time)
+    }, 300)
   }, [time])
 
   return (
