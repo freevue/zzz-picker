@@ -15,9 +15,18 @@ function getAgentCostType(rarity: Rarity, isPickup: boolean) {
   return 'SAlways'
 }
 
+const HideRecord: React.FC<{ children: React.ReactNode }> = (props) => {
+  return (
+    <span className="absolute cursor-default left-0 -bottom-8 font-extrabold w-full text-gray-50 text-xl! opacity-0 group-hover:opacity-70 transition-opacity duration-300">
+      {props.children}
+    </span>
+  )
+}
 const Record: React.FC<{ value: number; className?: string; fixed: number }> = (props) => {
   const count = useMotionValue(100)
-  const rounded = useTransform(() => Number(count.get().toFixed(props.fixed)))
+  const rounded = useTransform(() =>
+    Number(count.get().toFixed(props.fixed)).toLocaleString('ko-KR')
+  )
 
   useEffect(() => {
     const controls = animate(count, props.value, { duration: 1 })
@@ -28,7 +37,7 @@ const Record: React.FC<{ value: number; className?: string; fixed: number }> = (
   return (
     <motion.p
       className={pipe(
-        ['dark:text-text-primary', 'text-3xl', 'font-black', 'flex-1'],
+        ['dark:text-text-primary', 'text-3xl', 'font-black', 'flex-1', 'cursor-default'],
         concat([props.className || '']),
         join(' ')
       )}
@@ -146,7 +155,9 @@ const TotalScore: React.FC<Props> = () => {
             value={totalCost.A}
             fixed={2}
           />
-          <UI.Typo.Heading className="w-1/3 text-xl text-center">총 사용 Cost</UI.Typo.Heading>
+          <UI.Typo.Heading className="w-1/3 text-xl text-center cursor-default">
+            총 사용 Cost
+          </UI.Typo.Heading>
           <Record
             className={pipe(
               ['text-left'],
@@ -159,12 +170,16 @@ const TotalScore: React.FC<Props> = () => {
         </div>
         <div className="flex items-center justify-between">
           <Record className="text-right" value={roundTotalScore.A} fixed={0} />
-          <UI.Typo.Heading className="w-1/3 text-xl text-center">라운드 점수 합산</UI.Typo.Heading>
+          <UI.Typo.Heading className="w-1/3 text-xl text-center cursor-default">
+            라운드 점수 합산
+          </UI.Typo.Heading>
           <Record className="text-left" value={roundTotalScore.B} fixed={0} />
         </div>
         <div className="flex items-center justify-between">
           <Record className="text-right" value={roundTotalTime.A} fixed={0} />
-          <UI.Typo.Heading className="w-1/3 text-xl text-center">시간 보너스</UI.Typo.Heading>
+          <UI.Typo.Heading className="w-1/3 text-xl text-center cursor-default">
+            시간 보너스
+          </UI.Typo.Heading>
           <Record className="text-left" value={roundTotalTime.B} fixed={0} />
         </div>
         <div className="flex items-center justify-between">
@@ -173,7 +188,9 @@ const TotalScore: React.FC<Props> = () => {
             value={(setting.totalCost - totalCost.A) * DEFAULT_COST_RATE * 100}
             fixed={2}
           />
-          <UI.Typo.Heading className="w-1/3 text-xl text-center">Cost 보너스 배율</UI.Typo.Heading>
+          <UI.Typo.Heading className="w-1/3 text-xl text-center cursor-default">
+            Cost 보너스 배율
+          </UI.Typo.Heading>
           <Record
             className="text-left"
             value={(setting.totalCost - totalCost.B) * DEFAULT_COST_RATE * 100}
@@ -181,13 +198,23 @@ const TotalScore: React.FC<Props> = () => {
           />
         </div>
         <div className="flex items-center justify-between mt-4">
-          <UI.Typo.Heading className="flex-1 text-right" primary>
-            <Record value={Math.round(totalScore.A)} fixed={0} />
-          </UI.Typo.Heading>
-          <UI.Typo.Heading className="w-1/3 text-center">총 점수</UI.Typo.Heading>
-          <UI.Typo.Heading className="flex-1 text-left" primary>
-            <Record value={Math.round(totalScore.B)} fixed={0} />
-          </UI.Typo.Heading>
+          <div className="text-right flex-1 relative group">
+            <Record
+              className="text-primary! text-4xl!"
+              value={Math.round(totalScore.A)}
+              fixed={0}
+            />
+            <HideRecord>{totalScore.A.toLocaleString()}</HideRecord>
+          </div>
+          <UI.Typo.Heading className="w-1/3 text-center cursor-default">총 점수</UI.Typo.Heading>
+          <div className="text-left flex-1 relative group">
+            <Record
+              className="text-primary! text-4xl!"
+              value={Math.round(totalScore.B)}
+              fixed={0}
+            />
+            <HideRecord>{totalScore.B.toLocaleString()}</HideRecord>
+          </div>
         </div>
       </div>
     </div>
