@@ -34,7 +34,13 @@ const CostDialog: React.FC<Props> = (props) => {
   }
 
   return (
-    <div className={pipe(['w-2xl', 'relative'], concat([]), join(' '))}>
+    <div
+      className={pipe(
+        ['w-2xl', 'relative', 'min-h-[480px]', 'flex', 'flex-col'],
+        concat([]),
+        join(' ')
+      )}
+    >
       <UI.Typo.Heading primary className="">
         {agent.fullNameKo} +{props.totalCost}
         <span
@@ -44,14 +50,15 @@ const CostDialog: React.FC<Props> = (props) => {
           {agent.rarity}
         </span>
       </UI.Typo.Heading>
-      <div className="flex mt-8 items-end relative z-10">
+      <div className="flex mt-8 items-end relative z-10 flex-1">
         <div className="w-sm flex items-start justify-start">
           <img
             className={pipe(
               ['w-full', 'block'],
+              concat([]),
               concat(
                 props.agentId === PRETTY_AGENT_ID
-                  ? ['fill-white', 'drop-shadow-xl', 'drop-shadow-white']
+                  ? ['fill-white', 'drop-shadow-2xl', 'drop-shadow-white']
                   : []
               ),
               join(' ')
