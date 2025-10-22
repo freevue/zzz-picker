@@ -17,18 +17,21 @@ type State = {
   agent: Map<number, Agent>
   boss: Map<number, Boss>
   deadlyAssault: [Boss, Boss, Boss] | null
+  deadlyAssaultList: Array<DeadlyAssault>
 }
 
 export const Context = createContext<State>({
   agent: new Map(),
   boss: new Map(),
   deadlyAssault: null,
+  deadlyAssaultList: [],
 })
 
 const Provider = (props: Props) => {
   const [agent, setAgent] = useState<Map<number, Agent>>(new Map())
   const [boss, setBoss] = useState<Map<number, Boss>>(new Map())
   const [deadlyAssault, setDeadlyAssault] = useState<[number, number, number] | null>(null)
+  const [deadlyAssaultList, setDeadlyAssaultList] = useState<Array<DeadlyAssault>>([])
 
   useEffect(() => {
     pipe(
@@ -49,21 +52,28 @@ const Provider = (props: Props) => {
       }, new Map()),
       (boss) => setBoss(boss)
     )
+    pipe(getDeadlyAssault(), toArray, (list) => setDeadlyAssaultList(list))
+  }, [])
+
+  useEffect(() => {
+    if (deadlyAssaultList.length === 0) return
+
     pipe(
-      getDeadlyAssault(),
+      deadlyAssaultList,
       filter(({ date }) => dayjs(date).isBefore(dayjs())),
       toArray,
       head as (list: Array<DeadlyAssault>) => DeadlyAssault,
       ({ boss1, boss2, boss3 }) => [boss1, boss2, boss3] as [number, number, number],
       (list) => setDeadlyAssault(list)
     )
-  }, [])
+  }, [deadlyAssaultList])
 
   return (
     <Context.Provider
       value={{
         agent,
         boss,
+        deadlyAssaultList,
         deadlyAssault: useMemo(() => {
           if (isNull(deadlyAssault)) return deadlyAssault
 
