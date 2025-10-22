@@ -1,8 +1,8 @@
 import { UI } from '@/components'
-import { PRETTY_AGENT_ID } from '@/constant'
 import { useAgent, usePlay } from '@/hooks'
 import { pipe, join, concat, map, zipWithIndex, toArray } from '@fxts/core'
 import { Form, Button } from '@zzz-picker/components'
+import { PRETTY_AGENT_ID } from '@zzz-picker/provider'
 import type { Side, TypeEngine } from '@zzz-picker/provider'
 import { useMemo } from 'react'
 

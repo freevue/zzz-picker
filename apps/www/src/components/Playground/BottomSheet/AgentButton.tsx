@@ -1,7 +1,7 @@
-import { PRETTY_AGENT_ID } from '@/constant'
 import { useAgent } from '@/hooks'
 import { pipe, concat, join } from '@fxts/core'
 import { Button } from '@zzz-picker/components'
+import { PRETTY_AGENT_ID } from '@zzz-picker/provider'
 
 type Props = {
   id: number

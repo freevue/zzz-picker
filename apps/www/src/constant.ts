@@ -1,6 +1,5 @@
 import type { URLState, CostWeight, CostTable, AgentCostSetting } from '@/types'
 
-export const PRETTY_AGENT_ID = 156728
 export const DEFAULT_COST_RATE = 0.05
 export const DEFAULT_TIME_BONUS = 333
 
