@@ -14,7 +14,7 @@ const Round: React.FC<Props> = (props) => {
       <UI.Typo.Heading className="text-2xl font-bold dark:text-text-primary text-center">
         {props.round.name}
       </UI.Typo.Heading>
-      <div className="flex justify-between items-center mt-4 gap-8">
+      <div className="flex justify-between items-center -mt-11 gap-8">
         <Pick side="A" roundId={props.id} round={props.round} />
         <div className="flex items-center">
           <BossButton boss={props.round.boss} roundId={props.id} />
