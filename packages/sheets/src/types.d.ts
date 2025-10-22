@@ -1,3 +1,9 @@
+// JSON 모듈 import를 위한 타입 정의
+declare module '*.json' {
+  const value: any
+  export default value
+}
+
 export type Agent = {
   hoyolabId: null | number
   naverChzzkId: null | string

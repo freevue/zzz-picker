@@ -1,4 +1,10 @@
 export const BASE_URL = 'https://sheets.googleapis.com/v4/spreadsheets'
+export const NAVER_GAME_API_URL =
+  'https://comm-api.game.naver.com/nng_main/v1/game/db/character/GM_NCR_007033/dataType/photo?offset=0&limit=70'
+export const HOYOVERSE_ZZZ_API_URL =
+  'https://sg-public-api-static.hoyoverse.com/content_v2_user/app/3e9196a4b9274bd7/getContentList?iPageSize=200&iPage=1&iChanId=287&sLangKey=ko-kr'
+export const NAVER_CHZZK_API_URL =
+  'https://comm-api.game.naver.com/nng_main/v1/game/db/character/objectId'
 
 export const API_KEY = process.env.GOOGLE_API_KEY!
 export const SHEET_ID = process.env.GOOGLE_SHEET_ID!
