@@ -60,6 +60,7 @@ const Count: React.FC<Props> = (props) => {
           max={props.max}
           value={count}
           onChange={onInputChange}
+          onWheel={(event) => event.currentTarget.blur()}
         />
       </label>
       <Button className="p-2 bg-gray-50 group" value="1" onClick={onButtonClick} type="button">
