@@ -36,6 +36,8 @@ export type Boss = {
   nameEn: null | string
   fullNameEn: string
   image: string
+  weakness: null | string
+  resistance: null | string
 }
 
 export type DeadlyAssault = {

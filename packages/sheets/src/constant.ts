@@ -47,6 +47,8 @@ export enum BOSS_KEY {
   NAME_EN = 'nameEn',
   FULL_NAME_EN = 'fullNameEn',
   IMAGE = 'image',
+  WEAKNESS = 'weakness',
+  RESISTANCE = 'resistance',
 }
 
 export enum DEADLY_ASSAULT_KEY {
