@@ -11,7 +11,7 @@ const Side: React.FC = () => {
 
   return (
     <>
-      <div className="flex w-full p-4 gap-4 items-center sticky top-0 bg-black z-10">
+      <div className="flex w-full p-4 gap-5 items-center sticky top-0 bg-black z-10">
         <Nickname side="A" />
         <span className="text-3xl font-extrabold dark:text-gray-400">VS</span>
         <Nickname side="B" />
