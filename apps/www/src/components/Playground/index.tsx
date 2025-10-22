@@ -16,7 +16,7 @@ const Side: React.FC = () => {
         <span className="text-2xl font-bold dark:text-text-secondary">VS</span>
         <Nickname side="B" />
       </div>
-      <div className="p-4 flex flex-col gap-6 mt-8">
+      <div className="p-4 flex flex-col gap-20 mt-8">
         {pipe(
           round,
           map(([index, round]) => <Round key={index} id={index} round={round} />),
