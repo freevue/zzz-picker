@@ -149,6 +149,7 @@ const Provider = (props: Props) => {
 
             audioRef.current = new Audio(ALICE_AUDIO_PATH)
 
+            audioRef.current.volume = 0.5
             audioRef.current.addEventListener('ended', onAudioEnded)
             audioRef.current.addEventListener('loadedmetadata', onAudioLoadedMetaData)
           }
