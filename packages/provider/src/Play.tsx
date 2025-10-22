@@ -1,6 +1,9 @@
+import { PRETTY_AGENT_ID } from './'
 import { Context as SettingContext } from './Setting'
 import { findIndex, map, pipe, range, toArray, zipWithIndex } from '@fxts/core'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
+
+const ALICE_AUDIO_PATH = '/audio/alice.mp3'
 
 export type SelectAgent = number | null
 export type SelectBoss = number | null
@@ -86,6 +89,7 @@ export const Context = createContext<State>({
 })
 
 const Provider = (props: Props) => {
+  const audioRef = useRef<HTMLAudioElement>(null)
   const { setting, roundList } = useContext(SettingContext)
   const [banList, setBanList] = useState<Array<SelectAgent>>([])
   const [round, setRound] = useState<Map<number, TypeRound>>(new Map())
@@ -133,6 +137,21 @@ const Provider = (props: Props) => {
         },
         setRoundPick: (roundIndex, side, index, agent) => {
           const currentRound = round.get(roundIndex)!
+
+          if (agent === PRETTY_AGENT_ID && audioRef.current === null) {
+            const onAudioLoadedMetaData = () => {
+              audioRef.current?.play()
+            }
+            const onAudioEnded = () => {
+              audioRef.current?.removeEventListener('loadedmetadata', onAudioLoadedMetaData)
+              audioRef.current?.removeEventListener('ended', onAudioEnded)
+            }
+
+            audioRef.current = new Audio(ALICE_AUDIO_PATH)
+
+            audioRef.current.addEventListener('ended', onAudioEnded)
+            audioRef.current.addEventListener('loadedmetadata', onAudioLoadedMetaData)
+          }
 
           pipe(
             currentRound,
