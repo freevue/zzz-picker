@@ -47,8 +47,6 @@ const Boss: React.FC = () => {
     )
   }, [deadlyAssaultList, selected])
 
-  console.log(bossData)
-
   const onBossClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setSelected(Number(event.currentTarget.value))
     setIsOpen(false)
