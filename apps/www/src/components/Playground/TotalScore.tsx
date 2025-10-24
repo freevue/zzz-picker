@@ -2,7 +2,7 @@ import { UI } from '@/components'
 import { DEFAULT_COST_RATE, DEFAULT_TIME_BONUS } from '@/constant'
 import { usePlay, useSetting, useStore } from '@/hooks'
 import type { Rarity } from '@/types'
-import { pipe, join, concat, map, sum, flatMap, filter } from '@fxts/core'
+import { pipe, join, concat, map, sum, flatMap, filter, isNull } from '@fxts/core'
 import { animate, motion, useMotionValue, useTransform } from 'motion/react'
 import { useEffect, useMemo } from 'react'
 
@@ -68,10 +68,17 @@ const TotalScore: React.FC<Props> = () => {
           const agentCostType = getAgentCostType(currentAgent.rarity, currentAgent.isPickup)
           const { used, rate } = costTable.agent[agentCostType]
 
-          const engineCost = pick.setting.engineType
-            ? costTable.engine[pick.setting.engineType].used +
-              costTable.engine[pick.setting.engineType].rate * pick.setting.engineRate
-            : 0
+          if (isNull(pick.setting.engineType)) return used + rate * pick.setting.rate
+          if (pick.setting.engineType === 'S')
+            return (
+              used +
+              rate * pick.setting.rate +
+              (pick.setting.engineRate >= 4 ? costTable.engine.S.rate : 0)
+            )
+
+          const engineCost =
+            costTable.engine[pick.setting.engineType].used +
+            costTable.engine[pick.setting.engineType].rate * pick.setting.engineRate
 
           return used + rate * pick.setting.rate + engineCost
         }),
@@ -87,10 +94,17 @@ const TotalScore: React.FC<Props> = () => {
           const agentCostType = getAgentCostType(currentAgent.rarity, currentAgent.isPickup)
           const { used, rate } = costTable.agent[agentCostType]
 
-          const engineCost = pick.setting.engineType
-            ? costTable.engine[pick.setting.engineType].used +
-              costTable.engine[pick.setting.engineType].rate * pick.setting.engineRate
-            : 0
+          if (isNull(pick.setting.engineType)) return used + rate * pick.setting.rate
+          if (pick.setting.engineType === 'S')
+            return (
+              used +
+              rate * pick.setting.rate +
+              (pick.setting.engineRate >= 4 ? costTable.engine.S.rate : 0)
+            )
+
+          const engineCost =
+            costTable.engine[pick.setting.engineType].used +
+            costTable.engine[pick.setting.engineType].rate * pick.setting.engineRate
 
           return used + rate * pick.setting.rate + engineCost
         }),

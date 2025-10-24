@@ -31,18 +31,14 @@ const AgentButton: React.FC<Props> = (props) => {
       props.setting,
       (setting) => {
         let engineList: number[] = []
+        const { rate: engineRate, used: engineUsed } = costTable.engine[setting.engineType || 'S']
 
         if (setting.engineType === 'S') {
           engineList = setting.engineType
-            ? [costTable.engine[setting.engineType].used, setting.engineRate >= 4 ? 1 : 0]
+            ? [engineUsed, setting.engineRate >= 4 ? engineRate : 0]
             : [0]
         } else {
-          engineList = setting.engineType
-            ? [
-                costTable.engine[setting.engineType].used,
-                costTable.engine[setting.engineType].rate * setting.engineRate,
-              ]
-            : [0]
+          engineList = setting.engineType ? [engineUsed, engineRate * setting.engineRate] : [0]
         }
 
         return [used, setting.rate * rate, ...engineList]
