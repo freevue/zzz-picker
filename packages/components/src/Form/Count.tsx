@@ -36,7 +36,9 @@ const Count: React.FC<Props> = (props) => {
       return newCount
     })
   }
-
+  const onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    event.target.value = `${Number(event.target.value)}`
+  }
   useEffect(() => {
     props.onChange?.(count, props.name)
   }, [count])
@@ -60,6 +62,7 @@ const Count: React.FC<Props> = (props) => {
           max={props.max}
           value={count}
           onChange={onInputChange}
+          onBlur={onBlur}
           onWheel={(event) => event.currentTarget.blur()}
         />
       </label>
