@@ -119,7 +119,7 @@ const TotalScore: React.FC<Props> = () => {
         round,
         map(([, round]) => round.B.result.timer || 180),
         filter((value) => 180 > value),
-        map((value) => value * DEFAULT_TIME_BONUS),
+        map((value) => (180 - value) * DEFAULT_TIME_BONUS),
         sum
       ),
     }
