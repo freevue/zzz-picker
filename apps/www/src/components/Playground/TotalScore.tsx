@@ -3,8 +3,9 @@ import { DEFAULT_COST_RATE, DEFAULT_TIME_BONUS } from '@/constant'
 import { usePlay, useSetting, useStore } from '@/hooks'
 import type { Rarity } from '@/types'
 import { pipe, join, concat, map, sum, flatMap, filter, isNull } from '@fxts/core'
+import { Button } from '@zzz-picker/components'
 import { animate, motion, useMotionValue, useTransform } from 'motion/react'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 type Props = {}
 
@@ -56,6 +57,7 @@ const TotalScore: React.FC<Props> = () => {
   const { agent } = useStore()
   const { costTable, setting } = useSetting()
   const { round } = usePlay()
+  const [isCounting, setIsCounting] = useState(false)
   const totalCost = useMemo(() => {
     return {
       A: pipe(
@@ -189,23 +191,23 @@ const TotalScore: React.FC<Props> = () => {
           />
         </div>
         <div className="flex items-center justify-between">
-          <Record className="text-right" value={roundTotalScore.A} fixed={0} />
+          <Record className="text-right" value={isCounting ? roundTotalScore.A : 0} fixed={0} />
           <UI.Typo.Heading className="w-1/3 text-xl text-center cursor-default">
             라운드 점수 합산
           </UI.Typo.Heading>
-          <Record className="text-left" value={roundTotalScore.B} fixed={0} />
+          <Record className="text-left" value={isCounting ? roundTotalScore.B : 0} fixed={0} />
         </div>
         <div className="flex items-center justify-between">
-          <Record className="text-right" value={roundTotalTime.A} fixed={0} />
+          <Record className="text-right" value={isCounting ? roundTotalTime.A : 0} fixed={0} />
           <UI.Typo.Heading className="w-1/3 text-xl text-center cursor-default">
             시간 보너스
           </UI.Typo.Heading>
-          <Record className="text-left" value={roundTotalTime.B} fixed={0} />
+          <Record className="text-left" value={isCounting ? roundTotalTime.B : 0} fixed={0} />
         </div>
         <div className="flex items-center justify-between">
           <Record
             className="text-right"
-            value={(setting.totalCost - totalCost.A) * DEFAULT_COST_RATE * 100}
+            value={isCounting ? (setting.totalCost - totalCost.A) * DEFAULT_COST_RATE * 100 : 0}
             fixed={2}
             prefix="%"
           />
@@ -214,7 +216,7 @@ const TotalScore: React.FC<Props> = () => {
           </UI.Typo.Heading>
           <Record
             className="text-left"
-            value={(setting.totalCost - totalCost.B) * DEFAULT_COST_RATE * 100}
+            value={isCounting ? (setting.totalCost - totalCost.B) * DEFAULT_COST_RATE * 100 : 0}
             fixed={2}
             prefix="%"
           />
@@ -223,7 +225,7 @@ const TotalScore: React.FC<Props> = () => {
           <div className="text-right flex-1 relative group">
             <Record
               className="text-primary! text-4xl!"
-              value={Math.round(totalScore.A)}
+              value={isCounting ? Math.round(totalScore.A) : 0}
               fixed={0}
             />
             <HideRecord>{totalScore.A.toLocaleString()}</HideRecord>
@@ -232,12 +234,19 @@ const TotalScore: React.FC<Props> = () => {
           <div className="text-left flex-1 relative group">
             <Record
               className="text-primary! text-4xl!"
-              value={Math.round(totalScore.B)}
+              value={isCounting ? Math.round(totalScore.B) : 0}
               fixed={0}
             />
             <HideRecord>{totalScore.B.toLocaleString()}</HideRecord>
           </div>
         </div>
+        <Button
+          type="button"
+          onClick={() => setIsCounting(true)}
+          className="text-secondary font-extrabold text-xl"
+        >
+          결산하기
+        </Button>
       </div>
     </div>
   )
