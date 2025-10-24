@@ -12,7 +12,7 @@ export const DEFAULT_AGENT_COST_STATE: AgentCostSetting = {
 
 export const DEFAULT_URL_STATE: URLState = {
   banCount: 2,
-  totalCost: 20,
+  totalCost: 24,
   allowAgent: [],
 }
 
@@ -38,12 +38,12 @@ export const DEFAULT_COST_TABLE: CostTable = {
     SExclusive: {
       ...DEFAULT_COST_WEIGHT,
       used: 1,
-      rate: 1,
+      rate: 0.5,
     },
     S: {
       ...DEFAULT_COST_WEIGHT,
-      used: 1,
-      rate: 0,
+      used: 0,
+      rate: 1,
     },
     A: DEFAULT_COST_WEIGHT,
   },
