@@ -12,7 +12,7 @@ const MAX_SCORE = 70_000
 const Score: React.FC<Props> = (props) => {
   const { round, setRoundResultScore } = usePlay()
   const value = useMemo(() => {
-    return round.get(props.roundId)?.[props.side]?.result.score || 0
+    return Number(round.get(props.roundId)?.[props.side]?.result.score || 0)
   }, [round, props.roundId, props.side])
 
   const onScoreChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,6 +31,9 @@ const Score: React.FC<Props> = (props) => {
   }
   const onFocus = (event: React.FocusEvent<HTMLInputElement>) => {
     event.target.select()
+  }
+  const onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    event.target.value = `${Number(event.target.value)}`
   }
 
   return (
@@ -68,6 +71,7 @@ const Score: React.FC<Props> = (props) => {
         name={`${props.roundId}-${props.side}-score`}
         onChange={onScoreChange}
         onFocus={onFocus}
+        onBlur={onBlur}
         min={0}
         max={MAX_SCORE}
         value={value}

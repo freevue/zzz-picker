@@ -61,6 +61,9 @@ const Time: React.FC<Props> = (props) => {
   const onFocus = (event: React.FocusEvent<HTMLInputElement>) => {
     event.target.select()
   }
+  const onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    event.target.value = `${Number(event.target.value)}`
+  }
 
   useEffect(() => {
     timerRef.current && clearInterval(timerRef.current)
@@ -99,6 +102,7 @@ const Time: React.FC<Props> = (props) => {
           name={`${props.roundId}-${props.side}-time-minute`}
           onChange={onMinuteChange}
           onFocus={onFocus}
+          onBlur={onBlur}
           min={0}
           max={3}
           value={minute}
@@ -129,6 +133,7 @@ const Time: React.FC<Props> = (props) => {
           name={`${props.roundId}-${props.side}-time-second`}
           onChange={onSecondChange}
           onFocus={onFocus}
+          onBlur={onBlur}
           min={0}
           max={59}
           value={second}
