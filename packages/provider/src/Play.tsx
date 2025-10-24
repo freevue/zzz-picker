@@ -1,7 +1,7 @@
 import { PRETTY_AGENT_ID } from './'
 import { Context as SettingContext } from './Setting'
 import { Context as StoreContext } from './Store'
-import { each, findIndex, isNull, map, pipe, range, toArray, zipWithIndex } from '@fxts/core'
+import { findIndex, map, pipe, range, toArray, zipWithIndex } from '@fxts/core'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 
 const ALICE_AUDIO_PATH = '/audio/alice.mp3'
