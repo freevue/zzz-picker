@@ -39,8 +39,8 @@ export const DEFAULT_COST_TABLE: CostTable = {
       rate: 1,
     },
     SAlways: {
-      used: 1,
-      rate: 1,
+      used: 0,
+      rate: 0,
     },
     AAlways: {
       used: 0,
@@ -54,7 +54,7 @@ export const DEFAULT_COST_TABLE: CostTable = {
     },
     S: {
       used: 0,
-      rate: 1,
+      rate: 1, // 4~5인 경우 1cost
     },
     A: {
       used: 0,
