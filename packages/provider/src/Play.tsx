@@ -1,6 +1,7 @@
 import { PRETTY_AGENT_ID } from './'
 import { Context as SettingContext } from './Setting'
-import { findIndex, map, pipe, range, toArray, zipWithIndex } from '@fxts/core'
+import { Context as StoreContext } from './Store'
+import { each, findIndex, isNull, map, pipe, range, toArray, zipWithIndex } from '@fxts/core'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 
 const ALICE_AUDIO_PATH = '/audio/alice.mp3'
@@ -90,10 +91,12 @@ export const Context = createContext<State>({
 
 const Provider = (props: Props) => {
   const audioRef = useRef<HTMLAudioElement>(null)
+  const { agent } = useContext(StoreContext)
   const { setting, roundList } = useContext(SettingContext)
   const [banList, setBanList] = useState<Array<SelectAgent>>([])
   const [round, setRound] = useState<Map<number, TypeRound>>(new Map())
 
+  useEffect(() => {}, [])
   useEffect(() => {
     pipe(
       setting.banCount,
@@ -104,14 +107,28 @@ const Provider = (props: Props) => {
     )
   }, [setting.banCount])
   useEffect(() => {
+    const history = JSON.parse(window.localStorage.getItem('zzz-picker-round') || '[]')
+
     pipe(
       roundList,
       zipWithIndex,
-      map(([index, name]) => [index, { ...DEFAULT_ROUND, name }] as const),
+      map(([index, name]) => [index, { ...DEFAULT_ROUND, name, ...history[index] }] as const),
       toArray,
-      (list) => setRound(new Map(list))
+      (list) => {
+        setRound(new Map(list))
+      }
     )
-  }, [roundList])
+  }, [roundList, agent])
+  useEffect(() => {
+    pipe(
+      [...round.entries()],
+      map(([, round]) => round),
+      toArray,
+      (list) => {
+        window.localStorage.setItem('zzz-picker-round', JSON.stringify(list))
+      }
+    )
+  }, [round])
 
   return (
     <Context.Provider

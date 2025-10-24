@@ -1,6 +1,6 @@
 import CostDialog from '../CostDialog'
 import { useAgent, usePlay, useSetting } from '@/hooks'
-import { concat, join, pipe, sum } from '@fxts/core'
+import { concat, isUndefined, join, pipe, sum } from '@fxts/core'
 import { Button, Dialog, Icons } from '@zzz-picker/components'
 import type { Side, TypePick } from '@zzz-picker/provider'
 import { useMemo, useState } from 'react'
@@ -17,6 +17,8 @@ const AgentButton: React.FC<Props> = (props) => {
   const agent = useAgent(props.agent!)!
   const [isOpen, setIsOpen] = useState(false)
   const agentRarityKey = useMemo(() => {
+    if (isUndefined(agent)) return 'SAlways'
+
     if (agent.rarity === 'A') return 'AAlways'
     if (agent.rarity === 'S' && agent.isPickup) return 'SPick'
 

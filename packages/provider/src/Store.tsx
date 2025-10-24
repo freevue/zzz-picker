@@ -28,6 +28,7 @@ export const Context = createContext<State>({
 })
 
 const Provider = (props: Props) => {
+  const [isLoaded, setIsLoaded] = useState(false)
   const [agent, setAgent] = useState<Map<number, Agent>>(new Map())
   const [boss, setBoss] = useState<Map<number, Boss>>(new Map())
   const [deadlyAssault, setDeadlyAssault] = useState<[number, number, number] | null>(null)
@@ -41,7 +42,10 @@ const Provider = (props: Props) => {
 
         return prev
       }, new Map()),
-      (agent) => setAgent(agent)
+      (agent) => {
+        setAgent(agent)
+        setIsLoaded(true)
+      }
     )
     pipe(
       getBoss(),
@@ -85,7 +89,7 @@ const Provider = (props: Props) => {
         }, [boss, deadlyAssault]),
       }}
     >
-      {props.children}
+      {isLoaded ? props.children : null}
     </Context.Provider>
   )
 }
