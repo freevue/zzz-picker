@@ -22,11 +22,17 @@ const HideRecord: React.FC<{ children: React.ReactNode }> = (props) => {
     </span>
   )
 }
-const Record: React.FC<{ value: number; className?: string; fixed: number }> = (props) => {
+const Record: React.FC<{ value: number; className?: string; fixed: number; prefix?: string }> = (
+  props
+) => {
   const count = useMotionValue(100)
-  const rounded = useTransform(() =>
-    Number(count.get().toFixed(props.fixed)).toLocaleString('ko-KR')
-  )
+  const rounded = useTransform(() => {
+    const value = Number(count.get().toFixed(props.fixed)).toLocaleString('ko-KR')
+
+    if (props.prefix) return `${value} ${props.prefix}`
+
+    return value
+  })
 
   useEffect(() => {
     const controls = animate(count, props.value, { duration: 1 })
@@ -187,6 +193,7 @@ const TotalScore: React.FC<Props> = () => {
             className="text-right"
             value={(setting.totalCost - totalCost.A) * DEFAULT_COST_RATE * 100}
             fixed={2}
+            prefix="%"
           />
           <UI.Typo.Heading className="w-1/3 text-xl text-center cursor-default">
             Cost 보너스 배율
@@ -195,6 +202,7 @@ const TotalScore: React.FC<Props> = () => {
             className="text-left"
             value={(setting.totalCost - totalCost.B) * DEFAULT_COST_RATE * 100}
             fixed={2}
+            prefix="%"
           />
         </div>
         <div className="flex items-center justify-between mt-4">
