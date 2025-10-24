@@ -251,7 +251,13 @@ const Provider = (props: Props) => {
             toArray,
             (list) => {
               setRound(new Map(list))
-              setBanList([])
+              pipe(
+                setting.banCount,
+                range,
+                map(() => null),
+                toArray,
+                (list) => setBanList(list)
+              )
             }
           )
         },
