@@ -50,11 +50,11 @@ export const DEFAULT_COST_TABLE: CostTable = {
   engine: {
     SExclusive: {
       used: 1,
-      rate: 1,
+      rate: 0.5,
     },
     S: {
-      used: 1,
-      rate: 0,
+      used: 0,
+      rate: 1,
     },
     A: {
       used: 0,
@@ -64,7 +64,7 @@ export const DEFAULT_COST_TABLE: CostTable = {
 }
 const DEFAULT_URL_STATE = {
   banCount: 2,
-  totalCost: 20,
+  totalCost: 24,
   allowAgent: [] as Array<number>,
 }
 const DEFAULT_ROUND_LIST = ['1라운드', '2라운드']
