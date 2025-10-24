@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 type Props = {
   value: number
   name: string
+  append?: React.ReactNode
 }
 
 const Td: React.FC<Props> = (props) => {
@@ -49,7 +50,7 @@ const Td: React.FC<Props> = (props) => {
   }, [isEdit])
 
   return (
-    <td className="text-center border-gray-600 border-b border-r hover:bg-gray-700">
+    <td className="text-center h-14 border-gray-600 border-b border-r hover:bg-gray-700 relative">
       {isEdit ? (
         <form className="block w-full h-full relative" onSubmit={onSubmit}>
           <label className="block w-full h-full">
@@ -71,7 +72,8 @@ const Td: React.FC<Props> = (props) => {
           className="w-full h-full cursor-pointer block text-text-gray-50 text-lg font-medium"
           type="button"
         >
-          {props.value}
+          <span className="block">{props.value}</span>
+          {props.append || null}
         </button>
       )}
     </td>

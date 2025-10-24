@@ -51,7 +51,13 @@ const CostTable = () => {
           <tr>
             <Th>S</Th>
             <Td name="engine.S.used" value={costTable.engine.S.used} />
-            <Td name="engine.S.rate" value={costTable.engine.S.rate} />
+            <Td
+              name="engine.S.rate"
+              value={costTable.engine.S.rate}
+              append={
+                <span className="text-sm block px-2 text-gray-400 text-center">4 ~ 5인 경우</span>
+              }
+            />
           </tr>
           <tr>
             <Th>A</Th>
@@ -60,7 +66,8 @@ const CostTable = () => {
           </tr>
         </Table>
         <p className="text-sm text-text-secondary">
-          현재 Cost 배율은 1코스트당 {DEFAULT_COST_RATE * 100}% 입니다. (숫자를 클릭하면 수정이 가능합니다.)
+          현재 Cost 배율은 1코스트당 {DEFAULT_COST_RATE * 100}% 입니다. (숫자를 클릭하면 수정이
+          가능합니다.)
         </p>
       </div>
     </div>
