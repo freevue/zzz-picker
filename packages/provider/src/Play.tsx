@@ -39,7 +39,7 @@ const DEFAULT_SCORE: Score = {
 const DEFAULT_SETTING: TypePick['setting'] = {
   rate: 0,
   engineType: null,
-  engineRate: 1,
+  engineRate: 0,
 }
 const DEFAULT_PICK: TypePick = {
   agent: null,
