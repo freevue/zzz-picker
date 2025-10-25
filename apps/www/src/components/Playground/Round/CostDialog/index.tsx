@@ -1,6 +1,6 @@
 import { UI } from '@/components'
 import { useAgent, usePlay } from '@/hooks'
-import { pipe, join, concat, map, zipWithIndex, toArray } from '@fxts/core'
+import { pipe, join, concat, map, zipWithIndex, toArray, slice } from '@fxts/core'
 import { Form, Button } from '@zzz-picker/components'
 import { PRETTY_AGENT_ID } from '@zzz-picker/provider'
 import type { Side, TypeEngine } from '@zzz-picker/provider'
@@ -93,6 +93,7 @@ const CostDialog: React.FC<Props> = (props) => {
                     { name: 'A급', value: 'A' },
                     { name: '미착용', value: null },
                   ],
+                  slice(agent.rarity === 'A' ? 1 : 0, 4),
                   zipWithIndex,
                   map(([index, item]) => (
                     <li key={index} className="flex-1">
