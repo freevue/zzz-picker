@@ -50,7 +50,7 @@ const CostDialog: React.FC<Props> = (props) => {
           {agent.rarity}
         </span>
       </UI.Typo.Heading>
-      <div className="flex mt-8 items-end relative z-10 flex-1">
+      <div className="flex mt-8 items-end relative z-10 flex-1 gap-8">
         <div className="w-sm flex items-start justify-start">
           <img
             className={pipe(
@@ -58,7 +58,8 @@ const CostDialog: React.FC<Props> = (props) => {
               concat([]),
               concat(
                 props.agentId === PRETTY_AGENT_ID
-                  ? ['fill-white', 'drop-shadow-2xl', 'drop-shadow-white']
+                  ? // ? ['fill-white', 'drop-shadow-2xl', 'drop-shadow-white']
+                    ['rounded-bl-2xl', 'rounded-tr-2xl']
                   : []
               ),
               join(' ')
