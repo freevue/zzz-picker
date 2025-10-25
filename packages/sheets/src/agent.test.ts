@@ -1,5 +1,5 @@
-import getAgentData from '../agent'
-import { NAVER_GAME_API_URL, HOYOVERSE_ZZZ_API_URL, NAVER_CHZZK_API_URL } from '../constant'
+import getAgentData from './agent'
+import { NAVER_GAME_API_URL, HOYOVERSE_ZZZ_API_URL, NAVER_CHZZK_API_URL } from './constant'
 import { isNull, map, pipe, toArray } from '@fxts/core'
 import { readFileSync } from 'fs'
 import { join } from 'path'
@@ -8,7 +8,7 @@ import { describe, test, expect } from 'vitest'
 const sheets = await getAgentData()
 const [agents, { avatar_icon, buddy_icon }] = pipe(
   ['agents.mock.json', 'icons.mock.json'],
-  map((fileName) => join(__dirname, fileName)),
+  map((fileName) => join(__dirname, '__tests__', fileName)),
   map((path) => readFileSync(path, 'utf-8')),
   map((data) => JSON.parse(data)),
   toArray
