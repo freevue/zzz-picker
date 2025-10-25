@@ -3,6 +3,7 @@ import { NAVER_GAME_API_URL, HOYOVERSE_ZZZ_API_URL, NAVER_CHZZK_API_URL } from '
 import { isNull, map, pipe, toArray } from '@fxts/core'
 import { readFileSync } from 'fs'
 import { join } from 'path'
+import { describe, test, expect } from 'vitest'
 
 const sheets = await getAgentData()
 const [agents, { avatar_icon, buddy_icon }] = pipe(

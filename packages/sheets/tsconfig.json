@@ -7,10 +7,8 @@
     },
     "target": "es2022",
     "module": "es2022",
-    "strict": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "types": ["jest", "node"]
+    "isolatedModules": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist", "assets", "**/__fixtures__/**", "**/__mocks__/**", "coverage"]
