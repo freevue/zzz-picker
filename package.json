@@ -5,7 +5,7 @@
     "dev:www": "pnpm --filter @zzz-picker/www dev",
     "build:www": "pnpm --filter @zzz-picker/www build",
     "preview:www": "pnpm --filter @zzz-picker/www preview",
-    "test:sheets": "pnpm --filter @zzz-picker/sheets test"
+    "test": "vitest"
   },
   "dependencies": {
     "@fxts/core": "^1.17.0"
@@ -15,6 +15,7 @@
     "@types/node": "^24.6.0",
     "prettier": "^3.6.2",
     "typescript": "~5.9.3",
-    "typescript-eslint": "^8.45.0"
+    "typescript-eslint": "^8.45.0",
+    "vitest": "^3.2.4"
   }
 }
