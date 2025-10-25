@@ -1,15 +1,16 @@
 import { UI } from '@/components'
 import { usePlay, useSetting, useStore } from '@/hooks'
 import type { Rarity } from '@/types'
-import { pipe, join, concat, map, sum, flatMap, filter, isNull } from '@fxts/core'
+import { pipe, join, concat, map, sum, flatMap, filter } from '@fxts/core'
 import { Button } from '@zzz-picker/components'
-import { DEFAULT_COST_RATE, DEFAULT_TIME_BONUS } from '@zzz-picker/constant'
+import { DEFAULT_COST_RATE, DEFAULT_TIME_BONUS, type AgentCostType } from '@zzz-picker/constant'
+import { getAgentTotalCost } from '@zzz-picker/utils'
 import { animate, motion, useMotionValue, useTransform } from 'motion/react'
 import { useEffect, useMemo, useState } from 'react'
 
 type Props = {}
 
-function getAgentCostType(rarity: Rarity, isPickup: boolean) {
+function getAgentCostType(rarity: Rarity, isPickup: boolean): AgentCostType {
   if (rarity === 'A') return 'AAlways'
   if (rarity === 'S' && isPickup) return 'SPick'
 
@@ -66,23 +67,17 @@ const TotalScore: React.FC<Props> = () => {
         map((pick) => {
           if (!pick.agent) return 0
 
-          const currentAgent = agent.get(pick.agent)!
-          const agentCostType = getAgentCostType(currentAgent.rarity, currentAgent.isPickup)
-          const { used, rate } = costTable.agent[agentCostType]
-
-          if (isNull(pick.setting.engineType)) return used + rate * pick.setting.rate
-          if (pick.setting.engineType === 'S')
-            return (
-              used +
-              rate * pick.setting.rate +
-              (pick.setting.engineRate >= 4 ? costTable.engine.S.rate : 0)
-            )
-
-          const engineCost =
-            costTable.engine[pick.setting.engineType].used +
-            costTable.engine[pick.setting.engineType].rate * pick.setting.engineRate
-
-          return used + rate * pick.setting.rate + engineCost
+          return pipe(
+            agent.get(pick.agent)!,
+            (currentAgent) => getAgentCostType(currentAgent.rarity, currentAgent.isPickup),
+            (pickup) => ({
+              pickup,
+              agentRate: pick.setting.rate,
+              engineType: pick.setting.engineType,
+              engineRate: pick.setting.engineRate,
+            }),
+            getAgentTotalCost(costTable)
+          )
         }),
         sum
       ),
@@ -92,23 +87,17 @@ const TotalScore: React.FC<Props> = () => {
         map((pick) => {
           if (!pick.agent) return 0
 
-          const currentAgent = agent.get(pick.agent)!
-          const agentCostType = getAgentCostType(currentAgent.rarity, currentAgent.isPickup)
-          const { used, rate } = costTable.agent[agentCostType]
-
-          if (isNull(pick.setting.engineType)) return used + rate * pick.setting.rate
-          if (pick.setting.engineType === 'S')
-            return (
-              used +
-              rate * pick.setting.rate +
-              (pick.setting.engineRate >= 4 ? costTable.engine.S.rate : 0)
-            )
-
-          const engineCost =
-            costTable.engine[pick.setting.engineType].used +
-            costTable.engine[pick.setting.engineType].rate * pick.setting.engineRate
-
-          return used + rate * pick.setting.rate + engineCost
+          return pipe(
+            agent.get(pick.agent)!,
+            (currentAgent) => getAgentCostType(currentAgent.rarity, currentAgent.isPickup),
+            (pickup) => ({
+              pickup,
+              agentRate: pick.setting.rate,
+              engineType: pick.setting.engineType,
+              engineRate: pick.setting.engineRate,
+            }),
+            getAgentTotalCost(costTable)
+          )
         }),
         sum
       ),

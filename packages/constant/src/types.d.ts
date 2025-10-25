@@ -47,20 +47,18 @@ export type URLState = {
   allowAgent: AllowAgent
 }
 
+export type AgentCostType = 'SPick' | 'SAlways' | 'AAlways'
+export type EngineCostType = 'SExclusive' | 'S' | 'A'
 export type CostWeight = {
   used: number
   rate: number
 }
 export type CostTable = {
   agent: {
-    SPick: CostWeight
-    SAlways: CostWeight
-    AAlways: CostWeight
+    [key in AgentCostType]: CostWeight
   }
   engine: {
-    SExclusive: CostWeight
-    S: CostWeight
-    A: CostWeight
+    [key in EngineCostType]: CostWeight
   }
 }
 
@@ -73,8 +71,8 @@ export type Boss = {
 }
 
 export type AgentCostSetting = {
-  pickup: keyof CostTable['agent']
+  pickup: AgentCostType
   agentRate: number
-  engineType: keyof CostTable['engine'] | null
+  engineType: EngineCostType | null
   engineRate: number
 }
