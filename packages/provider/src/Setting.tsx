@@ -14,54 +14,9 @@ import {
   isNumber,
   isString,
 } from '@fxts/core'
+import { DEFAULT_COST_TABLE, type CostTable } from '@zzz-picker/constant'
 import { createContext, useContext, useEffect, useState } from 'react'
 
-export type CostWeight = {
-  used: number
-  rate: number
-}
-export type CostTable = {
-  agent: {
-    SPick: CostWeight
-    SAlways: CostWeight
-    AAlways: CostWeight
-  }
-  engine: {
-    SExclusive: CostWeight
-    S: CostWeight
-    A: CostWeight
-  }
-}
-export const DEFAULT_COST_TABLE: CostTable = {
-  agent: {
-    SPick: {
-      used: 1,
-      rate: 1,
-    },
-    SAlways: {
-      used: 0,
-      rate: 0,
-    },
-    AAlways: {
-      used: 0,
-      rate: 0,
-    },
-  },
-  engine: {
-    SExclusive: {
-      used: 1,
-      rate: 0.5,
-    },
-    S: {
-      used: 0,
-      rate: 1, // 4~5인 경우 1cost
-    },
-    A: {
-      used: 0,
-      rate: 0,
-    },
-  },
-}
 const DEFAULT_URL_STATE = {
   banCount: 2,
   totalCost: 24,
