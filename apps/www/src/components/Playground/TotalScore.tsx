@@ -221,8 +221,9 @@ const TotalScore: React.FC<Props> = () => {
               className="text-primary! text-4xl!"
               value={isCounting ? Math.round(totalScore.A) : 0}
               fixed={0}
+              isHide={!isCounting}
             />
-            <HideRecord>{totalScore.A.toLocaleString()}</HideRecord>
+            {isCounting && <HideRecord>{totalScore.A.toLocaleString()}</HideRecord>}
           </div>
           <UI.Typo.Heading className="w-1/3 text-center cursor-default">총 점수</UI.Typo.Heading>
           <div className="text-left flex-1 relative group">
@@ -230,8 +231,9 @@ const TotalScore: React.FC<Props> = () => {
               className="text-primary! text-4xl!"
               value={isCounting ? Math.round(totalScore.B) : 0}
               fixed={0}
+              isHide={!isCounting}
             />
-            <HideRecord>{totalScore.B.toLocaleString()}</HideRecord>
+            {isCounting && <HideRecord>{totalScore.B.toLocaleString()}</HideRecord>}
           </div>
         </div>
         <Button
