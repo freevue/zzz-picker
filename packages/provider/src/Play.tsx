@@ -63,6 +63,8 @@ type Props = {
 type State = {
   banList: Array<SelectAgent>
   round: Map<number, TypeRound>
+  isCounting: boolean
+  setIsCounting: () => void
   setBan: (index: number, id: SelectAgent) => void
   setRoundBossSelect: (roundIndex: number, bossIndex: SelectBoss) => void
   setRoundPick: (roundIndex: number, side: Side, index: number, agent: SelectAgent) => void
@@ -79,7 +81,9 @@ type State = {
 
 export const Context = createContext<State>({
   banList: [],
+  isCounting: false,
   round: new Map(),
+  setIsCounting: () => {},
   setBan: () => {},
   setRoundBossSelect: () => {},
   setRoundPick: () => {},
@@ -95,6 +99,7 @@ const Provider = (props: Props) => {
   const { setting, roundList } = useContext(SettingContext)
   const [banList, setBanList] = useState<Array<SelectAgent>>([])
   const [round, setRound] = useState<Map<number, TypeRound>>(new Map())
+  const [isCounting, setIsCounting] = useState<boolean>(false)
 
   useEffect(() => {}, [])
   useEffect(() => {
@@ -260,6 +265,9 @@ const Provider = (props: Props) => {
             }
           )
         },
+        setIsCounting: () => {
+          setIsCounting((prev) => !prev)
+        },
         reset: () => {
           pipe(
             roundList,
@@ -267,6 +275,7 @@ const Provider = (props: Props) => {
             map(([index, name]) => [index, { ...DEFAULT_ROUND, name }] as const),
             toArray,
             (list) => {
+              setIsCounting(false)
               setRound(new Map(list))
               pipe(
                 setting.banCount,
