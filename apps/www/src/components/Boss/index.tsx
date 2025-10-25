@@ -1,7 +1,7 @@
 import { Plus } from '@/Icons'
 import { BossDialog } from '@/components'
 import { UI } from '@/components'
-import { useStore, usePlay } from '@/hooks'
+import { useStore } from '@/hooks'
 import {
   pipe,
   concat,
@@ -20,7 +20,6 @@ import { useMemo, useState } from 'react'
 
 const Boss: React.FC = () => {
   const { boss, deadlyAssaultList } = useStore()
-  const { setRoundBossSelect } = usePlay()
   const [selected, setSelected] = useState<number | null>(null)
   const [isOpen, setIsOpen] = useState(false)
   const bossData = useMemo(() => {
@@ -49,7 +48,6 @@ const Boss: React.FC = () => {
   }, [deadlyAssaultList, selected])
 
   const onBossClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setRoundBossSelect(1, Number(event.currentTarget.value))
     setSelected(Number(event.currentTarget.value))
     setIsOpen(false)
   }
