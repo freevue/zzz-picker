@@ -149,6 +149,10 @@ const TotalScore: React.FC<Props> = () => {
     }
   }, [roundTotalScore, roundTotalTime, totalCost])
 
+  useEffect(() => {
+    console.log('change')
+  }, [round])
+
   return (
     <div>
       <UI.Typo.Heading className="text-center" primary>
