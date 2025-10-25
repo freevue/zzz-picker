@@ -24,7 +24,7 @@ const HideRecord: React.FC<{ children: React.ReactNode }> = (props) => {
     </span>
   )
 }
-const Record: React.FC<{ value: number; className?: string; fixed: number; prefix?: string }> = (
+const Record: React.FC<{ value: number; className?: string; fixed: number; prefix?: string; isHide?: boolean }> = (
   props
 ) => {
   const count = useMotionValue(100)
@@ -47,6 +47,7 @@ const Record: React.FC<{ value: number; className?: string; fixed: number; prefi
       className={pipe(
         ['dark:text-text-primary', 'text-3xl', 'font-black', 'flex-1', 'cursor-default'],
         concat([props.className || '']),
+        concat(props.isHide ? ['opacity-0'] : ['opacity-100']),
         join(' ')
       )}
     >
