@@ -1,6 +1,6 @@
 import CostDialog from '../CostDialog'
 import { useAgent, usePlay, useSetting } from '@/hooks'
-import { concat, isUndefined, join, pipe, sum } from '@fxts/core'
+import { concat, isUndefined, join, pipe } from '@fxts/core'
 import { Button, Dialog, Icons } from '@zzz-picker/components'
 import type { Side, TypePick } from '@zzz-picker/provider'
 import { getAgentTotalCost } from '@zzz-picker/utils'
