@@ -59,7 +59,7 @@ const CostDialog: React.FC<Props> = (props) => {
               concat(
                 props.agentId === PRETTY_AGENT_ID
                   ? // ? ['fill-white', 'drop-shadow-2xl', 'drop-shadow-white']
-                    ['rounded-bl-2xl', 'rounded-tr-2xl']
+                    ['rounded-bl-2xl', 'rounded-tr-2xl', 'border-2', 'border-secondary']
                   : []
               ),
               join(' ')
