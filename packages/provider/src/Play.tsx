@@ -140,6 +140,7 @@ const Provider = (props: Props) => {
       value={{
         banList,
         round,
+        isCounting,
         setBan: (index, id) => {
           setBanList((prev) => {
             const newList = [...prev]
