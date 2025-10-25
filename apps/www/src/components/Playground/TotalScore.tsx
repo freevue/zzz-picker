@@ -6,7 +6,7 @@ import { Button } from '@zzz-picker/components'
 import { DEFAULT_COST_RATE, DEFAULT_TIME_BONUS, type AgentCostType } from '@zzz-picker/constant'
 import { getAgentTotalCost } from '@zzz-picker/utils'
 import { animate, motion, useMotionValue, useTransform } from 'motion/react'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 type Props = {}
 
@@ -57,7 +57,8 @@ const Record: React.FC<{ value: number; className?: string; fixed: number; prefi
 const TotalScore: React.FC<Props> = () => {
   const { agent } = useStore()
   const { costTable, setting } = useSetting()
-  const { round, isCounting, setIsCounting } = usePlay()
+  const { round } = usePlay()
+  const [isCounting, setIsCounting] = useState<boolean>(false)
   const totalCost = useMemo(() => {
     return {
       A: pipe(
@@ -150,7 +151,7 @@ const TotalScore: React.FC<Props> = () => {
   }, [roundTotalScore, roundTotalTime, totalCost])
 
   useEffect(() => {
-    console.log('change')
+    setIsCounting(false)
   }, [round])
 
   return (
@@ -234,7 +235,7 @@ const TotalScore: React.FC<Props> = () => {
         </div>
         <Button
           type="button"
-          onClick={() => setIsCounting()}
+          onClick={() => setIsCounting((prev) => !prev)}
           className="text-secondary font-extrabold text-xl"
         >
           결산하기
