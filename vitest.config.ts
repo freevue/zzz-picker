@@ -8,6 +8,6 @@ export default defineConfig({
       provider: 'v8',
     },
     reporters: ['verbose'],
-    projects: ['packages/*', '!packages/tailwind-config', '!packages/constant', '!packages/utils'],
+    projects: ['packages/*', '!packages/tailwind-config', '!packages/constant', '!packages/sheets'],
   },
 })
