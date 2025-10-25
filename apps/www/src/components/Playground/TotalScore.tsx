@@ -185,18 +185,18 @@ const TotalScore: React.FC<Props> = () => {
           />
         </div>
         <div className="flex items-center justify-between">
-          <Record className="text-right" value={isCounting ? roundTotalScore.A : 0} fixed={0} />
+          <Record className="text-right" value={isCounting ? roundTotalScore.A : 0} fixed={0} isHide={!isCounting} />
           <UI.Typo.Heading className="w-1/3 text-xl text-center cursor-default">
             라운드 점수 합산
           </UI.Typo.Heading>
-          <Record className="text-left" value={isCounting ? roundTotalScore.B : 0} fixed={0} />
+          <Record className="text-left" value={isCounting ? roundTotalScore.B : 0} fixed={0} isHide={!isCounting} />
         </div>
         <div className="flex items-center justify-between">
-          <Record className="text-right" value={isCounting ? roundTotalTime.A : 0} fixed={0} />
+          <Record className="text-right" value={isCounting ? roundTotalTime.A : 0} fixed={0} isHide={!isCounting} />
           <UI.Typo.Heading className="w-1/3 text-xl text-center cursor-default">
             시간 보너스
           </UI.Typo.Heading>
-          <Record className="text-left" value={isCounting ? roundTotalTime.B : 0} fixed={0} />
+          <Record className="text-left" value={isCounting ? roundTotalTime.B : 0} fixed={0} isHide={!isCounting} />
         </div>
         <div className="flex items-center justify-between">
           <Record
@@ -204,6 +204,7 @@ const TotalScore: React.FC<Props> = () => {
             value={isCounting ? (setting.totalCost - totalCost.A) * DEFAULT_COST_RATE * 100 : 0}
             fixed={2}
             prefix="%"
+            isHide={!isCounting}
           />
           <UI.Typo.Heading className="w-1/3 text-xl text-center cursor-default">
             Cost 보너스 배율
@@ -213,6 +214,7 @@ const TotalScore: React.FC<Props> = () => {
             value={isCounting ? (setting.totalCost - totalCost.B) * DEFAULT_COST_RATE * 100 : 0}
             fixed={2}
             prefix="%"
+            isHide={!isCounting}
           />
         </div>
         <div className="flex items-center justify-between mt-4">
