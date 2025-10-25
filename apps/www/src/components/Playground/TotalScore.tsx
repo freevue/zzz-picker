@@ -230,7 +230,7 @@ const TotalScore: React.FC<Props> = () => {
         </div>
         <Button
           type="button"
-          onClick={() => setIsCounting((prev) => !prev)}
+          onClick={() => setIsCounting()}
           className="text-secondary font-extrabold text-xl"
         >
           결산하기
