@@ -3,6 +3,7 @@ import { useAgent, usePlay, useSetting } from '@/hooks'
 import { concat, isUndefined, join, pipe, sum } from '@fxts/core'
 import { Button, Dialog, Icons } from '@zzz-picker/components'
 import type { Side, TypePick } from '@zzz-picker/provider'
+import { getAgentTotalCost } from '@zzz-picker/utils'
 import { useMemo, useState } from 'react'
 
 type Props = {
@@ -25,27 +26,12 @@ const AgentButton: React.FC<Props> = (props) => {
     return 'SAlways'
   }, [agent])
   const totalCost = useMemo(() => {
-    const { used, rate } = costTable.agent[agentRarityKey]
-
-    return pipe(
-      props.setting,
-      (setting) => {
-        let engineList: number[] = []
-        const { rate: engineRate, used: engineUsed } = costTable.engine[setting.engineType || 'S']
-
-        if (setting.engineType === 'S') {
-          engineList = setting.engineType
-            ? [engineUsed, setting.engineRate >= 4 ? engineRate : 0]
-            : [0]
-        } else {
-          engineList = setting.engineType ? [engineUsed, engineRate * setting.engineRate] : [0]
-        }
-
-        return [used, setting.rate * rate, ...engineList]
-      },
-      sum,
-      (value) => Number((value * 100).toFixed(2)) / 100
-    )
+    return getAgentTotalCost(costTable, {
+      pickup: agentRarityKey,
+      agentRate: props.setting.rate,
+      engineType: props.setting.engineType,
+      engineRate: props.setting.engineRate,
+    })
   }, [props.setting, agentRarityKey, costTable])
 
   const onDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {

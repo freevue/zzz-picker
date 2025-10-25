@@ -2,8 +2,8 @@ import Table from './Table'
 import Td from './Td'
 import Th from './Th'
 import { UI } from '@/components'
-import { DEFAULT_COST_RATE } from '@/constant'
 import { useSetting } from '@/hooks'
+import { DEFAULT_COST_RATE } from '@zzz-picker/constant'
 
 const CostTable = () => {
   const { setting, costTable } = useSetting()

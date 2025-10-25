@@ -1,9 +1,9 @@
 import { UI } from '@/components'
-import { DEFAULT_COST_RATE, DEFAULT_TIME_BONUS } from '@/constant'
 import { usePlay, useSetting, useStore } from '@/hooks'
 import type { Rarity } from '@/types'
 import { pipe, join, concat, map, sum, flatMap, filter, isNull } from '@fxts/core'
 import { Button } from '@zzz-picker/components'
+import { DEFAULT_COST_RATE, DEFAULT_TIME_BONUS } from '@zzz-picker/constant'
 import { animate, motion, useMotionValue, useTransform } from 'motion/react'
 import { useEffect, useMemo, useState } from 'react'
 
