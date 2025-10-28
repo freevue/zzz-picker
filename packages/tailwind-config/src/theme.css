@@ -38,3 +38,15 @@
   --color-table-text-highlight: var(--color-amber-400);
   --color-table-text-accent: var(--color-cyan-400);
 }
+
+@theme {
+  --animate-turbo: spin 0.1s linear infinite;
+  @keyframes turbo {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}

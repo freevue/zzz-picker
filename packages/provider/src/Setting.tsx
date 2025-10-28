@@ -87,30 +87,6 @@ const Provider = (props: Props) => {
       }
     )
   }, [gqlAgents])
-  useEffect(() => {
-    if (gqlAgents.size === 0) return
-
-    const params = new URLSearchParams(window.location.search)
-
-    pipe(
-      saveSetting,
-      entries,
-      each(([key, value]) => {
-        if (isArray(value)) {
-          params.set(key, join(',', value))
-        }
-        if (isNumber(value)) {
-          params.set(key, `${value}`)
-        }
-        if (isString(value)) {
-          params.set(key, value)
-        }
-      }),
-      () => {
-        window.history.replaceState(null, '', `?${params.toString()}`)
-      }
-    )
-  }, [gqlAgents, saveSetting])
 
   return (
     <Context.Provider
