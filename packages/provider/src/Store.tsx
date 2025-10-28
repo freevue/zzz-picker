@@ -1,4 +1,5 @@
-import { filter, head, isNull, map, pipe, reduceLazy, toArray } from '@fxts/core'
+import { each, filter, head, isNull, map, pipe, prop, reduceLazy, toArray } from '@fxts/core'
+import { AGENT_LIST, useQuery, type GQL_AgentList, type GQL_Agent } from '@zzz-picker/graphql'
 import {
   getAgent,
   getBoss,
@@ -14,6 +15,7 @@ type Props = {
   children: React.ReactNode
 }
 type State = {
+  gqlAgents: Map<number, GQL_Agent>
   agent: Map<number, Agent>
   boss: Map<number, Boss>
   deadlyAssault: [Boss, Boss, Boss] | null
@@ -21,6 +23,7 @@ type State = {
 }
 
 export const Context = createContext<State>({
+  gqlAgents: new Map(),
   agent: new Map(),
   boss: new Map(),
   deadlyAssault: null,
@@ -28,6 +31,8 @@ export const Context = createContext<State>({
 })
 
 const Provider = (props: Props) => {
+  const { loading, error, data } = useQuery<GQL_AgentList>(AGENT_LIST)
+
   const [isLoaded, setIsLoaded] = useState(false)
   const [agent, setAgent] = useState<Map<number, Agent>>(new Map())
   const [boss, setBoss] = useState<Map<number, Boss>>(new Map())
@@ -76,6 +81,21 @@ const Provider = (props: Props) => {
     <Context.Provider
       value={{
         agent,
+        gqlAgents: useMemo(() => {
+          const currentMap = new Map()
+
+          if (loading) return currentMap
+
+          pipe(
+            data?.agentsCollection?.edges || [],
+            map(prop('node')),
+            each((agent) => {
+              currentMap.set(agent.id, agent)
+            })
+          )
+
+          return currentMap
+        }, [data, loading]),
         boss,
         deadlyAssaultList,
         deadlyAssault: useMemo(() => {

@@ -16,6 +16,7 @@
     "motion": "^12.23.22"
   },
   "devDependencies": {
+    "@zzz-picker/graphql": "workspace:*",
     "@types/node": "^24.6.0",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9"

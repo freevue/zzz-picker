@@ -2,7 +2,7 @@ import { UI } from '@/components'
 import { useAgent, usePlay } from '@/hooks'
 import { pipe, join, concat, map, zipWithIndex, toArray, slice } from '@fxts/core'
 import { Form, Button } from '@zzz-picker/components'
-import { PRETTY_AGENT_ID } from '@zzz-picker/provider'
+import { PRETTY_AGENT_ID } from '@zzz-picker/constant'
 import type { Side, TypeEngine } from '@zzz-picker/provider'
 import { useMemo } from 'react'
 

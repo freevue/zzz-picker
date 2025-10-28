@@ -56,10 +56,10 @@ export const Context = createContext<State>({
 const Provider = (props: Props) => {
   const [saveSetting, setSaveSetting] = useState(DEFAULT_URL_STATE)
   const [costTable, setCostTable] = useState(DEFAULT_COST_TABLE)
-  const { agent } = useContext(StoreContext)
+  const { gqlAgents } = useContext(StoreContext)
 
   useEffect(() => {
-    if (agent.size === 0) return
+    if (gqlAgents.size === 0) return
 
     const params = new URLSearchParams(window.location.search)
 
@@ -67,8 +67,8 @@ const Provider = (props: Props) => {
       params.get('allowAgent'),
       when(isNull, () =>
         pipe(
-          agent,
-          filter(([, agent]) => agent.isUp),
+          gqlAgents,
+          filter(([, agent]) => agent.isPickup),
           map(([zzzId]) => zzzId),
           join(',')
         )
@@ -86,9 +86,9 @@ const Provider = (props: Props) => {
         }))
       }
     )
-  }, [agent])
+  }, [gqlAgents])
   useEffect(() => {
-    if (agent.size === 0) return
+    if (gqlAgents.size === 0) return
 
     const params = new URLSearchParams(window.location.search)
 
@@ -110,7 +110,7 @@ const Provider = (props: Props) => {
         window.history.replaceState(null, '', `?${params.toString()}`)
       }
     )
-  }, [agent, saveSetting])
+  }, [gqlAgents, saveSetting])
 
   return (
     <Context.Provider

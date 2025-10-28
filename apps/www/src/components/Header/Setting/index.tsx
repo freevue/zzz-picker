@@ -3,13 +3,13 @@ import { UI, RarityTabs } from '@/components'
 import { useSetting, useStore } from '@/hooks'
 import type { Rarity } from '@/types'
 import { pipe, map, toArray, filter, includes } from '@fxts/core'
-import { Form } from '@zzz-picker/components'
+import { Form, Agent } from '@zzz-picker/components'
 import { useState } from 'react'
 
 const Setting: React.FC = () => {
   const { setting, setSaveSetting } = useSetting()
   const [selectRarity, setSelectRarity] = useState<Rarity>('S')
-  const { agent } = useStore()
+  const { agent, gqlAgents } = useStore()
 
   const onAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     pipe(Number(event.currentTarget.value), (id) => {
@@ -62,17 +62,16 @@ const Setting: React.FC = () => {
             <UI.Typo.Heading primary>Allow Agent</UI.Typo.Heading>
             <RarityTabs className="flex-1" value={selectRarity} onChange={setSelectRarity} />
           </div>
-          <ul className="grid grid-cols-5 gap-4 py-4 flex-1">
+          <ul className="grid grid-cols-5 py-4 gap-y-4 flex-1">
             {pipe(
-              agent,
+              gqlAgents,
               filter(([, agent]) => agent.rarity === selectRarity),
               map(([id, agent]) => (
                 <li key={id} className="flex items-start justify-center">
-                  <AgentButton
-                    id={id}
-                    onClick={onAgentClick}
-                    disabled={agent.isTeaser}
-                    active={includes(id, setting.allowAgent)}
+                  <Agent.Card
+                    // disabled={agent.isTeaser}
+                    active={agent.isAllow}
+                    {...agent}
                   />
                 </li>
               )),

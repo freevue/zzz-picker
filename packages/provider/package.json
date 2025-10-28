@@ -8,8 +8,11 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@zzz-picker/sheets": "workspace:*",
     "@zzz-picker/constant": "workspace:*",
+    "@zzz-picker/sheets": "workspace:*",
+    "@zzz-picker/graphql": "workspace:*",
+    "@supabase/supabase-js": "^2.76.1",
+    "@apollo/client": "^4.0.7",
     "dayjs": "^1.11.18",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
