@@ -31,7 +31,7 @@ export const Context = createContext<State>({
 })
 
 const Provider = (props: Props) => {
-  const { loading, error, data } = useQuery<GQL_AgentList>(AGENT_LIST)
+  const { loading, data } = useQuery<GQL_AgentList>(AGENT_LIST)
 
   const [isLoaded, setIsLoaded] = useState(false)
   const [agent, setAgent] = useState<Map<number, Agent>>(new Map())

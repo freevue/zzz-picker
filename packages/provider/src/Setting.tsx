@@ -1,19 +1,5 @@
 import { Context as StoreContext } from './Store'
-import {
-  join,
-  filter,
-  map,
-  pipe,
-  when,
-  split,
-  isNull,
-  toArray,
-  entries,
-  each,
-  isArray,
-  isNumber,
-  isString,
-} from '@fxts/core'
+import { join, filter, map, pipe, when, split, isNull, toArray } from '@fxts/core'
 import { DEFAULT_COST_TABLE, type CostTable } from '@zzz-picker/constant'
 import { createContext, useContext, useEffect, useState } from 'react'
 

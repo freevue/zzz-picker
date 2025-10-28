@@ -20,12 +20,9 @@ const Provider: React.FC<Props> = (props) => {
   const [path, setPath] = useState(window.location.pathname || '/')
   const push = (path: string) => {
     setPath(path)
+    window.history.pushState(null, '', path)
   }
   const Component = useMemo(() => props.routes[path] || props.children, [path, props])
-
-  useEffect(() => {
-    window.history.pushState(null, '', path)
-  }, [path])
 
   return <Context.Provider value={{ path, push }}>{Component}</Context.Provider>
 }

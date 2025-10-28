@@ -1,30 +1,29 @@
-import AgentButton from './AgentButton'
 import { UI, RarityTabs } from '@/components'
 import { useSetting, useStore } from '@/hooks'
 import type { Rarity } from '@/types'
-import { pipe, map, toArray, filter, includes } from '@fxts/core'
+import { pipe, map, toArray, filter } from '@fxts/core'
 import { Form, Agent } from '@zzz-picker/components'
 import { useState } from 'react'
 
 const Setting: React.FC = () => {
   const { setting, setSaveSetting } = useSetting()
   const [selectRarity, setSelectRarity] = useState<Rarity>('S')
-  const { agent, gqlAgents } = useStore()
+  const { gqlAgents } = useStore()
 
-  const onAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    pipe(Number(event.currentTarget.value), (id) => {
-      setSaveSetting({
-        ...setting,
-        allowAgent: includes(id, setting.allowAgent)
-          ? pipe(
-              [...setting.allowAgent],
-              filter((agentId) => agentId !== id),
-              toArray
-            )
-          : [...setting.allowAgent, id],
-      })
-    })
-  }
+  // const onAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  //   pipe(Number(event.currentTarget.value), (id) => {
+  //     setSaveSetting({
+  //       ...setting,
+  //       allowAgent: includes(id, setting.allowAgent)
+  //         ? pipe(
+  //             [...setting.allowAgent],
+  //             filter((agentId) => agentId !== id),
+  //             toArray
+  //           )
+  //         : [...setting.allowAgent, id],
+  //     })
+  //   })
+  // }
   const onInputChange = (value: number, name: string) => {
     setSaveSetting({ ...setting, [name]: value })
   }

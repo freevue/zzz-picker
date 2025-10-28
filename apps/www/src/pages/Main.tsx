@@ -1,5 +1,8 @@
-import { pipe, zipWithIndex, map, toArray, join, concat } from '@fxts/core'
+import { useStore } from '@/hooks'
+import { pipe, zipWithIndex, map, toArray, join, concat, filter } from '@fxts/core'
+import { DEFAULT } from '@zzz-picker/constant'
 import { motion } from 'motion/react'
+import { useMemo } from 'react'
 
 type Props = {
   href: string
@@ -70,19 +73,43 @@ const LINKS = [
 ]
 
 const Main: React.FC = () => {
+  const { gqlAgents } = useStore()
+  const allowAgents = useMemo(() => {
+    return pipe(
+      gqlAgents,
+      filter(([, agent]) => agent.isAllow),
+      map(([id]) => id),
+      join(',')
+    )
+  }, [gqlAgents])
+
   return (
     <div className="size-full dark:bg-gray-900 flex flex-col items-center justify-center gap-10">
-      {/* <h1 className="text-8xl font-black text-center text-primary italic">Z . Z . Z</h1> */}
       <img src="/images/main/logo.png" alt="logo" className="w-32 block hover:animate-turbo" />
       <div className="flex items-center justify-center gap-10">
         {pipe(
           LINKS,
           zipWithIndex,
-          map(([index, link]) => (
-            <Link key={index} href={link.href} url={link.url} delay={index * 0.2}>
-              {link.title}
-            </Link>
-          )),
+          map(([index, link]) => {
+            if (link.href === '/unlimited') {
+              return (
+                <Link key={index} href={link.href} url={link.url} delay={index * 0.2}>
+                  {link.title}
+                </Link>
+              )
+            }
+
+            return (
+              <Link
+                key={index}
+                href={`${link.href}?allowAgent=${allowAgents}&banCount=${DEFAULT.BAN_COUNT}`}
+                url={link.url}
+                delay={index * 0.2}
+              >
+                {link.title}
+              </Link>
+            )
+          }),
           toArray
         )}
       </div>
