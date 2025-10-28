@@ -1,0 +1,5 @@
+export { default as Main } from './Main'
+export { default as CustomPlay } from './CustomPlay'
+export { default as OriginalPlay } from './OriginalPlay'
+export { default as LegendPlay } from './LegendPlay'
+export { default as UnlimitedPlay } from './UnlimitedPlay'
