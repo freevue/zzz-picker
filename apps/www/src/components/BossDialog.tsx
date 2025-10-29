@@ -58,14 +58,14 @@ const BossDialog: React.FC<Props> = (props) => {
                     concat(
                       props.active === boss.id
                         ? ['border-primary']
-                        : ['border-base', 'hover:border-secondary']
+                        : ['border-foreground', 'hover:border-secondary']
                     ),
                     join(' ')
                   )}
                 >
                   <img className="block w-full" src={`/images/boss/${boss.id}.webp`} alt="" />
                 </div>
-                <span className="text-base text-lg font-extrabold mt-4 block w-full text-center group-hover:text-secondary">
+                <span className="text-foreground text-lg font-extrabold mt-4 block w-full text-center group-hover:text-secondary">
                   {boss.nameKo}
                 </span>
               </Button>

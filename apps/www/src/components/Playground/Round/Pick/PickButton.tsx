@@ -34,7 +34,7 @@ const PickButton: React.FC<Props> = (props) => {
             'h-full',
             'flex',
             'border-2',
-            'border-base',
+            'border-foreground',
             'items-center',
             'justify-center',
             'group/button',

@@ -14,7 +14,11 @@ const Button: React.FC<Props> = (props) => {
     <button
       className={pipe(
         ['active:outline-none', 'cursor-pointer', 'focus:outline-none'],
-        concat(['disabled:grayscale-75', 'disabled:cursor-not-allowed', 'disabled:text-base0']),
+        concat([
+          'disabled:grayscale-75',
+          'disabled:cursor-not-allowed',
+          'disabled:text-foreground0',
+        ]),
         concat(props.className ? [props.className] : []),
         join(' ')
       )}

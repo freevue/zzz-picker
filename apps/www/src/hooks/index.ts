@@ -1,4 +1,4 @@
-import { StoreContext, SettingContext, PlayContext } from '@zzz-picker/provider'
+import { StoreContext, SettingContext, PlayContext, RouterContext } from '@zzz-picker/provider'
 import { useContext } from 'react'
 
 export const useStore = () => {
@@ -17,4 +17,8 @@ export const useSetting = () => {
 
 export const usePlay = () => {
   return useContext(PlayContext)
+}
+
+export const useRouter = () => {
+  return useContext(RouterContext)
 }

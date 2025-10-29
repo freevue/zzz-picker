@@ -18,6 +18,7 @@ const Th: React.FC<Props> = (props) => {
           'border-r',
           'text-lg',
           'font-bold',
+          'text-foreground',
         ],
         concat([props.className || '']),
         join(' ')

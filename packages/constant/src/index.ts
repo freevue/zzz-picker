@@ -14,20 +14,6 @@ export const DEFAULT = {
     pickList: [null, null, null],
   } as RoundSide,
 }
-
-export const PRETTY_AGENT_ID = 156728
-export const DEFAULT_COST_RATE = 0.05
-export const DEFAULT_TIME_BONUS = 333
-export const DEFAULT_AGENT_COST_STATE: AgentCostSetting = {
-  pickup: 'AAlways',
-  agentRate: 0,
-  engineType: 'SExclusive',
-  engineRate: 0,
-}
-export const DEFAULT_COST_WEIGHT: CostWeight = {
-  used: 0,
-  rate: 0,
-}
 export const DEFAULT_COST_TABLE: CostTable = {
   agent: {
     SPick: {
@@ -57,4 +43,18 @@ export const DEFAULT_COST_TABLE: CostTable = {
       rate: 0,
     },
   },
+}
+
+export const PRETTY_AGENT_ID = 156728
+export const DEFAULT_COST_RATE = 0.05
+export const DEFAULT_TIME_BONUS = 333
+export const DEFAULT_AGENT_COST_STATE: AgentCostSetting = {
+  pickup: 'AAlways',
+  agentRate: 0,
+  engineType: 'SExclusive',
+  engineRate: 0,
+}
+export const DEFAULT_COST_WEIGHT: CostWeight = {
+  used: 0,
+  rate: 0,
 }

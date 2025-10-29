@@ -1,17 +1,22 @@
 import { Header, Playground, CostTable, CommonBossCard } from '@/components'
-import { pipe, concat, join } from '@fxts/core'
+import { useRouter } from '@/hooks'
+import { pipe, concat, join, map, toArray, split } from '@fxts/core'
 import { DEFAULT } from '@zzz-picker/constant'
 import { Play, Setting } from '@zzz-picker/provider'
+import { useMemo } from 'react'
 
 const CustomPlay: React.FC = () => {
+  const { searchParams } = useRouter()
+  const options = useMemo(() => {
+    return {
+      banCount: Number(searchParams.banCount || DEFAULT.BAN_COUNT),
+      totalCost: Infinity,
+      allowAgent: pipe(searchParams.allowAgent || '', split(','), map(Number), toArray),
+    }
+  }, [searchParams])
+
   return (
-    <Setting
-      option={{
-        banCount: DEFAULT.BAN_COUNT,
-        totalCost: Infinity,
-        allowAgent: [],
-      }}
-    >
+    <Setting option={options}>
       <div className="w-full h-full overflow-auto scrollbar-hidden">
         <Play>
           <div className="h-full ml-auto w-fit flex z-10 relative flex-1 overflow-auto scrollbar-hidden">
@@ -21,7 +26,7 @@ const CustomPlay: React.FC = () => {
                   'min-w-xl',
                   'w-xl',
                   'text-white',
-                  'bg-bg-content',
+                  'bg-content',
                   'flex',
                   'flex-col',
                   'gap-6',
@@ -42,7 +47,14 @@ const CustomPlay: React.FC = () => {
             </div>
             <div
               className={pipe(
-                ['min-w-4xl', 'w-4xl', 'overflow-auto', 'scrollbar-hidden', 'min-h-screen'],
+                [
+                  'min-w-4xl',
+                  'bg-base',
+                  'w-4xl',
+                  'overflow-auto',
+                  'scrollbar-hidden',
+                  'min-h-screen',
+                ],
                 join(' ')
               )}
             >

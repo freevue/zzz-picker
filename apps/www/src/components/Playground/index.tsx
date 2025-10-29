@@ -23,9 +23,7 @@ const Side: React.FC = () => {
           toArray
         )}
       </div>
-      <div className="p-4 my-8">
-        <TotalScore />
-      </div>
+      <div className="p-4 my-8">{/* <TotalScore /> */}</div>
       <BottomSheet />
       <Reset />
     </>

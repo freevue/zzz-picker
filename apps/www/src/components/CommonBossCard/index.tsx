@@ -39,13 +39,13 @@ const Boss: React.FC = () => {
                 'items-center',
                 'justify-center',
                 'border-2',
-                'border-base',
+                'border-foreground',
                 'rounded-bl-2xl',
                 'rounded-tr-2xl',
                 'overflow-hidden',
                 'backdrop-blur-md',
               ],
-              concat(state.common.boss === null ? ['hover:border-secondary'] : ['border-primary']),
+              concat(state.common.boss === null ? [] : ['border-primary']),
               join(' ')
             )}
             type="button"
@@ -54,7 +54,7 @@ const Boss: React.FC = () => {
             {state.common.boss !== null ? (
               <img src={`/images/boss/${state.common.boss}.webp`} alt="" className="blick w-full" />
             ) : (
-              <Plus className="stroke-text-primary size-14 group-hover:stroke-secondary" />
+              <Plus className="stroke-foreground size-14 group-hover:stroke-secondary" />
             )}
           </Button>
           {state.common.boss !== null && <BossInfo />}

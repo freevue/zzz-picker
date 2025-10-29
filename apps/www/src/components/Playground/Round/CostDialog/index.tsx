@@ -103,7 +103,7 @@ const CostDialog: React.FC<Props> = (props) => {
                           concat(
                             currentCost.engineType === item.value
                               ? ['bg-primary']
-                              : ['text-base', 'bg-gray-600/70', 'hover:bg-gray-600']
+                              : ['text-foreground', 'bg-gray-600/70', 'hover:bg-gray-600']
                           ),
                           join(' ')
                         )}

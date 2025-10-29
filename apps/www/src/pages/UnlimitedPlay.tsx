@@ -41,7 +41,14 @@ const CustomPlay: React.FC = () => {
             </div>
             <div
               className={pipe(
-                ['min-w-4xl', 'w-4xl', 'overflow-auto', 'scrollbar-hidden', 'min-h-screen'],
+                [
+                  'min-w-4xl',
+                  'w-4xl',
+                  'overflow-auto',
+                  'scrollbar-hidden',
+                  'min-h-screen',
+                  'bg-base',
+                ],
                 join(' ')
               )}
             >

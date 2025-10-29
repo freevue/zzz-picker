@@ -18,7 +18,7 @@ function getAgentCostType(rarity: Rarity, isPickup: boolean): AgentCostType {
 
 const HideRecord: React.FC<{ children: React.ReactNode }> = (props) => {
   return (
-    <span className="absolute cursor-default left-0 -bottom-8 font-extrabold w-full text-base text-xl! opacity-0 group-hover:opacity-70 transition-opacity duration-300">
+    <span className="absolute cursor-default left-0 -bottom-8 font-extrabold w-full text-foreground text-xl! opacity-0 group-hover:opacity-70 transition-opacity duration-300">
       {props.children}
     </span>
   )

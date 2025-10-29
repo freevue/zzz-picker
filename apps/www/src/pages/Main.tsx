@@ -19,7 +19,7 @@ const Link: React.FC<Props> = (props) => {
       transition={{ duration: 0.2, delay: props.delay }}
       className={pipe(
         ['flex', 'flex-col', 'items-center', 'justify-center', 'gap-1', 'group'],
-        concat(['text-base']),
+        concat(['text-foreground']),
         concat([]),
         join(' ')
       )}
@@ -40,7 +40,7 @@ const Link: React.FC<Props> = (props) => {
             'justify-center',
             'relative',
           ],
-          concat(['text-base', 'border-base']),
+          concat(['text-foreground', 'border-foreground']),
           concat(['group-hover:border-secondary']),
           join(' ')
         )}
@@ -54,17 +54,19 @@ const Link: React.FC<Props> = (props) => {
 
 const LINKS = [
   {
-    href: '/original',
+    href: (allowAgents?: string) =>
+      `/original?allowAgent=${allowAgents}&banCount=${DEFAULT.BAN_COUNT}&totalCost=${DEFAULT.TOTAL_COST}`,
     url: '/images/main/1.png',
     title: '정식 로프꾼',
   },
   {
-    href: '/legend',
+    href: (allowAgents?: string) =>
+      `/legend?allowAgent=${allowAgents}&banCount=${DEFAULT.BAN_COUNT}`,
     url: '/images/main/3.png',
     title: '레전드 로프꾼',
   },
   {
-    href: '/unlimited',
+    href: () => '/unlimited',
     url: '/images/main/4.png',
     title: '공허사냥꾼',
   },
@@ -82,32 +84,17 @@ const Main: React.FC = () => {
   }, [gqlAgents])
 
   return (
-    <div className="size-full bg-gray-900 flex flex-col items-center justify-center gap-10">
+    <div className="size-full flex flex-col items-center justify-center gap-10">
       <img src="/images/main/logo.png" alt="logo" className="w-32 block hover:animate-turbo" />
       <div className="flex items-center justify-center gap-10">
         {pipe(
           LINKS,
           zipWithIndex,
-          map(([index, link]) => {
-            if (link.href === '/unlimited') {
-              return (
-                <Link key={index} href={link.href} url={link.url} delay={index * 0.2}>
-                  {link.title}
-                </Link>
-              )
-            }
-
-            return (
-              <Link
-                key={index}
-                href={`${link.href}?allowAgent=${allowAgents}&banCount=${DEFAULT.BAN_COUNT}`}
-                url={link.url}
-                delay={index * 0.2}
-              >
-                {link.title}
-              </Link>
-            )
-          }),
+          map(([index, link]) => (
+            <Link key={index} href={`${link.href(allowAgents)}`} url={link.url} delay={index * 0.2}>
+              {link.title}
+            </Link>
+          )),
           toArray
         )}
       </div>

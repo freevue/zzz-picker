@@ -2,10 +2,11 @@
   --color-primary: #fbbf24;
   --color-secondary: #06b6d4;
 
-  --color-bg-base: #0a0a0a;
-  --color-bg-content: #1a1a1a;
+  --color-base: #0a0a0a;
+  --color-content: #1a1a1a;
+  --color-panel: #2a2a2a;
 
-  --color-base: #f3f4f6;
+  --color-foreground: #f3f4f6;
   --color-table: #2a2318;
 
   --animate-turbo: spin 0.1s linear infinite;
@@ -27,9 +28,10 @@ html.alice {
   --color-primary: #debe8d;
   --color-secondary: #5fa3a3;
 
-  --color-bg-base: #080b0f;
-  --color-bg-content: #131820;
+  --color-base: #080b0f;
+  --color-content: #131820;
+  --color-panel: #1e2731;
 
-  --color-base: #eef2f7;
+  --color-foreground: #eef2f7;
   --color-table: #1e2530;
 }

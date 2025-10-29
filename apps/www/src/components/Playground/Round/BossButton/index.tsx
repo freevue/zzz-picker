@@ -45,7 +45,13 @@ const BossButton: React.FC<Props> = (props) => {
           concat(
             props.boss
               ? ['border-primary']
-              : ['items-center', 'justify-center', 'flex', 'border-base', 'hover:border-secondary']
+              : [
+                  'items-center',
+                  'justify-center',
+                  'flex',
+                  'border-foreground',
+                  'hover:border-secondary',
+                ]
           ),
           join(' ')
         )}

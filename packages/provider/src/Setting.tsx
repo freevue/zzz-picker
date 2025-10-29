@@ -1,19 +1,23 @@
-import { Context as StoreContext } from './Store'
-import { join, filter, map, pipe, when, split, isNull, toArray } from '@fxts/core'
+import { Context as RouterContext } from './Router'
+import {
+  join,
+  filter,
+  map,
+  pipe,
+  split,
+  toArray,
+  entries,
+  isArray,
+  fromEntries,
+  isEmpty,
+} from '@fxts/core'
 import { DEFAULT_COST_TABLE, DEFAULT, type CostTable } from '@zzz-picker/constant'
 import { createContext, useContext, useEffect, useState } from 'react'
 
-const DEFAULT_URL_STATE = {
-  banCount: 2,
-  totalCost: 24,
-  allowAgent: [] as Array<number>,
-}
-const DEFAULT_ROUND_LIST = ['1라운드', '2라운드']
-
 type Optios = {
-  banCount?: number
-  totalCost?: number
-  allowAgent?: Array<number>
+  banCount: number
+  totalCost: number
+  allowAgent: Array<number>
 }
 type SettingState = {
   banCount: number
@@ -26,20 +30,9 @@ type Props = {
 }
 type State = {
   state: SettingState
-
-  setting: {
-    banCount: number
-    totalCost: number
-    allowAgent: Array<number>
-  }
-  roundList: Array<string>
+  setState: React.Dispatch<React.SetStateAction<SettingState>>
   costTable: CostTable
   setCostTable: (key: string, value: number) => void
-  setSaveSetting: (setting: {
-    banCount?: number
-    totalCost?: number
-    allowAgent?: Array<number>
-  }) => void
 }
 
 export const Context = createContext<State>({
@@ -48,33 +41,36 @@ export const Context = createContext<State>({
     totalCost: DEFAULT.TOTAL_COST,
     allowAgent: [],
   },
-  setting: {
-    ...DEFAULT_URL_STATE,
-  },
-  roundList: DEFAULT_ROUND_LIST,
+  setState: () => {},
   costTable: DEFAULT_COST_TABLE,
   setCostTable: () => {},
-  setSaveSetting: () => {},
 })
 
 const Provider = (props: Props) => {
-  const [state, setState] = useState<SettingState>({
-    totalCost: DEFAULT.TOTAL_COST,
-    banCount: DEFAULT.BAN_COUNT,
-    allowAgent: [],
-    ...(props.option || {}),
-  })
-
-  const [saveSetting, setSaveSetting] = useState(DEFAULT_URL_STATE)
+  const { replace } = useContext(RouterContext)
+  const [state, setState] = useState<SettingState>(props.option)
   const [costTable, setCostTable] = useState(DEFAULT_COST_TABLE)
+
+  useEffect(() => {
+    pipe(
+      state,
+      entries,
+      filter(([, value]) => !isEmpty(value) && !!value),
+      map(([key, value]) => {
+        if (isArray(value)) return [key, join(',', value)] as const
+
+        return [key, `${value}`] as const
+      }),
+      fromEntries,
+      (searchParams) => replace({ searchParams })
+    )
+  }, [state])
 
   return (
     <Context.Provider
       value={{
         state,
-
-        setting: { ...saveSetting },
-        roundList: DEFAULT_ROUND_LIST,
+        setState,
         costTable,
         setCostTable: (key, value) => {
           function updateNested<T>(item: T, [first, ...rest]: Array<string>): T {
@@ -84,12 +80,6 @@ const Provider = (props: Props) => {
           }
 
           setCostTable((prev) => pipe(key, split('.'), toArray, (list) => updateNested(prev, list)))
-        },
-        setSaveSetting: (setting) => {
-          setSaveSetting((prev) => ({
-            ...prev,
-            ...setting,
-          }))
         },
       }}
     >

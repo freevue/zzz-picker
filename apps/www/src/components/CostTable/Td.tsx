@@ -51,14 +51,14 @@ const Td: React.FC<Props> = (props) => {
 
   if (state.totalCost === Infinity) {
     return (
-      <td className="text-center h-14 bg-bg-content border-table border-b border-r text-2xl font-black">
+      <td className="text-center h-14 bg-content border-table text-foreground border-b border-r text-2xl font-black">
         -
       </td>
     )
   }
 
   return (
-    <td className="text-center h-14 bg-bg-content border-table border-b border-r hover:bg-table relative">
+    <td className="text-center h-14 bg-content border-table border-b border-r hover:bg-table/70 relative">
       {isEdit ? (
         <form className="block w-full h-full relative" onSubmit={onSubmit}>
           <label className="block w-full h-full">
@@ -77,7 +77,7 @@ const Td: React.FC<Props> = (props) => {
       ) : (
         <button
           onClick={onEditClick}
-          className="w-full h-full cursor-pointer block text-text-base text-lg font-medium"
+          className="w-full h-full cursor-pointer block text-foreground text-lg font-medium"
           type="button"
         >
           <span className="block">{props.value}</span>

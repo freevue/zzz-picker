@@ -131,7 +131,7 @@ export const Context = createContext<State>({
 
 const Provider = (props: Props) => {
   const [state, setState] = useState<PlayState>(DEFAULT_STATE)
-  const { state: settingState, setting, roundList } = useContext(SettingContext)
+  const { state: settingState } = useContext(SettingContext)
   const [isCounting, setIsCounting] = useState<boolean>(false)
 
   useEffect(() => {
@@ -152,28 +152,6 @@ const Provider = (props: Props) => {
   const [banList, setBanList] = useState<Array<SelectAgent>>([])
   const [round, setRound] = useState<Map<number, TypeRound>>(new Map())
 
-  useEffect(() => {
-    pipe(
-      setting.banCount,
-      range,
-      map(() => null),
-      toArray,
-      (list) => setBanList(list)
-    )
-  }, [setting.banCount])
-  useEffect(() => {
-    const history = JSON.parse(window.localStorage.getItem('zzz-picker-round') || '[]')
-
-    pipe(
-      roundList,
-      zipWithIndex,
-      map(([index, name]) => [index, { ...DEFAULT_ROUND, name, ...history[index] }] as const),
-      toArray,
-      (list) => {
-        setRound(new Map(list))
-      }
-    )
-  }, [roundList, gqlAgents])
   useEffect(() => {
     pipe(
       [...round.entries()],

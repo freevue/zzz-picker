@@ -1,15 +1,16 @@
 import { concat, join, map, pipe, toArray } from '@fxts/core'
 import { Button } from '@zzz-picker/components'
+import type { Rarity } from '@zzz-picker/constant'
 
 type Props = {
-  onChange: (value: 'S' | 'A') => void
-  value: 'S' | 'A'
+  onChange: (value: Rarity) => void
+  value: Rarity
   className?: string
 }
 
 const Tabs: React.FC<Props> = (props) => {
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    props.onChange(event.currentTarget.value as 'S' | 'A')
+    props.onChange(event.currentTarget.value as Rarity)
   }
 
   return (
@@ -29,8 +30,8 @@ const Tabs: React.FC<Props> = (props) => {
                 ['w-full', 'py-1', 'font-extrabold', 'text-lg'],
                 concat(
                   props.value === item
-                    ? ['bg-primary']
-                    : ['text-base', 'bg-gray-600/70', 'hover:bg-gray-600']
+                    ? ['bg-primary', 'text-base']
+                    : ['text-foreground', 'bg-panel', 'hover:text-secondary']
                 ),
                 join(' ')
               )}

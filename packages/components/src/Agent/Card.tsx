@@ -25,8 +25,8 @@ const AgentCard: React.FC<Props> = (props) => {
           ),
           concat(
             props.disabled
-              ? ['grayscale-100', 'cursor-not-allowed', 'line-through', 'text-base0']
-              : ['cursor-pointer', 'text-base']
+              ? ['grayscale-100', 'cursor-not-allowed', 'line-through', 'text-foreground0']
+              : ['cursor-pointer', 'text-foreground']
           ),
           join(' ')
         )}

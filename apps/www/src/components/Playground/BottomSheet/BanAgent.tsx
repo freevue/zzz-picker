@@ -60,7 +60,7 @@ const BanButton: React.FC<{ id: number | null; index: number }> = (props) => {
               'items-center',
               'justify-center',
               'border-2',
-              'border-base',
+              'border-foreground',
               'group',
             ],
             concat(['group-first:rounded-bl-2xl', 'group-first:border-r-0']),
@@ -68,7 +68,7 @@ const BanButton: React.FC<{ id: number | null; index: number }> = (props) => {
             join(' ')
           )}
         >
-          <Plus className="size-12 stroke-base group-hover:stroke-secondary" />
+          <Plus className="size-12 stroke-foreground group-hover:stroke-secondary" />
         </Button>
       ) : (
         <div

@@ -1,32 +1,19 @@
 import { Header, Playground, CostTable, CommonBossCard } from '@/components'
-import { useStore } from '@/hooks'
-import { pipe, toArray, filter, map, join, concat } from '@fxts/core'
+import { useRouter } from '@/hooks'
+import { pipe, toArray, map, join, concat, split } from '@fxts/core'
 import { DEFAULT } from '@zzz-picker/constant'
 import { Play, Setting } from '@zzz-picker/provider'
 import { useMemo } from 'react'
 
 const OriginalPlay: React.FC = () => {
-  const { gqlAgents } = useStore()
+  const { searchParams } = useRouter()
   const options = useMemo(() => {
-    if (gqlAgents.size === 0)
-      return {
-        banCount: DEFAULT.BAN_COUNT,
-        totalCost: DEFAULT.TOTAL_COST,
-        allowAgent: [],
-      }
-
-    return pipe(
-      gqlAgents,
-      filter(([, agent]) => agent.isAllow),
-      map(([id]) => Number(id)),
-      toArray,
-      (allowAgent) => ({
-        banCount: DEFAULT.BAN_COUNT,
-        totalCost: DEFAULT.TOTAL_COST,
-        allowAgent,
-      })
-    )
-  }, [gqlAgents])
+    return {
+      banCount: Number(searchParams.banCount || DEFAULT.BAN_COUNT),
+      totalCost: Number(searchParams.totalCost || DEFAULT.TOTAL_COST),
+      allowAgent: pipe(searchParams.allowAgent || '', split(','), map(Number), toArray),
+    }
+  }, [searchParams])
 
   return (
     <Setting option={options}>
@@ -38,8 +25,7 @@ const OriginalPlay: React.FC = () => {
                 [
                   'min-w-xl',
                   'w-xl',
-                  'text-white',
-                  'bg-bg-content',
+                  'bg-content',
                   'flex',
                   'flex-col',
                   'gap-6',
@@ -60,7 +46,14 @@ const OriginalPlay: React.FC = () => {
             </div>
             <div
               className={pipe(
-                ['min-w-4xl', 'w-4xl', 'overflow-auto', 'scrollbar-hidden', 'min-h-screen'],
+                [
+                  'min-w-4xl',
+                  'w-4xl',
+                  'overflow-auto',
+                  'scrollbar-hidden',
+                  'min-h-screen',
+                  'bg-base',
+                ],
                 join(' ')
               )}
             >

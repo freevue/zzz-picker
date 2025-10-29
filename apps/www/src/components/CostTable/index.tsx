@@ -64,7 +64,9 @@ const CostTable: React.FC = () => {
               name="engine.S.rate"
               value={costTable.engine.S.rate}
               append={
-                <span className="text-sm block px-2 text-gray-400 text-center">4 ~ 5인 경우</span>
+                <span className="text-sm block px-2 text-foreground/70 text-center">
+                  4 ~ 5인 경우
+                </span>
               }
             />
           </tr>
@@ -74,7 +76,7 @@ const CostTable: React.FC = () => {
             <Td name="engine.A.rate" value={costTable.engine.A.rate} />
           </tr>
         </Table>
-        <p className="text-sm text-text-secondary">
+        <p className="text-sm text-foreground/70">
           현재 Cost 배율은 1코스트당 {DEFAULT_COST_RATE * 100}% 입니다. (숫자를 클릭하면 수정이
           가능합니다.)
         </p>
