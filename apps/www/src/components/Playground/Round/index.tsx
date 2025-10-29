@@ -1,25 +1,30 @@
-import BossButton from './BossButton'
+import { Common, Personal } from './BossButton'
 import Pick from './Pick'
+import { usePlay } from '@/hooks'
 import { Typo } from '@zzz-picker/components'
-import type { TypeRound } from '@zzz-picker/provider'
+import type { RoundId } from '@zzz-picker/constant'
+import { useMemo } from 'react'
 
 type Props = {
-  id: number
-  round: TypeRound
+  id: RoundId
 }
 
 const Round: React.FC<Props> = (props) => {
+  const { state } = usePlay()
+  const round = useMemo(() => state[props.id], [state, props.id])
+
   return (
     <div className="w-full">
       <Typo.Heading className="text-2xl font-bold text-text-primary text-center">
-        {props.round.name}
+        {round.title}
       </Typo.Heading>
-      <div className="flex justify-between items-center -mt-11 gap-8">
-        <Pick side="A" roundId={props.id} round={props.round} />
-        <div className="flex items-center">
-          <BossButton boss={props.round.boss} roundId={props.id} />
+      <div className="flex justify-between items-center -mt-11">
+        <Pick side="A" roundId={props.id} />
+        <div className="flex items-center justify-center w-44">
+          {props.id === 'common' && <Common />}
+          {props.id === 'personal' && <Personal />}
         </div>
-        <Pick side="B" roundId={props.id} round={props.round} />
+        <Pick side="B" roundId={props.id} />
       </div>
     </div>
   )

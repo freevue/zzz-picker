@@ -3,29 +3,26 @@ import { BossDialog } from '@/components'
 import { usePlay, useStore } from '@/hooks'
 import { concat, join, pipe } from '@fxts/core'
 import { Button, Dialog } from '@zzz-picker/components'
-import type { SelectBoss } from '@zzz-picker/provider'
 import { useMemo, useState } from 'react'
 
-type Props = {
-  boss: SelectBoss
-  roundId: number
-}
-
-const BossButton: React.FC<Props> = (props) => {
-  const { boss } = useStore()
-  const { setRoundBossSelect } = usePlay()
+const Common: React.FC = () => {
+  const { gqlBosses } = useStore()
+  const { state, setState } = usePlay()
   const [isOpen, setIsOpen] = useState(false)
   const bossData = useMemo(() => {
-    if (props.boss === null) return undefined
+    if (state['common'].boss === null) return undefined
 
-    return boss.get(props.boss)
-  }, [props.boss, boss])
+    return gqlBosses.get(state['common'].boss)
+  }, [state, gqlBosses])
 
   const onBossClick = () => {
     setIsOpen(true)
   }
   const onBossChange = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setRoundBossSelect(props.roundId, Number(event.currentTarget.value))
+    setState((prev) => ({
+      ...prev,
+      common: { ...prev.common, boss: Number(event.currentTarget.value) },
+    }))
     setIsOpen(false)
   }
 
@@ -43,15 +40,9 @@ const BossButton: React.FC<Props> = (props) => {
             'rounded-tr-2xl',
           ],
           concat(
-            props.boss
+            state.common.boss
               ? ['border-primary']
-              : [
-                  'items-center',
-                  'justify-center',
-                  'flex',
-                  'border-foreground',
-                  'hover:border-secondary',
-                ]
+              : ['items-center', 'justify-center', 'flex', 'border-foreground']
           ),
           join(' ')
         )}
@@ -59,17 +50,20 @@ const BossButton: React.FC<Props> = (props) => {
         onClick={onBossClick}
       >
         {bossData ? (
-          <img className="block w-full" src={`/boss/${bossData.image}`} alt={bossData.fullNameEn} />
+          <img
+            className="block w-full"
+            src={`/images/boss/${bossData.id}.webp`}
+            alt={bossData.nameKo}
+          />
         ) : (
-          <Plus className="stroke-base block size-10 group-hover:stroke-secondary" />
+          <Plus className="stroke-foreground block size-10 group-hover:stroke-secondary" />
         )}
       </Button>
-
       <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <BossDialog active={props.boss} onChange={onBossChange} />
+        <BossDialog active={1} onClick={onBossChange} />
       </Dialog>
     </>
   )
 }
 
-export default BossButton
+export default Common

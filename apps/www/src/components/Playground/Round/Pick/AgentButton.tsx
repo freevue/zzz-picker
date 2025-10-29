@@ -80,7 +80,7 @@ const AgentButton: React.FC<Props> = (props) => {
           className="absolute right-0 top-0 group size-8 flex items-center justify-center bg-content/70 backdrop-blur-lg text-foreground font-bold text-lg"
           onClick={onDeleteClick}
         >
-          <Icons.Cross className="stroke-base size-6 group-hover:stroke-secondary" />
+          <Icons.Cross className="stroke-foreground size-6 group-hover:stroke-secondary" />
         </Button>
       </div>
       <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>

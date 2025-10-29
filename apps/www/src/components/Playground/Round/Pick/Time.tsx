@@ -1,24 +1,21 @@
 import { usePlay } from '@/hooks'
-import type { Side } from '@/types'
 import { pipe, concat, join } from '@fxts/core'
+import type { RoundId, Side } from '@zzz-picker/constant'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 type Props = {
-  roundId: number
+  roundId: RoundId
   side: Side
 }
 
 const Time: React.FC<Props> = (props) => {
   const timerRef = useRef<NodeJS.Timeout | null>(null)
-
-  const { round, setRoundResultTime } = usePlay()
-
+  const { state, setState } = usePlay()
   const [minute, setMinute] = useState(0)
   const [second, setSecond] = useState(0)
-
   const value = useMemo(() => {
-    return round.get(props.roundId)?.[props.side]?.result.timer
-  }, [round, props.roundId, props.side])
+    return state[props.roundId][props.side].time
+  }, [props.roundId, props.side])
 
   const time = useMemo(() => {
     return minute * 60 + second
@@ -69,7 +66,7 @@ const Time: React.FC<Props> = (props) => {
     timerRef.current && clearInterval(timerRef.current)
     timerRef.current = setTimeout(() => {
       timerRef.current = null
-      setRoundResultTime(props.roundId, props.side, time)
+      // setRoundResultTime(props.roundId, props.side, time)
     }, 300)
   }, [time])
 

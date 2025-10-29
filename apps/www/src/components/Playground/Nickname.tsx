@@ -13,10 +13,10 @@ const Nickname: React.FC<Props> = (props) => {
         placeholder="닉네임을 입력해주세요"
         className={pipe(
           [
-            'placeholder:text-text-secondary',
+            'placeholder:text-foreground/70',
+            'placeholder:text-3xl',
             'focus:outline-none',
             'focus:border-secondary',
-            'placeholder:text-3xl',
             'text-primary',
             'text-4xl',
             'font-black',

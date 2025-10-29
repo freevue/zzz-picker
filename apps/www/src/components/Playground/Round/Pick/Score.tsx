@@ -1,19 +1,19 @@
 import { usePlay } from '@/hooks'
-import type { Side } from '@/types'
 import { pipe, concat, join } from '@fxts/core'
+import type { RoundId, Side } from '@zzz-picker/constant'
 import { useMemo } from 'react'
 
 type Props = {
-  roundId: number
+  roundId: RoundId
   side: Side
 }
 
 const MAX_SCORE = 70_000
 const Score: React.FC<Props> = (props) => {
-  const { round, setRoundResultScore } = usePlay()
+  const { state, setState } = usePlay()
   const value = useMemo(() => {
-    return Number(round.get(props.roundId)?.[props.side]?.result.score || 0)
-  }, [round, props.roundId, props.side])
+    return Number(state[props.roundId][props.side].result || 0)
+  }, [state, props.roundId, props.side])
 
   const onScoreChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     pipe(
@@ -25,7 +25,7 @@ const Score: React.FC<Props> = (props) => {
         return value
       },
       (value) => {
-        setRoundResultScore(props.roundId, props.side, value)
+        // setRoundResultScore(props.roundId, props.side, value)
       }
     )
   }

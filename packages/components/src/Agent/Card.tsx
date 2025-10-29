@@ -37,13 +37,22 @@ const AgentCard: React.FC<Props> = (props) => {
           alt=""
           style={{ backgroundColor: props.color || 'transparent' }}
           className={pipe(
-            ['size-28', 'block', 'object-cover', 'overflow-hidden'],
+            [
+              'w-full',
+              'aspect-square',
+              'block',
+              'object-cover',
+              'overflow-hidden',
+              'rounded-bl-2xl',
+            ],
             concat(['group-hover:rounded-bl-none', 'transition-[border-radius]', 'duration-300']),
-            concat(props.active ? [''] : ['rounded-bl-2xl']),
+            concat(
+              props.active ? ['rounded-bl-none'] : ['rounded-bl-2xl', 'group-hover:rounded-bl-2xl']
+            ),
             join(' ')
           )}
         />
-        <span className="text-md font-bold mt-1">{props.nameKo}</span>
+        <span className="text-sm font-bold mt-1">{props.nameKo}</span>
       </button>
     </div>
   )

@@ -4,23 +4,24 @@ import { usePlay } from '@/hooks'
 import type { Side } from '@/types'
 import { concat, join, pipe } from '@fxts/core'
 import { Button, Dialog } from '@zzz-picker/components'
+import type { RoundId } from '@zzz-picker/constant'
 import { useState } from 'react'
 
 type Props = {
   side: Side
   index: number
-  roundId: number
+  roundId: RoundId
 }
 
 const PickButton: React.FC<Props> = (props) => {
-  const { setRoundPick } = usePlay()
+  const { setState } = usePlay()
   const [isOpen, setIsOpen] = useState(false)
 
   const onAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
     setIsOpen(false)
-    setRoundPick(props.roundId, props.side, props.index, Number(event.currentTarget.value))
+    // setRoundPick(props.roundId, props.side, props.index, Number(event.currentTarget.value))
   }
 
   return (
@@ -51,7 +52,7 @@ const PickButton: React.FC<Props> = (props) => {
           join(' ')
         )}
       >
-        <Plus className="size-12 stroke-base group-hover/button:stroke-secondary" />
+        <Plus className="size-12 stroke-foreground group-hover/button:stroke-secondary" />
       </Button>
       <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <AgentDialog onClick={onAgentClick} />

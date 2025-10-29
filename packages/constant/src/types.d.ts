@@ -1,4 +1,5 @@
 export type Side = 'A' | 'B'
+export type RoundId = 'common' | 'personal'
 export type SelectAgent = number | null
 export type SelectBoss = number | null
 export type RoundSide = {

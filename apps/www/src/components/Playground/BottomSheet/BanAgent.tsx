@@ -1,7 +1,17 @@
 import AgentDialog from './AgentDialog'
 import { Plus, Cross } from '@/Icons'
 import { useAgent, usePlay, useSetting } from '@/hooks'
-import { pipe, zipWithIndex, map, toArray, join, concat, isNull } from '@fxts/core'
+import {
+  pipe,
+  zipWithIndex,
+  map,
+  toArray,
+  join,
+  concat,
+  isNull,
+  filter,
+  findIndex,
+} from '@fxts/core'
 import { Button, Dialog, Typo } from '@zzz-picker/components'
 import { useState } from 'react'
 
@@ -27,7 +37,7 @@ const AgentButton: React.FC<Props> = (props) => {
       )}
     >
       <img
-        src={agent.chzzkSquareImage || agent.labSquareImage}
+        src={agent.profile.url}
         style={{ backgroundColor: agent.color || 'transparent' }}
         className="block w-full"
         alt={agent.nameKo}
@@ -36,15 +46,33 @@ const AgentButton: React.FC<Props> = (props) => {
   )
 }
 const BanButton: React.FC<{ id: number | null; index: number }> = (props) => {
-  const { setBan } = usePlay()
+  const { state, setState } = usePlay()
   const [isAgentDialogOpen, setIsAgentDialogOpen] = useState(false)
 
   const onAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setBan(props.index, Number(event.currentTarget.value))
+    const currentValue = Number(event.currentTarget.value)
+    const currentIndex = findIndex((id) => id === currentValue, state.banList)
+
+    setState((prev) => {
+      const banList = [...prev.banList]
+
+      if (currentIndex !== props.index) {
+        banList[props.index] = currentValue
+        banList[currentIndex] = null
+      }
+
+      return { ...prev, banList }
+    })
     setIsAgentDialogOpen(false)
   }
   const onDelete = () => {
-    setBan(props.index, null)
+    setState((prev) => {
+      const banList = [...prev.banList]
+
+      banList[props.index] = null
+
+      return { ...prev, banList }
+    })
   }
 
   return (
@@ -80,12 +108,12 @@ const BanButton: React.FC<{ id: number | null; index: number }> = (props) => {
           )}
         >
           <Button
-            className="absolute top-0 p-1 right-0 group/delete bg-content rounded-bl-2xl"
+            className="absolute top-0 p-1 right-0 group/delete bg-panel rounded-bl-2xl"
             onClick={onDelete}
             value={props.id}
             type="reset"
           >
-            <Cross className="size-6 stroke-base group-hover/delete:stroke-secondary" />
+            <Cross className="size-6 stroke-foreground group-hover/delete:stroke-secondary" />
           </Button>
           <AgentButton id={props.id} onClick={() => setIsAgentDialogOpen(true)} />
         </div>

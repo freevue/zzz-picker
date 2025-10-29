@@ -2,21 +2,21 @@ import AgentButton from './AgentButton'
 import PickButton from './PickButton'
 import Score from './Score'
 import Time from './Time'
-import type { Side } from '@/types'
+import { usePlay } from '@/hooks'
 import { join, pipe, map, toArray, zipWithIndex, concat } from '@fxts/core'
-import type { TypeRound } from '@zzz-picker/provider'
+import type { RoundId, Side } from '@zzz-picker/constant'
 import { useMemo } from 'react'
 
 type Props = {
   side: Side
-  round: TypeRound
-  roundId: number
+  roundId: RoundId
 }
 
 const Pick: React.FC<Props> = (props) => {
+  const { state } = usePlay()
   const pickList = useMemo(() => {
-    return props.round[props.side].pickList
-  }, [props])
+    return state[props.roundId][props.side].pickList
+  }, [state, props.roundId, props.side])
 
   return (
     <div className="flex-1">
@@ -33,10 +33,12 @@ const Pick: React.FC<Props> = (props) => {
             pickList,
             zipWithIndex,
             map(([index, pick]) => (
-              <li key={index} className={pipe(['size-30', 'group/list'], concat([]), join(' '))}>
-                {pick.agent ? (
-                  <AgentButton roundId={props.roundId} index={index} side={props.side} {...pick} />
-                ) : (
+              <li
+                key={index}
+                className={pipe(['flex-1', 'aspect-square', 'group/list'], concat([]), join(' '))}
+              >
+                {pick !== null ? null : (
+                  // <AgentButton roundId={props.roundId} index={index} side={props.side} {...pick} />
                   <PickButton roundId={props.roundId} index={index} side={props.side} />
                 )}
               </li>
