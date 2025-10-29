@@ -1,7 +1,7 @@
 import { UI, RarityTabs } from '@/components'
 import { useSetting, useStore } from '@/hooks'
 import type { Rarity } from '@/types'
-import { pipe, map, toArray, filter } from '@fxts/core'
+import { pipe, map, toArray, filter, includes } from '@fxts/core'
 import { Form, Agent } from '@zzz-picker/components'
 import { useState } from 'react'
 
@@ -10,20 +10,22 @@ const Setting: React.FC = () => {
   const [selectRarity, setSelectRarity] = useState<Rarity>('S')
   const { gqlAgents } = useStore()
 
-  // const onAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-  //   pipe(Number(event.currentTarget.value), (id) => {
-  //     setSaveSetting({
-  //       ...setting,
-  //       allowAgent: includes(id, setting.allowAgent)
-  //         ? pipe(
-  //             [...setting.allowAgent],
-  //             filter((agentId) => agentId !== id),
-  //             toArray
-  //           )
-  //         : [...setting.allowAgent, id],
-  //     })
-  //   })
-  // }
+  const onAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    window.history.replaceState(null, '', `?allowAgent=${event.currentTarget.value}`)
+
+    // pipe(Number(event.currentTarget.value), (id) => {
+    //   setSaveSetting({
+    //     ...setting,
+    //     allowAgent: includes(id, setting.allowAgent)
+    //       ? pipe(
+    //           [...setting.allowAgent],
+    //           filter((agentId) => agentId !== id),
+    //           toArray
+    //         )
+    //       : [...setting.allowAgent, id],
+    //   })
+    // })
+  }
   const onInputChange = (value: number, name: string) => {
     setSaveSetting({ ...setting, [name]: value })
   }
@@ -68,8 +70,9 @@ const Setting: React.FC = () => {
               map(([id, agent]) => (
                 <li key={id} className="flex items-start justify-center">
                   <Agent.Card
-                    // disabled={agent.isTeaser}
-                    active={agent.isAllow}
+                    onClick={onAgentClick}
+                    disabled={agent.isTeaser}
+                    active={includes(id, setting.allowAgent)}
                     {...agent}
                   />
                 </li>

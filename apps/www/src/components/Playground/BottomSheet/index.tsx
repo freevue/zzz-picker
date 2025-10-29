@@ -4,11 +4,11 @@ import { useStore } from '@/hooks'
 import { AnimatePresence, motion } from 'motion/react'
 
 const BottomSheet = () => {
-  const { agent } = useStore()
+  const { loading } = useStore()
 
   return (
     <AnimatePresence>
-      {agent.size > 0 && (
+      {!loading && (
         <motion.div
           initial={{ y: 100 }}
           animate={{ y: 0 }}
