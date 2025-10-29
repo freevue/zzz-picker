@@ -76,7 +76,7 @@ const Time: React.FC<Props> = (props) => {
   return (
     <div
       className={pipe(
-        ['text-xl', 'font-extrabold', 'dark:text-gray-50', 'w-60', 'flex', 'items-center', 'gap-4'],
+        ['text-xl', 'font-extrabold', 'text-base', 'w-60', 'flex', 'items-center', 'gap-4'],
         join(' ')
       )}
     >
@@ -90,7 +90,7 @@ const Time: React.FC<Props> = (props) => {
               'text-center',
               'px-4',
               'py-2',
-              'border-gray-50',
+              'border-base',
               'block',
               'focus:outline-none',
               'focus:border-secondary',
@@ -121,7 +121,7 @@ const Time: React.FC<Props> = (props) => {
               'text-center',
               'px-4',
               'py-2',
-              'border-gray-50',
+              'border-base',
               'block',
               'focus:outline-none',
               'focus:border-secondary',

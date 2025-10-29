@@ -45,13 +45,7 @@ const BossButton: React.FC<Props> = (props) => {
           concat(
             props.boss
               ? ['border-primary']
-              : [
-                  'items-center',
-                  'justify-center',
-                  'flex',
-                  'border-gray-50',
-                  'hover:border-secondary',
-                ]
+              : ['items-center', 'justify-center', 'flex', 'border-base', 'hover:border-secondary']
           ),
           join(' ')
         )}
@@ -61,7 +55,7 @@ const BossButton: React.FC<Props> = (props) => {
         {bossData ? (
           <img className="block w-full" src={`/boss/${bossData.image}`} alt={bossData.fullNameEn} />
         ) : (
-          <Plus className="stroke-gray-50 block size-10 group-hover:stroke-secondary" />
+          <Plus className="stroke-base block size-10 group-hover:stroke-secondary" />
         )}
       </Button>
 

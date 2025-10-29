@@ -19,7 +19,7 @@ const Link: React.FC<Props> = (props) => {
       transition={{ duration: 0.2, delay: props.delay }}
       className={pipe(
         ['flex', 'flex-col', 'items-center', 'justify-center', 'gap-1', 'group'],
-        concat(['dark:text-gray-50']),
+        concat(['text-base']),
         concat([]),
         join(' ')
       )}
@@ -40,16 +40,14 @@ const Link: React.FC<Props> = (props) => {
             'justify-center',
             'relative',
           ],
-          concat(['dark:text-gray-50', 'dark:border-gray-50']),
-          concat(['group-hover:dark:border-secondary']),
+          concat(['text-base', 'border-base']),
+          concat(['group-hover:border-secondary']),
           join(' ')
         )}
       >
         <img className="block w-full" src={props.url} alt="" />
       </div>
-      <span className="text-xl font-extrabold group-hover:dark:text-secondary">
-        {props.children}
-      </span>
+      <span className="text-xl font-extrabold group-hover:text-secondary">{props.children}</span>
     </motion.a>
   )
 }
@@ -84,7 +82,7 @@ const Main: React.FC = () => {
   }, [gqlAgents])
 
   return (
-    <div className="size-full dark:bg-gray-900 flex flex-col items-center justify-center gap-10">
+    <div className="size-full bg-gray-900 flex flex-col items-center justify-center gap-10">
       <img src="/images/main/logo.png" alt="logo" className="w-32 block hover:animate-turbo" />
       <div className="flex items-center justify-center gap-10">
         {pipe(

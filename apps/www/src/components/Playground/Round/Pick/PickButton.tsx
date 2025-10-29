@@ -34,7 +34,7 @@ const PickButton: React.FC<Props> = (props) => {
             'h-full',
             'flex',
             'border-2',
-            'border-gray-50',
+            'border-base',
             'items-center',
             'justify-center',
             'group/button',
@@ -51,7 +51,7 @@ const PickButton: React.FC<Props> = (props) => {
           join(' ')
         )}
       >
-        <Plus className="size-12 stroke-gray-50 group-hover/button:stroke-secondary" />
+        <Plus className="size-12 stroke-base group-hover/button:stroke-secondary" />
       </Button>
       <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <AgentDialog onClick={onAgentClick} />

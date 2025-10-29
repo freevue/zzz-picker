@@ -60,7 +60,7 @@ const BanButton: React.FC<{ id: number | null; index: number }> = (props) => {
               'items-center',
               'justify-center',
               'border-2',
-              'border-gray-50',
+              'border-base',
               'group',
             ],
             concat(['group-first:rounded-bl-2xl', 'group-first:border-r-0']),
@@ -68,7 +68,7 @@ const BanButton: React.FC<{ id: number | null; index: number }> = (props) => {
             join(' ')
           )}
         >
-          <Plus className="size-12 stroke-gray-50 group-hover:stroke-secondary" />
+          <Plus className="size-12 stroke-base group-hover:stroke-secondary" />
         </Button>
       ) : (
         <div
@@ -85,7 +85,7 @@ const BanButton: React.FC<{ id: number | null; index: number }> = (props) => {
             value={props.id}
             type="reset"
           >
-            <Cross className="size-6 stroke-gray-50 group-hover/delete:stroke-secondary" />
+            <Cross className="size-6 stroke-base group-hover/delete:stroke-secondary" />
           </Button>
           <AgentButton id={props.id} onClick={() => setIsAgentDialogOpen(true)} />
         </div>

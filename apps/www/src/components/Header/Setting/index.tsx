@@ -35,7 +35,7 @@ const Setting: React.FC = () => {
       <Typo.Heading primary>설정</Typo.Heading>
       <div className="flex flex-col gap-4 mt-8">
         <div className="flex mb-4 items-center text-center gap-8">
-          <h2 className="text-2xl w-2/5 font-black dark:text-white">Total Cost</h2>
+          <h2 className="text-2xl w-2/5 font-black text-white">Total Cost</h2>
           <div className="flex-1">
             <Form.Count
               min={0}
@@ -47,7 +47,7 @@ const Setting: React.FC = () => {
           </div>
         </div>
         <div className="flex mb-4 items-center text-center gap-8">
-          <h2 className="text-2xl w-2/5 font-black dark:text-white">Ban Count</h2>
+          <h2 className="text-2xl w-2/5 font-black text-white">Ban Count</h2>
           <div className="flex-1">
             <Form.Count
               min={0}

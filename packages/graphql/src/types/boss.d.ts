@@ -1,12 +1,12 @@
 import type { GQL_Edges, GQL_Node, GQL_Attribute } from '.'
 
-export type GQL_Boss = {
+export type GQL_Boss<T> = {
   id: number
   nameKo: string
   hp: Array<number>
-  resistance: GQL_Edges<GQL_Node<GQL_Attribute>>
-  weakness: GQL_Edges<GQL_Node<GQL_Attribute>>
+  resistance: T
+  weakness: T
 }
 export type GQL_BossList = {
-  bossCollection: GQL_Edges<GQL_Node<GQL_Boss>>
+  bossCollection: GQL_Edges<GQL_Node<GQL_Boss<GQL_Edges<GQL_Node<GQL_Attribute>>>>>
 }

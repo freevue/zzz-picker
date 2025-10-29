@@ -11,7 +11,7 @@ type Props = {
 const Round: React.FC<Props> = (props) => {
   return (
     <div className="w-full">
-      <Typo.Heading className="text-2xl font-bold dark:text-text-primary text-center">
+      <Typo.Heading className="text-2xl font-bold text-text-primary text-center">
         {props.round.name}
       </Typo.Heading>
       <div className="flex justify-between items-center -mt-11 gap-8">

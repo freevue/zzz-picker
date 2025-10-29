@@ -11,7 +11,7 @@ type Props = {
 const Td: React.FC<Props> = (props) => {
   const input = useRef<HTMLInputElement>(null)
   const [isEdit, setIsEdit] = useState(false)
-  const { setCostTable } = useSetting()
+  const { state, setCostTable } = useSetting()
 
   const onEditClick = () => {
     setIsEdit(true)
@@ -49,8 +49,16 @@ const Td: React.FC<Props> = (props) => {
     }
   }, [isEdit])
 
+  if (state.totalCost === Infinity) {
+    return (
+      <td className="text-center h-14 bg-bg-content border-table border-b border-r text-2xl font-black">
+        -
+      </td>
+    )
+  }
+
   return (
-    <td className="text-center h-14 border-gray-600 border-b border-r hover:bg-gray-700 relative">
+    <td className="text-center h-14 bg-bg-content border-table border-b border-r hover:bg-table relative">
       {isEdit ? (
         <form className="block w-full h-full relative" onSubmit={onSubmit}>
           <label className="block w-full h-full">
@@ -69,7 +77,7 @@ const Td: React.FC<Props> = (props) => {
       ) : (
         <button
           onClick={onEditClick}
-          className="w-full h-full cursor-pointer block text-text-gray-50 text-lg font-medium"
+          className="w-full h-full cursor-pointer block text-text-base text-lg font-medium"
           type="button"
         >
           <span className="block">{props.value}</span>

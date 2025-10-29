@@ -30,7 +30,7 @@ const Tabs: React.FC<Props> = (props) => {
                 concat(
                   props.value === item
                     ? ['bg-primary']
-                    : ['dark:text-gray-50', 'dark:bg-gray-600/70', 'dark:hover:bg-gray-600']
+                    : ['text-base', 'bg-gray-600/70', 'hover:bg-gray-600']
                 ),
                 join(' ')
               )}

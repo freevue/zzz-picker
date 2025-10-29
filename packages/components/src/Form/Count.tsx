@@ -47,9 +47,9 @@ const Count: React.FC<Props> = (props) => {
   }, [props.value])
 
   return (
-    <div className="flex items-center w-full border-2 border-gray-50 overflow-hidden rounded-lg">
-      <Button className="p-2 bg-gray-50 group" value="-1" onClick={onButtonClick} type="button">
-        <Icons.Minus className="dark:stroke-content size-8 group-hover:stroke-secondary" />
+    <div className="flex items-center w-full border-2 border-base overflow-hidden rounded-lg">
+      <Button className="p-2 bg-base group" value="-1" onClick={onButtonClick} type="button">
+        <Icons.Minus className="stroke-content size-8 group-hover:stroke-secondary" />
       </Button>
       <label className="flex-1 block h-full">
         <input
@@ -66,8 +66,8 @@ const Count: React.FC<Props> = (props) => {
           onWheel={(event) => event.currentTarget.blur()}
         />
       </label>
-      <Button className="p-2 bg-gray-50 group" value="1" onClick={onButtonClick} type="button">
-        <Icons.Plus className="dark:stroke-content size-8 group-hover:stroke-secondary" />
+      <Button className="p-2 bg-base group" value="1" onClick={onButtonClick} type="button">
+        <Icons.Plus className="stroke-content size-8 group-hover:stroke-secondary" />
       </Button>
     </div>
   )

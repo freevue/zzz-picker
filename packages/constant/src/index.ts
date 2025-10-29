@@ -9,7 +9,6 @@ export const DEFAULT = {
   BAN_COUNT: 2,
   TOTAL_COST: 24,
   ROUNDE_SIDE: {
-    boss: null,
     time: 0,
     result: 0,
     pickList: [null, null, null],

@@ -13,7 +13,7 @@ const Side: React.FC = () => {
     <>
       <div className="flex w-full p-4 gap-5 items-center sticky top-0 bg-black z-10">
         <Nickname side="A" />
-        <span className="text-3xl font-extrabold dark:text-gray-400">VS</span>
+        <span className="text-3xl font-extrabold text-gray-400">VS</span>
         <Nickname side="B" />
       </div>
       <div className="p-4 flex flex-col gap-20 mt-8">

@@ -4,6 +4,7 @@
 @import './base.css';
 
 @custom-variant dark (&:where(.dark, .dark *));
+@custom-variant alice (&:where(.alice, .alice *));
 
 .scrollbar-hidden {
   scrollbar-width: none;

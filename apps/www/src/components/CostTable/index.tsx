@@ -5,8 +5,8 @@ import { useSetting } from '@/hooks'
 import { Icons, Typo } from '@zzz-picker/components'
 import { DEFAULT_COST_RATE } from '@zzz-picker/constant'
 
-const CostTable = () => {
-  const { state, setting, costTable } = useSetting()
+const CostTable: React.FC = () => {
+  const { state, costTable } = useSetting()
 
   return (
     <div className="p-4">
@@ -23,7 +23,7 @@ const CostTable = () => {
           </span>
         </p>
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 relative">
         <Table>
           <tr>
             <Th className="text-primary">캐릭터 구분</Th>

@@ -64,7 +64,7 @@ const AgentButton: React.FC<Props> = (props) => {
             join(' ')
           )}
         >
-          <span className="absolute left-0 top-0 h-8 min-w-8 w-fit px-2 flex items-center justify-center bg-content/70 backdrop-blur-lg text-gray-50 font-bold text-lg">
+          <span className="absolute left-0 top-0 h-8 min-w-8 w-fit px-2 flex items-center justify-center bg-content/70 backdrop-blur-lg text-base font-bold text-lg">
             {totalCost}
           </span>
           <div className="w-full h-full" style={{ backgroundColor: agent.color || 'transparent' }}>
@@ -77,10 +77,10 @@ const AgentButton: React.FC<Props> = (props) => {
         </Button>
         <Button
           type="button"
-          className="absolute right-0 top-0 group size-8 flex items-center justify-center bg-content/70 backdrop-blur-lg text-gray-50 font-bold text-lg"
+          className="absolute right-0 top-0 group size-8 flex items-center justify-center bg-content/70 backdrop-blur-lg text-base font-bold text-lg"
           onClick={onDeleteClick}
         >
-          <Icons.Cross className="dark:stroke-gray-50 size-6 group-hover:stroke-secondary" />
+          <Icons.Cross className="stroke-base size-6 group-hover:stroke-secondary" />
         </Button>
       </div>
       <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>

@@ -6,7 +6,7 @@ import {
   DEFAULT,
   type SelectAgent,
   type SelectBoss,
-  type PlayRound,
+  type RoundSide,
 } from '@zzz-picker/constant'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 
@@ -65,10 +65,11 @@ type PlayState = {
   banList: Array<SelectAgent>
   common: {
     title: string
-  } & PlayRound
+    boss: SelectBoss
+  } & Record<Side, RoundSide>
   persnal: {
     title: string
-  } & PlayRound
+  } & Record<Side, RoundSide & { boss: SelectBoss }>
 }
 
 type Props = {
@@ -96,20 +97,23 @@ type State = {
   ) => void
 }
 
-export const Context = createContext<State>({
-  state: {
-    banList: [],
-    common: {
-      title: '공용 무대',
-      A: DEFAULT.ROUNDE_SIDE,
-      B: DEFAULT.ROUNDE_SIDE,
-    },
-    persnal: {
-      title: '개인 무대',
-      A: DEFAULT.ROUNDE_SIDE,
-      B: DEFAULT.ROUNDE_SIDE,
-    },
+const DEFAULT_STATE = {
+  banList: [],
+  common: {
+    title: '공용 무대',
+    boss: null,
+    A: DEFAULT.ROUNDE_SIDE,
+    B: DEFAULT.ROUNDE_SIDE,
   },
+  persnal: {
+    title: '개인 무대',
+    A: { ...DEFAULT.ROUNDE_SIDE, boss: null },
+    B: { ...DEFAULT.ROUNDE_SIDE, boss: null },
+  },
+}
+
+export const Context = createContext<State>({
+  state: DEFAULT_STATE,
   setState: () => {},
   reset: () => {},
 
@@ -125,19 +129,6 @@ export const Context = createContext<State>({
   setRoundCostSetting: () => {},
 })
 
-const DEFAULT_STATE = {
-  banList: [],
-  common: {
-    title: '공용 무대',
-    A: DEFAULT.ROUNDE_SIDE,
-    B: DEFAULT.ROUNDE_SIDE,
-  },
-  persnal: {
-    title: '개인 무대',
-    A: DEFAULT.ROUNDE_SIDE,
-    B: DEFAULT.ROUNDE_SIDE,
-  },
-}
 const Provider = (props: Props) => {
   const [state, setState] = useState<PlayState>(DEFAULT_STATE)
   const { state: settingState, setting, roundList } = useContext(SettingContext)
@@ -156,7 +147,7 @@ const Provider = (props: Props) => {
     setIsCounting(false)
   }, [state])
 
-  const { agent } = useContext(StoreContext)
+  const { gqlAgents } = useContext(StoreContext)
   const audioRef = useRef<HTMLAudioElement>(null)
   const [banList, setBanList] = useState<Array<SelectAgent>>([])
   const [round, setRound] = useState<Map<number, TypeRound>>(new Map())
@@ -182,7 +173,7 @@ const Provider = (props: Props) => {
         setRound(new Map(list))
       }
     )
-  }, [roundList, agent])
+  }, [roundList, gqlAgents])
   useEffect(() => {
     pipe(
       [...round.entries()],

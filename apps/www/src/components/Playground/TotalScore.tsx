@@ -18,7 +18,7 @@ function getAgentCostType(rarity: Rarity, isPickup: boolean): AgentCostType {
 
 const HideRecord: React.FC<{ children: React.ReactNode }> = (props) => {
   return (
-    <span className="absolute cursor-default left-0 -bottom-8 font-extrabold w-full text-gray-50 text-xl! opacity-0 group-hover:opacity-70 transition-opacity duration-300">
+    <span className="absolute cursor-default left-0 -bottom-8 font-extrabold w-full text-base text-xl! opacity-0 group-hover:opacity-70 transition-opacity duration-300">
       {props.children}
     </span>
   )
@@ -48,7 +48,7 @@ const Record: React.FC<{
   return (
     <motion.p
       className={pipe(
-        ['dark:text-text-primary', 'text-3xl', 'font-black', 'flex-1', 'cursor-default'],
+        ['text-text-primary', 'text-3xl', 'font-black', 'flex-1', 'cursor-default'],
         concat([props.className || '']),
         concat(props.isHide ? ['opacity-0'] : ['opacity-100']),
         join(' ')

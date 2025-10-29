@@ -1,4 +1,5 @@
-import { Header, Playground, CostTable, Boss } from '@/components'
+import { Header, Playground, CostTable, CommonBossCard } from '@/components'
+import { pipe, concat, join } from '@fxts/core'
 import { Play, Setting } from '@zzz-picker/provider'
 
 const CustomPlay: React.FC = () => {
@@ -13,12 +14,37 @@ const CustomPlay: React.FC = () => {
       <div className="w-full h-full overflow-auto scrollbar-hidden">
         <Play>
           <div className="h-full ml-auto w-fit flex z-10 relative flex-1 overflow-auto scrollbar-hidden">
-            <div className="min-w-xl w-xl dark:text-white bg-content flex flex-col gap-6 overflow-y-auto overflow-x-hidden scrollbar-hidden">
+            <div
+              className={pipe(
+                [
+                  'min-w-xl',
+                  'w-xl',
+                  'text-white',
+                  'bg-bg-content',
+                  'flex',
+                  'flex-col',
+                  'gap-6',
+                  'overflow-y-auto',
+                  'overflow-x-hidden',
+                  'scrollbar-hidden',
+                ],
+                concat(['bg-cover', 'bg-no-repeat', 'bg-[180px_30px]']),
+                concat([
+                  'alice:bg-[url("https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/08/04/01f84d7fdcdbef65d8a9c94416e81d91_2128704813195499621.png?x-oss-process=image%2Fformat%2Cwebp")]',
+                ]),
+                join(' ')
+              )}
+            >
               <Header />
-              <Boss />
+              <CommonBossCard />
               <CostTable />
             </div>
-            <div className="min-w-4xl w-4xl overflow-auto scrollbar-hidden min-h-screen">
+            <div
+              className={pipe(
+                ['min-w-4xl', 'w-4xl', 'overflow-auto', 'scrollbar-hidden', 'min-h-screen'],
+                join(' ')
+              )}
+            >
               <Playground />
             </div>
           </div>

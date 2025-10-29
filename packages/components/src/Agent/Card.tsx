@@ -20,13 +20,13 @@ const AgentCard: React.FC<Props> = (props) => {
           ['w-28', 'group', 'border-2', 'rounded-bl-2xl', 'rounded-tr-2xl', 'overflow-hidden'],
           concat(
             props.active
-              ? ['border-primary', 'dark:text-primary']
+              ? ['border-primary', 'text-primary']
               : ['border-transparent', 'hover:text-secondary']
           ),
           concat(
             props.disabled
-              ? ['grayscale-100', 'cursor-not-allowed', 'line-through', 'dark:text-gray-500']
-              : ['cursor-pointer', 'dark:text-gray-50']
+              ? ['grayscale-100', 'cursor-not-allowed', 'line-through', 'text-base0']
+              : ['cursor-pointer', 'text-base']
           ),
           join(' ')
         )}
