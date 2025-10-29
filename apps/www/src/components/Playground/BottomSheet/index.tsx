@@ -12,8 +12,8 @@ const BottomSheet = () => {
         <motion.div
           initial={{ y: 100 }}
           animate={{ y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="sticky bottom-0 left-0 w-full p-4 bg-content/50 backdrop-blur-lg"
+          transition={{ duration: 0.2 }}
+          className="sticky bottom-0 left-0 w-full bg-content/50 backdrop-blur-lg"
         >
           <div className="flex w-full flex-1 gap-4 overflow-hidden">
             <AllowAgent />

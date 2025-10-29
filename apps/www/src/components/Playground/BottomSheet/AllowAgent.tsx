@@ -8,7 +8,7 @@ const Agent: React.FC<{ id: number }> = (props) => {
   return agent ? (
     <li className="size-24 overflow-hidden">
       <img
-        src={agent.chzzkSquareImage || agent.labSquareImage}
+        src={agent.profile.url}
         style={{ backgroundColor: agent.color || 'transparent' }}
         className="block w-full"
         alt={agent.nameKo}
@@ -17,17 +17,17 @@ const Agent: React.FC<{ id: number }> = (props) => {
   ) : null
 }
 const AllowAgent = () => {
-  const { setting } = useSetting()
+  const { state } = useSetting()
 
-  return setting.allowAgent.length ? (
-    <div className="flex-1 overflow-hidden">
+  return state.allowAgent.length ? (
+    <div className="flex-1 overflow-hidden p-4">
       <UI.Typo.Heading className="text-xl" primary>
         Allow
       </UI.Typo.Heading>
       <div className="w-full overflow-x-auto overflow-y-hidden mt-4">
         <ul className="flex w-fit rounded-bl-2xl rounded-tr-2xl overflow-hidden">
           {pipe(
-            setting.allowAgent,
+            state.allowAgent,
             map((id) => <Agent id={id} key={id} />),
             toArray
           )}

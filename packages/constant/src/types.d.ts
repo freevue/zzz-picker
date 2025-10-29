@@ -1,5 +1,6 @@
 export type Side = 'A' | 'B'
 export type SelectAgent = number | null
+export type SelectBoss = number | null
 export type PickState = {
   [key in Side]: [RoundSelectAgentState, RoundSelectAgentState, RoundSelectAgentState]
 }

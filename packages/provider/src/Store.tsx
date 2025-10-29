@@ -1,5 +1,24 @@
-import { each, filter, head, isNull, map, pipe, prop, reduceLazy, toArray } from '@fxts/core'
-import { AGENT_LIST, useQuery, type GQL_AgentList, type GQL_Agent } from '@zzz-picker/graphql'
+import {
+  each,
+  filter,
+  flatMap,
+  head,
+  isNull,
+  map,
+  pipe,
+  prop,
+  reduceLazy,
+  toArray,
+} from '@fxts/core'
+import {
+  AGENT_LIST,
+  BOSS_LIST,
+  useQuery,
+  type GQL_AgentList,
+  type GQL_Agent,
+  type GQL_BossList,
+  type GQL_Boss,
+} from '@zzz-picker/graphql'
 import {
   getAgent,
   getBoss,
@@ -16,6 +35,8 @@ type Props = {
 }
 type State = {
   gqlAgents: Map<number, GQL_Agent>
+  gqlBosses: Map<number, GQL_Boss>
+  loading: boolean
   agent: Map<number, Agent>
   boss: Map<number, Boss>
   deadlyAssault: [Boss, Boss, Boss] | null
@@ -24,6 +45,8 @@ type State = {
 
 export const Context = createContext<State>({
   gqlAgents: new Map(),
+  gqlBosses: new Map(),
+  loading: false,
   agent: new Map(),
   boss: new Map(),
   deadlyAssault: null,
@@ -31,7 +54,8 @@ export const Context = createContext<State>({
 })
 
 const Provider = (props: Props) => {
-  const { loading, data } = useQuery<GQL_AgentList>(AGENT_LIST)
+  const { loading: agentLoading, data: agentData } = useQuery<GQL_AgentList>(AGENT_LIST)
+  const { loading: bossLoading, data: bossData } = useQuery<GQL_BossList>(BOSS_LIST)
 
   const [isLoaded, setIsLoaded] = useState(false)
   const [agent, setAgent] = useState<Map<number, Agent>>(new Map())
@@ -80,23 +104,55 @@ const Provider = (props: Props) => {
   return (
     <Context.Provider
       value={{
-        agent,
+        loading: useMemo(() => agentLoading || bossLoading, [agentLoading, bossLoading]),
         gqlAgents: useMemo(() => {
           const currentMap = new Map()
 
-          if (loading) return currentMap
+          if (agentLoading) return currentMap
 
           pipe(
-            data?.agentsCollection?.edges || [],
+            agentData?.agentsCollection?.edges || [],
             map(prop('node')),
             each((agent) => {
-              currentMap.set(agent.id, agent)
+              currentMap.set(Number(agent.id), agent)
             })
           )
 
           return currentMap
-        }, [data, loading]),
-        boss,
+        }, [agentData, agentLoading]),
+        gqlBosses: useMemo(() => {
+          const currentMap = new Map()
+
+          if (bossLoading) return currentMap
+
+          pipe(
+            bossData?.bossCollection?.edges || [],
+            map(prop('node')),
+            map((boss) => ({
+              ...boss,
+              resistance: pipe(
+                boss.resistance.edges,
+                map(prop('node')),
+                map(prop('attributes')),
+                toArray
+              ),
+              weakness: pipe(
+                boss.weakness.edges,
+                map(prop('node')),
+                map(prop('attributes')),
+                toArray
+              ),
+            })),
+            each((boss) => {
+              currentMap.set(Number(boss.id), boss)
+            })
+          )
+
+          return currentMap
+        }, [bossData, bossLoading]),
+
+        agent: new Map(),
+        boss: new Map(),
         deadlyAssaultList,
         deadlyAssault: useMemo(() => {
           if (isNull(deadlyAssault)) return deadlyAssault

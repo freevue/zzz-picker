@@ -7,6 +7,7 @@ export const DEFAULT = {
   COST_BONUS_RATE: 0.05,
   TIME_BONUS: 333,
   BAN_COUNT: 2,
+  TOTAL_COST: 24,
 }
 
 export const PRETTY_AGENT_ID = 156728

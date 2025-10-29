@@ -3,17 +3,27 @@ import Td from './Td'
 import Th from './Th'
 import { UI } from '@/components'
 import { useSetting } from '@/hooks'
+import { Icons } from '@zzz-picker/components'
 import { DEFAULT_COST_RATE } from '@zzz-picker/constant'
 
 const CostTable = () => {
-  const { setting, costTable } = useSetting()
+  const { state, setting, costTable } = useSetting()
 
   return (
     <div className="p-4">
-      <UI.Typo.Heading primary className="mb-4 flex items-end justify-between">
-        Cost{' '}
-        <span className="text-xl font-bold text-secondary">[설정 Cost: {setting.totalCost}]</span>
-      </UI.Typo.Heading>
+      <div className="flex items-end justify-between mb-4">
+        <UI.Typo.Heading primary>Cost</UI.Typo.Heading>
+        <p className="text-xl text-secondary font-bold flex items-end">
+          <span>설정 Cost:</span>
+          <span className="ml-1">
+            {state.totalCost === Infinity ? (
+              <Icons.Infinity className="size-7 stroke-secondary" />
+            ) : (
+              state.totalCost
+            )}
+          </span>
+        </p>
+      </div>
       <div className="flex flex-col gap-4">
         <Table>
           <tr>

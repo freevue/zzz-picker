@@ -6,9 +6,9 @@ export const useStore = () => {
 }
 
 export const useAgent = (id: number) => {
-  const { agent } = useContext(StoreContext)
+  const { gqlAgents } = useContext(StoreContext)
 
-  return agent.get(id)
+  return gqlAgents.get(id)
 }
 
 export const useSetting = () => {

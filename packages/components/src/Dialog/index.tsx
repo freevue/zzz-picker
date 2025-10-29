@@ -42,9 +42,14 @@ const Dialog: React.FC<Props> = (props) => {
     }
   }, [props.isOpen])
 
-  return props.isOpen
-    ? createPortal(
-        <div
+  return createPortal(
+    <AnimatePresence initial={false}>
+      {props.isOpen ? (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
           onClick={onBackdropClick}
           className={pipe(
             [
@@ -58,6 +63,7 @@ const Dialog: React.FC<Props> = (props) => {
               'flex',
               'items-start',
               'py-24',
+              'px-8',
               'justify-center',
               'overflow-y-auto',
               'backdrop-blur-lg',
@@ -67,33 +73,32 @@ const Dialog: React.FC<Props> = (props) => {
             join(' ')
           )}
         >
-          <AnimatePresence>
-            {props.isOpen && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3 }}
-                className={pipe(
-                  [
-                    'rounded-bl-4xl',
-                    'rounded-tr-4xl',
-                    'dark:bg-content',
-                    'dark:text-gray-50',
-                    'overflow-hidden',
-                    'p-8',
-                  ],
-                  join(' ')
-                )}
-                onClick={onContentClick}
-              >
-                {props.children}
-              </motion.div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.2 }}
+            className={pipe(
+              [
+                'min-w-fit',
+                'rounded-bl-4xl',
+                'rounded-tr-4xl',
+                'dark:bg-content',
+                'dark:text-gray-50',
+                'overflow-hidden',
+                'p-8',
+              ],
+              join(' ')
             )}
-          </AnimatePresence>
-        </div>,
-        document.body
-      )
-    : null
+            onClick={onContentClick}
+          >
+            {props.children}
+          </motion.div>
+        </motion.div>
+      ) : null}
+    </AnimatePresence>,
+    document.body
+  )
 }
 
 export default Dialog

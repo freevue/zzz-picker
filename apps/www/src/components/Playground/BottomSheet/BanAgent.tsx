@@ -1,7 +1,7 @@
 import AgentDialog from './AgentDialog'
 import { Plus, Cross } from '@/Icons'
 import { UI } from '@/components'
-import { useAgent, usePlay } from '@/hooks'
+import { useAgent, usePlay, useSetting } from '@/hooks'
 import { pipe, zipWithIndex, map, toArray, join, concat, isNull } from '@fxts/core'
 import { Button, Dialog } from '@zzz-picker/components'
 import { useState } from 'react'
@@ -99,21 +99,22 @@ const BanButton: React.FC<{ id: number | null; index: number }> = (props) => {
 }
 
 const BanAgent = () => {
-  const { banList } = usePlay()
+  const { state: settingState } = useSetting()
+  const { state: playState } = usePlay()
 
-  if (banList.length === 0) {
+  if (settingState.banCount === 0) {
     return null
   }
 
   return (
-    <div className="flex-1 overflow-hidden">
+    <div className="flex-1 overflow-hidden p-4">
       <UI.Typo.Heading className="text-xl" primary>
         Ban
       </UI.Typo.Heading>
       <div className="w-full overflow-x-auto overflow-y-hidden mt-4">
         <ul className="flex w-fit">
           {pipe(
-            banList,
+            playState.banList,
             zipWithIndex,
             map(([index, id]) => (
               <li key={index} className="size-24 overflow-hidden group">

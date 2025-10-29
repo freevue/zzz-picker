@@ -1,13 +1,11 @@
 import { Context as SettingContext } from './Setting'
 import { Context as StoreContext } from './Store'
 import { findIndex, map, pipe, range, toArray, zipWithIndex } from '@fxts/core'
-import { PRETTY_AGENT_ID } from '@zzz-picker/constant'
+import { PRETTY_AGENT_ID, type SelectAgent, type SelectBoss } from '@zzz-picker/constant'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 
 const ALICE_AUDIO_PATH = '/audio/alice.mp3'
 
-export type SelectAgent = number | null
-export type SelectBoss = number | null
 export type TypeEngine = 'SExclusive' | 'S' | 'A' | null
 export type Side = 'A' | 'B'
 export type Score = {
@@ -57,10 +55,16 @@ const DEFAULT_ROUND: TypeRound = {
   boss: null as SelectBoss,
 }
 
+type PlayState = {
+  banList: Array<SelectAgent>
+}
+
 type Props = {
   children: React.ReactNode
 }
 type State = {
+  state: PlayState
+
   banList: Array<SelectAgent>
   round: Map<number, TypeRound>
   isCounting: boolean
@@ -80,6 +84,10 @@ type State = {
 }
 
 export const Context = createContext<State>({
+  state: {
+    banList: [],
+  },
+
   banList: [],
   isCounting: false,
   round: new Map(),
@@ -94,12 +102,26 @@ export const Context = createContext<State>({
 })
 
 const Provider = (props: Props) => {
-  const audioRef = useRef<HTMLAudioElement>(null)
+  const [state, setState] = useState<PlayState>({
+    banList: [],
+  })
   const { agent } = useContext(StoreContext)
-  const { setting, roundList } = useContext(SettingContext)
+  const { state: settingState, setting, roundList } = useContext(SettingContext)
+
+  const audioRef = useRef<HTMLAudioElement>(null)
   const [banList, setBanList] = useState<Array<SelectAgent>>([])
   const [round, setRound] = useState<Map<number, TypeRound>>(new Map())
   const [isCounting, setIsCounting] = useState<boolean>(false)
+
+  useEffect(() => {
+    pipe(
+      settingState.banCount,
+      range,
+      map(() => null),
+      toArray,
+      (banList) => setState((prev) => ({ ...prev, banList }))
+    )
+  }, [settingState.banCount])
 
   useEffect(() => {}, [])
   useEffect(() => {
@@ -138,6 +160,8 @@ const Provider = (props: Props) => {
   return (
     <Context.Provider
       value={{
+        state,
+
         banList,
         round,
         isCounting,
