@@ -1,5 +1,5 @@
-import { UI } from '@/components'
 import { pipe, map, toArray, zipWithIndex, filter } from '@fxts/core'
+import { Typo } from '@zzz-picker/components'
 
 const LINK_LIST = [
   {
@@ -27,7 +27,7 @@ const LINK_LIST = [
 const Information: React.FC = () => {
   return (
     <div className="w-lg">
-      <UI.Typo.Heading primary>Information</UI.Typo.Heading>
+      <Typo.Heading primary>Information</Typo.Heading>
       <ul className="flex flex-col gap-4 mt-8">
         {pipe(
           LINK_LIST,

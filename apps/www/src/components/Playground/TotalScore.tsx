@@ -1,8 +1,7 @@
-import { UI } from '@/components'
 import { usePlay, useSetting, useStore } from '@/hooks'
 import type { Rarity } from '@/types'
 import { pipe, join, concat, map, sum, flatMap, filter } from '@fxts/core'
-import { Button } from '@zzz-picker/components'
+import { Button, Typo } from '@zzz-picker/components'
 import { DEFAULT_COST_RATE, DEFAULT_TIME_BONUS, type AgentCostType } from '@zzz-picker/constant'
 import { getAgentTotalCost } from '@zzz-picker/utils'
 import { animate, motion, useMotionValue, useTransform } from 'motion/react'
@@ -24,9 +23,13 @@ const HideRecord: React.FC<{ children: React.ReactNode }> = (props) => {
     </span>
   )
 }
-const Record: React.FC<{ value: number; className?: string; fixed: number; prefix?: string; isHide?: boolean }> = (
-  props
-) => {
+const Record: React.FC<{
+  value: number
+  className?: string
+  fixed: number
+  prefix?: string
+  isHide?: boolean
+}> = (props) => {
   const count = useMotionValue(100)
   const rounded = useTransform(() => {
     const value = Number(count.get().toFixed(props.fixed)).toLocaleString('ko-KR')
@@ -157,9 +160,9 @@ const TotalScore: React.FC<Props> = () => {
 
   return (
     <div>
-      <UI.Typo.Heading className="text-center" primary>
+      <Typo.Heading className="text-center" primary>
         결과
-      </UI.Typo.Heading>
+      </Typo.Heading>
       <div className="flex flex-col gap-4 mt-8">
         <div className="flex items-center justify-between">
           <Record
@@ -171,9 +174,9 @@ const TotalScore: React.FC<Props> = () => {
             value={totalCost.A}
             fixed={2}
           />
-          <UI.Typo.Heading className="w-1/3 text-xl text-center cursor-default">
+          <Typo.Heading className="w-1/3 text-xl text-center cursor-default">
             총 사용 Cost
-          </UI.Typo.Heading>
+          </Typo.Heading>
           <Record
             className={pipe(
               ['text-left'],
@@ -185,18 +188,38 @@ const TotalScore: React.FC<Props> = () => {
           />
         </div>
         <div className="flex items-center justify-between">
-          <Record className="text-right" value={isCounting ? roundTotalScore.A : 0} fixed={0} isHide={!isCounting} />
-          <UI.Typo.Heading className="w-1/3 text-xl text-center cursor-default">
+          <Record
+            className="text-right"
+            value={isCounting ? roundTotalScore.A : 0}
+            fixed={0}
+            isHide={!isCounting}
+          />
+          <Typo.Heading className="w-1/3 text-xl text-center cursor-default">
             라운드 점수 합산
-          </UI.Typo.Heading>
-          <Record className="text-left" value={isCounting ? roundTotalScore.B : 0} fixed={0} isHide={!isCounting} />
+          </Typo.Heading>
+          <Record
+            className="text-left"
+            value={isCounting ? roundTotalScore.B : 0}
+            fixed={0}
+            isHide={!isCounting}
+          />
         </div>
         <div className="flex items-center justify-between">
-          <Record className="text-right" value={isCounting ? roundTotalTime.A : 0} fixed={0} isHide={!isCounting} />
-          <UI.Typo.Heading className="w-1/3 text-xl text-center cursor-default">
+          <Record
+            className="text-right"
+            value={isCounting ? roundTotalTime.A : 0}
+            fixed={0}
+            isHide={!isCounting}
+          />
+          <Typo.Heading className="w-1/3 text-xl text-center cursor-default">
             시간 보너스
-          </UI.Typo.Heading>
-          <Record className="text-left" value={isCounting ? roundTotalTime.B : 0} fixed={0} isHide={!isCounting} />
+          </Typo.Heading>
+          <Record
+            className="text-left"
+            value={isCounting ? roundTotalTime.B : 0}
+            fixed={0}
+            isHide={!isCounting}
+          />
         </div>
         <div className="flex items-center justify-between">
           <Record
@@ -206,9 +229,9 @@ const TotalScore: React.FC<Props> = () => {
             prefix="%"
             isHide={!isCounting}
           />
-          <UI.Typo.Heading className="w-1/3 text-xl text-center cursor-default">
+          <Typo.Heading className="w-1/3 text-xl text-center cursor-default">
             Cost 보너스 배율
-          </UI.Typo.Heading>
+          </Typo.Heading>
           <Record
             className="text-left"
             value={isCounting ? (setting.totalCost - totalCost.B) * DEFAULT_COST_RATE * 100 : 0}
@@ -227,7 +250,7 @@ const TotalScore: React.FC<Props> = () => {
             />
             {isCounting && <HideRecord>{totalScore.A.toLocaleString()}</HideRecord>}
           </div>
-          <UI.Typo.Heading className="w-1/3 text-center cursor-default">총 점수</UI.Typo.Heading>
+          <Typo.Heading className="w-1/3 text-center cursor-default">총 점수</Typo.Heading>
           <div className="text-left flex-1 relative group">
             <Record
               className="text-primary! text-4xl!"

@@ -1,9 +1,8 @@
 import Table from './Table'
 import Td from './Td'
 import Th from './Th'
-import { UI } from '@/components'
 import { useSetting } from '@/hooks'
-import { Icons } from '@zzz-picker/components'
+import { Icons, Typo } from '@zzz-picker/components'
 import { DEFAULT_COST_RATE } from '@zzz-picker/constant'
 
 const CostTable = () => {
@@ -12,7 +11,7 @@ const CostTable = () => {
   return (
     <div className="p-4">
       <div className="flex items-end justify-between mb-4">
-        <UI.Typo.Heading primary>Cost</UI.Typo.Heading>
+        <Typo.Heading primary>Cost</Typo.Heading>
         <p className="text-xl text-secondary font-bold flex items-end">
           <span>설정 Cost:</span>
           <span className="ml-1">

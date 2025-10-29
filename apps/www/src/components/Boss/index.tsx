@@ -1,6 +1,5 @@
 import { Plus } from '@/Icons'
 import { BossDialog } from '@/components'
-import { UI } from '@/components'
 import { useStore } from '@/hooks'
 import {
   pipe,
@@ -15,7 +14,7 @@ import {
   split,
   zipWithIndex,
 } from '@fxts/core'
-import { Button, Dialog } from '@zzz-picker/components'
+import { Button, Dialog, Typo } from '@zzz-picker/components'
 import { useMemo, useState } from 'react'
 
 const Boss: React.FC = () => {
@@ -55,9 +54,9 @@ const Boss: React.FC = () => {
   return (
     <>
       <div className="p-4">
-        <UI.Typo.Heading primary className="mb-4 flex items-center gap-4">
+        <Typo.Heading primary className="mb-4 flex items-center gap-4">
           공용 무대
-        </UI.Typo.Heading>
+        </Typo.Heading>
         <div className="flex h-fit gap-4">
           <Button
             className={pipe(

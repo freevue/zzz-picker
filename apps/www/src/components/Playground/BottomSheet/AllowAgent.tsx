@@ -1,6 +1,6 @@
-import { UI } from '@/components'
 import { useAgent, useSetting } from '@/hooks'
 import { pipe, map, toArray } from '@fxts/core'
+import { Typo } from '@zzz-picker/components'
 
 const Agent: React.FC<{ id: number }> = (props) => {
   const agent = useAgent(props.id)
@@ -21,9 +21,9 @@ const AllowAgent = () => {
 
   return state.allowAgent.length ? (
     <div className="flex-1 overflow-hidden p-4">
-      <UI.Typo.Heading className="text-xl" primary>
+      <Typo.Heading className="text-xl" primary>
         Allow
-      </UI.Typo.Heading>
+      </Typo.Heading>
       <div className="w-full overflow-x-auto overflow-y-hidden mt-4">
         <ul className="flex w-fit rounded-bl-2xl rounded-tr-2xl overflow-hidden">
           {pipe(

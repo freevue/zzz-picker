@@ -1,9 +1,8 @@
 import AgentDialog from './AgentDialog'
 import { Plus, Cross } from '@/Icons'
-import { UI } from '@/components'
 import { useAgent, usePlay, useSetting } from '@/hooks'
 import { pipe, zipWithIndex, map, toArray, join, concat, isNull } from '@fxts/core'
-import { Button, Dialog } from '@zzz-picker/components'
+import { Button, Dialog, Typo } from '@zzz-picker/components'
 import { useState } from 'react'
 
 type Props = {
@@ -108,9 +107,9 @@ const BanAgent = () => {
 
   return (
     <div className="flex-1 overflow-hidden p-4">
-      <UI.Typo.Heading className="text-xl" primary>
+      <Typo.Heading className="text-xl" primary>
         Ban
-      </UI.Typo.Heading>
+      </Typo.Heading>
       <div className="w-full overflow-x-auto overflow-y-hidden mt-4">
         <ul className="flex w-fit">
           {pipe(

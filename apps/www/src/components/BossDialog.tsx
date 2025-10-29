@@ -1,7 +1,6 @@
-import { UI } from '@/components'
 import { useStore } from '@/hooks'
 import { pipe, map, toArray, concat, join } from '@fxts/core'
-import { Button } from '@zzz-picker/components'
+import { Button, Typo } from '@zzz-picker/components'
 
 type Props = {
   active: number | null
@@ -13,7 +12,7 @@ const BossDialog: React.FC<Props> = (props) => {
 
   return (
     <div className="w-2xl">
-      <UI.Typo.Heading primary>Boss</UI.Typo.Heading>
+      <Typo.Heading primary>Boss</Typo.Heading>
       <ul className="flex flex-wrap mt-8 w-full gap-8">
         {pipe(
           deadlyAssault || [],

@@ -1,7 +1,6 @@
-import { UI } from '@/components'
 import { useAgent, usePlay } from '@/hooks'
 import { pipe, join, concat, map, zipWithIndex, toArray, slice } from '@fxts/core'
-import { Form, Button } from '@zzz-picker/components'
+import { Form, Button, Typo } from '@zzz-picker/components'
 import { PRETTY_AGENT_ID } from '@zzz-picker/constant'
 import type { Side, TypeEngine } from '@zzz-picker/provider'
 import { useMemo } from 'react'
@@ -41,7 +40,7 @@ const CostDialog: React.FC<Props> = (props) => {
         join(' ')
       )}
     >
-      <UI.Typo.Heading primary className="">
+      <Typo.Heading primary className="">
         {agent.fullNameKo} +{props.totalCost}
         <span
           className="absolute -top-2 -right-2 text-9xl font-black block scale-200 opacity-50 italic"
@@ -49,7 +48,7 @@ const CostDialog: React.FC<Props> = (props) => {
         >
           {agent.rarity}
         </span>
-      </UI.Typo.Heading>
+      </Typo.Heading>
       <div className="flex mt-8 items-end relative z-10 flex-1 gap-8">
         <div className="w-sm flex items-start justify-start">
           <img
@@ -69,12 +68,12 @@ const CostDialog: React.FC<Props> = (props) => {
           />
         </div>
         <div className="flex-1">
-          <UI.Typo.Heading primary className="text-2xl">
+          <Typo.Heading primary className="text-2xl">
             Cost 설정
-          </UI.Typo.Heading>
+          </Typo.Heading>
           <div className="mt-8 flex flex-col gap-8">
             <div>
-              <UI.Typo.Heading className="text-xl mb-2">캐릭터 돌파</UI.Typo.Heading>
+              <Typo.Heading className="text-xl mb-2">캐릭터 돌파</Typo.Heading>
               <Form.Count
                 min={0}
                 max={6}
@@ -85,7 +84,7 @@ const CostDialog: React.FC<Props> = (props) => {
               />
             </div>
             <div>
-              <UI.Typo.Heading className="text-xl mb-2">엔진 종류</UI.Typo.Heading>
+              <Typo.Heading className="text-xl mb-2">엔진 종류</Typo.Heading>
               <ul className={pipe(['flex', 'rounded-lg', 'overflow-hidden'], join(' '))}>
                 {pipe(
                   [
@@ -126,7 +125,7 @@ const CostDialog: React.FC<Props> = (props) => {
             </div>
             {currentCost.engineType && (
               <div>
-                <UI.Typo.Heading className="text-xl mb-2">엔진 돌파</UI.Typo.Heading>
+                <Typo.Heading className="text-xl mb-2">엔진 돌파</Typo.Heading>
                 <Form.Count
                   min={0}
                   max={5}

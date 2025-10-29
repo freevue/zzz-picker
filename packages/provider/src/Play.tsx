@@ -1,7 +1,13 @@
 import { Context as SettingContext } from './Setting'
 import { Context as StoreContext } from './Store'
 import { findIndex, map, pipe, range, toArray, zipWithIndex } from '@fxts/core'
-import { PRETTY_AGENT_ID, type SelectAgent, type SelectBoss } from '@zzz-picker/constant'
+import {
+  PRETTY_AGENT_ID,
+  DEFAULT,
+  type SelectAgent,
+  type SelectBoss,
+  type PlayRound,
+} from '@zzz-picker/constant'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 
 const ALICE_AUDIO_PATH = '/audio/alice.mp3'
@@ -57,6 +63,12 @@ const DEFAULT_ROUND: TypeRound = {
 
 type PlayState = {
   banList: Array<SelectAgent>
+  common: {
+    title: string
+  } & PlayRound
+  persnal: {
+    title: string
+  } & PlayRound
 }
 
 type Props = {
@@ -64,6 +76,8 @@ type Props = {
 }
 type State = {
   state: PlayState
+  setState: React.Dispatch<React.SetStateAction<PlayState>>
+  reset: () => void
 
   banList: Array<SelectAgent>
   round: Map<number, TypeRound>
@@ -80,13 +94,24 @@ type State = {
     index: number,
     setting: TypePick['setting']
   ) => void
-  reset: () => void
 }
 
 export const Context = createContext<State>({
   state: {
     banList: [],
+    common: {
+      title: '공용 무대',
+      A: DEFAULT.ROUNDE_SIDE,
+      B: DEFAULT.ROUNDE_SIDE,
+    },
+    persnal: {
+      title: '개인 무대',
+      A: DEFAULT.ROUNDE_SIDE,
+      B: DEFAULT.ROUNDE_SIDE,
+    },
   },
+  setState: () => {},
+  reset: () => {},
 
   banList: [],
   isCounting: false,
@@ -98,19 +123,24 @@ export const Context = createContext<State>({
   setRoundResultScore: () => {},
   setRoundResultTime: () => {},
   setRoundCostSetting: () => {},
-  reset: () => {},
 })
 
+const DEFAULT_STATE = {
+  banList: [],
+  common: {
+    title: '공용 무대',
+    A: DEFAULT.ROUNDE_SIDE,
+    B: DEFAULT.ROUNDE_SIDE,
+  },
+  persnal: {
+    title: '개인 무대',
+    A: DEFAULT.ROUNDE_SIDE,
+    B: DEFAULT.ROUNDE_SIDE,
+  },
+}
 const Provider = (props: Props) => {
-  const [state, setState] = useState<PlayState>({
-    banList: [],
-  })
-  const { agent } = useContext(StoreContext)
+  const [state, setState] = useState<PlayState>(DEFAULT_STATE)
   const { state: settingState, setting, roundList } = useContext(SettingContext)
-
-  const audioRef = useRef<HTMLAudioElement>(null)
-  const [banList, setBanList] = useState<Array<SelectAgent>>([])
-  const [round, setRound] = useState<Map<number, TypeRound>>(new Map())
   const [isCounting, setIsCounting] = useState<boolean>(false)
 
   useEffect(() => {
@@ -122,8 +152,15 @@ const Provider = (props: Props) => {
       (banList) => setState((prev) => ({ ...prev, banList }))
     )
   }, [settingState.banCount])
+  useEffect(() => {
+    setIsCounting(false)
+  }, [state])
 
-  useEffect(() => {}, [])
+  const { agent } = useContext(StoreContext)
+  const audioRef = useRef<HTMLAudioElement>(null)
+  const [banList, setBanList] = useState<Array<SelectAgent>>([])
+  const [round, setRound] = useState<Map<number, TypeRound>>(new Map())
+
   useEffect(() => {
     pipe(
       setting.banCount,
@@ -161,6 +198,10 @@ const Provider = (props: Props) => {
     <Context.Provider
       value={{
         state,
+        setState,
+        reset: () => {
+          setState(DEFAULT_STATE)
+        },
 
         banList,
         round,
@@ -292,25 +333,6 @@ const Provider = (props: Props) => {
         },
         setIsCounting: () => {
           setIsCounting((prev) => !prev)
-        },
-        reset: () => {
-          pipe(
-            roundList,
-            zipWithIndex,
-            map(([index, name]) => [index, { ...DEFAULT_ROUND, name }] as const),
-            toArray,
-            (list) => {
-              setIsCounting(false)
-              setRound(new Map(list))
-              pipe(
-                setting.banCount,
-                range,
-                map(() => null),
-                toArray,
-                (list) => setBanList(list)
-              )
-            }
-          )
         },
       }}
     >

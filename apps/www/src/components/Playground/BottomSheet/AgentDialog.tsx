@@ -1,8 +1,9 @@
 import AgentButton from './AgentButton'
-import { UI, RarityTabs } from '@/components'
+import { RarityTabs } from '@/components'
 import { useStore, usePlay, useSetting } from '@/hooks'
 import type { Rarity } from '@/types'
 import { pipe, filter, map, toArray, includes } from '@fxts/core'
+import { Typo } from '@zzz-picker/components'
 import { useState } from 'react'
 
 type Props = {
@@ -19,7 +20,7 @@ const AgentDialog: React.FC<Props> = (props) => {
   return (
     <div className="flex flex-col w-2xl">
       <div className="flex items-center justify-between gap-16">
-        <UI.Typo.Heading primary>Ban Agent</UI.Typo.Heading>
+        <Typo.Heading primary>Ban Agent</Typo.Heading>
         <RarityTabs className="flex-1" value={selectRarity} onChange={setSelectRarity} />
       </div>
       <div className="flex-1 mt-8">

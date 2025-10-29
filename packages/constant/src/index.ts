@@ -1,4 +1,4 @@
-import type { AgentCostSetting, URLState, CostWeight, CostTable } from './types.d'
+import type { AgentCostSetting, CostWeight, CostTable, RoundSide } from './types.d'
 
 export * from './types.d'
 
@@ -8,6 +8,12 @@ export const DEFAULT = {
   TIME_BONUS: 333,
   BAN_COUNT: 2,
   TOTAL_COST: 24,
+  ROUNDE_SIDE: {
+    boss: null,
+    time: 0,
+    result: 0,
+    pickList: [null, null, null],
+  } as RoundSide,
 }
 
 export const PRETTY_AGENT_ID = 156728
@@ -18,11 +24,6 @@ export const DEFAULT_AGENT_COST_STATE: AgentCostSetting = {
   agentRate: 0,
   engineType: 'SExclusive',
   engineRate: 0,
-}
-export const DEFAULT_URL_STATE: URLState = {
-  banCount: 2,
-  totalCost: 24,
-  allowAgent: [],
 }
 export const DEFAULT_COST_WEIGHT: CostWeight = {
   used: 0,

@@ -1,8 +1,8 @@
-import { UI, RarityTabs } from '@/components'
+import { RarityTabs } from '@/components'
 import { useSetting, useStore } from '@/hooks'
 import type { Rarity } from '@/types'
 import { pipe, map, toArray, filter, includes } from '@fxts/core'
-import { Form, Agent } from '@zzz-picker/components'
+import { Form, Agent, Typo } from '@zzz-picker/components'
 import { useState } from 'react'
 
 const Setting: React.FC = () => {
@@ -32,7 +32,7 @@ const Setting: React.FC = () => {
 
   return (
     <div className="flex flex-col w-2xl">
-      <UI.Typo.Heading primary>설정</UI.Typo.Heading>
+      <Typo.Heading primary>설정</Typo.Heading>
       <div className="flex flex-col gap-4 mt-8">
         <div className="flex mb-4 items-center text-center gap-8">
           <h2 className="text-2xl w-2/5 font-black dark:text-white">Total Cost</h2>
@@ -60,7 +60,7 @@ const Setting: React.FC = () => {
         </div>
         <div className="flex-1 flex flex-col overflow-hidden gap-4 mt-8">
           <div className="flex items-center justify-between gap-16">
-            <UI.Typo.Heading primary>Allow Agent</UI.Typo.Heading>
+            <Typo.Heading primary>Allow Agent</Typo.Heading>
             <RarityTabs className="flex-1" value={selectRarity} onChange={setSelectRarity} />
           </div>
           <ul className="grid grid-cols-5 py-4 gap-y-4 flex-1">
