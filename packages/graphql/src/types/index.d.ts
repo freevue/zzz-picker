@@ -7,3 +7,5 @@ export type GQL_Node<T> = {
 
 export * from './agent'
 export * from './image'
+export * from './attribute'
+export * from './boss'

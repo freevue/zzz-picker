@@ -1,7 +1,7 @@
 import type { GQL_Edges, GQL_Node, GQL_Image } from '.'
 
 export type GQL_Agent = {
-  id: null
+  id: number
   rarity: 'S' | 'A'
   isTeaser: boolean
   isPickup: boolean
