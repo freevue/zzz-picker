@@ -79,10 +79,16 @@ const BanButton: React.FC<{ id: number | null; index: number }> = (props) => {
               'items-center',
               'justify-center',
               'border-2',
+              'border-r-1',
+              'border-l-1',
               'border-foreground',
               'group',
             ],
-            concat(['group-first:rounded-bl-2xl', 'group-first:border-r-0']),
+            concat([
+              'group-first:rounded-bl-2xl',
+              'group-first:border-l-2',
+              'group-last:border-r-2',
+            ]),
             concat(['group-last:rounded-tr-2xl']),
             join(' ')
           )}
