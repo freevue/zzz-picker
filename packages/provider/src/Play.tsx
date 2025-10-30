@@ -6,6 +6,7 @@ import {
   type SelectBoss,
   type RoundSide,
   type Side,
+  type AgentCostSetting,
 } from '@zzz-picker/constant'
 import { createContext, useContext, useEffect, useState } from 'react'
 
@@ -25,7 +26,12 @@ type Props = {
 }
 type State = {
   state: PlayState
+  cost: {
+    A: Map<number, AgentCostSetting>
+    B: Map<number, AgentCostSetting>
+  }
   isCounting: boolean
+  setCost: React.Dispatch<React.SetStateAction<Record<Side, Map<number, AgentCostSetting>>>>
   setIsCounting: React.Dispatch<React.SetStateAction<boolean>>
   setState: React.Dispatch<React.SetStateAction<PlayState>>
   reset: () => void
@@ -49,6 +55,11 @@ const DEFAULT_STATE = {
 export const Context = createContext<State>({
   state: DEFAULT_STATE,
   isCounting: false,
+  cost: {
+    A: new Map(),
+    B: new Map(),
+  },
+  setCost: () => {},
   setIsCounting: () => {},
   setState: () => {},
   reset: () => {},
@@ -56,6 +67,10 @@ export const Context = createContext<State>({
 
 const Provider = (props: Props) => {
   const [state, setState] = useState<PlayState>(DEFAULT_STATE)
+  const [cost, setCost] = useState<Record<Side, Map<number, AgentCostSetting>>>({
+    A: new Map(),
+    B: new Map(),
+  })
   const { state: settingState } = useContext(SettingContext)
   const [isCounting, setIsCounting] = useState<boolean>(false)
 
@@ -88,6 +103,8 @@ const Provider = (props: Props) => {
       value={{
         state,
         isCounting,
+        cost,
+        setCost,
         setIsCounting,
         setState,
         reset: () => {
@@ -96,7 +113,13 @@ const Provider = (props: Props) => {
             range,
             map(() => null),
             toArray,
-            (banList) => setState((prev) => ({ ...DEFAULT_STATE, banList }))
+            (banList) => {
+              setState(() => ({ ...DEFAULT_STATE, banList }))
+              setCost({
+                A: new Map(),
+                B: new Map(),
+              })
+            }
           )
         },
       }}

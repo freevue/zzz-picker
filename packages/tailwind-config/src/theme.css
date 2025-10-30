@@ -1,6 +1,7 @@
 @theme {
   --color-primary: #fbbf24;
   --color-secondary: #06b6d4;
+  --color-focus: #78350f;
 
   --color-base: #0a0a0a;
   --color-content: #1a1a1a;
@@ -27,6 +28,7 @@ html {
 html.alice {
   --color-primary: #debe8d;
   --color-secondary: #5fa3a3;
+  --color-focus: #9a3412;
 
   --color-base: #080b0f;
   --color-content: #131820;

@@ -1,10 +1,11 @@
 import AgentDialog from '../AgentDialog'
 import { Plus } from '@/Icons'
-import { usePlay } from '@/hooks'
+import { usePlay, useStore } from '@/hooks'
 import type { Side } from '@/types'
-import { concat, join, pipe } from '@fxts/core'
+import { concat, findIndex, join, pipe } from '@fxts/core'
 import { Button, Dialog } from '@zzz-picker/components'
 import type { RoundId } from '@zzz-picker/constant'
+import { getAgentRarity } from '@zzz-picker/utils'
 import { useState } from 'react'
 
 type Props = {
@@ -14,14 +15,58 @@ type Props = {
 }
 
 const PickButton: React.FC<Props> = (props) => {
-  const { setState } = usePlay()
+  const { gqlAgents } = useStore()
+  const { setState, setCost } = usePlay()
   const [isOpen, setIsOpen] = useState(false)
 
   const onAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    setIsOpen(false)
-    // setRoundPick(props.roundId, props.side, props.index, Number(event.currentTarget.value))
+    const currentAgentId = Number(event.currentTarget.value)
+
+    setState((prev) => {
+      const pickList = [...prev[props.roundId][props.side].pickList]
+      const currentIndex = findIndex(
+        (id) => id === currentAgentId,
+        prev[props.roundId][props.side].pickList
+      )
+
+      if (currentIndex !== props.index) {
+        pickList[props.index] = currentAgentId
+        pickList[currentIndex] = null
+      }
+
+      return {
+        ...prev,
+        [props.roundId]: {
+          ...prev[props.roundId],
+          [props.side]: { ...prev[props.roundId][props.side], pickList },
+        },
+      }
+    })
+    pipe(
+      currentAgentId,
+      (agentId) => gqlAgents.get(agentId)!,
+      getAgentRarity,
+      (rarity) => ({
+        rarity,
+        agentRate: 0,
+        engineType: null,
+        engineRate: 1,
+      }),
+      (agentSetting) => {
+        setIsOpen(false)
+        setCost((prev) => {
+          const newCost = { ...prev }
+
+          if (newCost[props.side].has(currentAgentId)) return prev
+
+          newCost[props.side].set(currentAgentId, agentSetting)
+
+          return newCost
+        })
+      }
+    )
   }
 
   return (
@@ -55,7 +100,7 @@ const PickButton: React.FC<Props> = (props) => {
         <Plus className="size-12 stroke-foreground group-hover/button:stroke-secondary" />
       </Button>
       <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <AgentDialog onClick={onAgentClick} />
+        <AgentDialog onClick={onAgentClick} side={props.side} roundId={props.roundId} />
       </Dialog>
     </>
   )

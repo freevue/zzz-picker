@@ -2,23 +2,39 @@ import BottomSheet from './BottomSheet'
 import Nickname from './Nickname'
 import Reset from './Reset'
 import Round from './Round'
+import TotalScore from './TotalScore'
+import { useStore } from '@/hooks'
+import { AnimatePresence, motion } from 'motion/react'
 
 const Side: React.FC = () => {
+  const { loading } = useStore()
+
   return (
-    <>
-      <div className="flex w-full p-4 gap-5 items-center sticky top-0 bg-black z-10">
-        <Nickname side="A" />
-        <span className="text-3xl font-extrabold text-foreground/50">VS</span>
-        <Nickname side="B" />
-      </div>
-      <div className="p-4 flex flex-col gap-20 mt-8">
-        <Round id="personal" />
-        <Round id="common" />
-      </div>
-      <div className="p-4 my-8">{/* <TotalScore /> */}</div>
-      <BottomSheet />
-      <Reset />
-    </>
+    <AnimatePresence>
+      {loading ? null : (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <div className="flex w-full p-4 gap-5 items-center sticky top-0 bg-black z-10">
+            <Nickname side="A" />
+            <span className="text-3xl font-extrabold text-foreground/50">VS</span>
+            <Nickname side="B" />
+          </div>
+          <div className="p-4 flex flex-col gap-20 mt-8">
+            <Round id="personal" />
+            <Round id="common" />
+          </div>
+          <div className="p-4 my-8">
+            <TotalScore />
+          </div>
+          <BottomSheet />
+          <Reset />
+        </motion.div>
+      )}
+    </AnimatePresence>
   )
 }
 

@@ -1,43 +1,52 @@
 import CostDialog from '../CostDialog'
 import { useAgent, usePlay, useSetting } from '@/hooks'
-import { concat, isUndefined, join, pipe } from '@fxts/core'
+import { concat, join, pipe } from '@fxts/core'
 import { Button, Dialog, Icons } from '@zzz-picker/components'
-import type { Side, TypePick } from '@zzz-picker/provider'
+import type { Side, RoundId } from '@zzz-picker/constant'
 import { getAgentTotalCost } from '@zzz-picker/utils'
 import { useMemo, useState } from 'react'
 
 type Props = {
   side: Side
   index: number
-  roundId: number
-} & TypePick
+  roundId: RoundId
+  agentId: number
+}
 
 const AgentButton: React.FC<Props> = (props) => {
-  const { setRoundPick } = usePlay()
+  const { cost, setState, setCost } = usePlay()
   const { costTable } = useSetting()
-  const agent = useAgent(props.agent!)!
+  const agent = useAgent(props.agentId)!
   const [isOpen, setIsOpen] = useState(false)
-  const agentRarityKey = useMemo(() => {
-    if (isUndefined(agent)) return 'SAlways'
-
-    if (agent.rarity === 'A') return 'AAlways'
-    if (agent.rarity === 'S' && agent.isPickup) return 'SPick'
-
-    return 'SAlways'
-  }, [agent])
   const totalCost = useMemo(() => {
-    return getAgentTotalCost(costTable, {
-      pickup: agentRarityKey,
-      agentRate: props.setting.rate,
-      engineType: props.setting.engineType,
-      engineRate: props.setting.engineRate,
-    })
-  }, [props.setting, agentRarityKey, costTable])
+    const currentCost = cost[props.side].get(props.agentId)!
+
+    return getAgentTotalCost(costTable, currentCost)
+  }, [props.agentId, cost, costTable, props.side])
 
   const onDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    setRoundPick(props.roundId, props.side, props.index, null)
+    setCost((prev) => {
+      const newCost = { ...prev }
+
+      newCost[props.side].delete(props.agentId)
+
+      return newCost
+    })
+    setState((prev) => {
+      const pickList = [...prev[props.roundId][props.side].pickList]
+
+      pickList[props.index] = null
+
+      return {
+        ...prev,
+        [props.roundId]: {
+          ...prev[props.roundId],
+          [props.side]: { ...prev[props.roundId][props.side], pickList },
+        },
+      }
+    })
   }
 
   if (!agent) return null
@@ -68,11 +77,7 @@ const AgentButton: React.FC<Props> = (props) => {
             {totalCost}
           </span>
           <div className="w-full h-full" style={{ backgroundColor: agent.color || 'transparent' }}>
-            <img
-              className="block w-full"
-              src={agent.chzzkSquareImage || agent.labSquareImage}
-              alt={agent.nameKo}
-            />
+            <img className="block w-full" src={agent.profile.url} alt={agent.nameKo} />
           </div>
         </Button>
         <Button
@@ -87,8 +92,7 @@ const AgentButton: React.FC<Props> = (props) => {
         <CostDialog
           roundId={props.roundId}
           side={props.side}
-          agentId={props.agent!}
-          index={props.index}
+          agentId={props.agentId}
           totalCost={totalCost}
         />
       </Dialog>

@@ -9,19 +9,19 @@ export type RoundSide = {
 }
 export type PlayCostMap = Map<number, CostTable>
 export type Rarity = 'S' | 'A'
-export type AgentCostType = 'SPick' | 'SAlways' | 'AAlways'
-export type EngineCostType = 'SExclusive' | 'S' | 'A'
+export type AgentCostType = 'sPickAgent' | 'sAlwaysAgent' | 'aAlwaysAgent'
+export type EngineCostType = 'sExclusiveEngine' | 'sEngine' | 'aEngine'
 export type CostWeight = {
   used: number
   rate: number
 }
 export type CostTable = {
-  agent: {
-    [key in AgentCostType]: CostWeight
-  }
-  engine: {
-    [key in EngineCostType]: CostWeight
-  }
+  sPickAgent: CostWeight
+  sAlwaysAgent: CostWeight
+  aAlwaysAgent: CostWeight
+  sExclusiveEngine: CostWeight
+  sEngine: CostWeight
+  aEngine: CostWeight
 }
 export type DeadlyAssault = {
   version: number
@@ -41,7 +41,7 @@ export type Boss = {
 }
 
 export type AgentCostSetting = {
-  pickup: AgentCostType
+  rarity: AgentCostType
   agentRate: number
   engineType: EngineCostType | null
   engineRate: number

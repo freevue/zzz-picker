@@ -24,8 +24,14 @@ const Score: React.FC<Props> = (props) => {
 
         return value
       },
-      (value) => {
-        // setRoundResultScore(props.roundId, props.side, value)
+      (result) => {
+        setState((prev) => ({
+          ...prev,
+          [props.roundId]: {
+            ...prev[props.roundId],
+            [props.side]: { ...prev[props.roundId][props.side], result },
+          },
+        }))
       }
     )
   }

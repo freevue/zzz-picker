@@ -28,10 +28,23 @@ const Setting: React.FC = () => {
   const onInputChange = (value: number, name: string) => {
     setState((prev) => ({ ...prev, [name]: value }))
   }
+  const onThemeChange = () => {
+    document.documentElement.classList.toggle('dark')
+    document.documentElement.classList.toggle('alice')
+  }
 
   return (
     <div className="flex flex-col w-2xl">
-      <Typo.Heading primary>설정</Typo.Heading>
+      <Typo.Heading primary className="flex items-center">
+        설정
+        <button
+          type="button"
+          onClick={onThemeChange}
+          className="ml-auto cursor-pointer px-2 py-1 bg-[#debe8d] text-[#9a3412] rounded-lg text-sm"
+        >
+          대칭
+        </button>
+      </Typo.Heading>
       <div className="flex flex-col gap-4 mt-8">
         {state.totalCost !== Infinity && (
           <div className="flex mb-4 items-center text-center gap-8">

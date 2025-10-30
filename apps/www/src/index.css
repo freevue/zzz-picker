@@ -7,7 +7,7 @@ body {
   width: 100vw;
   overflow: hidden;
   font-family: 'Paperozi', sans-serif;
-  background-color: var(--color-base);
+  background-color: var(--color-content);
 }
 
 #root {

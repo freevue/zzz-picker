@@ -3,10 +3,13 @@ import { useStore, usePlay, useSetting } from '@/hooks'
 import type { Rarity } from '@/types'
 import { pipe, filter, map, toArray, includes } from '@fxts/core'
 import { Typo, Agent } from '@zzz-picker/components'
+import type { RoundId, Side } from '@zzz-picker/constant'
 import { useState } from 'react'
 
 type Props = {
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
+  side: Side
+  roundId: RoundId
 }
 
 const AgentDialog: React.FC<Props> = (props) => {
@@ -50,7 +53,14 @@ const AgentDialog: React.FC<Props> = (props) => {
                 <Agent.Card
                   {...agent}
                   active={false}
-                  disabled={includes(id, playState.banList)}
+                  disabled={
+                    includes(id, playState.banList) ||
+                    includes(
+                      id,
+                      playState[props.roundId === 'common' ? 'personal' : 'common'][props.side]
+                        .pickList
+                    )
+                  }
                   onClick={props.onClick}
                 />
               </li>

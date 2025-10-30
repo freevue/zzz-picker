@@ -13,13 +13,9 @@ const Time: React.FC<Props> = (props) => {
   const { state, setState } = usePlay()
   const [minute, setMinute] = useState(0)
   const [second, setSecond] = useState(0)
-  const value = useMemo(() => {
-    return state[props.roundId][props.side].time
-  }, [props.roundId, props.side])
+  const value = useMemo(() => state[props.roundId][props.side].time, [props.roundId, props.side])
 
-  const time = useMemo(() => {
-    return minute * 60 + second
-  }, [minute, second])
+  const time = useMemo(() => minute * 60 + second, [minute, second])
   useEffect(() => {
     if (value === 0) {
       setMinute(0)
@@ -66,9 +62,15 @@ const Time: React.FC<Props> = (props) => {
     timerRef.current && clearInterval(timerRef.current)
     timerRef.current = setTimeout(() => {
       timerRef.current = null
-      // setRoundResultTime(props.roundId, props.side, time)
+      setState((prev) => ({
+        ...prev,
+        [props.roundId]: {
+          ...prev[props.roundId],
+          [props.side]: { ...prev[props.roundId][props.side], time },
+        },
+      }))
     }, 300)
-  }, [time])
+  }, [time, props.roundId, props.side])
 
   return (
     <div

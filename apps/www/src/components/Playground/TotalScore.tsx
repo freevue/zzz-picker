@@ -1,20 +1,12 @@
-import { usePlay, useSetting, useStore } from '@/hooks'
-import type { Rarity } from '@/types'
-import { pipe, join, concat, map, sum, flatMap, filter } from '@fxts/core'
+import { usePlay, useSetting } from '@/hooks'
+import { pipe, join, concat, map, sum, filter, toArray, transpose, isNull } from '@fxts/core'
 import { Button, Typo } from '@zzz-picker/components'
-import { DEFAULT_COST_RATE, DEFAULT_TIME_BONUS, type AgentCostType } from '@zzz-picker/constant'
+import { DEFAULT, DEFAULT_COST_RATE } from '@zzz-picker/constant'
 import { getAgentTotalCost } from '@zzz-picker/utils'
 import { animate, motion, useMotionValue, useTransform } from 'motion/react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 
 type Props = {}
-
-function getAgentCostType(rarity: Rarity, isPickup: boolean): AgentCostType {
-  if (rarity === 'A') return 'AAlways'
-  if (rarity === 'S' && isPickup) return 'SPick'
-
-  return 'SAlways'
-}
 
 const HideRecord: React.FC<{ children: React.ReactNode }> = (props) => {
   return (
@@ -48,7 +40,7 @@ const Record: React.FC<{
   return (
     <motion.p
       className={pipe(
-        ['text-text-primary', 'text-3xl', 'font-black', 'flex-1', 'cursor-default'],
+        ['text-foreground', 'text-3xl', 'font-black', 'flex-1', 'cursor-default'],
         concat([props.className || '']),
         concat(props.isHide ? ['opacity-0'] : ['opacity-100']),
         join(' ')
@@ -59,104 +51,75 @@ const Record: React.FC<{
   )
 }
 const TotalScore: React.FC<Props> = () => {
-  const { agent } = useStore()
-  const { costTable, setting } = useSetting()
-  const { round } = usePlay()
-  const [isCounting, setIsCounting] = useState<boolean>(false)
+  const { state: playState, cost, isCounting, setIsCounting } = usePlay()
+  const { costTable, state: settingState } = useSetting()
   const totalCost = useMemo(() => {
-    return {
-      A: pipe(
-        round,
-        flatMap(([, round]) => round.A.pickList),
-        map((pick) => {
-          if (!pick.agent) return 0
+    const [A, B] = pipe(
+      [playState.common, playState.personal],
+      map(({ A, B }) => [
+        pipe(
+          A.pickList,
+          filter((agentId) => !isNull(agentId)),
+          map((agentId) => cost.A.get(agentId)!),
+          map(getAgentTotalCost(costTable)),
+          sum
+        ),
+        pipe(
+          B.pickList,
+          filter((agentId) => !isNull(agentId)),
+          map((agentId) => cost.B.get(agentId)!),
+          map(getAgentTotalCost(costTable)),
+          sum
+        ),
+      ]),
+      (list) => transpose(...list),
+      map(sum),
+      toArray
+    )
 
-          return pipe(
-            agent.get(pick.agent)!,
-            (currentAgent) => getAgentCostType(currentAgent.rarity, currentAgent.isPickup),
-            (pickup) => ({
-              pickup,
-              agentRate: pick.setting.rate,
-              engineType: pick.setting.engineType,
-              engineRate: pick.setting.engineRate,
-            }),
-            getAgentTotalCost(costTable)
-          )
-        }),
-        sum
-      ),
-      B: pipe(
-        round,
-        flatMap(([, round]) => round.B.pickList),
-        map((pick) => {
-          if (!pick.agent) return 0
-
-          return pipe(
-            agent.get(pick.agent)!,
-            (currentAgent) => getAgentCostType(currentAgent.rarity, currentAgent.isPickup),
-            (pickup) => ({
-              pickup,
-              agentRate: pick.setting.rate,
-              engineType: pick.setting.engineType,
-              engineRate: pick.setting.engineRate,
-            }),
-            getAgentTotalCost(costTable)
-          )
-        }),
-        sum
-      ),
-    }
-  }, [round, costTable, agent])
+    return { A, B }
+  }, [playState, cost, costTable])
   const roundTotalScore = useMemo(() => {
-    return {
-      A: pipe(
-        round,
-        map(([, round]) => round.A.result.score),
-        sum
-      ),
-      B: pipe(
-        round,
-        map(([, round]) => round.B.result.score),
-        sum
-      ),
-    }
-  }, [round])
+    const [A, B] = pipe(
+      [playState.common, playState.personal],
+      map(({ A, B }) => [A.result, B.result]),
+      (list) => transpose(...list),
+      map(sum),
+      toArray
+    )
+
+    return { A, B }
+  }, [playState])
   const roundTotalTime = useMemo(() => {
-    return {
-      A: pipe(
-        round,
-        map(([, round]) => round.A.result.timer || 180),
-        filter((value) => 180 > value),
-        map((value) => (180 - value) * DEFAULT_TIME_BONUS),
-        sum
-      ),
-      B: pipe(
-        round,
-        map(([, round]) => round.B.result.timer || 180),
-        filter((value) => 180 > value),
-        map((value) => (180 - value) * DEFAULT_TIME_BONUS),
-        sum
-      ),
-    }
-  }, [round])
+    const [A, B] = pipe(
+      [playState.common, playState.personal],
+      map(({ A, B }) => [A.time && 180 - A.time, B.time && 180 - B.time]),
+      (list) => transpose(...list),
+      map(sum),
+      map((value) => value * DEFAULT.TIME_BONUS),
+      toArray
+    )
+
+    return { A, B }
+  }, [playState])
   const totalScore = useMemo(() => {
     return {
       A: sum([
         roundTotalScore.A,
-        roundTotalScore.A * (setting.totalCost - totalCost.A) * DEFAULT_COST_RATE,
+        settingState.totalCost === Infinity
+          ? 0
+          : roundTotalScore.A * (settingState.totalCost - totalCost.A) * DEFAULT_COST_RATE,
         roundTotalTime.A,
       ]),
       B: sum([
         roundTotalScore.B,
-        roundTotalScore.B * (setting.totalCost - totalCost.B) * DEFAULT_COST_RATE,
+        settingState.totalCost === Infinity
+          ? 0
+          : roundTotalScore.B * (settingState.totalCost - totalCost.B) * DEFAULT_COST_RATE,
         roundTotalTime.B,
       ]),
     }
-  }, [roundTotalScore, roundTotalTime, totalCost])
-
-  useEffect(() => {
-    setIsCounting(false)
-  }, [round])
+  }, [roundTotalScore, roundTotalTime, totalCost, settingState.totalCost])
 
   return (
     <div>
@@ -168,7 +131,11 @@ const TotalScore: React.FC<Props> = () => {
           <Record
             className={pipe(
               ['text-right'],
-              concat(totalCost.A > setting.totalCost ? ['text-red-500!'] : []),
+              concat(
+                settingState.totalCost !== Infinity && totalCost.A > settingState.totalCost
+                  ? ['text-red-500!']
+                  : []
+              ),
               join(' ')
             )}
             value={totalCost.A}
@@ -180,7 +147,11 @@ const TotalScore: React.FC<Props> = () => {
           <Record
             className={pipe(
               ['text-left'],
-              concat(totalCost.B > setting.totalCost ? ['text-red-500!'] : []),
+              concat(
+                settingState.totalCost !== Infinity && totalCost.B > settingState.totalCost
+                  ? ['text-red-500!']
+                  : []
+              ),
               join(' ')
             )}
             value={totalCost.B}
@@ -221,25 +192,31 @@ const TotalScore: React.FC<Props> = () => {
             isHide={!isCounting}
           />
         </div>
-        <div className="flex items-center justify-between">
-          <Record
-            className="text-right"
-            value={isCounting ? (setting.totalCost - totalCost.A) * DEFAULT_COST_RATE * 100 : 0}
-            fixed={2}
-            prefix="%"
-            isHide={!isCounting}
-          />
-          <Typo.Heading className="w-1/3 text-xl text-center cursor-default">
-            Cost 보너스 배율
-          </Typo.Heading>
-          <Record
-            className="text-left"
-            value={isCounting ? (setting.totalCost - totalCost.B) * DEFAULT_COST_RATE * 100 : 0}
-            fixed={2}
-            prefix="%"
-            isHide={!isCounting}
-          />
-        </div>
+        {settingState.totalCost !== Infinity && (
+          <div className="flex items-center justify-between">
+            <Record
+              className="text-right"
+              value={
+                isCounting ? (settingState.totalCost - totalCost.A) * DEFAULT_COST_RATE * 100 : 0
+              }
+              fixed={2}
+              prefix="%"
+              isHide={!isCounting}
+            />
+            <Typo.Heading className="w-1/3 text-xl text-center cursor-default">
+              Cost 보너스 배율
+            </Typo.Heading>
+            <Record
+              className="text-left"
+              value={
+                isCounting ? (settingState.totalCost - totalCost.B) * DEFAULT_COST_RATE * 100 : 0
+              }
+              fixed={2}
+              prefix="%"
+              isHide={!isCounting}
+            />
+          </div>
+        )}
         <div className="flex items-center justify-between mt-4">
           <div className="text-right flex-1 relative group">
             <Record

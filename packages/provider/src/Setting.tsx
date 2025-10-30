@@ -11,7 +11,7 @@ import {
   fromEntries,
   isEmpty,
 } from '@fxts/core'
-import { DEFAULT_COST_TABLE, DEFAULT, type CostTable } from '@zzz-picker/constant'
+import { DEFAULT, type CostTable } from '@zzz-picker/constant'
 import { createContext, useContext, useEffect, useState } from 'react'
 
 type Optios = {
@@ -42,14 +42,14 @@ export const Context = createContext<State>({
     allowAgent: [],
   },
   setState: () => {},
-  costTable: DEFAULT_COST_TABLE,
+  costTable: DEFAULT.COST_TABLE,
   setCostTable: () => {},
 })
 
 const Provider = (props: Props) => {
   const { replace } = useContext(RouterContext)
   const [state, setState] = useState<SettingState>(props.option)
-  const [costTable, setCostTable] = useState(DEFAULT_COST_TABLE)
+  const [costTable, setCostTable] = useState(DEFAULT.COST_TABLE)
 
   useEffect(() => {
     pipe(

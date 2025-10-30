@@ -1,17 +1,7 @@
 import AgentDialog from './AgentDialog'
 import { Plus, Cross } from '@/Icons'
 import { useAgent, usePlay, useSetting } from '@/hooks'
-import {
-  pipe,
-  zipWithIndex,
-  map,
-  toArray,
-  join,
-  concat,
-  isNull,
-  filter,
-  findIndex,
-} from '@fxts/core'
+import { pipe, zipWithIndex, map, toArray, join, concat, isNull, findIndex } from '@fxts/core'
 import { Button, Dialog, Typo } from '@zzz-picker/components'
 import { useState } from 'react'
 
@@ -55,10 +45,11 @@ const BanButton: React.FC<{ id: number | null; index: number }> = (props) => {
 
     setState((prev) => {
       const banList = [...prev.banList]
+      const prevValue = banList[props.index]
 
       if (currentIndex !== props.index) {
         banList[props.index] = currentValue
-        banList[currentIndex] = null
+        banList[currentIndex] = prevValue || null
       }
 
       return { ...prev, banList }

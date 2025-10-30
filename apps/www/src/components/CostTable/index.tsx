@@ -32,18 +32,18 @@ const CostTable: React.FC = () => {
           </tr>
           <tr>
             <Th>S 픽업</Th>
-            <Td name="agent.SPick.used" value={costTable.agent.SPick.used} />
-            <Td name="agent.SPick.rate" value={costTable.agent.SPick.rate} />
+            <Td name="sPickAgent.used" value={costTable.sPickAgent.used} />
+            <Td name="sPickAgent.rate" value={costTable.sPickAgent.rate} />
           </tr>
           <tr>
             <Th>S 상시</Th>
-            <Td name="agent.SAlways.used" value={costTable.agent.SAlways.used} />
-            <Td name="agent.SAlways.rate" value={costTable.agent.SAlways.rate} />
+            <Td name="sAlwaysAgent.used" value={costTable.sAlwaysAgent.used} />
+            <Td name="sAlwaysAgent.rate" value={costTable.sAlwaysAgent.rate} />
           </tr>
           <tr>
             <Th>A 상시</Th>
-            <Td name="agent.AAlways.used" value={costTable.agent.AAlways.used} />
-            <Td name="agent.AAlways.rate" value={costTable.agent.AAlways.rate} />
+            <Td name="aAlwaysAgent.used" value={costTable.aAlwaysAgent.used} />
+            <Td name="aAlwaysAgent.rate" value={costTable.aAlwaysAgent.rate} />
           </tr>
         </Table>
         <Table>
@@ -54,15 +54,15 @@ const CostTable: React.FC = () => {
           </tr>
           <tr>
             <Th>전용 무기</Th>
-            <Td name="engine.SExclusive.used" value={costTable.engine.SExclusive.used} />
-            <Td name="engine.SExclusive.rate" value={costTable.engine.SExclusive.rate} />
+            <Td name="sExclusiveEngine.used" value={costTable.sExclusiveEngine.used} />
+            <Td name="sExclusiveEngine.rate" value={costTable.sExclusiveEngine.rate} />
           </tr>
           <tr>
             <Th>S</Th>
-            <Td name="engine.S.used" value={costTable.engine.S.used} />
+            <Td name="sEngine.used" value={costTable.sEngine.used} />
             <Td
-              name="engine.S.rate"
-              value={costTable.engine.S.rate}
+              name="sEngine.rate"
+              value={costTable.sEngine.rate}
               append={
                 <span className="text-sm block px-2 text-foreground/70 text-center">
                   4 ~ 5인 경우
@@ -72,8 +72,8 @@ const CostTable: React.FC = () => {
           </tr>
           <tr>
             <Th>A</Th>
-            <Td name="engine.A.used" value={costTable.engine.A.used} />
-            <Td name="engine.A.rate" value={costTable.engine.A.rate} />
+            <Td name="aEngine.used" value={costTable.aEngine.used} />
+            <Td name="aEngine.rate" value={costTable.aEngine.rate} />
           </tr>
         </Table>
         <p className="text-sm text-foreground/70">

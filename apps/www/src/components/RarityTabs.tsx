@@ -30,7 +30,7 @@ const Tabs: React.FC<Props> = (props) => {
                 ['w-full', 'py-1', 'font-extrabold', 'text-lg'],
                 concat(
                   props.value === item
-                    ? ['bg-primary', 'text-base']
+                    ? ['bg-primary', 'text-focus']
                     : ['text-foreground', 'bg-panel', 'hover:text-secondary']
                 ),
                 join(' ')

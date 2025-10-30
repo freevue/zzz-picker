@@ -56,6 +56,12 @@ const Header = () => {
             </button>
           </li>
         </ul>
+        <div className="ml-auto text-right">
+          <p className="text-sm text-foreground/70">v3.0.0</p>
+          <p className="hidden alice:block text-foreground">
+            가독성? 앨리스가 잘보이니 가독성은 좋음.
+          </p>
+        </div>
       </div>
       <Dialog isOpen={isInformationOpen} onClose={() => setIsInformationOpen(false)}>
         <Information />

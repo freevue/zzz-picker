@@ -34,7 +34,7 @@ const CustomPlay: React.FC = () => {
                   'overflow-x-hidden',
                   'scrollbar-hidden',
                 ],
-                concat(['bg-cover', 'bg-no-repeat', 'bg-[180px_30px]']),
+                concat(['bg-cover', 'bg-no-repeat', 'bg-[left_center]']),
                 concat([
                   'alice:bg-[url("https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/08/04/01f84d7fdcdbef65d8a9c94416e81d91_2128704813195499621.png?x-oss-process=image%2Fformat%2Cwebp")]',
                 ]),

@@ -1,35 +1,44 @@
 import { useAgent, usePlay } from '@/hooks'
-import { pipe, join, concat, map, zipWithIndex, toArray, slice } from '@fxts/core'
+import { pipe, join, concat, map, zipWithIndex, toArray } from '@fxts/core'
 import { Form, Button, Typo } from '@zzz-picker/components'
 import { PRETTY_AGENT_ID } from '@zzz-picker/constant'
-import type { Side, TypeEngine } from '@zzz-picker/provider'
+import type { Side, RoundId, EngineCostType } from '@zzz-picker/constant'
 import { useMemo } from 'react'
 
 type Props = {
-  roundId: number
+  roundId: RoundId
   side: Side
   agentId: number
-  index: number
   totalCost: number
 }
 
 const CostDialog: React.FC<Props> = (props) => {
   const agent = useAgent(props.agentId)!
-  const { round, setRoundCostSetting } = usePlay()
-  const currentCost = useMemo(() => {
-    return pipe(
-      round.get(props.roundId)!,
-      (round) => round[props.side].pickList[props.index].setting
-    )
-  }, [round, props.roundId, props.side, props.index])
+  const { cost, setCost } = usePlay()
+  const currentCost = useMemo(
+    () => cost[props.side].get(props.agentId)!,
+    [cost, props.agentId, props.side]
+  )
 
   const onRateChange = (value: number, name: string) => {
-    setRoundCostSetting(props.roundId, props.side, props.index, { ...currentCost, [name]: value })
+    setCost((prev) => {
+      const currentCost = new Map(prev[props.side])
+
+      currentCost.set(props.agentId, { ...currentCost.get(props.agentId)!, [name]: value })
+
+      return { ...prev, [props.side]: currentCost }
+    })
   }
   const onEngineChange = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const engineType = (event.currentTarget.value || null) as TypeEngine | null
+    const engineType = (event.currentTarget.value || null) as EngineCostType | null
 
-    setRoundCostSetting(props.roundId, props.side, props.index, { ...currentCost, engineType })
+    setCost((prev) => {
+      const currentCost = new Map(prev[props.side])
+
+      currentCost.set(props.agentId, { ...currentCost.get(props.agentId)!, engineType })
+
+      return { ...prev, [props.side]: currentCost }
+    })
   }
 
   return (
@@ -63,7 +72,7 @@ const CostDialog: React.FC<Props> = (props) => {
               ),
               join(' ')
             )}
-            src={agent.zzzBannerImage}
+            src={agent.banner.url}
             alt={agent.nameKo}
           />
         </div>
@@ -78,8 +87,8 @@ const CostDialog: React.FC<Props> = (props) => {
                 min={0}
                 max={6}
                 step={1}
-                value={currentCost.rate}
-                name="rate"
+                value={currentCost.agentRate}
+                name="agentRate"
                 onChange={onRateChange}
               />
             </div>
@@ -88,12 +97,11 @@ const CostDialog: React.FC<Props> = (props) => {
               <ul className={pipe(['flex', 'rounded-lg', 'overflow-hidden'], join(' '))}>
                 {pipe(
                   [
-                    { name: '전용', value: 'SExclusive' },
-                    { name: 'S급', value: 'S' },
-                    { name: 'A급', value: 'A' },
+                    { name: '전용', value: 'sExclusiveEngine' },
+                    { name: 'S급', value: 'sEngine' },
+                    { name: 'A급', value: 'aEngine' },
                     { name: '미착용', value: null },
                   ],
-                  slice(agent.rarity === 'A' ? 1 : 0, 4),
                   zipWithIndex,
                   map(([index, item]) => (
                     <li key={index} className="flex-1">
@@ -119,19 +127,17 @@ const CostDialog: React.FC<Props> = (props) => {
                 )}
               </ul>
             </div>
-            {currentCost.engineType && (
-              <div>
-                <Typo.Heading className="text-xl mb-2">엔진 돌파</Typo.Heading>
-                <Form.Count
-                  min={0}
-                  max={5}
-                  step={1}
-                  value={currentCost.engineRate}
-                  name="engineRate"
-                  onChange={onRateChange}
-                />
-              </div>
-            )}
+            <div>
+              <Typo.Heading className="text-xl mb-2">엔진 돌파</Typo.Heading>
+              <Form.Count
+                min={1}
+                max={5}
+                step={1}
+                value={currentCost.engineRate}
+                name="engineRate"
+                onChange={onRateChange}
+              />
+            </div>
           </div>
         </div>
       </div>
