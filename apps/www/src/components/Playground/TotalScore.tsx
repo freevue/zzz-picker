@@ -122,7 +122,7 @@ const TotalScore: React.FC<Props> = () => {
   }, [roundTotalScore, roundTotalTime, totalCost, settingState.totalCost])
 
   return (
-    <div>
+    <div className={pipe(['relative'], concat([]), join(' '))}>
       <Typo.Heading className="text-center" primary>
         결과
       </Typo.Heading>

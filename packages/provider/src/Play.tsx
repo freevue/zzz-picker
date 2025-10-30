@@ -1,3 +1,4 @@
+import { Context as RouterContext } from './Router'
 import { Context as SettingContext } from './Setting'
 import { map, pipe, range, toArray } from '@fxts/core'
 import {
@@ -71,6 +72,7 @@ const Provider = (props: Props) => {
     A: new Map(),
     B: new Map(),
   })
+  const { path } = useContext(RouterContext)
   const { state: settingState } = useContext(SettingContext)
   const [isCounting, setIsCounting] = useState<boolean>(false)
 
@@ -86,17 +88,32 @@ const Provider = (props: Props) => {
   useEffect(() => {
     setIsCounting(false)
   }, [state])
+  useEffect(() => {
+    const prevItem = window.localStorage.getItem('zzz-picker-play')
 
-  // useEffect(() => {
-  //   pipe(
-  //     [...round.entries()],
-  //     map(([, round]) => round),
-  //     toArray,
-  //     (list) => {
-  //       window.localStorage.setItem('zzz-picker-round', JSON.stringify(list))
-  //     }
-  //   )
-  // }, [round])
+    if (!prevItem) return
+
+    const data = JSON.parse(prevItem)[path]
+
+    if (data) {
+      setCost({
+        A: new Map(data.cost.A),
+        B: new Map(data.cost.B),
+      })
+      setState(data.state)
+    }
+  }, [path])
+  useEffect(() => {
+    window.localStorage.setItem(
+      'zzz-picker-play',
+      JSON.stringify({
+        [path]: {
+          state,
+          cost: { A: [...cost.A.entries()], B: [...cost.B.entries()] },
+        },
+      })
+    )
+  }, [path, state, cost])
 
   return (
     <Context.Provider
@@ -119,6 +136,8 @@ const Provider = (props: Props) => {
                 A: new Map(),
                 B: new Map(),
               })
+
+              window.localStorage.removeItem('zzz-picker-play')
             }
           )
         },

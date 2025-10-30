@@ -48,6 +48,7 @@ const CustomPlay: React.FC = () => {
                   'scrollbar-hidden',
                   'min-h-screen',
                   'bg-base',
+                  'relative',
                 ],
                 join(' ')
               )}

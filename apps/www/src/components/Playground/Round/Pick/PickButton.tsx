@@ -88,6 +88,7 @@ const PickButton: React.FC<Props> = (props) => {
             'border-l-1',
             'group-first/list:border-l-2',
             'group-last/list:border-r-2',
+            'backdrop-blur-2xl',
           ],
           concat(
             props.side === 'A'

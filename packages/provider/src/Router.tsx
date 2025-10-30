@@ -1,5 +1,5 @@
-import { pipe, map, fromEntries, entries, each } from '@fxts/core'
-import { createContext, useEffect, useMemo, useState } from 'react'
+import { pipe, fromEntries, entries, each } from '@fxts/core'
+import { createContext, useMemo, useState } from 'react'
 
 type Props = {
   children: React.ReactNode
