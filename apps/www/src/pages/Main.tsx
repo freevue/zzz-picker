@@ -1,8 +1,9 @@
 import { useStore } from '@/hooks'
 import { pipe, zipWithIndex, map, toArray, join, concat, filter } from '@fxts/core'
+import { Dialog, Typo } from '@zzz-picker/components'
 import { DEFAULT } from '@zzz-picker/constant'
 import { motion } from 'motion/react'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 type Props = {
   href: string
@@ -74,6 +75,7 @@ const LINKS = [
 
 const Main: React.FC = () => {
   const { gqlAgents } = useStore()
+  const [isOpen, setIsOpen] = useState(false)
   const allowAgents = useMemo(() => {
     return pipe(
       gqlAgents,
@@ -84,21 +86,43 @@ const Main: React.FC = () => {
   }, [gqlAgents])
 
   return (
-    <div className="size-full flex flex-col items-center justify-center gap-10">
-      <img src="/images/main/logo.png" alt="logo" className="w-32 block hover:animate-turbo" />
-      <div className="flex items-center justify-center gap-10">
-        {pipe(
-          LINKS,
-          zipWithIndex,
-          map(([index, link]) => (
-            <Link key={index} href={`${link.href(allowAgents)}`} url={link.url} delay={index * 0.2}>
-              {link.title}
-            </Link>
-          )),
-          toArray
-        )}
+    <>
+      <div className="size-full flex flex-col items-center justify-center gap-10">
+        <img src="/images/main/logo.png" alt="logo" className="w-32 block hover:animate-turbo" />
+        <div className="flex items-center justify-center gap-10">
+          {pipe(
+            LINKS,
+            zipWithIndex,
+            map(([index, link]) => (
+              <Link
+                key={index}
+                href={`${link.href(allowAgents)}`}
+                url={link.url}
+                delay={index * 0.2}
+              >
+                {link.title}
+              </Link>
+            )),
+            toArray
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={() => setIsOpen(true)}
+          className="text-foreground/70 text-lg font-bold hover:text-secondary cursor-pointer focus:outline-none"
+        >
+          룰 설명서
+        </button>
       </div>
-    </div>
+      <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <div className="flex flex-col gap-4 w-2xl">
+          <Typo.Heading primary>룰 설명서</Typo.Heading>
+          <div className="text-foreground text-lg">
+            <p>룰은 정리되면 추가될 예정입니다.</p>
+          </div>
+        </div>
+      </Dialog>
+    </>
   )
 }
 
