@@ -102,9 +102,7 @@ const TotalScore: React.FC<Props> = () => {
       map((value) => value * DEFAULT.TIME_BONUS),
       toArray
     )
-
-    console.log(A, B)
-
+    
     return { A, B }
   }, [playState])
   const totalScore = useMemo(() => {
