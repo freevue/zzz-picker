@@ -93,12 +93,17 @@ const TotalScore: React.FC<Props> = () => {
   const roundTotalTime = useMemo(() => {
     const [A, B] = pipe(
       [playState.common, playState.personal],
-      map(({ A, B }) => [A.time && 180 - A.time, B.time && 180 - B.time]),
+      map(({ A, B }) => [
+        180 >= A.time && A.time > 0 ? 180 - A.time : 0,
+        180 >= B.time && B.time > 0 ? 180 - B.time : 0,
+      ]),
       (list) => transpose(...list),
       map(sum),
       map((value) => value * DEFAULT.TIME_BONUS),
       toArray
     )
+
+    console.log(A, B)
 
     return { A, B }
   }, [playState])
