@@ -1,7 +1,6 @@
 import { useAgent, usePlay } from '@/hooks'
 import { pipe, join, concat, map, zipWithIndex, toArray } from '@fxts/core'
 import { Form, Button, Typo } from '@zzz-picker/components'
-import { PRETTY_AGENT_ID } from '@zzz-picker/constant'
 import type { Side, RoundId, EngineCostType } from '@zzz-picker/constant'
 import { useMemo } from 'react'
 
@@ -65,10 +64,10 @@ const CostDialog: React.FC<Props> = (props) => {
               ['w-full', 'block'],
               concat([]),
               concat(
-                props.agentId === PRETTY_AGENT_ID
-                  ? // ? ['fill-white', 'drop-shadow-2xl', 'drop-shadow-white']
-                    ['rounded-bl-2xl', 'rounded-tr-2xl', 'border-2', 'border-secondary']
-                  : []
+                []
+                // props.agentId === PRETTY_AGENT_ID
+                //   ? ['rounded-bl-2xl', 'rounded-tr-2xl', 'border-2', 'border-secondary']
+                //   : []
               ),
               join(' ')
             )}

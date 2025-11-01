@@ -51,8 +51,8 @@ const BossDialog: React.FC<Props> = (props) => {
                       'w-full',
                       'aspect-[3/4]',
                       'overflow-hidden',
-                      'rounded-bl-2xl',
-                      'rounded-tr-2xl',
+                      'rounded-bl-4xl',
+                      'rounded-tr-4xl',
                       'border-2',
                     ],
                     concat(

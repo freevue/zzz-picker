@@ -1,5 +1,5 @@
 export type Side = 'A' | 'B'
-export type RoundId = 'common' | 'personal'
+export type RoundId = 'common' | 'personal' | 'unlimited'
 export type SelectAgent = number | null
 export type SelectBoss = number | null
 export type RoundSide = {
@@ -29,6 +29,18 @@ export type DeadlyAssault = {
   boss1: number
   boss2: number
   boss3: number
+}
+export type CommonRound = {
+  key: 'common'
+  title: string
+  boss: SelectBoss
+} & Record<Side, RoundSide>
+export type PersonalRound = {
+  key: 'personal'
+  title: string
+} & Record<Side, RoundSide & { boss: SelectBoss }>
+export type UnlimitedRound = Omit<PersonalRound, 'key'> & {
+  key: 'unlimited'
 }
 
 // ---

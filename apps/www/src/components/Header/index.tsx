@@ -1,13 +1,15 @@
 import Information from './Information'
 import Setting from './Setting'
-import { Info, Setting as SettingIcon } from '@/Icons'
-import { Dialog } from '@zzz-picker/components'
+import { Dialog, Icons } from '@zzz-picker/components'
 import { useState } from 'react'
 
 const Header = () => {
   const [isInformationOpen, setIsInformationOpen] = useState(false)
   const [isSettingOpen, setIsSettingOpen] = useState(false)
 
+  const onBackClick = () => {
+    window.history.back()
+  }
   const onInformationClick = () => {
     setIsInformationOpen(true)
   }
@@ -19,6 +21,15 @@ const Header = () => {
     <>
       <div className="sticky top-0 left-0 p-4 w-full z-20 h-16 flex items-center bg-content">
         <ul className="flex gap-4 items-center">
+          <li>
+            <button
+              type="button"
+              onClick={onBackClick}
+              className="size-8 block cursor-pointer focus:outline-none p-1"
+            >
+              <Icons.Back className="stroke-foreground block w-full" />
+            </button>
+          </li>
           <li>
             <a
               href="https://www.youtube.com/@nZoeTV"
@@ -43,7 +54,7 @@ const Header = () => {
               type="button"
               onClick={onInformationClick}
             >
-              <Info className="cursor-pointer stroke-white/70 block w-full" />
+              <Icons.Info className="cursor-pointer stroke-white/70 block w-full" />
             </button>
           </li>
           <li>
@@ -52,7 +63,7 @@ const Header = () => {
               type="button"
               onClick={onSettingClick}
             >
-              <SettingIcon className="cursor-pointer stroke-white/70 block w-full" />
+              <Icons.Setting className="cursor-pointer stroke-white/70 block w-full" />
             </button>
           </li>
         </ul>

@@ -14,9 +14,10 @@ type Props = {
 
 const Pick: React.FC<Props> = (props) => {
   const { state } = usePlay()
-  const pickList = useMemo(() => {
-    return state[props.roundId][props.side].pickList
-  }, [state[props.roundId][props.side].pickList, props.roundId, props.side])
+  const pickList = useMemo(
+    () => state[props.roundId][props.side].pickList,
+    [state[props.roundId][props.side].pickList, props.roundId, props.side]
+  )
 
   return (
     <div className="flex-1">

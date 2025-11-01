@@ -4,22 +4,19 @@ import { map, pipe, range, toArray } from '@fxts/core'
 import {
   DEFAULT,
   type SelectAgent,
-  type SelectBoss,
-  type RoundSide,
   type Side,
   type AgentCostSetting,
+  type CommonRound,
+  type PersonalRound,
+  type UnlimitedRound,
 } from '@zzz-picker/constant'
 import { createContext, useContext, useEffect, useState } from 'react'
 
 type PlayState = {
   banList: Array<SelectAgent>
-  common: {
-    title: string
-    boss: SelectBoss
-  } & Record<Side, RoundSide>
-  personal: {
-    title: string
-  } & Record<Side, RoundSide & { boss: SelectBoss }>
+  common: CommonRound
+  personal: PersonalRound
+  unlimited: UnlimitedRound
 }
 
 type Props = {
@@ -41,16 +38,24 @@ type State = {
 const DEFAULT_STATE = {
   banList: [],
   common: {
+    key: 'common',
     title: '공용 무대',
     boss: null,
     A: DEFAULT.ROUNDE_SIDE,
     B: DEFAULT.ROUNDE_SIDE,
-  },
+  } as CommonRound,
   personal: {
+    key: 'personal',
     title: '개인 무대',
     A: { ...DEFAULT.ROUNDE_SIDE, boss: null },
     B: { ...DEFAULT.ROUNDE_SIDE, boss: null },
-  },
+  } as PersonalRound,
+  unlimited: {
+    key: 'unlimited',
+    title: '개인 무대',
+    A: { ...DEFAULT.ROUNDE_SIDE, boss: null },
+    B: { ...DEFAULT.ROUNDE_SIDE, boss: null },
+  } as UnlimitedRound,
 }
 
 export const Context = createContext<State>({

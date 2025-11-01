@@ -1,4 +1,4 @@
-import { Common, Personal } from './BossButton'
+import { Common, Double } from './BossButton'
 import Pick from './Pick'
 import { usePlay } from '@/hooks'
 import { Typo } from '@zzz-picker/components'
@@ -21,8 +21,7 @@ const Round: React.FC<Props> = (props) => {
       <div className="flex justify-between items-center -mt-11">
         <Pick side="A" roundId={props.id} />
         <div className="flex items-center justify-center w-44">
-          {props.id === 'common' && <Common />}
-          {props.id === 'personal' && <Personal />}
+          {props.id === 'common' ? <Common /> : <Double roundId={props.id} />}
         </div>
         <Pick side="B" roundId={props.id} />
       </div>

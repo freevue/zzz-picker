@@ -47,7 +47,7 @@ const Setting: React.FC = () => {
         </button>
       </Typo.Heading>
       {path === '/unlimited' ? (
-        <div className="overflow-hidden rounded-2xl mt-4">
+        <div className="overflow-hidden rounded-4xl mt-4">
           <img src="/images/bg.jpg" alt="" />
         </div>
       ) : (

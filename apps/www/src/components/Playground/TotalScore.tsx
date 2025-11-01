@@ -1,4 +1,4 @@
-import { usePlay, useSetting } from '@/hooks'
+import { usePlay, useSetting, useRouter } from '@/hooks'
 import { pipe, join, concat, map, sum, filter, toArray, transpose, isNull } from '@fxts/core'
 import { Button, Typo } from '@zzz-picker/components'
 import { DEFAULT, DEFAULT_COST_RATE } from '@zzz-picker/constant'
@@ -52,10 +52,14 @@ const Record: React.FC<{
 }
 const TotalScore: React.FC<Props> = () => {
   const { state: playState, cost, isCounting, setIsCounting } = usePlay()
+  const { path } = useRouter()
   const { costTable, state: settingState } = useSetting()
+  const roundList = useMemo(() => {
+    return [playState.personal, playState[path === '/unlimited' ? 'unlimited' : 'common']]
+  }, [path, playState])
   const totalCost = useMemo(() => {
     const [A, B] = pipe(
-      [playState.common, playState.personal],
+      roundList,
       map(({ A, B }) => [
         pipe(
           A.pickList,
@@ -78,10 +82,10 @@ const TotalScore: React.FC<Props> = () => {
     )
 
     return { A, B }
-  }, [playState, cost, costTable])
+  }, [cost, costTable, roundList])
   const roundTotalScore = useMemo(() => {
     const [A, B] = pipe(
-      [playState.common, playState.personal],
+      roundList,
       map(({ A, B }) => [A.result, B.result]),
       (list) => transpose(...list),
       map(sum),
@@ -89,10 +93,10 @@ const TotalScore: React.FC<Props> = () => {
     )
 
     return { A, B }
-  }, [playState])
+  }, [roundList])
   const roundTotalTime = useMemo(() => {
     const [A, B] = pipe(
-      [playState.common, playState.personal],
+      roundList,
       map(({ A, B }) => [
         180 >= A.time && A.time > 0 ? 180 - A.time : 0,
         180 >= B.time && B.time > 0 ? 180 - B.time : 0,
@@ -102,9 +106,9 @@ const TotalScore: React.FC<Props> = () => {
       map((value) => value * DEFAULT.TIME_BONUS),
       toArray
     )
-    
+
     return { A, B }
-  }, [playState])
+  }, [roundList])
   const totalScore = useMemo(() => {
     return {
       A: sum([
