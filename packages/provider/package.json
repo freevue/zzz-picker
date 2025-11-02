@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "@zzz-picker/constant": "workspace:*",
-    "@zzz-picker/sheets": "workspace:*",
     "@zzz-picker/graphql": "workspace:*",
     "@supabase/supabase-js": "^2.76.1",
     "@apollo/client": "^4.0.7",
