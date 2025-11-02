@@ -11,7 +11,7 @@
       "import": "./src/index.ts"
     }
   },
-  "dependencies": {
+  "peerDependencies": {
     "@apollo/client": "^4.0.7"
   }
 }

@@ -139,9 +139,6 @@ importers:
       '@zzz-picker/graphql':
         specifier: workspace:*
         version: link:../graphql
-      '@zzz-picker/sheets':
-        specifier: workspace:*
-        version: link:../sheets
       dayjs:
         specifier: ^1.11.18
         version: 1.11.18
@@ -161,8 +158,6 @@ importers:
       '@types/react-dom':
         specifier: ^19.1.9
         version: 19.2.2(@types/react@19.2.2)
-
-  packages/sheets: {}
 
   packages/tailwind-config:
     dependencies:
