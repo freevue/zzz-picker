@@ -27,4 +27,6 @@ dist-ssr
 scripts/assets
 coverage
 *.mock.json
+build
+.storybook
 # public/agents.json
