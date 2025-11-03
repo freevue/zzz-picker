@@ -37,3 +37,12 @@ html.alice {
   --color-foreground: #eef2f7;
   --color-table: #1e2530;
 }
+
+html.v2 {
+  --color-primary: #fbbf24;
+
+  --color-base: #0b0500;
+  --color-content: #e3ac1a;
+
+  --color-foreground: #ffeeda;
+}
