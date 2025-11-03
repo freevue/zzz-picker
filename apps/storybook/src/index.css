@@ -1,0 +1,16 @@
+@import '@zzz-picker/tailwind-config';
+@import '@zzz-picker/components/styles';
+
+/* 앱별 커스텀 스타일 */
+body {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  font-family: 'Paperozi', sans-serif;
+  background-color: var(--color-base);
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
