@@ -57,6 +57,9 @@ importers:
       '@zzz-picker/components':
         specifier: workspace:*
         version: link:../../packages/components
+      '@zzz-picker/provider':
+        specifier: workspace:*
+        version: link:../../packages/provider
       '@zzz-picker/tailwind-config':
         specifier: workspace:*
         version: link:../../packages/tailwind-config
