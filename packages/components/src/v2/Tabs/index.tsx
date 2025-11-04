@@ -34,10 +34,10 @@ const Tabs: React.FC<Props> = (props) => {
             value={tab.value}
             className={pipe(
               [
+                'h-11',
                 'focus:outline-none',
                 'flex-1',
                 'px-4',
-                'py-2',
                 'min-w-fit',
                 'cursor-pointer',
                 'flex',

@@ -1,3 +1,4 @@
+import Count from './Count'
 import Input from './Input'
 import Nickname from './Nickname'
 import Party from './Party'
@@ -14,6 +15,7 @@ type FormType = {
   Input: typeof Input
   Time: typeof Time
   Nickname: typeof Nickname
+  Count: typeof Count
 } & React.FC<Props>
 
 const Form: FormType = (props) => {
@@ -31,5 +33,6 @@ Form.Party = Party
 Form.Input = Input
 Form.Time = Time
 Form.Nickname = Nickname
+Form.Count = Count
 
 export default Form
