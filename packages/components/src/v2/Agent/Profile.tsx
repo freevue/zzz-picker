@@ -1,38 +1,38 @@
 import { useRoundedSize } from '..'
 import { pipe, concat, join } from '@fxts/core'
+import { useAgent } from '@zzz-picker/provider/hooks'
 import { motion, AnimatePresence } from 'motion/react'
 
 type Props = {
-  url?: string
-  color?: string
   className?: string
   flat?: boolean
-  alt?: string
+  id: number
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 }
 
 const Profile: React.FC<Props> = (props) => {
   const size = useRoundedSize(props.size)
+  const agent = useAgent(props.id)
 
   return (
     <div
       className={pipe(
-        ['overflow-hidden', size],
+        ['overflow-hidden', 'flex', 'items-end', size],
         concat([props.className || '']),
         concat(props.flat ? ['rounded-none!'] : []),
         join(' ')
       )}
-      style={{ backgroundColor: props.color || 'var(--color-content)' }}
+      style={{ backgroundColor: agent?.color || 'var(--color-netural)' }}
     >
       <AnimatePresence>
-        {props.url && (
+        {agent && (
           <motion.img
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.2 }}
-            src={props.url}
-            alt={props.alt || ''}
+            src={agent.profile.url}
+            alt={agent.nameKo}
             className="block w-full"
           />
         )}
