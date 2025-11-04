@@ -74,16 +74,16 @@ const LINKS = [
 ]
 
 const Main: React.FC = () => {
-  const { gqlAgents } = useStore()
+  const { agents } = useStore()
   const [isOpen, setIsOpen] = useState(false)
   const allowAgents = useMemo(() => {
     return pipe(
-      gqlAgents,
+      agents,
       filter(([, agent]) => agent.isAllow),
       map(([id]) => id),
       join(',')
     )
-  }, [gqlAgents])
+  }, [agents])
 
   return (
     <>

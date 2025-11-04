@@ -11,7 +11,7 @@ type Props = {
 }
 
 const AgentDialog: React.FC<Props> = (props) => {
-  const { gqlAgents } = useStore()
+  const { agents } = useStore()
   const { state: playState } = usePlay()
   const { state: settingState } = useSetting()
   const [selectRarity, setSelectRarity] = useState<Rarity>('S')
@@ -25,7 +25,7 @@ const AgentDialog: React.FC<Props> = (props) => {
       <div className="flex-1 mt-8">
         <ul className="grid grid-cols-5 gap-4 py-4 flex-1">
           {pipe(
-            gqlAgents,
+            agents,
             filter(([, agent]) => !agent.isTeaser),
             filter(([, agent]) => agent.rarity === selectRarity),
             filter(([id]) => !includes(id, settingState.allowAgent)),

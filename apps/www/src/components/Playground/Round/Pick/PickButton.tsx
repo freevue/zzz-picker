@@ -15,7 +15,7 @@ type Props = {
 }
 
 const PickButton: React.FC<Props> = (props) => {
-  const { gqlAgents } = useStore()
+  const { agents } = useStore()
   const { setState, setCost } = usePlay()
   const [isOpen, setIsOpen] = useState(false)
 
@@ -46,7 +46,7 @@ const PickButton: React.FC<Props> = (props) => {
     })
     pipe(
       currentAgentId,
-      (agentId) => gqlAgents.get(agentId)!,
+      (agentId) => agents.get(agentId)!,
       getAgentRarity,
       (rarity) => ({
         rarity,

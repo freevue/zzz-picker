@@ -8,7 +8,7 @@ import { useState } from 'react'
 const Setting: React.FC = () => {
   const { path } = useRouter()
   const { state, setState } = useSetting()
-  const { gqlAgents } = useStore()
+  const { agents } = useStore()
   const [selectRarity, setSelectRarity] = useState<Rarity>('S')
 
   const onAgentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,7 +85,7 @@ const Setting: React.FC = () => {
             </div>
             <ul className="grid grid-cols-5 py-4 gap-4 flex-1">
               {pipe(
-                gqlAgents,
+                agents,
                 filter(([, agent]) => agent.rarity === selectRarity),
                 map(([id, agent]) => (
                   <li key={id} className="flex flex-1 items-start justify-center">
