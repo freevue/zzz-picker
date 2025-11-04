@@ -1,20 +1,21 @@
 import { useRoundedSize } from '../..'
 import Button from './Button'
 import { pipe, concat, join, map, toArray, zipWithIndex, findIndex } from '@fxts/core'
+import type { SelectAgent } from '@zzz-picker/constant'
 
 type Props = {
-  value: (number | null)[]
+  value: SelectAgent[]
   cost?: number[]
   className?: string
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   deleteable?: boolean
-  onChange?: (value: (number | null)[]) => void
+  onChange?: (value: SelectAgent[]) => void
 }
 
 const Party: React.FC<Props> = (props) => {
   const size = useRoundedSize(props.size)
 
-  const onClick = (index: number) => (agentId: number) => {
+  const onClick = (index: number) => (agentId: SelectAgent) => {
     pipe(
       [...props.value],
       (list) => {

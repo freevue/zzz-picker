@@ -1,14 +1,15 @@
 import { Agent, Dialog, Typo } from '../../'
 import { Icons } from '../../../'
 import { pipe, concat, join, isNull, isUndefined } from '@fxts/core'
+import type { SelectAgent, AgentId } from '@zzz-picker/constant'
 import { useState, Activity } from 'react'
 
 type Props = {
-  id: number | null
+  id: SelectAgent
   cost?: number
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-  onClick?: (agentId: number) => void
-  onSelect?: (agentId: number) => void
+  onClick?: (agentId: AgentId) => void
+  onSelect?: (agentId: AgentId) => void
   onDelete?: (event: React.MouseEvent<HTMLButtonElement>) => void
   deleteable?: boolean
 }

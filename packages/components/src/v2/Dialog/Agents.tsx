@@ -1,13 +1,14 @@
 import { Agent, Typo } from '../'
 import Dialog from './'
 import { pipe, map, toArray, filter, includes, sortBy } from '@fxts/core'
+import type { AgentId } from '@zzz-picker/constant'
 import { useStore } from '@zzz-picker/provider/hooks'
 
 type Props = {
   isOpen: boolean
-  allowAgents?: number[]
-  banAgents?: number[]
-  activeAgent?: number[]
+  allowAgents?: AgentId[]
+  banAgents?: AgentId[]
+  activeAgent?: AgentId[]
   onClose?: () => void
   onSelect?: (event: React.MouseEvent<HTMLButtonElement>) => void
 }

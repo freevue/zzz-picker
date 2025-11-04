@@ -1,12 +1,13 @@
 import { useRoundedSize } from '..'
 import { pipe, concat, join } from '@fxts/core'
+import type { AgentId } from '@zzz-picker/constant'
 import { useAgent } from '@zzz-picker/provider/hooks'
 import { motion, AnimatePresence } from 'motion/react'
 
 type Props = {
   className?: string
   flat?: boolean
-  id: number
+  id: AgentId
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 }
 

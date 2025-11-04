@@ -1,6 +1,7 @@
 import { useRoundedSize } from '..'
 import Profile from './Profile'
 import { pipe, concat, join } from '@fxts/core'
+import type { SelectAgent, AgentId } from '@zzz-picker/constant'
 import { useAgent } from '@zzz-picker/provider/hooks'
 import { Activity } from 'react'
 
@@ -8,11 +9,11 @@ type Props = {
   className?: string
   children?: React.ReactNode
   flat?: boolean
-  id: number | null
+  id?: AgentId
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
   disabled?: boolean
-  value?: string | number
+  value?: AgentId
   naming?: boolean
   hover?: boolean
   active?: boolean
@@ -27,7 +28,7 @@ const Button: React.FC<Props> = (props) => {
       type="button"
       onClick={props.onClick}
       disabled={props.disabled}
-      value={props.value || props.id || undefined}
+      value={props.value || props.id}
       className={pipe(
         [
           'overflow-hidden',
