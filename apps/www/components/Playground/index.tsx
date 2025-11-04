@@ -21,7 +21,7 @@ const Side: React.FC = () => {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
         >
-          <div className="flex w-full p-4 gap-5 items-center bg-base sticky top-0 z-10">
+          <div className="flex w-full p-4 gap-5 items-center bg-base sticky top-0 z-30">
             <Nickname side="A" />
             <Typo.Heading className="heading-3xl text-ink">VS</Typo.Heading>
             <Nickname side="B" />
