@@ -57,6 +57,9 @@ importers:
       '@zzz-picker/components':
         specifier: workspace:*
         version: link:../../packages/components
+      '@zzz-picker/constant':
+        specifier: workspace:*
+        version: link:../../packages/constant
       '@zzz-picker/provider':
         specifier: workspace:*
         version: link:../../packages/provider
@@ -142,6 +145,9 @@ importers:
 
   packages/components:
     dependencies:
+      '@zzz-picker/constant':
+        specifier: workspace:*
+        version: link:../constant
       '@zzz-picker/provider':
         specifier: workspace:*
         version: link:../provider
