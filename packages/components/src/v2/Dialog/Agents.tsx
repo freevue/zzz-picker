@@ -9,7 +9,7 @@ type Props = {
   banAgents?: number[]
   activeAgent?: number[]
   onClose?: () => void
-  onSelect?: (agentId: number) => void
+  onSelect?: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 const Agents: React.FC<Props> = (props) => {
@@ -26,6 +26,7 @@ const Agents: React.FC<Props> = (props) => {
               map((agentId) => (
                 <Agent.Button
                   naming
+                  onClick={props.onSelect}
                   active={includes(agentId, props.activeAgent || [])}
                   id={agentId}
                   key={agentId}
@@ -48,6 +49,7 @@ const Agents: React.FC<Props> = (props) => {
                 <Agent.Button
                   naming
                   hover
+                  onClick={props.onSelect}
                   active={includes(agentId, props.activeAgent || [])}
                   disabled={includes(agentId, props.banAgents || []) || agent.isTeaser}
                   id={agentId}
