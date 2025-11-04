@@ -11,6 +11,7 @@
   },
   "peerDependencies": {
     "@zzz-picker/tailwind-config": "workspace:*",
+    "@zzz-picker/provider": "workspace:*",
     "dayjs": "^1.11.18",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
