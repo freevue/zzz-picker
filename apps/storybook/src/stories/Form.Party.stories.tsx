@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Form } from '@zzz-picker/components/v2'
+import { useState } from 'react'
 
 const meta = {
   title: 'Form/Party',
@@ -10,10 +11,11 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     value: { control: 'object' },
+    deleteable: { control: 'boolean' },
     size: { control: 'select', options: ['xs', 'sm', 'md', 'lg', 'xl'] },
   },
   args: {
-    value: [156728, 156729, 154605],
+    value: [null, null, null],
   },
 } satisfies Meta<typeof Form.Party>
 
@@ -31,6 +33,10 @@ export const Default: Story = {
 export const Empty: Story = {
   args: {
     size: 'md',
-    value: [null, null, null],
+  },
+  render: (args) => {
+    const [value, setValue] = useState<(number | null)[]>(args.value)
+
+    return <Form.Party {...args} value={value} onChange={setValue} />
   },
 }

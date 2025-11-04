@@ -2,32 +2,28 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Dialog } from '@zzz-picker/components/v2'
 
 const meta = {
-  title: 'Dialog/Agents',
-  component: Dialog.Agents,
+  title: 'Dialog/Default',
+  component: (args) => <Dialog className="text-ink" {...args} />,
   parameters: {
     layout: 'centered',
   },
   tags: ['autodocs'],
   argTypes: {
     isOpen: { control: 'boolean' },
-    allowAgents: { control: 'object' },
-    banAgents: { control: 'object' },
-    activeAgent: { control: 'object' },
+    children: { control: 'text' },
     onClose: { action: 'onClose' },
-    onSelect: { action: 'onSelect' },
   },
   args: {
     isOpen: false,
-    allowAgents: [158985, 154605],
-    banAgents: [103379, 155654],
+    children: 'Hello, world!',
   },
-} satisfies Meta<typeof Dialog.Agents>
+} satisfies Meta<typeof Dialog>
 
 export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const Agents: Story = {
+export const Default: Story = {
   args: {
     isOpen: false,
   },
