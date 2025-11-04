@@ -1,12 +1,14 @@
 import App from './App.tsx'
 import './index.css'
-import { Store, Apollo } from '@zzz-picker/provider'
+import { Store, Apollo, Socket } from '@zzz-picker/provider'
 import { createRoot } from 'react-dom/client'
 
 createRoot(document.getElementById('root')!).render(
   <Apollo>
     <Store>
-      <App />
+      <Socket>
+        <App />
+      </Socket>
     </Store>
   </Apollo>
 )

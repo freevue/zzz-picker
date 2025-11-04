@@ -3,13 +3,14 @@ import Nickname from './Nickname'
 import Reset from './Reset'
 import Round from './Round'
 import TotalScore from './TotalScore'
-import { useStore, useRouter } from '@/hooks'
+import { useStore } from '@/hooks'
+import { useLocation } from '@remix-run/react'
 import { Typo } from '@zzz-picker/components/v2'
 import { AnimatePresence, motion } from 'motion/react'
 
 const Side: React.FC = () => {
   const { loading } = useStore()
-  const { path } = useRouter()
+  const { pathname } = useLocation()
 
   return (
     <AnimatePresence>
@@ -27,7 +28,7 @@ const Side: React.FC = () => {
           </div>
           <div className="p-4 flex flex-col gap-20 mt-8">
             <Round id="personal" />
-            <Round id={path === '/unlimited' ? 'unlimited' : 'common'} />
+            <Round id={pathname === '/unlimited' ? 'unlimited' : 'common'} />
           </div>
           <div className="p-4 my-8">
             <TotalScore />

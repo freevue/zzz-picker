@@ -1,11 +1,11 @@
 import BossInfo from './BossInfo'
 import { Plus } from '@/Icons'
-import { BossDialog } from '@/components'
 import { usePlay } from '@/hooks'
 import { pipe, concat, join } from '@fxts/core'
 import { useLocation } from '@remix-run/react'
 import { Dialog, Typo } from '@zzz-picker/components/v2'
 import { useState } from 'react'
+import { BossDialog } from '~/components'
 
 const BossSelect = () => {
   const { state, setState } = usePlay()
@@ -44,7 +44,7 @@ const BossSelect = () => {
           onClick={() => setIsOpen(true)}
         >
           {state.common.boss !== null ? (
-            <div className="size-64 flex items-start">
+            <div className="size-64 flex items-start bg-netural">
               <img src={`/images/boss/${state.common.boss}.webp`} alt="" className="block w-full" />
             </div>
           ) : (
