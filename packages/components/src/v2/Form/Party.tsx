@@ -1,6 +1,7 @@
 import { Agent } from '../'
 import { Icons } from '../../'
 import { pipe, concat, join, map, toArray, zipWithIndex } from '@fxts/core'
+import { useAgent } from '@zzz-picker/provider/hooks'
 
 type AgentValue = {
   id: number
@@ -16,6 +17,8 @@ type Props = {
 }
 
 const Party: React.FC<Props> = (props) => {
+  const agent = useAgent(1)
+
   const onClick = (index: number) => () => {
     props.onClick?.(index)
   }
