@@ -1,5 +1,5 @@
 import { StoreContext, SettingContext, PlayContext, RouterContext } from '../'
-import { useContext } from 'react'
+import { useContext, useMemo } from 'react'
 
 export const useStore = () => {
   return useContext(StoreContext)
@@ -8,7 +8,7 @@ export const useStore = () => {
 export const useAgent = (id: number) => {
   const { agents } = useContext(StoreContext)
 
-  return agents.get(id)
+  return useMemo(() => agents.get(id), [agents, id])
 }
 
 export const useSetting = () => {
