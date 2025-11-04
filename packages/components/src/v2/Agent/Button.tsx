@@ -2,6 +2,7 @@ import { useRoundedSize } from '..'
 import Profile from './Profile'
 import { pipe, concat, join } from '@fxts/core'
 import { useAgent } from '@zzz-picker/provider/hooks'
+import { Activity } from 'react'
 
 type Props = {
   className?: string
@@ -70,26 +71,24 @@ const Button: React.FC<Props> = (props) => {
         style={{ backgroundColor: agent?.color || 'var(--color-content)' }}
       >
         {agent ? (
-          <>
-            <Profile
-              className={pipe(
-                ['size-full', 'transition-transform', 'duration-200'],
-                concat(props.hover ? ['group-hover:scale-105'] : []),
-                join(' ')
-              )}
-              id={Number(agent.id)}
-              flat
-            />
-          </>
+          <Profile
+            className={pipe(
+              ['size-full', 'transition-transform', 'duration-200'],
+              concat(props.hover ? ['group-hover:scale-105'] : []),
+              join(' ')
+            )}
+            id={Number(agent.id)}
+            flat
+          />
         ) : (
           props.children
         )}
       </div>
-      {props.naming && agent && (
+      <Activity mode={props.naming && agent ? 'visible' : 'hidden'}>
         <span className="block text-base font-bold text-ink break-keep group-disabled:opacity-50">
-          {agent.nameKo}
+          {agent?.nameKo}
         </span>
-      )}
+      </Activity>
     </button>
   )
 }
