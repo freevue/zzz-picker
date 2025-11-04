@@ -1,14 +1,25 @@
 @theme {
+  --charade-50: #eef1f7;
+  --charade-100: #d2dbea;
+  --charade-200: #a7bad8;
+  --charade-300: #7f9dc7;
+  --charade-400: #6882a7;
+  --charade-500: #546988;
+  --charade-600: #41526b;
+  --charade-700: #2f3d50;
+  --charade-800: #1f2937;
+  --charade-900: #131b25;
+  --charade-950: #0c1119;
+
   --color-primary: #fbbf24;
-  --color-secondary: #06b6d4;
-  --color-focus: #78350f;
+  --color-secondary: #6366f1;
+  --color-tertiary: #312e81;
+  --color-netural: #fffbeb;
 
-  --color-base: #0a0a0a;
-  --color-content: #1a1a1a;
-  --color-panel: #2a2a2a;
+  --color-base: var(--charade-800);
+  --color-content: var(--charade-700);
 
-  --color-foreground: #f3f4f6;
-  --color-table: #2a2318;
+  --color-ink: var(--charade-50);
 
   --animate-turbo: spin 0.1s linear infinite;
 
@@ -26,23 +37,49 @@ html {
   color: var(--color-base);
 }
 html.alice {
+  --shark-50: #f1f1f1;
+  --shark-100: #dcdcdc;
+  --shark-200: #bcbcbc;
+  --shark-300: #a1a1a1;
+  --shark-400: #888888;
+  --shark-500: #707070;
+  --shark-600: #5b5b5b;
+  --shark-700: #464646;
+  --shark-800: #343434;
+  --shark-900: #222222;
+  --shark-950: #111111;
+
   --color-primary: #debe8d;
-  --color-secondary: #5fa3a3;
-  --color-focus: #9a3412;
+  --color-secondary: #6c7340;
+  --color-tertiary: #fefefe;
+  --color-netural: #fcfaee;
 
-  --color-base: #080b0f;
-  --color-content: #131820;
-  --color-panel: #1e2731;
+  --color-base: var(--shark-900);
+  --color-content: var(--shark-800);
 
-  --color-foreground: #eef2f7;
-  --color-table: #1e2530;
+  --color-ink: var(--shark-50);
 }
 
 html.v2 {
+  --charade-50: #eef1f7;
+  --charade-100: #d2dbea;
+  --charade-200: #a7bad8;
+  --charade-300: #7f9dc7;
+  --charade-400: #6882a7;
+  --charade-500: #546988;
+  --charade-600: #41526b;
+  --charade-700: #2f3d50;
+  --charade-800: #1f2937;
+  --charade-900: #131b25;
+  --charade-950: #0c1119;
+
   --color-primary: #fbbf24;
+  --color-secondary: #6366f1;
+  --color-tertiary: #312e81;
+  --color-netural: #fffbeb;
 
-  --color-base: #0b0500;
-  --color-content: #e3ac1a;
+  --color-base: var(--charade-800);
+  --color-content: var(--charade-700);
 
-  --color-foreground: #ffeeda;
+  --color-ink: var(--charade-50);
 }

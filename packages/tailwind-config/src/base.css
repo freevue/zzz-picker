@@ -24,4 +24,56 @@
     -webkit-user-drag: none;
     -webkit-user-select: none;
   }
+
+  .heading-4xl {
+    font-family: 'Paperozi';
+    font-weight: var(--font-weight-black);
+    font-size: var(--text-4xl);
+  }
+  .heading-3xl {
+    font-family: 'Paperozi';
+    font-weight: var(--font-weight-black);
+    font-size: var(--text-3xl);
+  }
+  .heading-2xl {
+    font-family: 'Paperozi';
+    font-weight: var(--font-weight-extrabold);
+    font-size: var(--text-2xl);
+  }
+  .heading-xl {
+    font-family: 'Paperozi', sans-serif;
+    font-weight: var(--font-weight-extrabold);
+    font-size: var(--text-xl);
+  }
+  .heading-lg {
+    font-family: 'Paperozi', sans-serif;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--text-lg);
+  }
+  .heading-md {
+    font-family: 'Paperozi', sans-serif;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--text-md);
+  }
+
+  .body-2xl {
+    font-weight: var(--font-weight-bold);
+    font-size: var(--text-2xl);
+  }
+  .body-xl {
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--text-xl);
+  }
+  .body-lg {
+    font-weight: var(--font-weight-medium);
+    font-size: var(--text-lg);
+  }
+  .body-md {
+    font-weight: var(--font-weight-normal);
+    font-size: var(--text-md);
+  }
+  .body-sm {
+    font-weight: var(--font-weight-normal);
+    font-size: var(--text-sm);
+  }
 }
