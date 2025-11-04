@@ -1,7 +1,9 @@
 export type Side = 'A' | 'B'
 export type RoundId = 'common' | 'personal' | 'unlimited'
-export type SelectAgent = number | null
-export type SelectBoss = number | null
+export type AgentId = number
+export type BossId = number
+export type SelectAgent = AgentId | null
+export type SelectBoss = BossId | null
 export type RoundSide = {
   time: number
   result: number
