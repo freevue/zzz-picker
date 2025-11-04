@@ -2,6 +2,8 @@ import { useMemo } from 'react'
 
 export * as Agent from './Agent'
 export * as Form from './Form'
+export * as Typo from './Typo'
+export { default as Dialog } from './Dialog'
 
 export const useRoundedSize = (size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl') => {
   return useMemo(() => {
