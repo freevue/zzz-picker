@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 type Props = {
   value: number
   onChange?: (value: number) => void
+  className?: string
 }
 
 const Time: React.FC<Props> = (props) => {
@@ -49,14 +50,22 @@ const Time: React.FC<Props> = (props) => {
         type="button"
         onClick={() => setIsOpen(true)}
         className={pipe(
-          ['heading-4xl', 'text-ink', 'flex', 'gap-1', 'items-center', 'justify-center'],
-          concat(['']),
+          [
+            'heading-3xl',
+            'text-ink',
+            'flex',
+            'gap-1',
+            'items-center',
+            'justify-center',
+            'cursor-pointer',
+          ],
+          concat([props.className || '']),
           join(' ')
         )}
       >
-        <span>{minute < 10 ? `0${minute}` : minute}</span>
-        <span>:</span>
-        <span>{second < 10 ? `0${second}` : second}</span>
+        <span className="flex-1 text-center">{minute < 10 ? `0${minute}` : minute}</span>
+        <span className="">:</span>
+        <span className="flex-1 text-center">{second < 10 ? `0${second}` : second}</span>
       </button>
       <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <div className="flex items-center gap-1 justify-center">
