@@ -9,11 +9,12 @@ const meta = {
   },
   tags: ['autodocs'],
   argTypes: {
-    url: { control: 'text' },
-    color: { control: 'color' },
+    id: { control: 'number' },
     className: { control: 'text' },
     flat: { control: 'boolean' },
-    alt: { control: 'text' },
+    naming: { control: 'boolean' },
+    hover: { control: 'boolean' },
+    active: { control: 'boolean' },
     size: { control: 'select', options: ['xs', 'sm', 'md', 'lg', 'xl'] },
     children: { control: 'text' },
     onClick: { action: 'onClick' },
@@ -21,7 +22,7 @@ const meta = {
     value: { control: 'text' },
   },
   args: {
-    url: 'http://nng-phinf.pstatic.net/MjAyNTA2MDlfMTAg/MDAxNzQ5NDM3NTk2MzQx.FFrvPmLdvAqg-OHMmFnv7DHK0P04Wisu6ldjzy5tsO8g.m6if16OQTEfW6p03AqgK4wrA6piufA06HxWlSribKt4g.PNG/%EC%95%A8%EB%A6%AC%EC%8A%A42.png',
+    id: 156728,
   },
 } satisfies Meta<typeof Agent.Button>
 
@@ -29,25 +30,23 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const Profile: Story = {
+export const Default: Story = {
   args: {
-    url: 'http://nng-phinf.pstatic.net/MjAyNTA2MDlfMTAg/MDAxNzQ5NDM3NTk2MzQx.FFrvPmLdvAqg-OHMmFnv7DHK0P04Wisu6ldjzy5tsO8g.m6if16OQTEfW6p03AqgK4wrA6piufA06HxWlSribKt4g.PNG/%EC%95%A8%EB%A6%AC%EC%8A%A42.png',
+    id: 156728,
     size: 'md',
-    color: '#debe8d',
     flat: false,
-    alt: '',
   },
 }
 
 export const Empty: Story = {
   args: {
-    url: undefined,
+    id: null,
   },
 }
 
 export const Disabled: Story = {
   args: {
-    url: 'http://nng-phinf.pstatic.net/MjAyNTA2MDlfMTAg/MDAxNzQ5NDM3NTk2MzQx.FFrvPmLdvAqg-OHMmFnv7DHK0P04Wisu6ldjzy5tsO8g.m6if16OQTEfW6p03AqgK4wrA6piufA06HxWlSribKt4g.PNG/%EC%95%A8%EB%A6%AC%EC%8A%A42.png',
+    id: 156728,
     disabled: true,
   },
 }
