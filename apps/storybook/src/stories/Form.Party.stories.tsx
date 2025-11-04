@@ -26,17 +26,19 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     size: 'md',
-    value: [156728, 156729, 154605],
-  },
-}
-
-export const Empty: Story = {
-  args: {
-    size: 'md',
+    deleteable: true,
+    cost: [0, 0, 0],
   },
   render: (args) => {
     const [value, setValue] = useState<(number | null)[]>(args.value)
 
     return <Form.Party {...args} value={value} onChange={setValue} />
+  },
+}
+
+export const Full: Story = {
+  args: {
+    size: 'md',
+    value: [156728, 156729, 154605],
   },
 }
