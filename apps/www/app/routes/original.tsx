@@ -1,18 +1,17 @@
-import { Header, Playground, CommonBossCard } from '@/components'
-import { useRouter } from '@/hooks'
 import { pipe, toArray, map, join, concat, split } from '@fxts/core'
+import { useSearchParams } from '@remix-run/react'
 import { DEFAULT } from '@zzz-picker/constant'
 import { Play, Setting } from '@zzz-picker/provider'
 import { useMemo } from 'react'
-import { CostTable } from '~/components'
+import { CostTable, CommonBossCard, Header, Playground } from '~/components'
 
 const Original: React.FC = () => {
-  const { searchParams } = useRouter()
+  const [searchParams] = useSearchParams()
   const options = useMemo(() => {
     return {
-      banCount: Number(searchParams.banCount || DEFAULT.BAN_COUNT),
-      totalCost: Number(searchParams.totalCost || DEFAULT.TOTAL_COST),
-      allowAgent: pipe(searchParams.allowAgent || '', split(','), map(Number), toArray),
+      banCount: Number(searchParams.get('banCount') || DEFAULT.BAN_COUNT),
+      totalCost: Number(searchParams.get('totalCost') || DEFAULT.TOTAL_COST),
+      allowAgent: pipe(searchParams.get('allowAgent') || '', split(','), map(Number), toArray),
     }
   }, [searchParams])
 
