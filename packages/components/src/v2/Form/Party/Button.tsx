@@ -1,12 +1,14 @@
-import { Agent, Dialog } from '../../'
+import { Agent, Dialog, Typo } from '../../'
 import { Icons } from '../../../'
-import { pipe, concat, join } from '@fxts/core'
-import { useState } from 'react'
+import { pipe, concat, join, isNull, isUndefined } from '@fxts/core'
+import { useState, Activity } from 'react'
 
 type Props = {
   id: number | null
+  cost?: number
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   onClick?: (agentId: number) => void
+  onSelect?: (agentId: number) => void
   onDelete?: (event: React.MouseEvent<HTMLButtonElement>) => void
   deleteable?: boolean
 }
@@ -17,10 +19,10 @@ const Button: React.FC<Props> = (props) => {
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    setIsOpen(true)
+    if (!props.id) setIsOpen(true)
   }
   const onSelect = (event: React.MouseEvent<HTMLButtonElement>) => {
-    props.onClick?.(Number(event.currentTarget.value))
+    props.onSelect?.(Number(event.currentTarget.value))
     setIsOpen(false)
   }
 
@@ -60,7 +62,30 @@ const Button: React.FC<Props> = (props) => {
         >
           <Icons.Plus className="size-2/3 stroke-ink group-hover/button:stroke-primary" />
         </Agent.Button>
-        {props.deleteable && props.id !== null && (
+        <Activity mode={isUndefined(props.cost) || isNull(props.id) ? 'hidden' : 'visible'}>
+          <Typo.Body
+            className={pipe(
+              [
+                'absolute',
+                'left-0',
+                'top-0',
+                'size-8',
+                'bg-content/50',
+                'backdrop-blur-sm',
+                'text-ink',
+                'body-xl',
+                'flex',
+                'items-center',
+                'justify-center',
+              ],
+              concat([]),
+              join(' ')
+            )}
+          >
+            {props.cost}
+          </Typo.Body>
+        </Activity>
+        <Activity mode={props.deleteable && !isNull(props.id) ? 'visible' : 'hidden'}>
           <button
             type="button"
             onClick={props.onDelete}
@@ -79,13 +104,13 @@ const Button: React.FC<Props> = (props) => {
                 'transition-opacity',
                 'duration-200',
               ],
-              concat(['group-hover/wrap:opacity-100']),
+              concat(['group-hover/wrap:opacity-100', 'focus:outline-none']),
               join(' ')
             )}
           >
             <Icons.Cross className="size-full stroke-ink group-hover/delete:stroke-primary" />
           </button>
-        )}
+        </Activity>
       </div>
       <Dialog.Agents isOpen={isOpen} onSelect={onSelect} onClose={() => setIsOpen(false)} />
     </>

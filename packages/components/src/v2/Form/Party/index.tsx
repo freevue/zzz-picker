@@ -4,6 +4,7 @@ import { pipe, concat, join, map, toArray, zipWithIndex, findIndex } from '@fxts
 
 type Props = {
   value: (number | null)[]
+  cost?: number[]
   className?: string
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   deleteable?: boolean
@@ -54,7 +55,8 @@ const Party: React.FC<Props> = (props) => {
         zipWithIndex,
         map(([index, agentId]) => (
           <Button
-            onClick={onClick(index)}
+            cost={props.cost?.[index]}
+            onSelect={onClick(index)}
             onDelete={onDelete(index)}
             size={props.size}
             id={agentId}
