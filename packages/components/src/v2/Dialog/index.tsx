@@ -1,3 +1,4 @@
+import Agents from './Agents'
 import { pipe, join, concat } from '@fxts/core'
 import { motion, AnimatePresence } from 'motion/react'
 import { useEffect } from 'react'
@@ -9,7 +10,9 @@ type Props = {
   className?: string
   onClose?: () => void
 }
-type DialogType = React.FC<Props> & {}
+type DialogType = React.FC<Props> & {
+  Agents: typeof Agents
+}
 
 const Dialog: DialogType = (props) => {
   const onBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -101,5 +104,7 @@ const Dialog: DialogType = (props) => {
     document.body
   )
 }
+
+Dialog.Agents = Agents
 
 export default Dialog
