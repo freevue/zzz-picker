@@ -10,6 +10,7 @@ const Nickname: React.FC<Props> = (props) => {
   return (
     <Form.Input
       {...props}
+      type="text"
       className={pipe(
         [],
         concat(

@@ -1,7 +1,6 @@
 import Input from './Input'
 import Nickname from './Nickname'
 import Party from './Party'
-import Score from './Score'
 import Time from './Time'
 import { pipe, concat, join } from '@fxts/core'
 
@@ -13,7 +12,6 @@ type Props = {
 type FormType = {
   Party: typeof Party
   Input: typeof Input
-  Score: typeof Score
   Time: typeof Time
   Nickname: typeof Nickname
 } & React.FC<Props>
@@ -31,7 +29,6 @@ const Form: FormType = (props) => {
 
 Form.Party = Party
 Form.Input = Input
-Form.Score = Score
 Form.Time = Time
 Form.Nickname = Nickname
 

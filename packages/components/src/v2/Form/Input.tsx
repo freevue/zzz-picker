@@ -6,6 +6,7 @@ type Props = {
   onChange?: (value: string) => void
   className?: string
   name: string
+  type: React.HTMLInputTypeAttribute
 }
 
 const Input: React.FC<Props> = (props) => {
@@ -23,7 +24,7 @@ const Input: React.FC<Props> = (props) => {
             join(' ')
           )}
           name={props.name}
-          type="text"
+          type={props.type}
           value={props.value}
           onChange={onChange}
           placeholder={props.placeholder}
