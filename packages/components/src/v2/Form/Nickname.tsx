@@ -4,7 +4,7 @@ import type { Side } from '@zzz-picker/constant'
 
 type Props = {
   side: Side
-} & Omit<React.ComponentProps<typeof Form.Input>, 'name'>
+} & Omit<React.ComponentProps<typeof Form.Input>, 'name' | 'type'>
 
 const Nickname: React.FC<Props> = (props) => {
   return (
@@ -21,6 +21,7 @@ const Nickname: React.FC<Props> = (props) => {
           '[&_input]:text-4xl',
           '[&_input]:text-primary',
           '[&_input]:font-black',
+          '[&_input]:w-full',
           '[&_input]:px-5',
           '[&_input]:py-4',
           '[&_input]:placeholder:text-3xl',
