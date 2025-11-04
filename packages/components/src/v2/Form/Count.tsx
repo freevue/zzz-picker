@@ -73,7 +73,7 @@ const Count: React.FC<Props> = (props) => {
       <label className="h-full flex-1">
         <input
           className={pipe(
-            ['bg-content', 'text-ink', 'h-full', 'px-4', 'w-full', 'text-center'],
+            ['text-ink', 'h-full', 'px-4', 'w-full', 'text-center'],
             concat(['focus:outline-none', 'heading-2xl']),
             join(' ')
           )}
