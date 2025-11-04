@@ -15,31 +15,33 @@ const Time: React.FC<Props> = (props) => {
 
   const onMinuteChange = (value: number) => {
     setMinute(value)
+
+    props.onChange?.(value * 60 + second)
   }
   const onSecondChange = (value: number) => {
     setSecond(value)
+
+    props.onChange?.(minute * 60 + value)
   }
 
   useEffect(() => {
-    if (props.value >= 240) {
-      setMinute(3)
-      setSecond(0)
+    setMinute(() => {
+      const value = Math.floor(props.value / 60)
 
-      return
-    }
-    if (props.value < 0) {
-      setMinute(0)
-      setSecond(0)
+      if (value > 3) return 3
+      if (value < 0) return 0
 
-      return
-    }
+      return value
+    })
+    setSecond(() => {
+      const value = props.value % 60
 
-    setMinute(Math.floor(props.value / 60))
-    setSecond(props.value % 60)
+      if (value > 59) return 59
+      if (value < 0) return 0
+
+      return value
+    })
   }, [props.value])
-  useEffect(() => {
-    props.onChange?.(minute * 60 + second)
-  }, [minute, second])
 
   return (
     <>

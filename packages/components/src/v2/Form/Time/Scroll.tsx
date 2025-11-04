@@ -35,7 +35,7 @@ const Scroll: React.FC<Props> = (props) => {
 
     timeout.current && clearTimeout(timeout.current)
     timeout.current = setTimeout(() => {
-      props.onChange?.(scrollRef.current!.scrollTop / 56)
+      props.onChange?.(Math.floor(scrollRef.current!.scrollTop / 56))
       timeout.current = null
     }, 300)
   }
@@ -48,8 +48,7 @@ const Scroll: React.FC<Props> = (props) => {
   }, [isEditing])
   useEffect(() => {
     if (scrollRef.current && !isEditing) {
-      console.log(props.value * 56 - 10)
-      scrollRef.current.scrollTop = props.value * 56 - 10
+      scrollRef.current.scrollTop = props.value * 56
     }
   }, [props.value, isEditing])
 
