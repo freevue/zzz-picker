@@ -24,6 +24,7 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
+    type: 'text',
     value: 'Hello, world!',
   },
   render: (args) => {
@@ -35,6 +36,7 @@ export const Default: Story = {
 
 export const Name: Story = {
   args: {
+    type: 'text',
     value: '',
     placeholder: '닉네임을 입력해주세요',
   },
