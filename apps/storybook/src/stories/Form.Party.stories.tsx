@@ -28,6 +28,8 @@ export const Default: Story = {
     size: 'md',
     deleteable: true,
     cost: [0, 0, 0],
+    allowAgents: [158985, 154605],
+    banAgents: [103379, 155654],
   },
   render: (args) => {
     const [value, setValue] = useState<(number | null)[]>(args.value)
