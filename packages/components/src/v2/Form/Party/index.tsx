@@ -1,7 +1,7 @@
 import { useRoundedSize } from '../..'
 import Button from './Button'
 import { pipe, concat, join, map, toArray, zipWithIndex, findIndex } from '@fxts/core'
-import type { SelectAgent } from '@zzz-picker/constant'
+import type { AgentId, SelectAgent } from '@zzz-picker/constant'
 
 type Props = {
   value: SelectAgent[]
@@ -9,6 +9,8 @@ type Props = {
   className?: string
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   deleteable?: boolean
+  allowAgents?: AgentId[]
+  banAgents?: AgentId[]
   onChange?: (value: SelectAgent[]) => void
 }
 
@@ -63,6 +65,8 @@ const Party: React.FC<Props> = (props) => {
             id={agentId}
             key={index}
             deleteable={props.deleteable}
+            allowAgents={props.allowAgents}
+            banAgents={props.banAgents}
           />
         )),
         toArray

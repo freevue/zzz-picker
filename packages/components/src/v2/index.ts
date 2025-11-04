@@ -4,6 +4,7 @@ export * as Agent from './Agent'
 export * as Typo from './Typo'
 export { default as Form } from './Form'
 export { default as Dialog } from './Dialog'
+export { default as Tabs } from './Tabs'
 
 export const useRoundedSize = (size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl') => {
   return useMemo(() => {

@@ -12,6 +12,8 @@ type Props = {
   onSelect?: (agentId: AgentId) => void
   onDelete?: (event: React.MouseEvent<HTMLButtonElement>) => void
   deleteable?: boolean
+  allowAgents?: AgentId[]
+  banAgents?: AgentId[]
 }
 
 const Button: React.FC<Props> = (props) => {
@@ -61,7 +63,7 @@ const Button: React.FC<Props> = (props) => {
           size={props.size}
           id={props.id || 0}
         >
-          <Icons.Plus className="size-2/3 stroke-ink group-hover/button:stroke-primary" />
+          <Icons.Plus className="size-2/4 stroke-ink group-hover/button:stroke-primary" />
         </Agent.Button>
         <Activity mode={isUndefined(props.cost) || isNull(props.id) ? 'hidden' : 'visible'}>
           <Typo.Body
@@ -113,7 +115,13 @@ const Button: React.FC<Props> = (props) => {
           </button>
         </Activity>
       </div>
-      <Dialog.Agents isOpen={isOpen} onSelect={onSelect} onClose={() => setIsOpen(false)} />
+      <Dialog.Agents
+        isOpen={isOpen}
+        onSelect={onSelect}
+        onClose={() => setIsOpen(false)}
+        allowAgents={props.allowAgents}
+        banAgents={props.banAgents}
+      />
     </>
   )
 }

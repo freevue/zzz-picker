@@ -1,0 +1,60 @@
+import { pipe, concat, join, map, toArray, isString } from '@fxts/core'
+
+type Tab = {
+  value: string | number
+  label: string
+}
+type Props = {
+  list: (Tab | string)[]
+  value: string
+  onChange?: (value: string) => void
+  className?: string
+}
+
+const Tabs: React.FC<Props> = (props) => {
+  const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    props.onChange?.(event.currentTarget.value)
+  }
+
+  return (
+    <div
+      className={pipe(
+        ['flex', 'overflow-hidden', 'rounded-xl', 'bg-base/70'],
+        concat([props.className || '']),
+        join(' ')
+      )}
+    >
+      {pipe(
+        props.list,
+        map((tab) => (isString(tab) ? { value: tab, label: tab } : tab)),
+        map((tab) => (
+          <button
+            key={tab.value}
+            onClick={onClick}
+            value={tab.value}
+            className={pipe(
+              [
+                'focus:outline-none',
+                'flex-1',
+                'px-4',
+                'py-2',
+                'min-w-fit',
+                'cursor-pointer',
+                'flex',
+                'items-center',
+                'justify-center',
+              ],
+              concat(props.value === tab.value ? ['bg-primary', 'text-content'] : ['text-ink']),
+              join(' ')
+            )}
+          >
+            <span className="heading-lg">{tab.label}</span>
+          </button>
+        )),
+        toArray
+      )}
+    </div>
+  )
+}
+
+export default Tabs
