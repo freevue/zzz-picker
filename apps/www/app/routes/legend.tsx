@@ -1,19 +1,41 @@
-import { pipe, toArray, map, join, concat, split } from '@fxts/core'
+import { pipe, toArray, map, join, concat, split, filter } from '@fxts/core'
 import { useSearchParams } from '@remix-run/react'
 import { DEFAULT } from '@zzz-picker/constant'
 import { Play, Setting } from '@zzz-picker/provider'
-import { useMemo } from 'react'
+import { useStore } from '@zzz-picker/provider/hooks'
+import { useMemo, useEffect } from 'react'
 import { CostTable, CommonBossCard, Header, Playground } from '~/components'
 
 const Legend: React.FC = () => {
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const { agents, loading } = useStore()
   const options = useMemo(() => {
     return {
-      banCount: Number(searchParams.get('banCount') || DEFAULT.BAN_COUNT),
       totalCost: Infinity,
+      banCount: Number(searchParams.get('banCount') || DEFAULT.BAN_COUNT),
       allowAgent: pipe(searchParams.get('allowAgent') || '', split(','), map(Number), toArray),
     }
   }, [searchParams])
+
+  useEffect(() => {
+    pipe(
+      agents,
+      filter(([, agent]) => agent.isAllow),
+      map(([id]) => id),
+      join(','),
+      (allowAgent) => {
+        setSearchParams(
+          (prev) => ({
+            banCount: prev.get('banCount') || `${DEFAULT.BAN_COUNT}`,
+            allowAgent: prev.get('allowAgent') || allowAgent,
+          }),
+          { replace: true }
+        )
+      }
+    )
+  }, [agents])
+
+  if (loading) return null
 
   return (
     <Setting option={options}>
