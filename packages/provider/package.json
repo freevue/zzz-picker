@@ -13,8 +13,8 @@
     "@zzz-picker/graphql": "workspace:*",
     "@zzz-picker/utils": "workspace:*",
     "dayjs": "^1.11.18",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react": "catalog:react19",
+    "react-dom": "catalog:react19"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.76.1",
@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.6.0",
-    "@types/react": "^19.1.16",
-    "@types/react-dom": "^19.1.9"
+    "@types/react": "catalog:react19",
+    "@types/react-dom": "catalog:react19"
   }
 }
