@@ -217,6 +217,9 @@ importers:
       '@zzz-picker/graphql':
         specifier: workspace:*
         version: link:../graphql
+      '@zzz-picker/utils':
+        specifier: workspace:*
+        version: link:../utils
       dayjs:
         specifier: ^1.11.18
         version: 1.11.18

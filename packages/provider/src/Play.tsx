@@ -1,5 +1,6 @@
 import { Context as SettingContext } from './Setting'
-import { map, pipe, range, toArray } from '@fxts/core'
+import { Context as StoreContext } from './Store'
+import { map, pipe, range, toArray, flatMap, filter, isNull, includes } from '@fxts/core'
 import {
   DEFAULT,
   type SelectAgent,
@@ -9,7 +10,8 @@ import {
   type PersonalRound,
   type UnlimitedRound,
 } from '@zzz-picker/constant'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { getAgentRarity } from '@zzz-picker/utils'
+import { createContext, useContext, useEffect, useMemo, useState, useEffectEvent } from 'react'
 
 type PlayState = {
   banList: Array<SelectAgent>
@@ -26,6 +28,10 @@ type State = {
   cost: {
     A: Map<number, AgentCostSetting>
     B: Map<number, AgentCostSetting>
+  }
+  allPickList: {
+    A: SelectAgent[]
+    B: SelectAgent[]
   }
   isCounting: boolean
   setCost: React.Dispatch<React.SetStateAction<Record<Side, Map<number, AgentCostSetting>>>>
@@ -60,6 +66,10 @@ const DEFAULT_STATE = {
 export const Context = createContext<State>({
   state: DEFAULT_STATE,
   isCounting: false,
+  allPickList: {
+    A: [],
+    B: [],
+  },
   cost: {
     A: new Map(),
     B: new Map(),
@@ -71,6 +81,7 @@ export const Context = createContext<State>({
 })
 
 const Provider = (props: Props) => {
+  const { agents } = useContext(StoreContext)
   const [state, setState] = useState<PlayState>(DEFAULT_STATE)
   const [cost, setCost] = useState<Record<Side, Map<number, AgentCostSetting>>>({
     A: new Map(),
@@ -78,6 +89,43 @@ const Provider = (props: Props) => {
   })
   const { state: settingState } = useContext(SettingContext)
   const [isCounting, setIsCounting] = useState<boolean>(false)
+  const allPickList = useMemo(() => {
+    const getPickList = (side: Side) =>
+      pipe(
+        [state.common[side], state.personal[side], state.unlimited[side]],
+        flatMap((item) => item.pickList),
+        filter((agentId) => !isNull(agentId)),
+        toArray
+      )
+
+    return {
+      A: getPickList('A'),
+      B: getPickList('B'),
+    }
+  }, [state.common, state.personal, state.unlimited])
+
+  const updateCost = useEffectEvent((side: Side, agentId: SelectAgent) => {
+    if (isNull(agentId)) return
+    if (cost[side].has(agentId)) return
+
+    pipe(
+      agents.get(agentId)!,
+      getAgentRarity,
+      (rarity) => ({
+        rarity,
+        agentRate: 0,
+        engineType: null,
+        engineRate: 1,
+      }),
+      (agentSetting) => {
+        setCost((prev) => {
+          const newCost = { ...prev }
+          newCost[side].set(agentId, agentSetting)
+          return newCost
+        })
+      }
+    )
+  })
 
   useEffect(() => {
     pipe(
@@ -117,6 +165,14 @@ const Provider = (props: Props) => {
       })
     )
   }, [state, cost])
+  useEffect(() => {
+    for (const agentId of allPickList.A) {
+      updateCost('A', agentId)
+    }
+    for (const agentId of allPickList.B) {
+      updateCost('B', agentId)
+    }
+  }, [allPickList])
 
   return (
     <Context.Provider
@@ -124,6 +180,7 @@ const Provider = (props: Props) => {
         state,
         isCounting,
         cost,
+        allPickList,
         setCost,
         setIsCounting,
         setState,

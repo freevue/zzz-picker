@@ -11,6 +11,7 @@
   "peerDependencies": {
     "@zzz-picker/constant": "workspace:*",
     "@zzz-picker/graphql": "workspace:*",
+    "@zzz-picker/utils": "workspace:*",
     "dayjs": "^1.11.18",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
