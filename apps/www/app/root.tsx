@@ -1,7 +1,7 @@
 import type { LinksFunction, MetaFunction } from '@remix-run/node'
 import { Links, Meta, Outlet, Scripts } from '@remix-run/react'
 import { Store, Apollo, Socket } from '@zzz-picker/provider'
-import styles from '~/src/index.css?url'
+import styles from '~/index.css?url'
 
 export const links: LinksFunction = () => [
   { rel: 'icon', type: 'image/svg+xml', href: '/favicon.png' },
