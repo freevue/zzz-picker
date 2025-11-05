@@ -1,9 +1,16 @@
+import CostDialog from '../CostDialog'
 import { usePlay, useSetting } from '@/hooks'
-import { join, pipe, map, toArray, concat, when } from '@fxts/core'
-import { Form } from '@zzz-picker/components/v2'
-import { DEFAULT, type SelectAgent, type RoundId, type Side } from '@zzz-picker/constant'
+import { join, pipe, map, toArray, concat, when, findIndex } from '@fxts/core'
+import { Form, Dialog } from '@zzz-picker/components/v2'
+import {
+  DEFAULT,
+  type SelectAgent,
+  type RoundId,
+  type Side,
+  type AgentId,
+} from '@zzz-picker/constant'
 import { getAgentTotalCost } from '@zzz-picker/utils'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 type Props = {
   side: Side
@@ -13,6 +20,7 @@ type Props = {
 const Pick: React.FC<Props> = (props) => {
   const { costTable } = useSetting()
   const { state, cost, setState } = usePlay()
+  const [selectedAgentId, setSelectedAgentId] = useState<SelectAgent>(null)
   const pickList = useMemo(
     () => state[props.roundId][props.side].pickList,
     [state[props.roundId][props.side].pickList]
@@ -34,6 +42,9 @@ const Pick: React.FC<Props> = (props) => {
     )
   }, [pickList, cost, costTable])
 
+  const onClick = (agentId: AgentId) => {
+    setSelectedAgentId(agentId)
+  }
   const onChange = (value: SelectAgent[]) => {
     setState((prev) => {
       const roundData = { ...prev[props.roundId] }
@@ -76,49 +87,68 @@ const Pick: React.FC<Props> = (props) => {
   }
 
   return (
-    <div className="w-[336px]">
-      <div
-        className={pipe(
-          ['w-full flex flex-col', 'gap-4'],
-          concat([props.side === 'A' ? 'items-start' : 'items-end']),
-          join(' ')
-        )}
-      >
-        <Form.Time
-          value={time}
-          onChange={onTimeChange}
+    <>
+      <div className="w-[336px]">
+        <div
           className={pipe(
-            ['w-56', 'h-14', 'bg-content'],
-            concat(props.side === 'A' ? ['rounded-tr-2xl'] : []),
-            concat(props.side === 'B' ? ['rounded-tl-2xl'] : []),
+            ['w-full flex flex-col', 'gap-4'],
+            concat([props.side === 'A' ? 'items-start' : 'items-end']),
             join(' ')
           )}
-        />
-        <Form.Party
-          size="md"
-          reverse={props.side === 'B'}
-          value={pickList}
-          cost={costList}
-          deleteable
-          onChange={onChange}
-        />
-        <Form.Input
-          name={`${props.roundId}-${props.side}-score`}
-          value={`${score}`}
-          max={DEFAULT.MAX_SCORE}
-          min={0}
-          step={1}
-          type="number"
-          onChange={onScoreChange}
-          className={pipe(
-            ['w-56', 'h-14', 'bg-content', '[&_input]:text-3xl', '[&_input]:font-black'],
-            concat(props.side === 'A' ? ['rounded-bl-2xl', 'ml-auto', '[&_input]:text-right'] : []),
-            concat(props.side === 'B' ? ['rounded-br-2xl', 'mr-auto', '[&_input]:text-left'] : []),
-            join(' ')
-          )}
-        />
+        >
+          <Form.Time
+            value={time}
+            onChange={onTimeChange}
+            className={pipe(
+              ['w-56', 'h-14', 'bg-content'],
+              concat(props.side === 'A' ? ['rounded-tr-2xl'] : []),
+              concat(props.side === 'B' ? ['rounded-tl-2xl'] : []),
+              join(' ')
+            )}
+          />
+          <Form.Party
+            size="md"
+            reverse={props.side === 'B'}
+            value={pickList}
+            cost={costList}
+            deleteable
+            onChange={onChange}
+            onClick={onClick}
+          />
+          <Form.Input
+            name={`${props.roundId}-${props.side}-score`}
+            value={`${score}`}
+            max={DEFAULT.MAX_SCORE}
+            min={0}
+            step={1}
+            type="number"
+            onChange={onScoreChange}
+            className={pipe(
+              ['w-56', 'h-14', 'bg-content', '[&_input]:text-3xl', '[&_input]:font-black'],
+              concat(
+                props.side === 'A' ? ['rounded-bl-2xl', 'ml-auto', '[&_input]:text-right'] : []
+              ),
+              concat(
+                props.side === 'B' ? ['rounded-br-2xl', 'mr-auto', '[&_input]:text-left'] : []
+              ),
+              join(' ')
+            )}
+          />
+        </div>
       </div>
-    </div>
+      <Dialog isOpen={!!selectedAgentId} onClose={() => setSelectedAgentId(null)}>
+        <CostDialog
+          roundId={props.roundId}
+          side={props.side}
+          agentId={Number(selectedAgentId)}
+          totalCost={pipe(
+            pickList,
+            findIndex((id) => id === selectedAgentId),
+            (index) => costList[index] || 0
+          )}
+        />
+      </Dialog>
+    </>
   )
 }
 
