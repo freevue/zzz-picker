@@ -1,4 +1,3 @@
-import { Context as RouterContext } from './Router'
 import { Context as SettingContext } from './Setting'
 import { map, pipe, range, toArray } from '@fxts/core'
 import {
@@ -77,7 +76,6 @@ const Provider = (props: Props) => {
     A: new Map(),
     B: new Map(),
   })
-  const { path } = useContext(RouterContext)
   const { state: settingState } = useContext(SettingContext)
   const [isCounting, setIsCounting] = useState<boolean>(false)
 
@@ -98,7 +96,7 @@ const Provider = (props: Props) => {
 
     if (!prevItem) return
 
-    const data = JSON.parse(prevItem)[path]
+    const data = JSON.parse(prevItem)[window.location.pathname]
 
     if (data) {
       setCost({
@@ -107,18 +105,18 @@ const Provider = (props: Props) => {
       })
       setState(data.state)
     }
-  }, [path])
+  }, [])
   useEffect(() => {
     window.localStorage.setItem(
       'zzz-picker-play',
       JSON.stringify({
-        [path]: {
+        [window.location.pathname]: {
           state,
           cost: { A: [...cost.A.entries()], B: [...cost.B.entries()] },
         },
       })
     )
-  }, [path, state, cost])
+  }, [state, cost])
 
   return (
     <Context.Provider

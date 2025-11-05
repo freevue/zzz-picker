@@ -1,5 +1,5 @@
 import { useStore } from '@/hooks'
-import { pipe, map, toArray, concat, join, find, sort, zipWithIndex } from '@fxts/core'
+import { pipe, map, toArray, join, find, sort, zipWithIndex, when } from '@fxts/core'
 import { Typo } from '@zzz-picker/components/v2'
 import dayjs from 'dayjs'
 import { motion } from 'motion/react'
@@ -36,42 +36,36 @@ const BossDialog: React.FC<Props> = (props) => {
       <ul className="flex flex-wrap mt-8 w-full justify-between">
         {pipe(
           currentDeadlyAssault,
+          when(
+            (list) => list.length === 0,
+            () => [null, null, null]
+          ),
           zipWithIndex,
           map(([index, boss]) => (
             <motion.li
-              key={boss.id}
+              key={index}
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.2, delay: index * 0.2 }}
             >
               <button
-                className="w-52 group block focus:outline-none cursor-pointer"
+                className="w-52 aspect-[3/4] group block focus:outline-none cursor-pointer"
                 type="button"
-                value={boss.id}
+                value={boss?.id}
                 onClick={props.onClick}
               >
                 <div
                   className={pipe(
-                    [
-                      'w-full',
-                      'aspect-[3/4]',
-                      'overflow-hidden',
-                      'rounded-bl-4xl',
-                      'rounded-tr-4xl',
-                      'bg-netural',
-                    ],
-                    concat(
-                      props.active === boss.id
-                        ? ['border-primary']
-                        : ['border-foreground', 'hover:border-secondary']
-                    ),
+                    ['w-full', 'overflow-hidden', 'rounded-bl-4xl', 'rounded-tr-4xl', 'bg-netural'],
                     join(' ')
                   )}
                 >
-                  <img className="block w-full" src={`/images/boss/${boss.id}.webp`} alt="" />
+                  {boss && (
+                    <img className="block w-full" src={`/images/boss/${boss.id}.webp`} alt="" />
+                  )}
                 </div>
                 <span className="text-ink heading-lg mt-4 block w-full text-center group-hover:text-primary break-keep">
-                  {boss.nameKo}
+                  {boss?.nameKo || '-'}
                 </span>
               </button>
             </motion.li>

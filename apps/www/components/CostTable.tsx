@@ -14,7 +14,7 @@ const CostTable: React.FC = () => {
     <div className="p-4 mt-auto">
       <div className="flex items-end justify-between mb-4">
         <Typo.Heading className="heading-3xl text-primary">Cost</Typo.Heading>
-        <Typo.Body className="body-xl text-secondary flex items-end">
+        <Typo.Body className="body-xl text-secondary flex items-start">
           <span>설정 Cost:</span>
           <span className="ml-1">
             {state.totalCost === Infinity ? (

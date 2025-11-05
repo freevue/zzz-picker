@@ -1,5 +1,16 @@
 import { usePlay, useStore } from '@/hooks'
-import { pipe, sort, toArray, map, size, transpose, filter, sum, zipWithIndex } from '@fxts/core'
+import {
+  pipe,
+  sort,
+  toArray,
+  map,
+  size,
+  transpose,
+  filter,
+  sum,
+  zipWithIndex,
+  join,
+} from '@fxts/core'
 import { Typo } from '@zzz-picker/components/v2'
 import type { GQL_Attribute } from '@zzz-picker/graphql'
 import dayjs from 'dayjs'
@@ -62,19 +73,27 @@ const BossInfo: React.FC = () => {
           className="flex flex-1 h-auto flex-col"
         >
           <Typo.Heading className="heading-3xl text-primary">{bossData?.nameKo}</Typo.Heading>
-          <div className="flex gap-2">
+          <div className="flex gap-x-2 flex-wrap">
             <div className="flex-1 flex gap-1 items-center">
               <Typo.Body className="body-lg text-ink">약점:</Typo.Body>
               <Attributes attributes={bossData?.weakness || []} />
             </div>
-
             <div className="flex-1 flex gap-1 items-center">
               <Typo.Body className="body-lg text-ink">저항:</Typo.Body>
               <Attributes attributes={bossData?.resistance || []} />
             </div>
+            <div className="w-full flex gap-1 items-center mt-2">
+              <Typo.Body className="body-md text-ink">HP:</Typo.Body>
+              <Typo.Body className="text-primary body-xl flex tabular-nums">
+                {pipe(
+                  bossData?.hp || [],
+                  map((hp) => hp.toLocaleString('ko-KR')),
+                  join('/')
+                )}
+              </Typo.Body>
+            </div>
           </div>
-          <div className="mt-auto border-t border-ink/30 pt-2">
-            <Typo.Body className="body-xl text-ink mb-2">강습전 출현 횟수</Typo.Body>
+          <div className="mt-auto">
             <div className="flex items-end">
               <div className="">
                 {pipe(

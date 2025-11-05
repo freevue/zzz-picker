@@ -20,7 +20,7 @@ const BossSelect = () => {
 
   return (
     <>
-      <div className="flex h-fit gap-4 alice:opacity-20">
+      <div className="flex h-fit gap-4 alice:opacity-10">
         <button
           className={pipe(
             [

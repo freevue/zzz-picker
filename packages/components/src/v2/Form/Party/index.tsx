@@ -24,7 +24,7 @@ const Party: React.FC<Props> = (props) => {
         const currentIndex = findIndex((id) => id === agentId, list)
 
         list[index] = agentId
-        list[currentIndex] = null
+        currentIndex >= 0 && (list[currentIndex] = null)
 
         return list
       },

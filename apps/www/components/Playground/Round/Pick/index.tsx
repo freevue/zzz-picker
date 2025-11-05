@@ -5,7 +5,7 @@ import Time from './Time'
 import { usePlay } from '@/hooks'
 import { join, pipe, map, toArray, zipWithIndex, concat, isNull } from '@fxts/core'
 import { Form } from '@zzz-picker/components/v2'
-import type { RoundId, Side } from '@zzz-picker/constant'
+import type { SelectAgent, RoundId, Side } from '@zzz-picker/constant'
 import { useMemo } from 'react'
 
 type Props = {
@@ -14,11 +14,24 @@ type Props = {
 }
 
 const Pick: React.FC<Props> = (props) => {
-  const { state } = usePlay()
+  const { state, setState } = usePlay()
   const pickList = useMemo(
     () => state[props.roundId][props.side].pickList,
     [state[props.roundId][props.side].pickList, props.roundId, props.side]
   )
+
+  const onChange = (value: SelectAgent[]) => {
+    setState((prev) => {
+      const roundData = { ...prev[props.roundId] }
+
+      roundData[props.side].pickList = value as [SelectAgent, SelectAgent, SelectAgent]
+
+      return {
+        ...prev,
+        [props.roundId]: roundData,
+      }
+    })
+  }
 
   return (
     <div className="flex-1">
@@ -39,31 +52,7 @@ const Pick: React.FC<Props> = (props) => {
             join(' ')
           )}
         />
-        <Form.Party value={pickList} />
-        {/* <ul className="flex w-full">
-          {pipe(
-            pickList,
-            zipWithIndex,
-            map(([index, pick]) => (
-              <li
-                key={index}
-                className={pipe(['flex-1', 'aspect-square', 'group/list'], concat([]), join(' '))}
-              >
-                {isNull(pick) ? (
-                  <PickButton roundId={props.roundId} index={index} side={props.side} />
-                ) : (
-                  <AgentButton
-                    agentId={pick}
-                    roundId={props.roundId}
-                    index={index}
-                    side={props.side}
-                  />
-                )}
-              </li>
-            )),
-            toArray
-          )}
-        </ul> */}
+        <Form.Party value={pickList} onChange={onChange} />
         <Score roundId={props.roundId} side={props.side} />
       </div>
     </div>
