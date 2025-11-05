@@ -1,7 +1,7 @@
 import BossInfo from './BossInfo'
 import { pipe, concat, join } from '@fxts/core'
 import { useLocation } from '@remix-run/react'
-import { Icons } from '@zzz-picker/components/'
+import { Icons } from '@zzz-picker/components'
 import { Dialog, Typo } from '@zzz-picker/components/v2'
 import { usePlay } from '@zzz-picker/provider/hooks'
 import { useState } from 'react'
