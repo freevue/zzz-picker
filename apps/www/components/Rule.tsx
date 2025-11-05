@@ -14,7 +14,7 @@ const Rule: React.FC = () => {
         onClick={() => setIsOpen(true)}
         className="text-ink/70 body-lg hover:text-primary cursor-pointer focus:outline-none"
       >
-        룰 설명서
+        경기 룰
       </button>
       <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <div className="flex flex-col gap-4 w-2xl">
