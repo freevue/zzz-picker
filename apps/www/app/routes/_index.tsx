@@ -2,7 +2,7 @@ import { pipe, zipWithIndex, map, toArray } from '@fxts/core'
 import { Link } from '@remix-run/react'
 import { Typo } from '@zzz-picker/components/v2'
 import { motion } from 'motion/react'
-import { Rule } from '~/components'
+import { Rule, DevLog } from '~/components'
 import { LINKS } from '~/constant'
 
 const Main: React.FC = () => {
@@ -35,7 +35,10 @@ const Main: React.FC = () => {
           toArray
         )}
       </div>
-      <Rule />
+      <div className="flex gap-6">
+        <Rule />
+        <DevLog />
+      </div>
     </div>
   )
 }
