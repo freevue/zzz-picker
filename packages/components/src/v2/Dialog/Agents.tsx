@@ -11,6 +11,7 @@ type Props = {
   allowAgents?: AgentId[]
   banAgents?: AgentId[]
   activeAgent?: AgentId[]
+  filterAgents?: AgentId[]
   onClose?: () => void
   onSelect?: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
@@ -54,6 +55,7 @@ const Agents: React.FC<Props> = (props) => {
         <div className="grid grid-cols-5 gap-4 w-2xl items-start mt-8">
           {pipe(
             agents,
+            filter(([agentId]) => !includes(agentId, props.filterAgents || [])),
             filter(([agentId]) => !includes(agentId, props.allowAgents || [])),
             filter(([, agent]) => agent.rarity === rarity),
             sortBy(([agentId]) => agentId),
