@@ -1,11 +1,8 @@
-// import AgentButton from './AgentButton'
-import PickButton from './PickButton'
-import Score from './Score'
-import Time from './Time'
-import { usePlay } from '@/hooks'
-import { join, pipe, map, toArray, zipWithIndex, concat, isNull } from '@fxts/core'
+import { usePlay, useSetting } from '@/hooks'
+import { join, pipe, map, toArray, concat, when } from '@fxts/core'
 import { Form } from '@zzz-picker/components/v2'
-import type { SelectAgent, RoundId, Side } from '@zzz-picker/constant'
+import { DEFAULT, type SelectAgent, type RoundId, type Side } from '@zzz-picker/constant'
+import { getAgentTotalCost } from '@zzz-picker/utils'
 import { useMemo } from 'react'
 
 type Props = {
@@ -14,11 +11,28 @@ type Props = {
 }
 
 const Pick: React.FC<Props> = (props) => {
-  const { state, setState } = usePlay()
+  const { costTable } = useSetting()
+  const { state, cost, setState } = usePlay()
   const pickList = useMemo(
     () => state[props.roundId][props.side].pickList,
-    [state[props.roundId][props.side].pickList, props.roundId, props.side]
+    [state[props.roundId][props.side].pickList]
   )
+  const time = useMemo(
+    () => state[props.roundId][props.side].time,
+    [state, props.roundId, props.side]
+  )
+  const score = useMemo(
+    () => state[props.roundId][props.side].result,
+    [state, props.roundId, props.side]
+  )
+  const costList = useMemo(() => {
+    return pipe(
+      pickList,
+      map((agentId) => agentId && cost[props.side].get(agentId)),
+      map((costSetting) => (costSetting ? getAgentTotalCost(costTable, costSetting) : 0)),
+      toArray
+    )
+  }, [pickList, cost, costTable])
 
   const onChange = (value: SelectAgent[]) => {
     setState((prev) => {
@@ -26,15 +40,43 @@ const Pick: React.FC<Props> = (props) => {
 
       roundData[props.side].pickList = value as [SelectAgent, SelectAgent, SelectAgent]
 
-      return {
-        ...prev,
-        [props.roundId]: roundData,
-      }
+      return { ...prev, [props.roundId]: roundData }
     })
+  }
+  const onTimeChange = (value: number) => {
+    setState((prev) => {
+      const roundData = { ...prev[props.roundId] }
+
+      roundData[props.side].time = value
+
+      return { ...prev, [props.roundId]: roundData }
+    })
+  }
+  const onScoreChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    pipe(
+      Number(event.target.value),
+      when(
+        (value) => value > DEFAULT.MAX_SCORE,
+        () => DEFAULT.MAX_SCORE
+      ),
+      when(
+        (value) => value < 0,
+        () => 0
+      ),
+      (value) => {
+        setState((prev) => {
+          const roundData = { ...prev[props.roundId] }
+
+          roundData[props.side].result = value
+
+          return { ...prev, [props.roundId]: roundData }
+        })
+      }
+    )
   }
 
   return (
-    <div className="flex-1">
+    <div className="w-[336px]">
       <div
         className={pipe(
           ['w-full flex flex-col', 'gap-4'],
@@ -43,8 +85,8 @@ const Pick: React.FC<Props> = (props) => {
         )}
       >
         <Form.Time
-          value={0}
-          onChange={() => {}}
+          value={time}
+          onChange={onTimeChange}
           className={pipe(
             ['w-56', 'h-14', 'bg-content'],
             concat(props.side === 'A' ? ['rounded-tr-2xl'] : []),
@@ -52,8 +94,22 @@ const Pick: React.FC<Props> = (props) => {
             join(' ')
           )}
         />
-        <Form.Party value={pickList} onChange={onChange} />
-        <Score roundId={props.roundId} side={props.side} />
+        <Form.Party size="md" value={pickList} cost={costList} deleteable onChange={onChange} />
+        <Form.Input
+          name={`${props.roundId}-${props.side}-score`}
+          value={`${score}`}
+          max={DEFAULT.MAX_SCORE}
+          min={0}
+          step={1}
+          type="number"
+          onChange={onScoreChange}
+          className={pipe(
+            ['w-56', 'h-14', 'bg-content', '[&_input]:text-3xl', '[&_input]:font-black'],
+            concat(props.side === 'A' ? ['rounded-bl-2xl', 'ml-auto', '[&_input]:text-right'] : []),
+            concat(props.side === 'B' ? ['rounded-br-2xl', 'mr-auto', '[&_input]:text-left'] : []),
+            join(' ')
+          )}
+        />
       </div>
     </div>
   )
