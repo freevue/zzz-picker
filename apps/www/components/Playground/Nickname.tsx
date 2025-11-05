@@ -1,5 +1,4 @@
 import type { Side } from '@/types'
-import { pipe, join, concat } from '@fxts/core'
 import { Form } from '@zzz-picker/components/v2'
 import { useState } from 'react'
 
@@ -9,8 +8,8 @@ type Props = {
 
 const Nickname: React.FC<Props> = (props) => {
   const [value, setValue] = useState('')
-  const onChange = (value: string) => {
-    setValue(value)
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(event.target.value)
   }
 
   return (
