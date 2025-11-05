@@ -15,6 +15,7 @@ export const DEFAULT = {
   TIME_BONUS: 333,
   BAN_COUNT: 2,
   TOTAL_COST: 24,
+  MAX_SCORE: 70_000,
   ROUNDE_SIDE: {
     time: 0,
     result: 0,
