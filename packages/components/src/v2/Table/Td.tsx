@@ -1,4 +1,4 @@
-import { pipe, join, concat } from '@fxts/core'
+import { pipe, join, concat, isUndefined } from '@fxts/core'
 import { useEffect, useRef, useState } from 'react'
 
 type Props = {
@@ -14,7 +14,7 @@ const Td: React.FC<Props> = (props) => {
   const [isEdit, setIsEdit] = useState(false)
 
   const onEditClick = () => {
-    setIsEdit(true)
+    if (!isUndefined(props.onChange)) setIsEdit(true)
   }
   const onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     event.preventDefault()
