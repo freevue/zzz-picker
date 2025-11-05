@@ -94,7 +94,14 @@ const Pick: React.FC<Props> = (props) => {
             join(' ')
           )}
         />
-        <Form.Party size="md" value={pickList} cost={costList} deleteable onChange={onChange} />
+        <Form.Party
+          size="md"
+          reverse={props.side === 'B'}
+          value={pickList}
+          cost={costList}
+          deleteable
+          onChange={onChange}
+        />
         <Form.Input
           name={`${props.roundId}-${props.side}-score`}
           value={`${score}`}
