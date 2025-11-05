@@ -30,7 +30,11 @@ export const Default: Story = {
   render: (args) => {
     const [value, setValue] = useState(args.value)
 
-    return <Form.Input {...args} value={value} onChange={setValue} />
+    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setValue(event.target.value)
+    }
+
+    return <Form.Input {...args} value={value} onChange={onChange} />
   },
 }
 
@@ -43,11 +47,15 @@ export const Name: Story = {
   render: (args) => {
     const [value, setValue] = useState(args.value)
 
+    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setValue(event.target.value)
+    }
+
     return (
       <div className="flex gap-4 items-center">
-        <Form.Nickname {...args} side="A" value={value} onChange={setValue} />
+        <Form.Nickname {...args} side="A" value={value} onChange={onChange} />
         <Typo.Heading className="heading-3xl">VS</Typo.Heading>
-        <Form.Nickname {...args} side="B" value={value} onChange={setValue} />
+        <Form.Nickname {...args} side="B" value={value} onChange={onChange} />
       </div>
     )
   },
