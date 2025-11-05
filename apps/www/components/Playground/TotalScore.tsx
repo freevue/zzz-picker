@@ -11,9 +11,9 @@ type Props = {}
 
 const HideRecord: React.FC<{ children: React.ReactNode }> = (props) => {
   return (
-    <span className="absolute cursor-default left-0 -bottom-8 font-extrabold w-full text-foreground text-xl! opacity-0 group-hover:opacity-70 transition-opacity duration-300">
+    <Typo.Heading className="absolute cursor-default left-0 -bottom-8 w-full heading-xl text-ink opacity-0 group-hover:opacity-70 transition-opacity duration-200">
       {props.children}
-    </span>
+    </Typo.Heading>
   )
 }
 const Record: React.FC<{
