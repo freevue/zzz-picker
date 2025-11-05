@@ -1,9 +1,11 @@
 import AgentDialog from './AgentDialog'
 import { Plus, Cross } from '@/Icons'
-import { useAgent, usePlay, useSetting } from '@/hooks'
+import { useAgent, usePlay, useSetting, useStore } from '@/hooks'
 import { pipe, zipWithIndex, map, toArray, join, concat, isNull, findIndex } from '@fxts/core'
-import { Button, Dialog, Typo } from '@zzz-picker/components'
-import { useEffect, useState } from 'react'
+import { Button } from '@zzz-picker/components'
+import { Typo, Dialog, Form } from '@zzz-picker/components/v2'
+import type { SelectAgent } from '@zzz-picker/constant'
+import { useState } from 'react'
 
 type Props = {
   id: number
@@ -123,31 +125,30 @@ const BanButton: React.FC<{ id: number | null; index: number }> = (props) => {
 }
 
 const BanAgent = () => {
+  const { loading } = useStore()
   const { state: settingState } = useSetting()
   const { state: playState, setState } = usePlay()
 
-  if (settingState.banCount === 0) {
-    return null
+  const onChange = (banList: SelectAgent[]) => {
+    setState((prev) => ({ ...prev, banList }))
   }
+
+  if (loading || settingState.banCount === 0) return null
+
+  // console.log(playState)
 
   return (
     <div className="flex-1 overflow-hidden p-4">
-      <Typo.Heading className="text-xl" primary>
+      <Typo.Heading className="heading-2xl text-primary" heading={3}>
         Ban
       </Typo.Heading>
       <div className="w-full overflow-x-auto overflow-y-hidden mt-4">
-        <ul className="flex w-fit">
-          {pipe(
-            playState.banList,
-            zipWithIndex,
-            map(([index, id]) => (
-              <li key={index} className="size-24 overflow-hidden group">
-                <BanButton id={id} index={index} />
-              </li>
-            )),
-            toArray
-          )}
-        </ul>
+        <Form.Party
+          filterAgents={settingState.allowAgent}
+          value={playState.banList}
+          onChange={onChange}
+          deleteable
+        />
       </div>
     </div>
   )
