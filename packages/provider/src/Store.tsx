@@ -90,7 +90,6 @@ const Provider = (props: Props) => {
 
           return currentMap
         }, [bossData, bossLoading]),
-
         deadlyAssaultList: useMemo(() => {
           if (deadlyAssaultLoading) return []
 
