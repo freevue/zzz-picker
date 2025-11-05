@@ -14,6 +14,7 @@ type Props = {
   deleteable?: boolean
   allowAgents?: AgentId[]
   banAgents?: AgentId[]
+  filterAgents?: AgentId[]
 }
 
 const Button: React.FC<Props> = (props) => {
@@ -119,6 +120,7 @@ const Button: React.FC<Props> = (props) => {
         isOpen={isOpen}
         onSelect={onSelect}
         onClose={() => setIsOpen(false)}
+        filterAgents={props.filterAgents}
         allowAgents={props.allowAgents}
         banAgents={props.banAgents}
       />

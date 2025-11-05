@@ -1,6 +1,16 @@
 import { useRoundedSize } from '../..'
 import Button from './Button'
-import { pipe, concat, join, map, toArray, zipWithIndex, findIndex } from '@fxts/core'
+import {
+  pipe,
+  concat,
+  join,
+  map,
+  toArray,
+  zipWithIndex,
+  findIndex,
+  includes,
+  filter,
+} from '@fxts/core'
 import type { AgentId, SelectAgent } from '@zzz-picker/constant'
 
 type Props = {
@@ -11,11 +21,13 @@ type Props = {
   deleteable?: boolean
   allowAgents?: AgentId[]
   banAgents?: AgentId[]
+  filterAgents?: AgentId[]
+  reverse?: boolean
   onChange?: (value: SelectAgent[]) => void
 }
 
 const Party: React.FC<Props> = (props) => {
-  const size = useRoundedSize(props.size)
+  const size = useRoundedSize(props.size, props.reverse)
 
   const onClick = (index: number) => (agentId: SelectAgent) => {
     pipe(
@@ -48,7 +60,7 @@ const Party: React.FC<Props> = (props) => {
   return (
     <div
       className={pipe(
-        ['flex', 'w-auto!', 'overflow-hidden', size],
+        ['flex', 'w-fit!', 'overflow-hidden', size],
         concat([props.className || '']),
         join(' ')
       )}
@@ -64,6 +76,7 @@ const Party: React.FC<Props> = (props) => {
             size={props.size}
             id={agentId}
             key={index}
+            filterAgents={props.filterAgents}
             deleteable={props.deleteable}
             allowAgents={props.allowAgents}
             banAgents={props.banAgents}
