@@ -5,7 +5,7 @@ import { useState, Activity } from 'react'
 const Rule: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [gameRuleTab, setGameRuleTab] = useState('정식 로프꾼 경기')
-  const [commonRuleTab, setCommonRuleTab] = useState('참가신청 방법')
+  const [commonRuleTab, setCommonRuleTab] = useState('참가신청')
 
   return (
     <>
