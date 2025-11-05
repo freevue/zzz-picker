@@ -48,9 +48,16 @@ export const Context = createContext<State>({
 
 const Provider = (props: Props) => {
   const { replace } = useContext(RouterContext)
-  const [state, setState] = useState<SettingState>(props.option)
+  const [state, setState] = useState<SettingState>({
+    banCount: DEFAULT.BAN_COUNT,
+    totalCost: DEFAULT.TOTAL_COST,
+    allowAgent: [],
+  })
   const [costTable, setCostTable] = useState(DEFAULT.COST_TABLE)
 
+  useEffect(() => {
+    setState((prev) => ({ ...prev, ...props.option }))
+  }, [props.option])
   useEffect(() => {
     pipe(
       state,
