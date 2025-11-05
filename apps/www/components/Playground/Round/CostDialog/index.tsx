@@ -1,6 +1,6 @@
 import { useAgent, usePlay } from '@/hooks'
-import { pipe, join, concat, map, zipWithIndex, toArray } from '@fxts/core'
-import { Form, Button, Typo } from '@zzz-picker/components'
+import { pipe, join, concat } from '@fxts/core'
+import { Form, Typo, Tabs } from '@zzz-picker/components/v2'
 import type { Side, RoundId, EngineCostType } from '@zzz-picker/constant'
 import { useMemo } from 'react'
 
@@ -19,7 +19,7 @@ const CostDialog: React.FC<Props> = (props) => {
     [cost, props.agentId, props.side]
   )
 
-  const onRateChange = (value: number, name: string) => {
+  const onRateChange = (name: string) => (value: number) => {
     setCost((prev) => {
       const currentCost = new Map(prev[props.side])
 
@@ -28,13 +28,13 @@ const CostDialog: React.FC<Props> = (props) => {
       return { ...prev, [props.side]: currentCost }
     })
   }
-  const onEngineChange = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const engineType = (event.currentTarget.value || null) as EngineCostType | null
-
+  const onEngineChange = (value: string) => {
     setCost((prev) => {
       const currentCost = new Map(prev[props.side])
-
-      currentCost.set(props.agentId, { ...currentCost.get(props.agentId)!, engineType })
+      currentCost.set(props.agentId, {
+        ...currentCost.get(props.agentId)!,
+        engineType: value ? (value as EngineCostType) : null,
+      })
 
       return { ...prev, [props.side]: currentCost }
     })
@@ -48,7 +48,7 @@ const CostDialog: React.FC<Props> = (props) => {
         join(' ')
       )}
     >
-      <Typo.Heading primary className="">
+      <Typo.Heading className="heading-4xl text-primary" heading={2}>
         {agent.fullNameKo} +{props.totalCost}
         <span
           className="absolute -top-2 -right-2 text-9xl font-black block scale-200 opacity-50 italic"
@@ -58,83 +58,53 @@ const CostDialog: React.FC<Props> = (props) => {
         </span>
       </Typo.Heading>
       <div className="flex mt-8 items-end relative z-10 flex-1 gap-8">
-        <div className="w-sm flex items-start justify-start">
+        <div className="w-xs h-full flex items-start justify-start">
           <img
-            className={pipe(
-              ['w-full', 'block'],
-              concat([]),
-              concat(
-                []
-                // props.agentId === PRETTY_AGENT_ID
-                //   ? ['rounded-bl-2xl', 'rounded-tr-2xl', 'border-2', 'border-secondary']
-                //   : []
-              ),
-              join(' ')
-            )}
+            className={pipe(['w-full', 'block'], concat([]), join(' '))}
             src={agent.banner.url}
             alt={agent.nameKo}
           />
         </div>
         <div className="flex-1">
-          <Typo.Heading primary className="text-2xl">
+          <Typo.Heading className="heading-3xl text-primary" heading={3}>
             Cost 설정
           </Typo.Heading>
           <div className="mt-8 flex flex-col gap-8">
             <div>
-              <Typo.Heading className="text-xl mb-2">캐릭터 돌파</Typo.Heading>
+              <Typo.Body className="body-xl mb-2">캐릭터 돌파</Typo.Body>
               <Form.Count
                 min={0}
                 max={6}
                 step={1}
                 value={currentCost.agentRate}
+                className="bg-base/70"
                 name="agentRate"
-                onChange={onRateChange}
+                onChange={onRateChange('agentRate')}
               />
             </div>
             <div>
-              <Typo.Heading className="text-xl mb-2">엔진 종류</Typo.Heading>
-              <ul className={pipe(['flex', 'rounded-lg', 'overflow-hidden'], join(' '))}>
-                {pipe(
-                  [
-                    { name: '전용', value: 'sExclusiveEngine' },
-                    { name: 'S급', value: 'sEngine' },
-                    { name: 'A급', value: 'aEngine' },
-                    { name: '미착용', value: null },
-                  ],
-                  zipWithIndex,
-                  map(([index, item]) => (
-                    <li key={index} className="flex-1">
-                      <Button
-                        className={pipe(
-                          ['w-full', 'py-1', 'font-extrabold', 'text-lg'],
-                          concat(
-                            currentCost.engineType === item.value
-                              ? ['bg-primary']
-                              : ['text-foreground', 'bg-gray-600/70', 'hover:bg-gray-600']
-                          ),
-                          join(' ')
-                        )}
-                        type="button"
-                        onClick={onEngineChange}
-                        value={item.value || ''}
-                      >
-                        {item.name}
-                      </Button>
-                    </li>
-                  )),
-                  toArray
-                )}
-              </ul>
+              <Typo.Body className="body-xl mb-2">엔진 종류</Typo.Body>
+              <Tabs
+                list={[
+                  { label: '전용', value: 'sExclusiveEngine' },
+                  { label: 'S급', value: 'sEngine' },
+                  { label: 'A급', value: 'aEngine' },
+                  { label: '미착용', value: '' },
+                ]}
+                value={currentCost.engineType || ''}
+                onChange={onEngineChange}
+              />
             </div>
             <div>
-              <Typo.Heading className="text-xl mb-2">엔진 돌파</Typo.Heading>
+              <Typo.Body className="body-xl mb-2">엔진 돌파</Typo.Body>
               <Form.Count
                 min={1}
                 max={5}
                 step={1}
+                className="bg-base/70"
                 value={currentCost.engineRate}
                 name="engineRate"
-                onChange={onRateChange}
+                onChange={onRateChange('engineRate')}
               />
             </div>
           </div>
