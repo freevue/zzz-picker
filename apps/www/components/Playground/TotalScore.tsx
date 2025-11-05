@@ -1,7 +1,8 @@
-import { usePlay, useSetting, useRouter } from '@/hooks'
-import { pipe, join, concat, map, sum, filter, toArray, transpose, isNull } from '@fxts/core'
-import { Button, Typo } from '@zzz-picker/components'
-import { DEFAULT, DEFAULT_COST_RATE } from '@zzz-picker/constant'
+import { usePlay, useSetting } from '@/hooks'
+import { pipe, join, concat, map, sum, toArray, transpose, includes, filter } from '@fxts/core'
+import { useLocation } from '@remix-run/react'
+import { Typo } from '@zzz-picker/components/v2'
+import { DEFAULT, DEFAULT_COST_RATE, type Side } from '@zzz-picker/constant'
 import { getAgentTotalCost } from '@zzz-picker/utils'
 import { animate, motion, useMotionValue, useTransform } from 'motion/react'
 import { useEffect, useMemo } from 'react'
@@ -40,7 +41,7 @@ const Record: React.FC<{
   return (
     <motion.p
       className={pipe(
-        ['text-foreground', 'text-3xl', 'font-black', 'flex-1', 'cursor-default'],
+        ['text-ink', 'heading-3xl', 'flex-1', 'cursor-default'],
         concat([props.className || '']),
         concat(props.isHide ? ['opacity-0'] : ['opacity-100']),
         join(' ')
@@ -51,38 +52,28 @@ const Record: React.FC<{
   )
 }
 const TotalScore: React.FC<Props> = () => {
-  const { state: playState, cost, isCounting, setIsCounting } = usePlay()
-  const { path } = useRouter()
+  const { state: playState, allPickList, cost, isCounting, setIsCounting } = usePlay()
+  const { pathname } = useLocation()
   const { costTable, state: settingState } = useSetting()
   const roundList = useMemo(() => {
-    return [playState.personal, playState[path === '/unlimited' ? 'unlimited' : 'common']]
-  }, [path, playState])
+    return [playState.personal, playState[pathname === '/unlimited' ? 'unlimited' : 'common']]
+  }, [pathname, playState])
   const totalCost = useMemo(() => {
-    const [A, B] = pipe(
-      roundList,
-      map(({ A, B }) => [
-        pipe(
-          A.pickList,
-          filter((agentId) => !isNull(agentId)),
-          map((agentId) => cost.A.get(agentId)!),
-          map(getAgentTotalCost(costTable)),
-          sum
-        ),
-        pipe(
-          B.pickList,
-          filter((agentId) => !isNull(agentId)),
-          map((agentId) => cost.B.get(agentId)!),
-          map(getAgentTotalCost(costTable)),
-          sum
-        ),
-      ]),
-      (list) => transpose(...list),
-      map(sum),
-      toArray
-    )
+    const getSideTotalCost = (side: Side) => {
+      return pipe(
+        cost[side],
+        filter(([agentId]) => includes(agentId, allPickList[side])),
+        map(([, costSetting]) => costSetting),
+        map(getAgentTotalCost(costTable)),
+        sum
+      )
+    }
 
-    return { A, B }
-  }, [cost, costTable, roundList])
+    return {
+      A: getSideTotalCost('A'),
+      B: getSideTotalCost('B'),
+    }
+  }, [cost, costTable, allPickList])
   const roundTotalScore = useMemo(() => {
     const [A, B] = pipe(
       roundList,
@@ -130,9 +121,7 @@ const TotalScore: React.FC<Props> = () => {
 
   return (
     <div className={pipe(['relative'], concat([]), join(' '))}>
-      <Typo.Heading className="text-center" primary>
-        결과
-      </Typo.Heading>
+      <Typo.Heading className="text-center heading-3xl text-primary">결과</Typo.Heading>
       <div className="flex flex-col gap-4 mt-8">
         <div className="flex items-center justify-between">
           <Record
@@ -148,7 +137,7 @@ const TotalScore: React.FC<Props> = () => {
             value={totalCost.A}
             fixed={2}
           />
-          <Typo.Heading className="w-1/3 text-xl text-center cursor-default">
+          <Typo.Heading className="w-1/3 text-center cursor-default heading-xl">
             총 사용 Cost
           </Typo.Heading>
           <Record
@@ -172,7 +161,7 @@ const TotalScore: React.FC<Props> = () => {
             fixed={0}
             isHide={!isCounting}
           />
-          <Typo.Heading className="w-1/3 text-xl text-center cursor-default">
+          <Typo.Heading className="w-1/3 text-center cursor-default heading-xl">
             라운드 점수 합산
           </Typo.Heading>
           <Record
@@ -189,7 +178,7 @@ const TotalScore: React.FC<Props> = () => {
             fixed={0}
             isHide={!isCounting}
           />
-          <Typo.Heading className="w-1/3 text-xl text-center cursor-default">
+          <Typo.Heading className="w-1/3 text-center cursor-default heading-xl">
             시간 보너스
           </Typo.Heading>
           <Record
@@ -210,7 +199,7 @@ const TotalScore: React.FC<Props> = () => {
               prefix="%"
               isHide={!isCounting}
             />
-            <Typo.Heading className="w-1/3 text-xl text-center cursor-default">
+            <Typo.Heading className="w-1/3 text-center cursor-default heading-xl">
               Cost 보너스 배율
             </Typo.Heading>
             <Record
@@ -234,7 +223,9 @@ const TotalScore: React.FC<Props> = () => {
             />
             {isCounting && <HideRecord>{totalScore.A.toLocaleString()}</HideRecord>}
           </div>
-          <Typo.Heading className="w-1/3 text-center cursor-default">총 점수</Typo.Heading>
+          <Typo.Heading className="w-1/3 text-center cursor-default heading-3xl">
+            총 점수
+          </Typo.Heading>
           <div className="text-left flex-1 relative group">
             <Record
               className="text-primary! text-4xl!"
@@ -245,13 +236,13 @@ const TotalScore: React.FC<Props> = () => {
             {isCounting && <HideRecord>{totalScore.B.toLocaleString()}</HideRecord>}
           </div>
         </div>
-        <Button
+        <button
           type="button"
           onClick={() => setIsCounting((prev) => !prev)}
-          className="text-secondary font-extrabold text-xl"
+          className="text-secondary heading-xl focus:outline-none cursor-pointer"
         >
           결산하기
-        </Button>
+        </button>
       </div>
     </div>
   )
