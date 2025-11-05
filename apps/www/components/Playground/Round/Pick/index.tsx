@@ -1,5 +1,5 @@
 import CostDialog from '../CostDialog'
-import { join, pipe, map, toArray, concat, when, findIndex } from '@fxts/core'
+import { join, pipe, map, toArray, concat, when, findIndex, filter, isNumber } from '@fxts/core'
 import { Form, Dialog } from '@zzz-picker/components/v2'
 import {
   DEFAULT,
@@ -18,7 +18,7 @@ type Props = {
 }
 
 const Pick: React.FC<Props> = (props) => {
-  const { costTable } = useSetting()
+  const { costTable, state: settingState } = useSetting()
   const { state, cost, setState } = usePlay()
   const [selectedAgentId, setSelectedAgentId] = useState<SelectAgent>(null)
   const pickList = useMemo(
@@ -111,6 +111,8 @@ const Pick: React.FC<Props> = (props) => {
             reverse={props.side === 'B'}
             value={pickList}
             cost={costList}
+            allowAgents={settingState.allowAgent}
+            banAgents={pipe(state.banList, filter(isNumber), toArray)}
             deleteable
             onChange={onChange}
             onClick={onClick}

@@ -1,6 +1,6 @@
 import { pipe, split, toArray } from '@fxts/core'
 import { DEFAULT, type CostTable } from '@zzz-picker/constant'
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useState, useContext } from 'react'
 
 type Optios = {
   banCount: number

@@ -41,7 +41,12 @@ type State = {
 }
 
 const DEFAULT_STATE = {
-  banList: [],
+  banList: pipe(
+    DEFAULT.BAN_COUNT,
+    range,
+    map(() => null),
+    toArray
+  ),
   common: {
     key: 'common',
     title: '공용 무대',
@@ -81,7 +86,7 @@ export const Context = createContext<State>({
 })
 
 const Provider = (props: Props) => {
-  const { agents } = useContext(StoreContext)
+  const { agents, loading } = useContext(StoreContext)
   const [state, setState] = useState<PlayState>(DEFAULT_STATE)
   const [cost, setCost] = useState<Record<Side, Map<number, AgentCostSetting>>>({
     A: new Map(),
@@ -128,20 +133,16 @@ const Provider = (props: Props) => {
   })
 
   useEffect(() => {
+    if (loading) return
+
     pipe(
-      settingState.banCount,
+      settingState.banCount || DEFAULT.BAN_COUNT,
       range,
       map(() => null),
       toArray,
-      (banList) => {
-        console.log({ banList })
-        return setState((prev) => ({ ...prev, banList }))
-      }
+      (banList) => setState((prev) => ({ ...prev, banList }))
     )
-  }, [settingState.banCount])
-  useEffect(() => {
-    console.log({ goo: state.banList })
-  }, [state.banList])
+  }, [settingState.banCount, loading])
   useEffect(() => {
     setIsCounting(false)
   }, [state])
