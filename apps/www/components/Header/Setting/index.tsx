@@ -1,8 +1,8 @@
-import { useSetting, useStore } from '@/hooks'
 import { pipe, map, toArray, filter, includes, when, concat, reverse } from '@fxts/core'
 import { useLocation } from '@remix-run/react'
 import { Typo, Agent, Tabs, Form } from '@zzz-picker/components/v2'
 import type { Rarity } from '@zzz-picker/constant'
+import { useSetting, useStore } from '@zzz-picker/provider/hooks'
 import { useEffect, useState } from 'react'
 
 const Setting: React.FC = () => {

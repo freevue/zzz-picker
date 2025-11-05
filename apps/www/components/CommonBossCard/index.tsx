@@ -1,9 +1,9 @@
 import BossInfo from './BossInfo'
-import { Plus } from '@/Icons'
-import { usePlay } from '@/hooks'
 import { pipe, concat, join } from '@fxts/core'
 import { useLocation } from '@remix-run/react'
+import { Icons } from '@zzz-picker/components/'
 import { Dialog, Typo } from '@zzz-picker/components/v2'
+import { usePlay } from '@zzz-picker/provider/hooks'
 import { useState } from 'react'
 import { BossDialog } from '~/components'
 
@@ -48,7 +48,7 @@ const BossSelect = () => {
               <img src={`/images/boss/${state.common.boss}.webp`} alt="" className="block w-full" />
             </div>
           ) : (
-            <Plus className="stroke-ink size-1/3 group-hover:stroke-primary" />
+            <Icons.Plus className="stroke-ink size-1/3 group-hover:stroke-primary" />
           )}
         </button>
         {state.common.boss !== null && <BossInfo />}

@@ -1,6 +1,6 @@
-import { useStore } from '@/hooks'
 import { pipe, map, toArray, join, find, sort, zipWithIndex, when } from '@fxts/core'
 import { Typo } from '@zzz-picker/components/v2'
+import { useStore } from '@zzz-picker/provider/hooks'
 import dayjs from 'dayjs'
 import { motion } from 'motion/react'
 import { useMemo } from 'react'

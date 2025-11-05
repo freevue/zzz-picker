@@ -1,6 +1,6 @@
 import AllowAgent from './AllowAgent'
 import BanAgent from './BanAgent'
-import { useStore } from '@/hooks'
+import { useStore } from '@zzz-picker/provider/hooks'
 import { AnimatePresence, motion } from 'motion/react'
 
 const BottomSheet = () => {

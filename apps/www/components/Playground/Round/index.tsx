@@ -1,8 +1,8 @@
 import { Common, Double } from './BossButton'
 import Pick from './Pick'
-import { usePlay } from '@/hooks'
 import { Typo } from '@zzz-picker/components/v2'
 import type { RoundId } from '@zzz-picker/constant'
+import { usePlay } from '@zzz-picker/provider/hooks'
 import { useMemo } from 'react'
 
 type Props = {

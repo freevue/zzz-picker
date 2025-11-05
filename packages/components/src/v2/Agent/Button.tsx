@@ -1,7 +1,7 @@
 import { useRoundedSize } from '..'
 import Profile from './Profile'
 import { pipe, concat, join } from '@fxts/core'
-import type { SelectAgent, AgentId } from '@zzz-picker/constant'
+import type { AgentId } from '@zzz-picker/constant'
 import { useAgent } from '@zzz-picker/provider/hooks'
 import { Activity } from 'react'
 

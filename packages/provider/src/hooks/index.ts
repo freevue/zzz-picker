@@ -1,4 +1,4 @@
-import { StoreContext, SettingContext, PlayContext, RouterContext } from '../'
+import { StoreContext, SettingContext, PlayContext } from '../'
 import { useContext, useMemo } from 'react'
 
 export const useStore = () => {
@@ -17,8 +17,4 @@ export const useSetting = () => {
 
 export const usePlay = () => {
   return useContext(PlayContext)
-}
-
-export const useRouter = () => {
-  return useContext(RouterContext)
 }

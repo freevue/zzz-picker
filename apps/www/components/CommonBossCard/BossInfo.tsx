@@ -1,4 +1,3 @@
-import { usePlay, useStore } from '@/hooks'
 import {
   pipe,
   sort,
@@ -13,6 +12,7 @@ import {
 } from '@fxts/core'
 import { Typo } from '@zzz-picker/components/v2'
 import type { GQL_Attribute } from '@zzz-picker/graphql'
+import { usePlay, useStore } from '@zzz-picker/provider/hooks'
 import dayjs from 'dayjs'
 import { AnimatePresence, motion } from 'motion/react'
 import { useMemo } from 'react'

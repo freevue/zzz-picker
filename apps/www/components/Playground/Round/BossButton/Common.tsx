@@ -1,7 +1,7 @@
-import { Plus } from '@/Icons'
-import { usePlay, useStore } from '@/hooks'
 import { concat, join, pipe } from '@fxts/core'
+import { Icons } from '@zzz-picker/components'
 import { Dialog } from '@zzz-picker/components/v2'
+import { usePlay, useStore } from '@zzz-picker/provider/hooks'
 import { useMemo, useState } from 'react'
 import { BossDialog } from '~/components'
 
@@ -59,7 +59,7 @@ const Common: React.FC = () => {
             alt={bossData.nameKo}
           />
         ) : (
-          <Plus className="stroke-ink block size-10 group-hover:stroke-primary" />
+          <Icons.Plus className="stroke-ink block size-10 group-hover:stroke-primary" />
         )}
       </button>
       <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>

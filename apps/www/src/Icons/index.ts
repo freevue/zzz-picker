@@ -1,8 +1,0 @@
-export { default as Refresh } from './Refresh'
-export { default as Cross } from './Cross'
-export { default as Plus } from './Plus'
-export { default as Info } from './Info'
-export { default as Setting } from './Setting'
-export { default as Minus } from './Minus'
-export { default as Edit } from './Edit'
-export { default as Save } from './Save'

@@ -1,18 +1,6 @@
-import { Context as RouterContext } from './Router'
-import {
-  join,
-  filter,
-  map,
-  pipe,
-  split,
-  toArray,
-  entries,
-  isArray,
-  fromEntries,
-  isEmpty,
-} from '@fxts/core'
+import { pipe, split, toArray } from '@fxts/core'
 import { DEFAULT, type CostTable } from '@zzz-picker/constant'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 
 type Optios = {
   banCount: number
@@ -47,7 +35,6 @@ export const Context = createContext<State>({
 })
 
 const Provider = (props: Props) => {
-  const { replace } = useContext(RouterContext)
   const [state, setState] = useState<SettingState>({
     banCount: DEFAULT.BAN_COUNT,
     totalCost: DEFAULT.TOTAL_COST,
@@ -58,20 +45,6 @@ const Provider = (props: Props) => {
   useEffect(() => {
     setState((prev) => ({ ...prev, ...props.option }))
   }, [props.option])
-  useEffect(() => {
-    pipe(
-      state,
-      entries,
-      filter(([, value]) => !isEmpty(value) && !!value),
-      map(([key, value]) => {
-        if (isArray(value)) return [key, join(',', value)] as const
-
-        return [key, `${value}`] as const
-      }),
-      fromEntries,
-      (searchParams) => replace({ searchParams })
-    )
-  }, [state])
 
   return (
     <Context.Provider

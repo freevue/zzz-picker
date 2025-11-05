@@ -1,6 +1,6 @@
 import { Context as SettingContext } from './Setting'
 import { Context as StoreContext } from './Store'
-import { map, pipe, range, toArray, flatMap, filter, isNull, includes } from '@fxts/core'
+import { map, pipe, range, toArray, flatMap, filter, isNull } from '@fxts/core'
 import {
   DEFAULT,
   type SelectAgent,
@@ -133,9 +133,15 @@ const Provider = (props: Props) => {
       range,
       map(() => null),
       toArray,
-      (banList) => setState((prev) => ({ ...prev, banList }))
+      (banList) => {
+        console.log({ banList })
+        return setState((prev) => ({ ...prev, banList }))
+      }
     )
   }, [settingState.banCount])
+  useEffect(() => {
+    console.log({ goo: state.banList })
+  }, [state.banList])
   useEffect(() => {
     setIsCounting(false)
   }, [state])

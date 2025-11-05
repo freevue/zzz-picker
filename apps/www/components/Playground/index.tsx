@@ -3,9 +3,9 @@ import Nickname from './Nickname'
 import Reset from './Reset'
 import Round from './Round'
 import TotalScore from './TotalScore'
-import { useStore } from '@/hooks'
 import { useLocation } from '@remix-run/react'
 import { Typo } from '@zzz-picker/components/v2'
+import { useStore } from '@zzz-picker/provider/hooks'
 import { AnimatePresence, motion } from 'motion/react'
 
 const Side: React.FC = () => {

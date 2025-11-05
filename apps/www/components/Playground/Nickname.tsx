@@ -1,5 +1,5 @@
-import type { Side } from '@/types'
 import { Form } from '@zzz-picker/components/v2'
+import type { Side } from '@zzz-picker/constant'
 import { useState } from 'react'
 
 type Props = {

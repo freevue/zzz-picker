@@ -1,7 +1,7 @@
-import { useAgent, usePlay } from '@/hooks'
 import { pipe, join, concat } from '@fxts/core'
 import { Form, Typo, Tabs } from '@zzz-picker/components/v2'
 import type { Side, RoundId, EngineCostType } from '@zzz-picker/constant'
+import { useAgent, usePlay } from '@zzz-picker/provider/hooks'
 import { useMemo } from 'react'
 
 type Props = {

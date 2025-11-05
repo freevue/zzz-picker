@@ -1,5 +1,5 @@
-import { usePlay } from '@/hooks'
 import { Button, Icons } from '@zzz-picker/components'
+import { usePlay } from '@zzz-picker/provider/hooks'
 
 const Reset: React.FC = () => {
   const { reset } = usePlay()

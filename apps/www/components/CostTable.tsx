@@ -1,7 +1,7 @@
-import { useSetting } from '@/hooks'
 import { Icons } from '@zzz-picker/components'
 import { Table, Typo } from '@zzz-picker/components/v2'
 import { DEFAULT_COST_RATE } from '@zzz-picker/constant'
+import { useSetting } from '@zzz-picker/provider/hooks'
 
 const CostTable: React.FC = () => {
   const { state, costTable, setCostTable } = useSetting()

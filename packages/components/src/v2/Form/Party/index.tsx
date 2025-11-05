@@ -1,16 +1,6 @@
 import { useRoundedSize } from '../..'
 import Button from './Button'
-import {
-  pipe,
-  concat,
-  join,
-  map,
-  toArray,
-  zipWithIndex,
-  findIndex,
-  includes,
-  filter,
-} from '@fxts/core'
+import { pipe, concat, join, map, toArray, zipWithIndex, findIndex } from '@fxts/core'
 import type { AgentId, SelectAgent } from '@zzz-picker/constant'
 
 type Props = {

@@ -1,10 +1,10 @@
-import { Plus } from '@/Icons'
-import { BossDialog } from '@/components'
-import { usePlay, useStore } from '@/hooks'
 import { concat, join, pipe } from '@fxts/core'
-import { Button, Dialog } from '@zzz-picker/components'
+import { Icons } from '@zzz-picker/components'
+import { Dialog } from '@zzz-picker/components/v2'
 import type { Side } from '@zzz-picker/constant'
+import { usePlay, useStore } from '@zzz-picker/provider/hooks'
 import { useMemo, useState } from 'react'
+import { BossDialog } from '~/components'
 
 type Props = {
   side: Side
@@ -36,9 +36,17 @@ const BossButton: React.FC<Props> = (props) => {
 
   return (
     <>
-      <Button
+      <button
         className={pipe(
-          ['flex-1', 'aspect-[3/4]', 'overflow-hidden', 'border-2', 'group'],
+          [
+            'flex-1',
+            'aspect-[3/4]',
+            'overflow-hidden',
+            'border-2',
+            'group',
+            'focus:outline-none',
+            'cursor-pointer',
+          ],
           concat(
             bossData
               ? ['border-primary']
@@ -65,9 +73,9 @@ const BossButton: React.FC<Props> = (props) => {
             alt={bossData.nameKo}
           />
         ) : (
-          <Plus className="stroke-foreground block size-10 group-hover:stroke-secondary" />
+          <Icons.Plus className="stroke-foreground block size-10 group-hover:stroke-secondary" />
         )}
-      </Button>
+      </button>
       <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <BossDialog active={state.personal[props.side].boss} onClick={onBossChange} />
       </Dialog>

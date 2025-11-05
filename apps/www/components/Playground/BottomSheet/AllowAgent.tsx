@@ -1,5 +1,5 @@
-import { useSetting } from '@/hooks'
 import { Typo, Form } from '@zzz-picker/components/v2'
+import { useSetting } from '@zzz-picker/provider/hooks'
 
 const AllowAgent = () => {
   const { state } = useSetting()

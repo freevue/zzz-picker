@@ -1,5 +1,4 @@
 import CostDialog from '../CostDialog'
-import { usePlay, useSetting } from '@/hooks'
 import { join, pipe, map, toArray, concat, when, findIndex } from '@fxts/core'
 import { Form, Dialog } from '@zzz-picker/components/v2'
 import {
@@ -9,6 +8,7 @@ import {
   type Side,
   type AgentId,
 } from '@zzz-picker/constant'
+import { usePlay, useSetting } from '@zzz-picker/provider/hooks'
 import { getAgentTotalCost } from '@zzz-picker/utils'
 import { useMemo, useState } from 'react'
 
