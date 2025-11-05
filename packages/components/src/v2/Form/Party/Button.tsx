@@ -23,7 +23,11 @@ const Button: React.FC<Props> = (props) => {
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    if (!props.id) setIsOpen(true)
+    if (!props.id) {
+      setIsOpen(true)
+    } else {
+      props.onClick?.(Number(props.id))
+    }
   }
   const onSelect = (event: React.MouseEvent<HTMLButtonElement>) => {
     props.onSelect?.(Number(event.currentTarget.value))
