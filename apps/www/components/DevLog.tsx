@@ -1,4 +1,3 @@
-import { pipe, isString, map, toArray, zipWithIndex } from '@fxts/core'
 import { Dialog, Typo } from '@zzz-picker/components/v2'
 import { useState } from 'react'
 
