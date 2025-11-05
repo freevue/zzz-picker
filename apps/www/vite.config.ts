@@ -1,3 +1,4 @@
+import pkg from './package.json'
 import { vitePlugin as remix } from '@remix-run/dev'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
@@ -21,6 +22,7 @@ export default defineConfig({
     },
   },
   define: {
+    __VERSION__: JSON.stringify(pkg.version),
     'process.env.GOOGLE_API_KEY': JSON.stringify(process.env.GOOGLE_API_KEY),
     'process.env.GOOGLE_SHEET_ID': JSON.stringify(process.env.GOOGLE_SHEET_ID),
     'process.env.SUPABASE_URL': JSON.stringify(process.env.SUPABASE_URL),

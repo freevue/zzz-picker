@@ -69,7 +69,7 @@ const Header = () => {
           </li>
         </ul>
         <div className="ml-auto text-right">
-          <Typo.Body className="text-ink body-md">v3.0.0</Typo.Body>
+          <Typo.Body className="text-ink body-md">v{__VERSION__}</Typo.Body>
           <Typo.Body className="text-ink body-md hidden alice:block">
             가독성? 앨리스가 잘보이니 가독성은 좋음.
           </Typo.Body>
