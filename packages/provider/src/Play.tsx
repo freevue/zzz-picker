@@ -182,18 +182,6 @@ const Provider = (props: Props) => {
     setIsCounting(false)
   }, [state])
   useEffect(() => {
-    // const prevItem = window.localStorage.getItem('zzz-picker-play')
-    // if (!prevItem) return
-    // const data = JSON.parse(prevItem)[window.location.pathname]
-    // if (data) {
-    //   setCost({
-    //     A: new Map(data.cost.A),
-    //     B: new Map(data.cost.B),
-    //   })
-    //   setState(data.state)
-    // }
-  }, [])
-  useEffect(() => {
     const prevItem = window.localStorage.getItem('zzz-picker-play')
 
     window.localStorage.setItem(
@@ -206,7 +194,7 @@ const Provider = (props: Props) => {
         },
       })
     )
-  }, [state, cost, loading])
+  }, [state, cost])
   useEffect(() => {
     for (const agentId of allPickList.A) {
       updateCost('A', agentId)
