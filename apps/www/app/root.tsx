@@ -32,7 +32,7 @@ export const meta: MetaFunction = () => [
 
 const Router: React.FC = () => {
   return (
-    <html>
+    <html lang="ko">
       <head>
         <Meta />
         <Links />
