@@ -1,9 +1,9 @@
-import type { MetaFunction } from '@remix-run/node'
+// import type { MetaFunction } from '@remix-run/node'
 import RuleBook from '~/components/Rule/Book'
 
-export const meta: MetaFunction = () => {
-  return [{ title: '젠레스 존 제로: 엔강대 룰북' }]
-}
+// export const meta: MetaFunction = () => {
+//   return [{ title: '젠레스 존 제로: 엔강대 룰북' }]
+// }
 
 const Rule: React.FC = () => {
   return (

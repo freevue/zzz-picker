@@ -38,6 +38,15 @@ const Main: React.FC = () => {
       <div className="flex gap-6">
         <Rule />
         <DevLog />
+        <button
+          className="text-ink/70 body-lg hover:text-primary cursor-pointer focus:outline-none"
+          type="button"
+          onClick={() => {
+            window.localStorage.removeItem('zzz-picker-play')
+          }}
+        >
+          로컬 스토리지 초기화
+        </button>
       </div>
     </div>
   )

@@ -1,6 +1,17 @@
 import { Context as SettingContext } from './Setting'
 import { Context as StoreContext } from './Store'
-import { map, pipe, range, toArray, flatMap, filter, isNull } from '@fxts/core'
+import {
+  map,
+  pipe,
+  range,
+  toArray,
+  flatMap,
+  filter,
+  isNull,
+  throwIf,
+  when,
+  isUndefined,
+} from '@fxts/core'
 import {
   DEFAULT,
   type SelectAgent,
@@ -87,17 +98,41 @@ export const Context = createContext<State>({
 
 const Provider = (props: Props) => {
   const { agents, loading } = useContext(StoreContext)
-  const [state, setState] = useState<PlayState>(DEFAULT_STATE)
-  const [cost, setCost] = useState<Record<Side, Map<number, AgentCostSetting>>>({
-    A: new Map(),
-    B: new Map(),
+  const [state, setState] = useState<PlayState>(() => {
+    try {
+      return pipe(
+        window.localStorage.getItem('zzz-picker-play'),
+        throwIf(isNull, () => Error('')),
+        (storage) => JSON.parse(storage)[window.location.pathname],
+        when(isUndefined, () => ({ state: DEFAULT_STATE })),
+        ({ state }) => state
+      )
+    } catch {
+      return DEFAULT_STATE
+    }
+  })
+  const [cost, setCost] = useState<Record<Side, Map<number, AgentCostSetting>>>(() => {
+    try {
+      return pipe(
+        window.localStorage.getItem('zzz-picker-play'),
+        throwIf(isNull, () => Error('')),
+        (storage) => JSON.parse(storage)[window.location.pathname],
+        when(isUndefined, () => ({
+          cost: { A: new Map(), B: new Map() },
+        })),
+        ({ cost }) => ({ A: new Map(cost.A), B: new Map(cost.B) })
+      )
+    } catch {
+      return { A: new Map(), B: new Map() }
+    }
   })
   const { state: settingState } = useContext(SettingContext)
   const [isCounting, setIsCounting] = useState<boolean>(false)
   const allPickList = useMemo(() => {
     const getPickList = (side: Side) =>
       pipe(
-        [state.common[side], state.personal[side], state.unlimited[side]],
+        state || DEFAULT_STATE,
+        (state) => [state.common[side], state.personal[side], state.unlimited[side]],
         flatMap((item) => item.pickList),
         filter((agentId) => !isNull(agentId)),
         toArray
@@ -107,7 +142,7 @@ const Provider = (props: Props) => {
       A: getPickList('A'),
       B: getPickList('B'),
     }
-  }, [state.common, state.personal, state.unlimited])
+  }, [state])
 
   const updateCost = useEffectEvent((side: Side, agentId: SelectAgent) => {
     if (isNull(agentId)) return
@@ -140,38 +175,38 @@ const Provider = (props: Props) => {
       range,
       map(() => null),
       toArray,
-      (banList) => setState((prev) => ({ ...prev, banList }))
+      (banList) => setState((prev) => (prev ? { ...prev, banList } : DEFAULT_STATE))
     )
   }, [settingState.banCount, loading])
   useEffect(() => {
     setIsCounting(false)
   }, [state])
   useEffect(() => {
-    const prevItem = window.localStorage.getItem('zzz-picker-play')
-
-    if (!prevItem) return
-
-    const data = JSON.parse(prevItem)[window.location.pathname]
-
-    if (data) {
-      setCost({
-        A: new Map(data.cost.A),
-        B: new Map(data.cost.B),
-      })
-      setState(data.state)
-    }
+    // const prevItem = window.localStorage.getItem('zzz-picker-play')
+    // if (!prevItem) return
+    // const data = JSON.parse(prevItem)[window.location.pathname]
+    // if (data) {
+    //   setCost({
+    //     A: new Map(data.cost.A),
+    //     B: new Map(data.cost.B),
+    //   })
+    //   setState(data.state)
+    // }
   }, [])
   useEffect(() => {
+    const prevItem = window.localStorage.getItem('zzz-picker-play')
+
     window.localStorage.setItem(
       'zzz-picker-play',
       JSON.stringify({
+        ...(prevItem ? JSON.parse(prevItem) : {}),
         [window.location.pathname]: {
           state,
           cost: { A: [...cost.A.entries()], B: [...cost.B.entries()] },
         },
       })
     )
-  }, [state, cost])
+  }, [state, cost, loading])
   useEffect(() => {
     for (const agentId of allPickList.A) {
       updateCost('A', agentId)
@@ -184,7 +219,7 @@ const Provider = (props: Props) => {
   return (
     <Context.Provider
       value={{
-        state,
+        state: state || DEFAULT_STATE,
         isCounting,
         cost,
         allPickList,
