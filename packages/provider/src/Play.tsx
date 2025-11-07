@@ -26,6 +26,10 @@ import { getAgentRarity } from '@zzz-picker/utils'
 import { createContext, useContext, useEffect, useMemo, useState, useEffectEvent } from 'react'
 
 type PlayState = {
+  nickname: {
+    A: string
+    B: string
+  }
   banList: Array<SelectAgent>
   common: CommonRound
   personal: PersonalRound
@@ -53,6 +57,10 @@ type State = {
 }
 
 const DEFAULT_STATE = {
+  nickname: {
+    A: '',
+    B: '',
+  },
   banList: pipe(
     DEFAULT.BAN_COUNT,
     range,
@@ -106,7 +114,7 @@ const Provider = (props: Props) => {
         throwIf(isNull, () => Error('')),
         (storage) => JSON.parse(storage)[window.location.pathname],
         when(isUndefined, () => ({ state: DEFAULT_STATE })),
-        ({ state }) => state
+        ({ state }) => ({ ...DEFAULT_STATE, ...state })
       )
     } catch {
       return DEFAULT_STATE

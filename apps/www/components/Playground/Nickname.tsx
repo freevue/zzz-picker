@@ -1,15 +1,24 @@
 import { Form } from '@zzz-picker/components/v2'
 import type { Side } from '@zzz-picker/constant'
-import { useState } from 'react'
+import { usePlay } from '@zzz-picker/provider/hooks'
+import { useMemo } from 'react'
 
 type Props = {
   side: Side
 }
 
 const Nickname: React.FC<Props> = (props) => {
-  const [value, setValue] = useState('')
+  const { state, setState } = usePlay()
+  const value = useMemo(() => state.nickname[props.side], [state.nickname, props.side])
+
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value)
+    setState((prev) => ({
+      ...prev,
+      nickname: {
+        ...prev.nickname,
+        [props.side]: event.target.value,
+      },
+    }))
   }
 
   return (
