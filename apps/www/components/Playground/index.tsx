@@ -1,6 +1,6 @@
 import BottomSheet from './BottomSheet'
+import Floating from './Floating'
 import Nickname from './Nickname'
-import Reset from './Reset'
 import Round from './Round'
 import TotalScore from './TotalScore'
 import { useLocation } from '@remix-run/react'
@@ -34,7 +34,7 @@ const Side: React.FC = () => {
             <TotalScore />
           </div>
           <BottomSheet />
-          <Reset />
+          <Floating />
         </motion.div>
       )}
     </AnimatePresence>
