@@ -43,7 +43,7 @@ const Td: React.FC<Props> = (props) => {
   return (
     <td
       className={pipe(
-        ['text-center', 'h-14', 'bg-base/70', 'border-b', 'border-r', 'relative'],
+        ['text-center', 'h-14', 'bg-base/70', 'border-b', 'border-r', 'relative', 'group/td'],
         concat([props.className || '']),
         concat(['hover:bg-tertiary', 'border-secondary']),
         join(' ')
@@ -67,7 +67,7 @@ const Td: React.FC<Props> = (props) => {
       ) : (
         <button
           onClick={onEditClick}
-          className="w-full h-full cursor-pointer block text-ink body-xl"
+          className="w-full h-full cursor-pointer block text-ink body-xl group-hover/td:text-secondary"
           type="button"
         >
           <span className="block">{props.value}</span>
