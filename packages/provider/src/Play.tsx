@@ -14,6 +14,7 @@ import {
 } from '@fxts/core'
 import {
   DEFAULT,
+  STORAGE_KEY,
   type SelectAgent,
   type Side,
   type AgentCostSetting,
@@ -101,7 +102,7 @@ const Provider = (props: Props) => {
   const [state, setState] = useState<PlayState>(() => {
     try {
       return pipe(
-        window.localStorage.getItem('zzz-picker-play'),
+        window.localStorage.getItem(STORAGE_KEY),
         throwIf(isNull, () => Error('')),
         (storage) => JSON.parse(storage)[window.location.pathname],
         when(isUndefined, () => ({ state: DEFAULT_STATE })),
@@ -114,7 +115,7 @@ const Provider = (props: Props) => {
   const [cost, setCost] = useState<Record<Side, Map<number, AgentCostSetting>>>(() => {
     try {
       return pipe(
-        window.localStorage.getItem('zzz-picker-play'),
+        window.localStorage.getItem(STORAGE_KEY),
         throwIf(isNull, () => Error('')),
         (storage) => JSON.parse(storage)[window.location.pathname],
         when(isUndefined, () => ({
@@ -182,10 +183,10 @@ const Provider = (props: Props) => {
     setIsCounting(false)
   }, [state])
   useEffect(() => {
-    const prevItem = window.localStorage.getItem('zzz-picker-play')
+    const prevItem = window.localStorage.getItem(STORAGE_KEY)
 
     window.localStorage.setItem(
-      'zzz-picker-play',
+      STORAGE_KEY,
       JSON.stringify({
         ...(prevItem ? JSON.parse(prevItem) : {}),
         [window.location.pathname]: {
@@ -226,8 +227,6 @@ const Provider = (props: Props) => {
                 A: new Map(),
                 B: new Map(),
               })
-
-              window.localStorage.removeItem('zzz-picker-play')
             }
           )
         },

@@ -38,3 +38,5 @@ export const DEFAULT_COST_WEIGHT: CostWeight = {
   used: 0,
   rate: 0,
 }
+
+export const STORAGE_KEY = 'zzz-picker-play'
