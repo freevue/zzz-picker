@@ -62,7 +62,7 @@ const Main: React.FC = () => {
               type="button"
               onClick={onResetClick}
             >
-              로컬 저장 데이터 초기화
+              데이터 초기화
             </button>
           </Tooltip>
         </li>
