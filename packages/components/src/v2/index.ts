@@ -6,6 +6,7 @@ export { default as Form } from './Form'
 export { default as Dialog } from './Dialog'
 export { default as Tabs } from './Tabs'
 export { default as Table } from './Table'
+export { default as Tooltip } from './Tooltip'
 
 export const useRoundedSize = (size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl', reverse?: boolean) => {
   const rounded = useMemo(() => {
