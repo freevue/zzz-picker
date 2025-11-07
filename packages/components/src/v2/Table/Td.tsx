@@ -67,7 +67,7 @@ const Td: React.FC<Props> = (props) => {
       ) : (
         <button
           onClick={onEditClick}
-          className="w-full h-full cursor-pointer block text-ink body-xl group-hover/td:text-secondary"
+          className="w-full h-full cursor-pointer block text-ink body-xl alice:group-hover/td:text-secondary"
           type="button"
         >
           <span className="block">{props.value}</span>
