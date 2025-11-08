@@ -30,6 +30,15 @@ export const DEFAULT = {
     aEngine: { used: 0, rate: 0 },
   } as CostTable,
 }
+export enum SOCKET_EVENT {
+  MESSAGE = 'message',
+  SYNC = 'sync',
+  PICK = 'pick',
+  UNPICK = 'unpick',
+  BAN = 'ban',
+  UNBAN = 'unban',
+  JOIN = 'join',
+}
 
 export const PRETTY_AGENT_ID = 156728
 export const DEFAULT_COST_RATE = 0.05
