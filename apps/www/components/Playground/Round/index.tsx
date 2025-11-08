@@ -17,11 +17,11 @@ const Round: React.FC<Props> = (props) => {
     <div className="w-full">
       <Typo.Heading className="heading-3xl text-ink text-center">{round.title}</Typo.Heading>
       <div className="flex justify-between items-center -mt-14">
-        <Pick side="A" roundId={props.id} />
+        <Pick side="A" key={`${props.id}-A`} roundId={props.id} />
         <div className="flex items-center justify-center w-44">
           {props.id === 'common' ? <Common /> : <Double roundId={props.id} />}
         </div>
-        <Pick side="B" roundId={props.id} />
+        <Pick side="B" key={`${props.id}-B`} roundId={props.id} />
       </div>
     </div>
   )

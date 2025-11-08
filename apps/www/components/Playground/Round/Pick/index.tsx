@@ -45,23 +45,29 @@ const Pick: React.FC<Props> = (props) => {
   const onClick = (agentId: AgentId) => {
     setSelectedAgentId(agentId)
   }
-  const onChange = (value: SelectAgent[]) => {
-    setState((prev) => {
-      const roundData = { ...prev[props.roundId] }
-
-      roundData[props.side].pickList = value as [SelectAgent, SelectAgent, SelectAgent]
-
-      return { ...prev, [props.roundId]: roundData }
-    })
+  const onPickChange = (pickList: SelectAgent[]) => {
+    setState((prev) =>
+      pipe(
+        { ...prev[props.roundId] },
+        (roundData) => ({
+          ...roundData,
+          [props.side]: { ...prev[props.roundId][props.side], pickList },
+        }),
+        (roundData) => ({ ...prev, [props.roundId]: roundData })
+      )
+    )
   }
-  const onTimeChange = (value: number) => {
-    setState((prev) => {
-      const roundData = { ...prev[props.roundId] }
-
-      roundData[props.side].time = value
-
-      return { ...prev, [props.roundId]: roundData }
-    })
+  const onTimeChange = (time: number) => {
+    setState((prev) =>
+      pipe(
+        { ...prev[props.roundId] },
+        (roundData) => ({
+          ...roundData,
+          [props.side]: { ...prev[props.roundId][props.side], time },
+        }),
+        (roundData) => ({ ...prev, [props.roundId]: roundData })
+      )
+    )
   }
   const onScoreChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     pipe(
@@ -74,14 +80,17 @@ const Pick: React.FC<Props> = (props) => {
         (value) => value < 0,
         () => 0
       ),
-      (value) => {
-        setState((prev) => {
-          const roundData = { ...prev[props.roundId] }
-
-          roundData[props.side].result = value
-
-          return { ...prev, [props.roundId]: roundData }
-        })
+      (result) => {
+        setState((prev) =>
+          pipe(
+            { ...prev[props.roundId] },
+            (roundData) => ({
+              ...roundData,
+              [props.side]: { ...prev[props.roundId][props.side], result },
+            }),
+            (roundData) => ({ ...prev, [props.roundId]: roundData })
+          )
+        )
       }
     )
   }
@@ -114,7 +123,7 @@ const Pick: React.FC<Props> = (props) => {
             allowAgents={settingState.allowAgent}
             banAgents={pipe(state.banList, filter(isNumber), toArray)}
             deleteable
-            onChange={onChange}
+            onChange={onPickChange}
             onClick={onClick}
           />
           <Form.Input
