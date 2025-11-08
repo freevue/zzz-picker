@@ -24,7 +24,7 @@ const Button: React.FC<Props> = (props) => {
     event.preventDefault()
 
     if (!props.id) {
-      setIsOpen(true)
+      props.onSelect && setIsOpen(true)
     } else {
       props.onClick?.(Number(props.id))
     }

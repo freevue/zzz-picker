@@ -63,7 +63,7 @@ const Party: React.FC<Props> = (props) => {
           <Button
             cost={props.cost?.[index]}
             onClick={props.onClick}
-            onSelect={onClick(index)}
+            onSelect={props.onChange && onClick(index)}
             onDelete={onDelete(index)}
             size={props.size}
             id={agentId}
