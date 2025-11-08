@@ -1,6 +1,6 @@
 import type { LinksFunction, MetaFunction } from '@remix-run/node'
 import { Links, Meta, Outlet, Scripts } from '@remix-run/react'
-import { Store, Apollo, Socket, DB } from '@zzz-picker/provider'
+import { Store, Apollo, DB } from '@zzz-picker/provider'
 import styles from '~/index.css?url'
 
 export const links: LinksFunction = () => [
@@ -54,9 +54,7 @@ const Router: React.FC = () => {
         <Apollo>
           <Store>
             <DB>
-              <Socket>
-                <Outlet />
-              </Socket>
+              <Outlet />
             </DB>
           </Store>
         </Apollo>
