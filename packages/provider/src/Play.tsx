@@ -23,7 +23,7 @@ import {
   type UnlimitedRound,
 } from '@zzz-picker/constant'
 import { getAgentRarity } from '@zzz-picker/utils'
-import { createContext, useContext, useEffect, useMemo, useState, useEffectEvent, use } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState, useEffectEvent } from 'react'
 
 type PlayState = {
   nickname: {
