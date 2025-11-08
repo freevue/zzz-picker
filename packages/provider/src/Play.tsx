@@ -23,7 +23,7 @@ import {
   type UnlimitedRound,
 } from '@zzz-picker/constant'
 import { getAgentRarity } from '@zzz-picker/utils'
-import { createContext, useContext, useEffect, useMemo, useState, useEffectEvent } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState, useEffectEvent, use } from 'react'
 
 type PlayState = {
   nickname: {
@@ -35,16 +35,17 @@ type PlayState = {
   personal: PersonalRound
   unlimited: UnlimitedRound
 }
+type Cost = {
+  A: Map<number, AgentCostSetting>
+  B: Map<number, AgentCostSetting>
+}
 
 type Props = {
   children: React.ReactNode
 }
 type State = {
   state: PlayState
-  cost: {
-    A: Map<number, AgentCostSetting>
-    B: Map<number, AgentCostSetting>
-  }
+  cost: Cost
   allPickList: {
     A: SelectAgent[]
     B: SelectAgent[]
@@ -54,6 +55,32 @@ type State = {
   setIsCounting: React.Dispatch<React.SetStateAction<boolean>>
   setState: React.Dispatch<React.SetStateAction<PlayState>>
   reset: () => void
+}
+
+const saveData = (
+  data:
+    | { state: PlayState }
+    | {
+        cost: {
+          A: [number, AgentCostSetting][]
+          B: [number, AgentCostSetting][]
+        }
+      }
+) => {
+  pipe(
+    window.localStorage.getItem(STORAGE_KEY),
+    when(isNull, () => JSON.stringify({ [window.location.pathname]: {} })),
+    (data) => JSON.parse(data),
+    (prevItem) => ({
+      ...prevItem,
+      [window.location.pathname]: {
+        ...prevItem[window.location.pathname],
+        ...data,
+      },
+    }),
+    (newItem) => JSON.stringify(newItem),
+    (data) => window.localStorage.setItem(STORAGE_KEY, data)
+  )
 }
 
 const DEFAULT_STATE = {
@@ -191,19 +218,13 @@ const Provider = (props: Props) => {
     setIsCounting(false)
   }, [state])
   useEffect(() => {
-    const prevItem = window.localStorage.getItem(STORAGE_KEY)
-
-    window.localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        ...(prevItem ? JSON.parse(prevItem) : {}),
-        [window.location.pathname]: {
-          state,
-          cost: { A: [...cost.A.entries()], B: [...cost.B.entries()] },
-        },
-      })
-    )
-  }, [state, cost])
+    saveData({ state })
+  }, [state])
+  useEffect(() => {
+    saveData({
+      cost: { A: [...cost.A.entries()], B: [...cost.B.entries()] },
+    })
+  }, [cost])
   useEffect(() => {
     for (const agentId of allPickList.A) {
       updateCost('A', agentId)
