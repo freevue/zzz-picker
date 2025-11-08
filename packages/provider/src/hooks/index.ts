@@ -1,7 +1,5 @@
 import { StoreContext, SettingContext, PlayContext } from '../'
-import { Context as SocketContext } from '../Socket'
-import { REALTIME_SUBSCRIBE_STATES } from '@supabase/supabase-js'
-import { useContext, useMemo, useEffect, useState } from 'react'
+import { useContext, useMemo } from 'react'
 
 export const useStore = () => {
   return useContext(StoreContext)

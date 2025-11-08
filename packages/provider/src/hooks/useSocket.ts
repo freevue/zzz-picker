@@ -1,5 +1,5 @@
 import { Context as SocketContext } from '../Socket'
-import { peek, pipe, each, values } from '@fxts/core'
+import { pipe, each, values } from '@fxts/core'
 import { REALTIME_SUBSCRIBE_STATES } from '@supabase/supabase-js'
 import { SOCKET_EVENT } from '@zzz-picker/constant'
 import { useContext, useEffect, useState } from 'react'
