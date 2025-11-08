@@ -58,25 +58,19 @@ type State = {
 }
 
 const saveData = (
-  data:
-    | { state: PlayState }
-    | {
-        cost: {
-          A: [number, AgentCostSetting][]
-          B: [number, AgentCostSetting][]
-        }
-      }
+  state: PlayState,
+  cost: {
+    A: [number, AgentCostSetting][]
+    B: [number, AgentCostSetting][]
+  }
 ) => {
   pipe(
     window.localStorage.getItem(STORAGE_KEY),
-    when(isNull, () => JSON.stringify({ [window.location.pathname]: {} })),
+    when(isNull, () => JSON.stringify({})),
     (data) => JSON.parse(data),
     (prevItem) => ({
       ...prevItem,
-      [window.location.pathname]: {
-        ...prevItem[window.location.pathname],
-        ...data,
-      },
+      [window.location.pathname]: { state, cost },
     }),
     (newItem) => JSON.stringify(newItem),
     (data) => window.localStorage.setItem(STORAGE_KEY, data)
@@ -218,13 +212,8 @@ const Provider = (props: Props) => {
     setIsCounting(false)
   }, [state])
   useEffect(() => {
-    saveData({ state })
-  }, [state])
-  useEffect(() => {
-    saveData({
-      cost: { A: [...cost.A.entries()], B: [...cost.B.entries()] },
-    })
-  }, [cost])
+    saveData(state, { A: [...cost.A.entries()], B: [...cost.B.entries()] })
+  }, [state, cost])
   useEffect(() => {
     for (const agentId of allPickList.A) {
       updateCost('A', agentId)
