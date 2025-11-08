@@ -140,7 +140,7 @@ const Book: React.FC<Props> = (props) => {
               className="list-decimal"
               list={[
                 <Text>
-                  <Strong>A선수</Strong>가 먼저 진행합니다. <Strong>S급픽업 캐리터 2개</Strong>
+                  <Strong>A선수</Strong>가 먼저 진행합니다. <Strong>S급픽업 캐릭터 2개</Strong>
                   를 선택합니다. <br />
                   <Caption>이때 글로벌 노밴 캐릭터는 선택할 수 없습니다.</Caption>
                 </Text>,
@@ -149,7 +149,7 @@ const Book: React.FC<Props> = (props) => {
                 </Text>,
                 <Text>
                   <Strong>B선수</Strong>는 이전에 밴이 된 캐릭터와 다른 포지션의{' '}
-                  <Strong>S급픽업 캐리터 2개</Strong>를 선택합니다.
+                  <Strong>S급픽업 캐릭터 2개</Strong>를 선택합니다.
                   <Caption>
                     딜러 포지션 (강공, 이상, 명파) | 서포터 포지션 (지원, 격파, 방어)
                   </Caption>
