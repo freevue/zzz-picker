@@ -37,6 +37,7 @@ const Input: React.FC<Props> = (props) => {
           onBlur={props.onBlur}
           onWheel={props.onWheel}
           onKeyDown={props.onKeyDown}
+          autoComplete="off"
           placeholder={props.placeholder}
         />
       </label>
