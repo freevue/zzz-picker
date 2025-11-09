@@ -9,5 +9,8 @@
   },
   "peerDependencies": {
     "@zzz-picker/constant": "workspace:*"
+  },
+  "dependencies": {
+    "jose": "^6.1.0"
   }
 }
