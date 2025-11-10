@@ -6,15 +6,7 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    tailwindcss(),
-    remix(),
-    // react({
-    //   babel: {
-    //     plugins: [['babel-plugin-react-compiler']],
-    //   },
-    // }),
-  ],
+  plugins: [tailwindcss(), remix()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -23,6 +15,9 @@ export default defineConfig({
   },
   define: {
     __VERSION__: JSON.stringify(pkg.version),
+    'process.env.ROLE_TOKEN_SECRET': JSON.stringify(
+      process.env.ROLE_TOKEN_SECRET || 'zzz-picker-secret-key'
+    ),
     'process.env.GOOGLE_API_KEY': JSON.stringify(process.env.GOOGLE_API_KEY),
     'process.env.GOOGLE_SHEET_ID': JSON.stringify(process.env.GOOGLE_SHEET_ID),
     'process.env.SUPABASE_URL': JSON.stringify(process.env.SUPABASE_URL),

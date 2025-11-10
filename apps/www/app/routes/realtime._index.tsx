@@ -1,7 +1,7 @@
-import { pipe, concat, join, map, toArray, toAsync, isNull, zip } from '@fxts/core'
+import { pipe, concat, join, map, toArray } from '@fxts/core'
 import { Form, Typo, Tabs } from '@zzz-picker/components/v2'
 import type { Side } from '@zzz-picker/constant'
-import { createUUID, createJWT, verifyJWT } from '@zzz-picker/utils'
+import { createUUID, encryptRole } from '@zzz-picker/utils'
 import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
 
@@ -33,7 +33,9 @@ const CopyButton: React.FC<{ children: React.ReactNode; value: string }> = (prop
   )
 }
 const RealtimeRoot: React.FC = () => {
-  const [tokens, setTokens] = useState<string[] | null>(null)
+  const [tokens, setTokens] = useState<{ uuid: string; role: Side | 'H'; token: string }[] | null>(
+    null
+  )
   const [users, setUsers] = useState<Record<Side, string>>({ A: '', B: '' })
   const [league, setLeague] = useState<string>(TABS[0].value)
 
@@ -43,19 +45,18 @@ const RealtimeRoot: React.FC = () => {
       [side]: event.target.value,
     }))
   }
-  const onCreateChannel = async () => {
+  const onCreateChannel = () => {
+    const uuid = createUUID()
+
     pipe(
-      createUUID(),
-      (uuid) => ({ uuid, users, league }),
-      (payload) => [
-        { ...payload, role: 'HOST' },
-        { ...payload, role: 'A' },
-        { ...payload, role: 'B' },
-      ],
-      toAsync,
-      map((payload) => createJWT(payload)),
+      ['A', 'B', 'H'] as const,
+      map((role) => ({
+        role,
+        uuid,
+        token: encryptRole(role),
+      })),
       toArray,
-      (tokens) => setTokens(tokens)
+      (list) => setTokens(list)
     )
   }
 
@@ -126,13 +127,14 @@ const RealtimeRoot: React.FC = () => {
         >
           {pipe(
             tokens,
-            zip(['Host', users.A, users.B]),
-            map(([role, token]) => (
+            map(({ role, token, uuid }) => (
               <li key={token} className="flex w-full overflow-hidden gap-4 items-center">
                 <Typo.Heading className="heading-2xl text-ink flex-1 text-center" heading={2}>
                   {role} 채널
                 </Typo.Heading>
-                <LinkButton href={`${window.location.origin}/realtime/${token}`}>접속</LinkButton>
+                <LinkButton href={`${window.location.origin}/realtime/${uuid}?a=${token}`}>
+                  접속
+                </LinkButton>
                 <CopyButton value={token}>링크복사</CopyButton>
               </li>
             )),
