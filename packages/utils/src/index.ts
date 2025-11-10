@@ -1,7 +1,8 @@
-export const SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'zzz-picker-secret-key')
+export const SECRET = process.env.ROLE_TOKEN_SECRET
+export const base62 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 
 export { default as getAgentTotalCost } from './getAgentTotalCost'
 export { default as getAgentRarity } from './getAgentRarity'
 export { default as createUUID } from './createUUID'
-export { default as createJWT } from './createJWT'
-export { default as verifyJWT } from './verifyJWT'
+export { default as encryptRole } from './encryptRole'
+export { default as decryptRole } from './decryptRole'
