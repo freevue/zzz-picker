@@ -1,5 +1,5 @@
 import { pipe, map, toArray, isNull } from '@fxts/core'
-import type { Side } from '@zzz-picker/constant'
+import { DEFAULT_PLAY_STATE, STORAGE_KEY, type Side } from '@zzz-picker/constant'
 import { createUUID, encryptRole } from '@zzz-picker/utils'
 import { AnimatePresence } from 'motion/react'
 import { useState } from 'react'
@@ -20,7 +20,24 @@ const RealtimeRoot: React.FC = () => {
 
     const formData = new FormData(event.currentTarget)
 
-    // console.log([...formData.entries()])
+    pipe(
+      localStorage.getItem(STORAGE_KEY) || {},
+      (prevValue) => ({
+        ...prevValue,
+        [formData.get('league') as string]: {
+          state: {
+            ...DEFAULT_PLAY_STATE,
+            nickname: {
+              A: formData.get('A-nickname') as string,
+              B: formData.get('B-nickname') as string,
+            },
+          },
+          cost: { A: [], B: [] },
+        },
+      }),
+      (newItem) => JSON.stringify(newItem),
+      (data) => localStorage.setItem(STORAGE_KEY, data)
+    )
 
     const uuid = createUUID()
 
