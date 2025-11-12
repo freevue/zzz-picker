@@ -1,4 +1,4 @@
-import type { Rols } from '.'
+import type { Rols, RealtimeState } from '.'
 import { pipe, concat, join, entries, map, toArray } from '@fxts/core'
 import { SOCKET_EVENT } from '@zzz-picker/constant'
 import { useSocket } from '@zzz-picker/provider/hooks'
@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 
 type Props = {
   role: Rols
+  state: RealtimeState
 }
 
 const Status: React.FC<Props> = (props) => {
@@ -15,9 +16,10 @@ const Status: React.FC<Props> = (props) => {
     B: REALTIME_SUBSCRIBE_STATES.CLOSED,
     H: REALTIME_SUBSCRIBE_STATES.CLOSED,
   })
-  const { status } = useSocket(
+  const { status, send } = useSocket(
     (payload) => {
       setRoleStatus((prev) => ({ ...prev, [payload.role]: status }))
+      send(SOCKET_EVENT.SYNC, { aa: 1 })
     },
     { event: [SOCKET_EVENT.JOIN] }
   )
@@ -38,11 +40,9 @@ const Status: React.FC<Props> = (props) => {
         roleStatus,
         entries,
         map(([role, status]) => (
-          <div key={role}>
-            <p className="body-sm text-ink/50">
-              {role}: {status}
-            </p>
-          </div>
+          <p key={role} className="body-sm text-ink/50">
+            {role}: {status}
+          </p>
         )),
         toArray
       )}
