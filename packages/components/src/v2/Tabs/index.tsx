@@ -7,6 +7,7 @@ type Tab = {
 type Props = {
   list: (Tab | string)[]
   value: string
+  name?: string
   onChange?: (value: string) => void
   className?: string
 }
@@ -53,6 +54,7 @@ const Tabs: React.FC<Props> = (props) => {
         )),
         toArray
       )}
+      {props.name && <input type="hidden" name={props.name} value={props.value} />}
     </div>
   )
 }
