@@ -21,7 +21,8 @@ const RealtimeRoot: React.FC = () => {
     const formData = new FormData(event.currentTarget)
 
     pipe(
-      localStorage.getItem(STORAGE_KEY) || {},
+      localStorage.getItem(STORAGE_KEY) || '{}',
+      (data) => JSON.parse(data),
       (prevValue) => ({
         ...prevValue,
         [formData.get('league') as string]: {
