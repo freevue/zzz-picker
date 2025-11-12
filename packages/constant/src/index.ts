@@ -1,4 +1,5 @@
-import type { AgentCostSetting, CostWeight, CostTable, RoundSide } from './types.d'
+import type { AgentCostSetting, CostWeight, CostTable, RoundSide, PlayState } from './types.d'
+import { pipe, range, map, toArray } from '@fxts/core'
 
 export const DEFAULT_AGENT_COST_STATE: AgentCostSetting = {
   rarity: 'aAlwaysAgent',
@@ -38,6 +39,37 @@ export enum SOCKET_EVENT {
   BAN = 'ban',
   UNBAN = 'unban',
   JOIN = 'join',
+}
+export const DEFAULT_PLAY_STATE: PlayState = {
+  nickname: {
+    A: '',
+    B: '',
+  },
+  banList: pipe(
+    DEFAULT.BAN_COUNT,
+    range,
+    map(() => null),
+    toArray
+  ),
+  common: {
+    key: 'common',
+    title: '공용 무대',
+    boss: null,
+    A: DEFAULT.ROUNDE_SIDE,
+    B: DEFAULT.ROUNDE_SIDE,
+  },
+  personal: {
+    key: 'personal',
+    title: '개인 무대',
+    A: { ...DEFAULT.ROUNDE_SIDE, boss: null },
+    B: { ...DEFAULT.ROUNDE_SIDE, boss: null },
+  },
+  unlimited: {
+    key: 'unlimited',
+    title: '개인 무대',
+    A: { ...DEFAULT.ROUNDE_SIDE, boss: null },
+    B: { ...DEFAULT.ROUNDE_SIDE, boss: null },
+  },
 }
 
 export const PRETTY_AGENT_ID = 156728

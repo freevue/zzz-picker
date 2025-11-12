@@ -44,6 +44,16 @@ export type PersonalRound = {
 export type UnlimitedRound = Omit<PersonalRound, 'key'> & {
   key: 'unlimited'
 }
+export type PlayState = {
+  nickname: {
+    A: string
+    B: string
+  }
+  banList: Array<SelectAgent>
+  common: CommonRound
+  personal: PersonalRound
+  unlimited: UnlimitedRound
+}
 
 // ---
 export type Boss = {

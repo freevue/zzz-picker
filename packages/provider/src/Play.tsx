@@ -15,26 +15,15 @@ import {
 import {
   DEFAULT,
   STORAGE_KEY,
+  DEFAULT_PLAY_STATE,
   type SelectAgent,
   type Side,
   type AgentCostSetting,
-  type CommonRound,
-  type PersonalRound,
-  type UnlimitedRound,
+  type PlayState,
 } from '@zzz-picker/constant'
 import { getAgentRarity } from '@zzz-picker/utils'
 import { createContext, useContext, useEffect, useMemo, useState, useEffectEvent } from 'react'
 
-type PlayState = {
-  nickname: {
-    A: string
-    B: string
-  }
-  banList: Array<SelectAgent>
-  common: CommonRound
-  personal: PersonalRound
-  unlimited: UnlimitedRound
-}
 type Cost = {
   A: Map<number, AgentCostSetting>
   B: Map<number, AgentCostSetting>
@@ -77,40 +66,8 @@ const saveData = (
   )
 }
 
-const DEFAULT_STATE = {
-  nickname: {
-    A: '',
-    B: '',
-  },
-  banList: pipe(
-    DEFAULT.BAN_COUNT,
-    range,
-    map(() => null),
-    toArray
-  ),
-  common: {
-    key: 'common',
-    title: '공용 무대',
-    boss: null,
-    A: DEFAULT.ROUNDE_SIDE,
-    B: DEFAULT.ROUNDE_SIDE,
-  } as CommonRound,
-  personal: {
-    key: 'personal',
-    title: '개인 무대',
-    A: { ...DEFAULT.ROUNDE_SIDE, boss: null },
-    B: { ...DEFAULT.ROUNDE_SIDE, boss: null },
-  } as PersonalRound,
-  unlimited: {
-    key: 'unlimited',
-    title: '개인 무대',
-    A: { ...DEFAULT.ROUNDE_SIDE, boss: null },
-    B: { ...DEFAULT.ROUNDE_SIDE, boss: null },
-  } as UnlimitedRound,
-}
-
 export const Context = createContext<State>({
-  state: DEFAULT_STATE,
+  state: DEFAULT_PLAY_STATE,
   isCounting: false,
   allPickList: {
     A: [],
@@ -134,11 +91,11 @@ const Provider = (props: Props) => {
         window.localStorage.getItem(STORAGE_KEY),
         throwIf(isNull, () => Error('')),
         (storage) => JSON.parse(storage)[window.location.pathname],
-        when(isUndefined, () => ({ state: DEFAULT_STATE })),
-        ({ state }) => ({ ...DEFAULT_STATE, ...state })
+        when(isUndefined, () => ({ state: DEFAULT_PLAY_STATE })),
+        ({ state }) => ({ ...DEFAULT_PLAY_STATE, ...state })
       )
     } catch {
-      return DEFAULT_STATE
+      return DEFAULT_PLAY_STATE
     }
   })
   const [cost, setCost] = useState<Record<Side, Map<number, AgentCostSetting>>>(() => {
@@ -161,7 +118,7 @@ const Provider = (props: Props) => {
   const allPickList = useMemo(() => {
     const getPickList = (side: Side) =>
       pipe(
-        state || DEFAULT_STATE,
+        state || DEFAULT_PLAY_STATE,
         (state) => [state.common[side], state.personal[side], state.unlimited[side]],
         flatMap((item) => item.pickList),
         filter((agentId) => !isNull(agentId)),
@@ -205,7 +162,7 @@ const Provider = (props: Props) => {
       range,
       map(() => null),
       toArray,
-      (banList) => setState((prev) => (prev ? { ...prev, banList } : DEFAULT_STATE))
+      (banList) => setState((prev) => (prev ? { ...prev, banList } : DEFAULT_PLAY_STATE))
     )
   }, [settingState.banCount, loading])
   useEffect(() => {
@@ -226,7 +183,7 @@ const Provider = (props: Props) => {
   return (
     <Context.Provider
       value={{
-        state: state || DEFAULT_STATE,
+        state: state || DEFAULT_PLAY_STATE,
         isCounting,
         cost,
         allPickList,
@@ -240,7 +197,7 @@ const Provider = (props: Props) => {
             map(() => null),
             toArray,
             (banList) => {
-              setState(() => ({ ...DEFAULT_STATE, banList }))
+              setState(() => ({ ...DEFAULT_PLAY_STATE, banList }))
               setCost({
                 A: new Map(),
                 B: new Map(),
