@@ -1,32 +1,44 @@
 import { Context as SocketContext } from '../Socket'
-import { pipe, each, values } from '@fxts/core'
-import { REALTIME_SUBSCRIBE_STATES } from '@supabase/supabase-js'
+import { pipe, each, values, includes, filter } from '@fxts/core'
 import { SOCKET_EVENT } from '@zzz-picker/constant'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 
-type Receive = (event: SOCKET_EVENT, payload: Record<string, any>) => void
+type Receive = (payload: Record<string, any>) => void
+type Options = {
+  event: Array<SOCKET_EVENT>
+}
 
-const useSocket = (receive: Receive) => {
-  const [status, setStatus] = useState<REALTIME_SUBSCRIBE_STATES>(REALTIME_SUBSCRIBE_STATES.CLOSED)
-  const { channel } = useContext(SocketContext)
+const useSocket = (receive?: Receive, options?: Options) => {
+  const { channel, status, events } = useContext(SocketContext)
+
+  if (!channel) {
+    throw new Error('채널에 연결되지 않았습니다.')
+  }
 
   useEffect(() => {
+    const onSocket = (event: Event) => {
+      receive?.((event as CustomEvent<Record<string, any>>).detail)
+    }
+
     pipe(
       SOCKET_EVENT,
       values,
-      each((event) => {
-        channel.on('broadcast', { event }, ({ event, payload }) => {
-          receive(event as SOCKET_EVENT, payload)
-        })
+      filter((eventName) => options?.event && includes(eventName, options.event)),
+      each((eventName) => {
+        events.addEventListener(eventName, onSocket)
       })
     )
 
-    channel.subscribe(setStatus, 10_000)
-
     return () => {
-      channel.unsubscribe()
+      pipe(
+        SOCKET_EVENT,
+        values,
+        each((eventName) => {
+          events.removeEventListener(eventName, onSocket)
+        })
+      )
     }
-  }, [channel])
+  }, [options?.event])
 
   return {
     status,

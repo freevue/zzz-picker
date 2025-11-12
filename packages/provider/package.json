@@ -6,7 +6,8 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./hooks": "./src/hooks/index.ts"
+    "./hooks": "./src/hooks/index.ts",
+    "./realtime": "./src/realtime.ts"
   },
   "peerDependencies": {
     "@zzz-picker/constant": "workspace:*",
