@@ -25,10 +25,6 @@ const Time: React.FC<Props> = (props) => {
 
     props.onChange?.(minute * 60 + Number(event.target.value))
   }
-  const onContentClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.stopPropagation()
-    event.preventDefault()
-  }
 
   useEffect(() => {
     setMinute(() => {
