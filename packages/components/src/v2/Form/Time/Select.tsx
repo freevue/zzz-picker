@@ -20,10 +20,17 @@ const Option: React.FC<{
       disabled={props.disabled}
       value={props.value}
       className={pipe(
-        ['heading-3xl', 'flex', 'items-center', 'justify-center', 'snap-center', 'tracking-widest'],
+        [
+          'heading-3xl',
+          'flex',
+          'select-none',
+          'items-center',
+          'justify-center',
+          'snap-center',
+          'tracking-widest',
+        ],
         concat([props.className]),
-        concat(['focus:bg-transparent', 'active:bg-transparent']),
-        concat(['checked:bg-primary', 'selected:bg-primary']),
+        concat(['checked:bg-primary']),
         join(' ')
       )}
     >
@@ -36,6 +43,8 @@ const Select: React.FC<Props> = (props) => {
 
   useEffect(() => {
     if (selectRef.current) {
+      selectRef.current.blur()
+
       pipe(
         selectRef.current,
         ({ options }) => options.item(props.value + 1)?.offsetTop ?? 0,
@@ -54,7 +63,14 @@ const Select: React.FC<Props> = (props) => {
       name="minute"
       size={4}
       className={pipe(
-        ['block', 'focus:outline-none', 'scrollbar-hidden', 'snap-y', 'snap-mandatory'],
+        [
+          'appearance-none',
+          'block',
+          'focus:outline-none',
+          'scrollbar-hidden',
+          'snap-y',
+          'snap-mandatory',
+        ],
         concat([props.className]),
         concat(['shadow-2xl']),
         join(' ')
