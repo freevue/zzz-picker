@@ -107,13 +107,14 @@ const Time: React.FC<Props> = (props) => {
                 'h-[200%]',
                 'overflow-hidden',
                 'backdrop-blur-lg',
+                'shadow-2xl',
               ],
               concat(['heading-3xl', 'text-ink']),
               join(' ')
             )}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, scale: 1 }}
+            animate={{ opacity: 1, scale: 1.1 }}
+            exit={{ opacity: 0, scale: 1 }}
             transition={{ duration: 0.2 }}
           >
             <Select

@@ -72,7 +72,6 @@ const Select: React.FC<Props> = (props) => {
           'snap-mandatory',
         ],
         concat([props.className]),
-        concat(['shadow-2xl']),
         join(' ')
       )}
     >
