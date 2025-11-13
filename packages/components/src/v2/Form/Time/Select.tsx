@@ -1,0 +1,83 @@
+import { pipe, concat, join, map, range, toArray } from '@fxts/core'
+import { useEffect, useRef } from 'react'
+
+type Props = {
+  value: number
+  max: number
+  onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void
+  defaultValue?: number
+  className?: string
+}
+
+const Option: React.FC<{
+  value?: number
+  className?: string
+  disabled?: boolean
+  children?: React.ReactNode
+}> = (props) => {
+  return (
+    <option
+      disabled={props.disabled}
+      value={props.value}
+      className={pipe(
+        ['heading-3xl', 'flex', 'items-center', 'justify-center', 'snap-center', 'tracking-widest'],
+        concat([props.className]),
+        concat(['focus:bg-transparent', 'active:bg-transparent']),
+        concat(['checked:bg-primary', 'selected:bg-primary']),
+        join(' ')
+      )}
+    >
+      {props.children}
+    </option>
+  )
+}
+const Select: React.FC<Props> = (props) => {
+  const selectRef = useRef<HTMLSelectElement>(null)
+
+  useEffect(() => {
+    if (selectRef.current) {
+      pipe(
+        selectRef.current,
+        ({ options }) => options.item(props.value + 1)?.offsetTop ?? 0,
+        (top) => {
+          selectRef.current!.scrollTo({ top })
+        }
+      )
+    }
+  }, [props.value])
+
+  return (
+    <select
+      ref={selectRef}
+      onChange={props.onChange}
+      value={props.value}
+      name="minute"
+      size={4}
+      className={pipe(
+        ['block', 'focus:outline-none', 'scrollbar-hidden', 'snap-y', 'snap-mandatory'],
+        concat([props.className]),
+        concat(['shadow-2xl']),
+        join(' ')
+      )}
+    >
+      <Option className="h-1/4 text-[0px]" disabled>
+        -
+      </Option>
+      {pipe(
+        props.max,
+        range,
+        map((index) => (
+          <Option key={index} className="h-1/2" value={index}>
+            {index < 10 ? `${props.max > 10 ? '0' : ''}${index}` : index}
+          </Option>
+        )),
+        toArray
+      )}
+      <Option className="h-1/4 text-[0px]" disabled>
+        -
+      </Option>
+    </select>
+  )
+}
+
+export default Select

@@ -1,7 +1,7 @@
-import { Dialog } from '../../'
-import Scroll from './Scroll'
+import Select from './Select'
 import { pipe, concat, join } from '@fxts/core'
-import { useEffect, useState } from 'react'
+import { motion, AnimatePresence } from 'motion/react'
+import { useEffect, useRef, useState } from 'react'
 
 type Props = {
   value: number
@@ -10,19 +10,24 @@ type Props = {
 }
 
 const Time: React.FC<Props> = (props) => {
+  const contentRef = useRef<HTMLDivElement>(null)
   const [isOpen, setIsOpen] = useState(false)
   const [minute, setMinute] = useState(0)
   const [second, setSecond] = useState(0)
 
-  const onMinuteChange = (value: number) => {
-    setMinute(value)
+  const onMinuteChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setMinute(Number(event.target.value))
 
-    props.onChange?.(value * 60 + second)
+    props.onChange?.(Number(event.target.value) * 60 + second)
   }
-  const onSecondChange = (value: number) => {
-    setSecond(value)
+  const onSecondChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSecond(Number(event.target.value))
 
-    props.onChange?.(minute * 60 + value)
+    props.onChange?.(minute * 60 + Number(event.target.value))
+  }
+  const onContentClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation()
+    event.preventDefault()
   }
 
   useEffect(() => {
@@ -43,9 +48,24 @@ const Time: React.FC<Props> = (props) => {
       return value
     })
   }, [props.value])
+  useEffect(() => {
+    if (!isOpen) return
+
+    const onClose = (event: MouseEvent) => {
+      if (contentRef.current && !contentRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+
+    document.addEventListener('click', onClose)
+
+    return () => {
+      document.removeEventListener('click', onClose)
+    }
+  }, [isOpen])
 
   return (
-    <>
+    <div className="relative">
       <button
         type="button"
         onClick={() => setIsOpen(true)}
@@ -58,23 +78,65 @@ const Time: React.FC<Props> = (props) => {
             'items-center',
             'justify-center',
             'cursor-pointer',
+            'focus:outline-none',
           ],
           concat([props.className || '']),
           join(' ')
         )}
       >
-        <span className="flex-1 text-center">{minute < 10 ? `0${minute}` : minute}</span>
-        <span className="">:</span>
-        <span className="flex-1 text-center">{second < 10 ? `0${second}` : second}</span>
+        <span className="flex-1 text-center">{minute}</span>
+        <span className="px-2">:</span>
+        <span className="flex-1 text-center tracking-widest">
+          {second < 10 ? `0${second}` : second}
+        </span>
       </button>
-      <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <div className="flex items-center gap-1 justify-center">
-          <Scroll range={4} value={minute} onChange={onMinuteChange} />
-          <span className="text-ink heading-4xl">:</span>
-          <Scroll range={60} value={second} onChange={onSecondChange} />
-        </div>
-      </Dialog>
-    </>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            ref={contentRef}
+            className={pipe(
+              [
+                'absolute',
+                'flex',
+                'items-center',
+                'justify-center',
+                'left-0',
+                'top-1/2',
+                '-translate-y-1/2',
+                'z-10',
+                'rounded-tr-2xl',
+                'rounded-bl-2xl',
+                'w-full',
+                'bg-content',
+                'h-[200%]',
+                'overflow-hidden',
+                'backdrop-blur-lg',
+              ],
+              concat(['heading-3xl', 'text-ink']),
+              join(' ')
+            )}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Select
+              className="block h-full flex-1"
+              value={minute}
+              max={4}
+              onChange={onMinuteChange}
+            />
+            <span className="px-2">:</span>
+            <Select
+              className="block h-full flex-1"
+              value={second}
+              max={60}
+              onChange={onSecondChange}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   )
 }
 
