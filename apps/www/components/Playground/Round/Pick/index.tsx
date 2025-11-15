@@ -1,5 +1,5 @@
 import CostDialog from '../CostDialog'
-import { join, pipe, map, toArray, concat, when, findIndex, filter, isNumber } from '@fxts/core'
+import { join, pipe, toArray, concat, when, findIndex, filter, isNumber } from '@fxts/core'
 import { Form, Dialog } from '@zzz-picker/components/v2'
 import {
   DEFAULT,
@@ -8,8 +8,7 @@ import {
   type Side,
   type AgentId,
 } from '@zzz-picker/constant'
-import { usePlay, useSetting } from '@zzz-picker/provider/hooks'
-import { getAgentTotalCost } from '@zzz-picker/utils'
+import { usePlay, useSetting, useCostList } from '@zzz-picker/provider/hooks'
 import { useMemo, useState } from 'react'
 
 type Props = {
@@ -18,8 +17,8 @@ type Props = {
 }
 
 const Pick: React.FC<Props> = (props) => {
-  const { costTable, state: settingState } = useSetting()
-  const { state, cost, setState } = usePlay()
+  const { state: settingState } = useSetting()
+  const { state, setState } = usePlay()
   const [selectedAgentId, setSelectedAgentId] = useState<SelectAgent>(null)
   const pickList = useMemo(
     () => state[props.roundId][props.side].pickList,
@@ -33,14 +32,7 @@ const Pick: React.FC<Props> = (props) => {
     () => state[props.roundId][props.side].result,
     [state, props.roundId, props.side]
   )
-  const costList = useMemo(() => {
-    return pipe(
-      pickList,
-      map((agentId) => agentId && cost[props.side].get(agentId)),
-      map((costSetting) => (costSetting ? getAgentTotalCost(costTable, costSetting) : 0)),
-      toArray
-    )
-  }, [pickList, cost, costTable])
+  const costList = useCostList(props.side, pickList)
 
   const onClick = (agentId: AgentId) => {
     setSelectedAgentId(agentId)

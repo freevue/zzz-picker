@@ -1,9 +1,8 @@
-import { pipe, join, concat, map, sum, toArray, transpose, includes, filter } from '@fxts/core'
+import { pipe, join, concat, map, sum, toArray, transpose } from '@fxts/core'
 import { useLocation } from '@remix-run/react'
 import { Typo } from '@zzz-picker/components/v2'
-import { DEFAULT, DEFAULT_COST_RATE, type Side } from '@zzz-picker/constant'
-import { usePlay, useSetting } from '@zzz-picker/provider/hooks'
-import { getAgentTotalCost } from '@zzz-picker/utils'
+import { DEFAULT, DEFAULT_COST_RATE } from '@zzz-picker/constant'
+import { useCostList, usePlay, useSetting } from '@zzz-picker/provider/hooks'
 import { animate, motion, useMotionValue, useTransform } from 'motion/react'
 import { useEffect, useMemo } from 'react'
 
@@ -52,28 +51,18 @@ const Record: React.FC<{
   )
 }
 const TotalScore: React.FC<Props> = () => {
-  const { state: playState, allPickList, cost, isCounting, setIsCounting } = usePlay()
+  const { state: playState, allPickList, isCounting, setIsCounting } = usePlay()
   const { pathname } = useLocation()
-  const { costTable, state: settingState } = useSetting()
+  const { state: settingState } = useSetting()
   const roundList = useMemo(() => {
     return [playState.personal, playState[pathname === '/unlimited' ? 'unlimited' : 'common']]
   }, [pathname, playState])
-  const totalCost = useMemo(() => {
-    const getSideTotalCost = (side: Side) => {
-      return pipe(
-        cost[side],
-        filter(([agentId]) => includes(agentId, allPickList[side])),
-        map(([, costSetting]) => costSetting),
-        map(getAgentTotalCost(costTable)),
-        sum
-      )
-    }
-
-    return {
-      A: getSideTotalCost('A'),
-      B: getSideTotalCost('B'),
-    }
-  }, [cost, costTable, allPickList])
+  const aCostList = useCostList('A', allPickList.A)
+  const bCostList = useCostList('B', allPickList.B)
+  const totalCost = useMemo(
+    () => ({ A: sum(aCostList), B: sum(bCostList) }),
+    [aCostList, bCostList]
+  )
   const roundTotalScore = useMemo(() => {
     const [A, B] = pipe(
       roundList,
