@@ -141,7 +141,7 @@ const Provider = (props: Props) => {
         agentId,
         engineId: null,
         agentRate: 0,
-        engineRate: 0,
+        engineRate: 1,
       })
 
       return newCost
