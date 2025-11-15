@@ -21,7 +21,6 @@ import {
   type AgentCostSetting,
   type PlayState,
 } from '@zzz-picker/constant'
-import { getAgentRarity } from '@zzz-picker/utils'
 import { createContext, useContext, useEffect, useMemo, useState, useEffectEvent } from 'react'
 
 type Cost = {
@@ -84,7 +83,7 @@ export const Context = createContext<State>({
 })
 
 const Provider = (props: Props) => {
-  const { agents, loading } = useContext(StoreContext)
+  const { loading } = useContext(StoreContext)
   const [state, setState] = useState<PlayState>(() => {
     try {
       return pipe(
@@ -135,23 +134,18 @@ const Provider = (props: Props) => {
     if (isNull(agentId)) return
     if (cost[side].has(agentId)) return
 
-    pipe(
-      agents.get(agentId)!,
-      getAgentRarity,
-      (rarity) => ({
-        rarity,
+    setCost((prev) => {
+      const newCost = { ...prev }
+
+      newCost[side].set(agentId, {
+        agentId,
+        engineId: null,
         agentRate: 0,
-        engineType: null,
-        engineRate: 1,
-      }),
-      (agentSetting) => {
-        setCost((prev) => {
-          const newCost = { ...prev }
-          newCost[side].set(agentId, agentSetting)
-          return newCost
-        })
-      }
-    )
+        engineRate: 0,
+      })
+
+      return newCost
+    })
   })
 
   useEffect(() => {

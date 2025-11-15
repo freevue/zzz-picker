@@ -24,7 +24,7 @@ type Props = {
 type State = {
   agents: Map<number, GQL_Agent>
   gqlBosses: Map<number, GQL_Boss<Array<GQL_Attribute>>>
-  gqlEngines: Map<number, GQL_Engine>
+  engines: Map<number, GQL_Engine>
   loading: boolean
   deadlyAssaultList: Array<DeadlyAssault & { open: Dayjs }>
 }
@@ -32,7 +32,7 @@ type State = {
 export const Context = createContext<State>({
   agents: new Map(),
   gqlBosses: new Map(),
-  gqlEngines: new Map(),
+  engines: new Map(),
   loading: false,
   deadlyAssaultList: [],
 })
@@ -51,7 +51,7 @@ const Provider = (props: Props) => {
           () => agentLoading || bossLoading || deadlyAssaultLoading || engineLoading,
           [agentLoading, bossLoading, deadlyAssaultLoading, engineLoading]
         ),
-        gqlEngines: useMemo(() => {
+        engines: useMemo(() => {
           const currentMap = new Map()
 
           if (engineLoading) return currentMap
