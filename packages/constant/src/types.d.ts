@@ -10,7 +10,7 @@ export type RoundSide = {
   pickList: [SelectAgent, SelectAgent, SelectAgent]
 }
 export type PlayCostMap = Map<number, CostTable>
-export type Rarity = 'S' | 'A'
+export type Rarity = 'S' | 'A' | 'B'
 export type AgentCostType = 'sPickAgent' | 'sAlwaysAgent' | 'aAlwaysAgent'
 export type EngineCostType = 'sExclusiveEngine' | 'sEngine' | 'aEngine'
 export type CostWeight = {
