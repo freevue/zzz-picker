@@ -18,6 +18,16 @@ const DevLog: React.FC = () => {
         <div className="flex flex-col gap-4 w-2xl">
           <Typo.Heading className="heading-4xl text-primary">Dev Log</Typo.Heading>
           <div className="flex flex-col gap-8">
+            <Wrapper title="2025-11-15">
+              <Text>엔강대가 정식으로 시작합니다.</Text>
+              <Text>
+                경기 히스토리를 저장하여 통계를 지원하고자 했는데, 데이터 구성을 완료하지 못하였습니다. <br />
+                당장은 직접 수기로 입력할 것 같네요.
+              </Text>
+              <Text>
+                엔진 선택 사용성을 개선했습니다. 단순하게 등급만 보여주는 것이 아닌, 실제 무엇을 사용하는지 보여주고자 했습니다.
+              </Text>
+            </Wrapper>
             <Wrapper title="2025-11-05">
               <Text>디자인을 전면 개편했습니다.</Text>
               <Text>
