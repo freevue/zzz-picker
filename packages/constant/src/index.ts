@@ -1,12 +1,5 @@
-import type { AgentCostSetting, CostWeight, CostTable, RoundSide, PlayState } from './types.d'
+import type { CostWeight, CostTable, RoundSide, PlayState } from './types.d'
 import { pipe, range, map, toArray } from '@fxts/core'
-
-export const DEFAULT_AGENT_COST_STATE: AgentCostSetting = {
-  rarity: 'aAlwaysAgent',
-  agentRate: 0,
-  engineType: 'sExclusiveEngine',
-  engineRate: 0,
-}
 
 export * from './types.d'
 

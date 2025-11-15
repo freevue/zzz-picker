@@ -1,6 +1,7 @@
 export type Side = 'A' | 'B'
 export type RoundId = 'common' | 'personal' | 'unlimited'
 export type AgentId = number
+export type EngineId = number
 export type BossId = number
 export type SelectAgent = AgentId | null
 export type SelectBoss = BossId | null
@@ -54,6 +55,35 @@ export type PlayState = {
   personal: PersonalRound
   unlimited: UnlimitedRound
 }
+export type AgentCostSetting = {
+  agentId: AgentId
+  engineId: EngineId | null
+  agentRate: number
+  engineRate: number
+
+  // rarity: AgentCostType
+  // agentRate: number
+  // engineType: EngineCostType | null
+  // engineRate: number
+}
+export type AgentInfo = {
+  id: number
+  rarity: Rarity
+  isTeaser: boolean
+  isPickup: boolean
+  isAllow: boolean
+  color: string
+  nameKo: string
+  fullNameKo: string | null
+}
+export type EngineInfo = {
+  id: number
+  nameKo: string
+  exclusiveAgentId: number
+  rank: Rarity
+  imageUrl: string
+  iconUrl: string
+}
 
 // ---
 export type Boss = {
@@ -62,11 +92,4 @@ export type Boss = {
   images: {
     rectangle: string
   }
-}
-
-export type AgentCostSetting = {
-  rarity: AgentCostType
-  agentRate: number
-  engineType: EngineCostType | null
-  engineRate: number
 }
