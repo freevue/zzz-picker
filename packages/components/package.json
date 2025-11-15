@@ -16,9 +16,9 @@
       "default": "./src/v2/index.ts"
     },
     "./icons": {
-      "types": "./src/icons/index.ts",
-      "import": "./src/icons/index.ts",
-      "default": "./src/icons/index.ts"
+      "types": "./src/Icons/index.ts",
+      "import": "./src/Icons/index.ts",
+      "default": "./src/Icons/index.ts"
     },
     "./styles": {
       "default": "./src/index.css"
