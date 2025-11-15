@@ -23,6 +23,8 @@
 
   --animate-turbo: spin 0.1s linear infinite;
 
+  --drop-shadow-center: 0 0 5px;
+
   @keyframes turbo {
     0% {
       transform: rotate(0deg);
