@@ -26,7 +26,7 @@ const Option: React.FC<{
           'select-none',
           'items-center',
           'justify-center',
-          'snap-center',
+          // 'snap-center',
           'tracking-widest',
         ],
         concat([props.className]),
@@ -43,17 +43,37 @@ const Select: React.FC<Props> = (props) => {
 
   useEffect(() => {
     if (selectRef.current) {
-      selectRef.current.blur()
-
       pipe(
         selectRef.current,
-        ({ options }) => options.item(props.value + 1)?.offsetTop ?? 0,
+        ({ options }) => {
+          const fixHeight = options.item(0)?.offsetHeight ?? 0
+
+          return (options.item(props.value + 1)?.offsetTop ?? 0) - fixHeight
+        },
         (top) => {
-          selectRef.current!.scrollTo({ top })
+          selectRef.current!.blur()
+          selectRef.current!.scrollTo({ top, behavior: 'smooth' })
         }
       )
     }
   }, [props.value])
+  useEffect(() => {
+    if (selectRef.current) {
+      pipe(
+        selectRef.current,
+        ({ options }) => {
+          const fixHeight = options.item(0)?.offsetHeight ?? 0
+
+          return (options.item(props.value + 1)?.offsetTop ?? 0) - fixHeight
+        },
+        (top) => {
+          requestAnimationFrame(() => {
+            selectRef.current?.scrollTo({ top })
+          })
+        }
+      )
+    }
+  }, [])
 
   return (
     <select
@@ -68,8 +88,8 @@ const Select: React.FC<Props> = (props) => {
           'block',
           'focus:outline-none',
           'scrollbar-hidden',
-          'snap-y',
-          'snap-mandatory',
+          // 'snap-y',
+          // 'snap-mandatory',
         ],
         concat([props.className]),
         join(' ')
