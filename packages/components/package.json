@@ -15,6 +15,11 @@
       "import": "./src/v2/index.ts",
       "default": "./src/v2/index.ts"
     },
+    "./icons": {
+      "types": "./src/icons/index.ts",
+      "import": "./src/icons/index.ts",
+      "default": "./src/icons/index.ts"
+    },
     "./styles": {
       "default": "./src/index.css"
     }
