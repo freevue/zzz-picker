@@ -1,14 +1,7 @@
 import type { GQL_Edges, GQL_Node, GQL_Image, GQL_Rank_DataTypes, GQL_Engine } from '.'
+import type { AgentInfo } from '@zzz-picker/constant'
 
-export type GQL_Agent = {
-  id: number
-  rarity: GQL_Rank_DataTypes
-  isTeaser: boolean
-  isPickup: boolean
-  isAllow: boolean
-  color: string
-  nameKo: string
-  fullNameKo: string | null
+export type GQL_Agent = AgentInfo & {
   banner: GQL_Image
   profile: GQL_Image
   specialty: {

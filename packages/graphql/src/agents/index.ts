@@ -54,6 +54,7 @@ export const AGENT_LIST = gql`
           engine: enginesCollection {
             edges {
               node {
+                id
                 nameKo: name_ko
                 exclusiveAgentId: exclusive_agent_id
                 rank
