@@ -43,6 +43,25 @@ export const AGENT_LIST = gql`
           profile: profile_image {
             ...Image
           }
+          specialty {
+            id
+            nameKo: name_ko
+          }
+          attributes {
+            id
+            nameKo: name_ko
+          }
+          engine: enginesCollection {
+            edges {
+              node {
+                nameKo: name_ko
+                exclusiveAgentId: exclusive_agent_id
+                rank
+                imageUrl: image_url
+                iconUrl: icon_url
+              }
+            }
+          }
         }
       }
     }
