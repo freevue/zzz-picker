@@ -13,5 +13,8 @@
   },
   "peerDependencies": {
     "@apollo/client": "^4.0.7"
+  },
+  "devDependencies": {
+    "@zzz-picker/constant": "workspace:*"
   }
 }
