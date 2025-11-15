@@ -1,5 +1,6 @@
 import ClientOnly from '../ClientOnly'
 import Agents from './Agents'
+import Engines from './Engines'
 import { pipe, join, concat } from '@fxts/core'
 import { motion, AnimatePresence } from 'motion/react'
 import { useEffect } from 'react'
@@ -13,6 +14,7 @@ type Props = {
 }
 type DialogType = React.FC<Props> & {
   Agents: typeof Agents
+  Engines: typeof Engines
 }
 
 const Dialog: DialogType = (props) => {
@@ -113,5 +115,6 @@ const Dialog: DialogType = (props) => {
 }
 
 Dialog.Agents = Agents
+Dialog.Engines = Engines
 
 export default Dialog
