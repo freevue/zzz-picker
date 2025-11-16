@@ -60,7 +60,7 @@ const Provider = (props: Props) => {
             engineData?.enginesCollection?.edges || [],
             map(prop('node')),
             each((engine) => {
-              currentMap.set(Number(engine.id), engine)
+              currentMap.set(Number(engine.id), { ...engine, id: Number(engine.id) })
             })
           )
 
@@ -75,7 +75,7 @@ const Provider = (props: Props) => {
             agentData?.agentsCollection?.edges || [],
             map(prop('node')),
             each((agent) => {
-              currentMap.set(Number(agent.id), agent)
+              currentMap.set(Number(agent.id), { ...agent, id: Number(agent.id) })
             })
           )
 
@@ -105,7 +105,7 @@ const Provider = (props: Props) => {
               ),
             })),
             each((boss) => {
-              currentMap.set(Number(boss.id), boss)
+              currentMap.set(Number(boss.id), { ...boss, id: Number(boss.id) })
             })
           )
 
