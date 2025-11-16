@@ -97,11 +97,12 @@ const Pick: React.FC<Props> = (props) => {
             join(' ')
           )}
         >
-          <Form.Time
+          <Form.Time.Input
             value={time}
+            name={`${props.roundId}-${props.side}-time`}
             onChange={onTimeChange}
             className={pipe(
-              ['w-56', 'h-14', 'bg-content'],
+              ['w-56', 'h-14', 'bg-content', 'overflow-hidden'],
               concat(props.side === 'A' ? ['rounded-tr-2xl'] : []),
               concat(props.side === 'B' ? ['rounded-tl-2xl'] : []),
               join(' ')
