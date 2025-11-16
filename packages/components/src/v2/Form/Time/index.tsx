@@ -1,3 +1,4 @@
+import Input from './Input'
 import Select from './Select'
 import { pipe, concat, join } from '@fxts/core'
 import { motion, AnimatePresence } from 'motion/react'
@@ -8,8 +9,11 @@ type Props = {
   onChange?: (value: number) => void
   className?: string
 }
+type TypeTime = {
+  Input: typeof Input
+} & React.FC<Props>
 
-const Time: React.FC<Props> = (props) => {
+const Time: TypeTime = (props) => {
   const contentRef = useRef<HTMLDivElement>(null)
   const [isOpen, setIsOpen] = useState(false)
   const [minute, setMinute] = useState(0)
@@ -136,5 +140,7 @@ const Time: React.FC<Props> = (props) => {
     </div>
   )
 }
+
+Time.Input = Input
 
 export default Time
