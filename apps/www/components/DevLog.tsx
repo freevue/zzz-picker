@@ -1,4 +1,4 @@
-import { Text, Wrapper } from './Docs'
+import { Text, Wrapper, Image } from './Docs'
 import { Dialog, Typo } from '@zzz-picker/components/v2'
 import { useState } from 'react'
 
@@ -18,14 +18,24 @@ const DevLog: React.FC = () => {
         <div className="flex flex-col gap-4 w-2xl">
           <Typo.Heading className="heading-4xl text-primary">Dev Log</Typo.Heading>
           <div className="flex flex-col gap-8">
+            <Wrapper title="2025-11-16">
+              <Text>피드백 반영</Text>
+              <Image
+                className="aspect-[624/409]"
+                src="https://nng-phinf.pstatic.net/MjAyNTA2MDlfOTAg/MDAxNzQ5NDM3NTkzNTQx.SCBYePF842V1102Rd-N9EkRBhmp1ngrIa6UCJ0LgoUog.IFqtA00xgYuc1I2XUqvuvF431RKpUuPYJMagTi8VNLwg.PNG/%EC%95%A8%EB%A6%AC%EC%8A%A41.png"
+                alt="2025-11-16"
+              />
+            </Wrapper>
             <Wrapper title="2025-11-15">
               <Text>엔강대가 정식으로 시작합니다.</Text>
               <Text>
-                경기 히스토리를 저장하여 통계를 지원하고자 했는데, 데이터 구성을 완료하지 못하였습니다. <br />
+                경기 히스토리를 저장하여 통계를 지원하고자 했는데, 데이터 구성을 완료하지
+                못하였습니다. <br />
                 당장은 직접 수기로 입력할 것 같네요.
               </Text>
               <Text>
-                엔진 선택 사용성을 개선했습니다. 단순하게 등급만 보여주는 것이 아닌, 실제 무엇을 사용하는지 보여주고자 했습니다.
+                엔진 선택 사용성을 개선했습니다. 단순하게 등급만 보여주는 것이 아닌, 실제 무엇을
+                사용하는지 보여주고자 했습니다.
               </Text>
             </Wrapper>
             <Wrapper title="2025-11-05">
