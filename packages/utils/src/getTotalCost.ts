@@ -1,5 +1,5 @@
 import { getAgentRarity, getEngineRarity, getAgentCost, getEngineCost } from './'
-import { isNull, isUndefined, pipe, sum, peek } from '@fxts/core'
+import { isNull, isUndefined, pipe, sum } from '@fxts/core'
 import type {
   AgentCostSetting,
   AgentInfo,
