@@ -1,15 +1,13 @@
-import type { AgentCostType, Rarity } from '@zzz-picker/constant'
+import { isUndefined } from '@fxts/core'
+import type { AgentCostType, AgentInfo } from '@zzz-picker/constant'
 
-type Params = {
-  rarity: Rarity
-  isPickup: boolean
-}
+function getAgentRarity(params: AgentInfo | undefined): AgentCostType | null
 
-function getAgentRarity(params: Params): AgentCostType
+function getAgentRarity(params?: AgentInfo): AgentCostType | null {
+  if (isUndefined(params)) return null
 
-function getAgentRarity({ rarity, isPickup }: Params): AgentCostType {
-  if (isPickup) return 'sPickAgent'
-  if (rarity === 'A') return 'aAlwaysAgent'
+  if (params.isPickup) return 'sPickAgent'
+  if (params.rarity === 'A') return 'aAlwaysAgent'
 
   return 'sAlwaysAgent'
 }

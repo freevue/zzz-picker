@@ -1,30 +1,16 @@
-import { getAgentRarity } from './'
-import { isUndefined, pipe, sum } from '@fxts/core'
-import type { CostTable, AgentInfo } from '@zzz-picker/constant'
+import { isUndefined, sum } from '@fxts/core'
+import type { CostWeight, AgentCostSetting } from '@zzz-picker/constant'
 
-type CostData = {
-  agent: Pick<AgentInfo, 'rarity' | 'isPickup'> | undefined
-  agentRate: number
-}
+type ReturnAgentTotalCost = number | ((payload: CostWeight) => number)
 
-type ReturnAgentTotalCost = number | ((payload: CostData) => number)
+function getAgentCost(cost: AgentCostSetting, payload: CostWeight): number
+function getAgentCost(cost: AgentCostSetting): (payload: CostWeight) => number
 
-function getAgentCost(costTable: CostTable, payload: CostData): number
-function getAgentCost(costTable: CostTable): (payload: CostData) => number
-
-function getAgentCost(costTable: CostTable, payload?: CostData): ReturnAgentTotalCost {
+function getAgentCost(cost: AgentCostSetting, payload?: CostWeight): ReturnAgentTotalCost {
   if (isUndefined(payload))
-    return (currentPayload: CostData) => getAgentCost(costTable, currentPayload)
+    return (currentPayload: CostWeight) => getAgentCost(cost, currentPayload)
 
-  if (isUndefined(payload.agent)) return 0
-
-  return pipe(
-    { rarity: payload.agent.rarity, isPickup: payload.agent.isPickup },
-    getAgentRarity,
-    (agentCostType) => costTable[agentCostType],
-    ({ used, rate }) => [used, rate * payload.agentRate],
-    sum
-  )
+  return sum([payload.used, payload.rate * cost.agentRate])
 }
 
 export default getAgentCost
