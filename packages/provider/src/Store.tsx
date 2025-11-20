@@ -1,137 +1,101 @@
-import { each, map, pipe, prop, toArray } from '@fxts/core'
-import type { DeadlyAssault } from '@zzz-picker/constant'
-import {
-  AGENT_LIST,
-  BOSS_LIST,
-  DEADLY_ASSAULT_LIST,
-  ENGINE_LIST,
-  useQuery,
-  type GQL_AgentList,
-  type GQL_EngineList,
-  type GQL_Engine,
-  type GQL_Agent,
-  type GQL_BossList,
-  type GQL_Boss,
-  type GQL_DeadlyAssaultList,
-  type GQL_Attribute,
-} from '@zzz-picker/graphql'
+import type { DeadlyAssault, Boss, Engine, Agent } from './type'
+import { DB } from './utils'
+import { each, map, pipe, toArray } from '@fxts/core'
 import dayjs, { type Dayjs } from 'dayjs'
-import { createContext, useMemo } from 'react'
+import { createContext, use, useMemo, Suspense } from 'react'
 
 type Props = {
   children: React.ReactNode
+  deadlyAssaultList: Promise<Array<DeadlyAssault>>
+  getBoss: Promise<Array<Boss>>
+  getEngine: Promise<Array<Engine>>
+  getAgent: Promise<Array<Agent>>
 }
 type State = {
-  agents: Map<number, GQL_Agent>
-  gqlBosses: Map<number, GQL_Boss<Array<GQL_Attribute>>>
-  engines: Map<number, GQL_Engine>
-  loading: boolean
-  deadlyAssaultList: Array<DeadlyAssault & { open: Dayjs }>
+  agents: Map<number, Agent>
+  boss: Map<number, Boss>
+  engines: Map<number, Engine>
+  deadlyAssaultList: Array<Omit<DeadlyAssault, 'open'> & { open: Dayjs }>
 }
 
 export const Context = createContext<State>({
   agents: new Map(),
-  gqlBosses: new Map(),
+  boss: new Map(),
   engines: new Map(),
-  loading: false,
   deadlyAssaultList: [],
 })
 
-const Provider = (props: Props) => {
-  const { loading: engineLoading, data: engineData } = useQuery<GQL_EngineList>(ENGINE_LIST)
-  const { loading: agentLoading, data: agentData } = useQuery<GQL_AgentList>(AGENT_LIST)
-  const { loading: bossLoading, data: bossData } = useQuery<GQL_BossList>(BOSS_LIST)
-  const { loading: deadlyAssaultLoading, data: deadlyAssaultData } =
-    useQuery<GQL_DeadlyAssaultList>(DEADLY_ASSAULT_LIST)
+const Content: React.FC<Props> = (props) => {
+  const deadlyAssaultList = use(props.deadlyAssaultList)
+  const boss = use(props.getBoss)
+  const engine = use(props.getEngine)
+  const agent = use(props.getAgent)
 
   return (
     <Context.Provider
       value={{
-        loading: useMemo(
-          () => agentLoading || bossLoading || deadlyAssaultLoading || engineLoading,
-          [agentLoading, bossLoading, deadlyAssaultLoading, engineLoading]
-        ),
         engines: useMemo(() => {
-          const currentMap = new Map()
-
-          if (engineLoading) return currentMap
+          const currentMap = new Map<number, Engine>()
 
           pipe(
-            engineData?.enginesCollection?.edges || [],
-            map(prop('node')),
-            each((engine) => {
-              currentMap.set(Number(engine.id), { ...engine, id: Number(engine.id) })
-            })
+            engine,
+            map((engine) => ({ ...engine, id: Number(engine.id) })),
+            each((engine) => currentMap.set(engine.id, engine))
           )
 
           return currentMap
-        }, [engineData, engineLoading]),
+        }, [engine]),
         agents: useMemo(() => {
-          const currentMap = new Map()
-
-          if (agentLoading) return currentMap
+          const currentMap = new Map<number, Agent>()
 
           pipe(
-            agentData?.agentsCollection?.edges || [],
-            map(prop('node')),
-            each((agent) => {
-              currentMap.set(Number(agent.id), { ...agent, id: Number(agent.id) })
-            })
+            agent,
+            map((agent) => ({ ...agent, id: Number(agent.id) })),
+            each((agent) => currentMap.set(agent.id, agent))
           )
 
           return currentMap
-        }, [agentData, agentLoading]),
-        gqlBosses: useMemo(() => {
-          const currentMap = new Map()
-
-          if (bossLoading) return currentMap
+        }, [agent]),
+        boss: useMemo(() => {
+          const currentMap = new Map<number, Boss>()
 
           pipe(
-            bossData?.bossCollection?.edges || [],
-            map(prop('node')),
-            map((boss) => ({
-              ...boss,
-              resistance: pipe(
-                boss.resistance.edges,
-                map(prop('node')),
-                map(prop('attributes')),
-                toArray
-              ),
-              weakness: pipe(
-                boss.weakness.edges,
-                map(prop('node')),
-                map(prop('attributes')),
-                toArray
-              ),
-            })),
-            each((boss) => {
-              currentMap.set(Number(boss.id), { ...boss, id: Number(boss.id) })
-            })
+            boss,
+            map((boss) => ({ ...boss, id: Number(boss.id) })),
+            each((boss) => currentMap.set(boss.id, boss))
           )
 
           return currentMap
-        }, [bossData, bossLoading]),
+        }, [boss]),
         deadlyAssaultList: useMemo(() => {
-          if (deadlyAssaultLoading) return []
-
           return pipe(
-            deadlyAssaultData?.deadlyAssault?.edges || [],
-            map(prop('node')),
+            deadlyAssaultList,
             map((deadlyAssault) => ({
               ...deadlyAssault,
-              version: Number(deadlyAssault.version),
-              open: dayjs(deadlyAssault.openAt),
-              boss1: Number(deadlyAssault.boss1),
-              boss2: Number(deadlyAssault.boss2),
-              boss3: Number(deadlyAssault.boss3),
+              open: dayjs(deadlyAssault.open),
             })),
             toArray
           )
-        }, [deadlyAssaultData, deadlyAssaultLoading]),
+        }, [deadlyAssaultList]),
       }}
     >
       {props.children}
     </Context.Provider>
+  )
+}
+
+const Provider: React.FC<Pick<Props, 'children'>> = (props) => {
+  return (
+    <Suspense fallback={null}>
+      <Content
+        deadlyAssaultList={DB.getDeadlyAssaultList()}
+        getBoss={DB.getBoss()}
+        getEngine={DB.getEngine()}
+        getAgent={DB.getAgent()}
+      >
+        {props.children}
+      </Content>
+    </Suspense>
   )
 }
 

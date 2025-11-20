@@ -1,5 +1,4 @@
 import { Context as SettingContext } from './Setting'
-import { Context as StoreContext } from './Store'
 import {
   map,
   pipe,
@@ -83,35 +82,33 @@ export const Context = createContext<State>({
 })
 
 const Provider = (props: Props) => {
-  const { loading } = useContext(StoreContext)
-  const [state, setState] = useState<PlayState>(() => {
-    try {
-      return pipe(
-        window.localStorage.getItem(STORAGE_KEY),
-        throwIf(isNull, () => Error('')),
-        (storage) => JSON.parse(storage)[window.location.pathname],
-        when(isUndefined, () => ({ state: DEFAULT_PLAY_STATE })),
-        ({ state }) => ({ ...DEFAULT_PLAY_STATE, ...state })
-      )
-    } catch {
-      return DEFAULT_PLAY_STATE
-    }
+  const [state, setState] = useState<PlayState>(DEFAULT_PLAY_STATE)
+  const [cost, setCost] = useState<Record<Side, Map<number, AgentCostSetting>>>({
+    A: new Map(),
+    B: new Map(),
   })
-  const [cost, setCost] = useState<Record<Side, Map<number, AgentCostSetting>>>(() => {
+
+  useEffect(() => {
     try {
-      return pipe(
+      pipe(
         window.localStorage.getItem(STORAGE_KEY),
         throwIf(isNull, () => Error('')),
         (storage) => JSON.parse(storage)[window.location.pathname],
         when(isUndefined, () => ({
+          state: DEFAULT_PLAY_STATE,
           cost: { A: new Map(), B: new Map() },
         })),
-        ({ cost }) => ({ A: new Map(cost.A), B: new Map(cost.B) })
+        ({ state, cost }) => {
+          setState({ ...DEFAULT_PLAY_STATE, ...state })
+          setCost({ A: new Map(cost.A), B: new Map(cost.B) })
+        }
       )
     } catch {
-      return { A: new Map(), B: new Map() }
+      setState(DEFAULT_PLAY_STATE)
+      setCost({ A: new Map(), B: new Map() })
     }
-  })
+  }, [])
+
   const { state: settingState } = useContext(SettingContext)
   const [isCounting, setIsCounting] = useState<boolean>(false)
   const allPickList = useMemo(() => {
@@ -149,8 +146,6 @@ const Provider = (props: Props) => {
   })
 
   useEffect(() => {
-    if (loading) return
-
     pipe(
       settingState.banCount || DEFAULT.BAN_COUNT,
       range,
@@ -158,7 +153,7 @@ const Provider = (props: Props) => {
       toArray,
       (banList) => setState((prev) => (prev ? { ...prev, banList } : DEFAULT_PLAY_STATE))
     )
-  }, [settingState.banCount, loading])
+  }, [settingState.banCount])
   useEffect(() => {
     setIsCounting(false)
   }, [state])
