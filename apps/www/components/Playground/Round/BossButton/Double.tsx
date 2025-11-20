@@ -11,13 +11,13 @@ type Props = {
 }
 
 const BossButton: React.FC<Props & { side: Side }> = (props) => {
-  const { gqlBosses } = useStore()
+  const { boss } = useStore()
   const { state, setState } = usePlay()
   const [isOpen, setIsOpen] = useState(false)
   const side = useMemo(() => ({ ...state[props.roundId][props.side] }), [props, state])
   const bossData = useMemo(
-    () => (side.boss === null ? undefined : gqlBosses.get(Number(side.boss))),
-    [gqlBosses, side.boss]
+    () => (side.boss === null ? undefined : boss.get(side.boss)),
+    [boss, side.boss]
   )
 
   const onBossClick = () => {

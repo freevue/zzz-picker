@@ -137,8 +137,8 @@ const CostDialog: React.FC<Props> = (props) => {
       <Dialog.Engines
         isOpen={isEnginesOpen}
         allowEngines={pipe(
-          agent.engine.edges,
-          map((edge) => Number(edge.node.id)),
+          agent.engine,
+          map((engine) => engine.id),
           toArray
         )}
         activeEngine={currentCost.engineId ? [currentCost.engineId] : undefined}

@@ -1,4 +1,14 @@
-import { pipe, map, toArray, join, find, sort, zipWithIndex, when } from '@fxts/core'
+import {
+  pipe,
+  map,
+  toArray,
+  join,
+  find,
+  sort,
+  zipWithIndex,
+  isUndefined,
+  throwIf,
+} from '@fxts/core'
 import { Typo } from '@zzz-picker/components/v2'
 import { useStore } from '@zzz-picker/provider/hooks'
 import dayjs from 'dayjs'
@@ -11,24 +21,20 @@ type Props = {
 }
 
 const BossDialog: React.FC<Props> = (props) => {
-  const { deadlyAssaultList, gqlBosses, loading } = useStore()
+  const { deadlyAssaultList, boss } = useStore()
   const currentDeadlyAssault = useMemo(() => {
-    if (loading) return []
-
-    return pipe(
-      deadlyAssaultList,
-      sort((prev, curr) => curr.open.diff(prev.open)),
-      find((deadlyAssault) => dayjs(deadlyAssault.open).isBefore(dayjs())),
-      (deadlyAssault) =>
-        deadlyAssault
-          ? [
-              gqlBosses.get(deadlyAssault.boss1)!,
-              gqlBosses.get(deadlyAssault.boss2)!,
-              gqlBosses.get(deadlyAssault.boss3)!,
-            ]
-          : []
-    )
-  }, [deadlyAssaultList, gqlBosses, loading])
+    try {
+      return pipe(
+        deadlyAssaultList,
+        sort((prev, curr) => curr.open.diff(prev.open)),
+        find((deadlyAssault) => dayjs(deadlyAssault.open).isBefore(dayjs())),
+        throwIf(isUndefined, () => Error('')),
+        ({ boss1, boss2, boss3 }) => [boss1, boss2, boss3]
+      )
+    } catch {
+      return [null, null, null]
+    }
+  }, [deadlyAssaultList, boss])
 
   return (
     <div className="w-2xl">
@@ -36,10 +42,6 @@ const BossDialog: React.FC<Props> = (props) => {
       <ul className="flex flex-wrap mt-8 w-full justify-between">
         {pipe(
           currentDeadlyAssault,
-          when(
-            (list) => list.length === 0,
-            () => [null, null, null]
-          ),
           zipWithIndex,
           map(([index, boss]) => (
             <motion.li

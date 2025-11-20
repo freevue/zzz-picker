@@ -8,7 +8,7 @@ import { CostTable, CommonBossCard, Header, Playground } from '~/components'
 
 const Legend: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams()
-  const { agents, loading } = useStore()
+  const { agents } = useStore()
   const options = useMemo(() => {
     return {
       totalCost: Infinity,
@@ -34,8 +34,6 @@ const Legend: React.FC = () => {
       }
     )
   }, [agents])
-
-  if (loading) return null
 
   return (
     <Setting option={options}>

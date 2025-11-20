@@ -1,9 +1,8 @@
 import { Typo, Form } from '@zzz-picker/components/v2'
 import type { SelectAgent } from '@zzz-picker/constant'
-import { usePlay, useSetting, useStore } from '@zzz-picker/provider/hooks'
+import { usePlay, useSetting } from '@zzz-picker/provider/hooks'
 
 const BanAgent = () => {
-  const { loading } = useStore()
   const { state: settingState } = useSetting()
   const { state: playState, setState } = usePlay()
 
@@ -11,7 +10,7 @@ const BanAgent = () => {
     setState((prev) => ({ ...prev, banList }))
   }
 
-  if (loading || settingState.banCount === 0) return null
+  if (settingState.banCount === 0) return null
 
   return (
     <div className="flex-1 overflow-hidden p-4">

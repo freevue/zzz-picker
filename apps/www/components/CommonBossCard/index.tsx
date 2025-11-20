@@ -4,12 +4,15 @@ import { useLocation } from '@remix-run/react'
 import { Icons } from '@zzz-picker/components'
 import { Dialog, Typo } from '@zzz-picker/components/v2'
 import { usePlay } from '@zzz-picker/provider/hooks'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { BossDialog } from '~/components'
 
 const BossSelect = () => {
   const { state, setState } = usePlay()
   const [isOpen, setIsOpen] = useState(false)
+  const bossData = useMemo(() => {
+    return state.common.boss
+  }, [state.common.boss])
 
   const onBossClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     pipe(Number(event.currentTarget.value), (boss) => {
@@ -34,7 +37,7 @@ const BossSelect = () => {
               'focus:outline-none',
             ],
             concat(
-              state.common.boss === null
+              bossData === null
                 ? ['bg-base/70', 'aspect-[4/2]', 'max-h-64', 'w-full', 'flex']
                 : ['bg-transparent', 'block']
             ),
@@ -43,18 +46,18 @@ const BossSelect = () => {
           type="button"
           onClick={() => setIsOpen(true)}
         >
-          {state.common.boss !== null ? (
-            <div className="size-64 flex items-start bg-netural">
-              <img src={`/images/boss/${state.common.boss}.webp`} alt="" className="block w-full" />
-            </div>
-          ) : (
+          {bossData === null ? (
             <Icons.Plus className="stroke-ink size-1/3 group-hover:stroke-primary" />
+          ) : (
+            <div className="size-64 flex items-start bg-netural">
+              <img src={`/images/boss/${bossData}.webp`} alt="" className="block w-full" />
+            </div>
           )}
         </button>
-        {state.common.boss !== null && <BossInfo />}
+        {bossData !== null && <BossInfo />}
       </div>
       <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <BossDialog active={state.common.boss} onClick={onBossClick} />
+        <BossDialog active={bossData} onClick={onBossClick} />
       </Dialog>
     </>
   )

@@ -7,7 +7,7 @@ import { useEffect, useMemo } from 'react'
 import { CostTable, CommonBossCard, Header, Playground } from '~/components'
 
 const Original: React.FC = () => {
-  const { agents, loading } = useStore()
+  const { agents } = useStore()
   const [searchParams, setSearchParams] = useSearchParams()
   const options = useMemo(() => {
     return {
@@ -35,8 +35,6 @@ const Original: React.FC = () => {
       }
     )
   }, [agents])
-
-  if (loading) return null
 
   return (
     <Setting option={options}>

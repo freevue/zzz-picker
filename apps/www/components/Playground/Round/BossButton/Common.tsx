@@ -6,14 +6,14 @@ import { useMemo, useState } from 'react'
 import { BossDialog } from '~/components'
 
 const Common: React.FC = () => {
-  const { gqlBosses } = useStore()
+  const { boss } = useStore()
   const { state, setState } = usePlay()
   const [isOpen, setIsOpen] = useState(false)
   const bossData = useMemo(() => {
     if (state['common'].boss === null) return undefined
 
-    return gqlBosses.get(state['common'].boss)
-  }, [state, gqlBosses])
+    return boss.get(state['common'].boss)
+  }, [state, boss])
 
   const onBossClick = () => {
     setIsOpen(true)
