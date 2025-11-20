@@ -123,9 +123,6 @@ importers:
       '@zzz-picker/constant':
         specifier: workspace:*
         version: link:../../packages/constant
-      '@zzz-picker/graphql':
-        specifier: workspace:*
-        version: link:../../packages/graphql
       '@zzz-picker/provider':
         specifier: workspace:*
         version: link:../../packages/provider
@@ -206,21 +203,8 @@ importers:
       '@types/react-dom':
         specifier: catalog:react19
         version: 19.2.2(@types/react@19.2.2)
-      '@zzz-picker/graphql':
-        specifier: workspace:*
-        version: link:../graphql
 
   packages/constant: {}
-
-  packages/graphql:
-    dependencies:
-      '@apollo/client':
-        specifier: ^4.0.7
-        version: 4.0.7(graphql@16.11.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(rxjs@7.8.2)
-    devDependencies:
-      '@zzz-picker/constant':
-        specifier: workspace:*
-        version: link:../constant
 
   packages/provider:
     dependencies:
@@ -233,9 +217,6 @@ importers:
       '@zzz-picker/constant':
         specifier: workspace:*
         version: link:../constant
-      '@zzz-picker/graphql':
-        specifier: workspace:*
-        version: link:../graphql
       '@zzz-picker/utils':
         specifier: workspace:*
         version: link:../utils

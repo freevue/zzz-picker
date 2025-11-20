@@ -1,7 +1,7 @@
 import { passError } from '.'
 import { supabase } from '../'
-import type { Agent } from '../../type'
 import { pipe } from '@fxts/core'
+import type { Agent } from '@zzz-picker/constant'
 
 const QUERY = `
   id,

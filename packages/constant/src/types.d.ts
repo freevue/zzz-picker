@@ -1,3 +1,13 @@
+type Source = {
+  name: string
+  url: string
+}
+type Image = {
+  url: string
+  description: string
+  sources: Source
+}
+
 export type Side = 'A' | 'B'
 export type RoundId = 'common' | 'personal' | 'unlimited'
 export type AgentId = number
@@ -26,13 +36,22 @@ export type CostTable = {
   sEngine: CostWeight
   aEngine: CostWeight
 }
-export type DeadlyAssault = {
-  version: number
-  openAt: string
-  boss1: number
-  boss2: number
-  boss3: number
+export type Boss = {
+  id: BossId
+  nameKo: string
+  hp: Array<number>
+  resistance: Array<Attribute>
+  weakness: Array<Attribute>
 }
+export type DeadlyAssault = {
+  id: number
+  version: number
+  open: string
+  boss1: Pick<Boss, 'id' | 'nameKo'>
+  boss2: Pick<Boss, 'id' | 'nameKo'>
+  boss3: Pick<Boss, 'id' | 'nameKo'>
+}
+
 export type CommonRound = {
   key: 'common'
   title: string
@@ -60,11 +79,6 @@ export type AgentCostSetting = {
   engineId: EngineId | null
   agentRate: number
   engineRate: number
-
-  // rarity: AgentCostType
-  // agentRate: number
-  // engineType: EngineCostType | null
-  // engineRate: number
 }
 export type AgentInfo = {
   id: number
@@ -76,20 +90,36 @@ export type AgentInfo = {
   nameKo: string
   fullNameKo: string | null
 }
-export type EngineInfo = {
+export type Engine = {
   id: number
   nameKo: string
-  exclusiveAgentId: number
+  exclusiveAgentId: AgentId
   rank: Rarity
   imageUrl: string
   iconUrl: string
 }
-
-// ---
-export type Boss = {
-  isOpen: boolean
-  name: string
-  images: {
-    rectangle: string
+export type Attribute = {
+  id: number
+  nameKo: string
+}
+export type Agent = {
+  id: AgentId
+  rarity: Rarity
+  isTeaser: boolean
+  isPickup: boolean
+  isAllow: boolean
+  color: string
+  nameKo: string
+  fullNameKo: string
+  banner: Image
+  profile: Image
+  specialty: {
+    id: number
+    nameKo: string
   }
+  attributes: {
+    id: number
+    nameKo: string
+  }
+  engine: Array<Engine>
 }

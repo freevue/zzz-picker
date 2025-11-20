@@ -1,16 +1,16 @@
 import { isUndefined, isNull } from '@fxts/core'
-import type { AgentInfo, EngineCostType, EngineInfo } from '@zzz-picker/constant'
+import type { AgentInfo, EngineCostType, Engine } from '@zzz-picker/constant'
 
 type EngineRarity = EngineCostType | null
-type ReturnEngineRarity = EngineRarity | ((engine: EngineInfo | null) => EngineRarity)
+type ReturnEngineRarity = EngineRarity | ((engine: Engine | null) => EngineRarity)
 
-function getEngineRarity(agent: AgentInfo | undefined, engine: EngineInfo | null): EngineRarity
-function getEngineRarity(agent: AgentInfo | undefined): (engine: EngineInfo | null) => EngineRarity
+function getEngineRarity(agent: AgentInfo | undefined, engine: Engine | null): EngineRarity
+function getEngineRarity(agent: AgentInfo | undefined): (engine: Engine | null) => EngineRarity
 
-function getEngineRarity(agent?: AgentInfo, engine?: EngineInfo | null): ReturnEngineRarity {
+function getEngineRarity(agent?: AgentInfo, engine?: Engine | null): ReturnEngineRarity {
   if (isUndefined(agent)) return null
   if (isUndefined(engine))
-    return (currentEngine: EngineInfo | null) => getEngineRarity(agent, currentEngine)
+    return (currentEngine: Engine | null) => getEngineRarity(agent, currentEngine)
   if (isNull(engine)) return null
 
   if (engine.rank !== 'S') return 'aEngine'

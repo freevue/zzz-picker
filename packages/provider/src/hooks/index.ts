@@ -1,12 +1,6 @@
 import { StoreContext, SettingContext, PlayContext } from '../'
 import { isNumber, isObject, map, pipe, toArray, when } from '@fxts/core'
-import type {
-  Side,
-  SelectAgent,
-  AgentCostSetting,
-  EngineInfo,
-  AgentInfo,
-} from '@zzz-picker/constant'
+import type { Side, SelectAgent, AgentCostSetting, Engine, AgentInfo } from '@zzz-picker/constant'
 import { getTotalCost } from '@zzz-picker/utils'
 import { useContext, useMemo } from 'react'
 
@@ -50,7 +44,7 @@ export const useSelectEngine = (side: Side, selectAgents: SelectAgent[]) => {
   )
 }
 
-type Payload = [AgentCostSetting, AgentInfo | undefined, EngineInfo | undefined]
+type Payload = [AgentCostSetting, AgentInfo | undefined, Engine | undefined]
 
 export const useCostList = (side: Side, selectAgents: SelectAgent[]) => {
   const { cost } = usePlay()

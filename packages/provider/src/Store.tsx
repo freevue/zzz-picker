@@ -1,6 +1,6 @@
-import type { DeadlyAssault, Boss, Engine, Agent } from './type'
 import { DB } from './utils'
 import { each, map, pipe, toArray } from '@fxts/core'
+import type { Engine, Agent, DeadlyAssault, Boss } from '@zzz-picker/constant'
 import dayjs, { type Dayjs } from 'dayjs'
 import { createContext, use, useMemo, Suspense } from 'react'
 

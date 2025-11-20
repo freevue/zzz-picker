@@ -1,12 +1,12 @@
 import { pipe, join, concat } from '@fxts/core'
-import type { GQL_Agent } from '@zzz-picker/graphql'
+import type { Agent } from '@zzz-picker/constant'
 
 type Props = {
   className?: string
   defaultChecked?: boolean
   disabled?: boolean
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
-} & GQL_Agent
+} & Agent
 
 const AgentCard: React.FC<Props> = (props) => {
   return (

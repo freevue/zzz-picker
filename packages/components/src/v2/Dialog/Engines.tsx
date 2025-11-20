@@ -2,7 +2,7 @@ import { Typo, Tabs } from '../'
 import { Cross } from '../../Icons'
 import Dialog from './'
 import { pipe, map, toArray, filter, includes, join, concat } from '@fxts/core'
-import type { EngineId, EngineInfo } from '@zzz-picker/constant'
+import type { EngineId, Engine } from '@zzz-picker/constant'
 import type { Rarity } from '@zzz-picker/constant'
 import { useStore } from '@zzz-picker/provider/hooks'
 import { useState } from 'react'
@@ -19,7 +19,7 @@ type ButtonProps = {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-const Button: React.FC<EngineInfo & ButtonProps> = (props) => {
+const Button: React.FC<Engine & ButtonProps> = (props) => {
   return (
     <button
       type="button"

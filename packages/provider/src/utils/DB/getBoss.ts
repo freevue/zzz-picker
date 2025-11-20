@@ -1,7 +1,7 @@
 import { passError } from '.'
 import { supabase } from '../'
-import type { Boss } from '../../type'
 import { pipe } from '@fxts/core'
+import type { Boss } from '@zzz-picker/constant'
 
 const QUERY = `
   id,

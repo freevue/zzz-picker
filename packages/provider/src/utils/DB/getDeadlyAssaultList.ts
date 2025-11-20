@@ -1,7 +1,7 @@
 import { passError } from '.'
 import { supabase } from '../'
-import type { DeadlyAssault } from '../../type'
 import { pipe } from '@fxts/core'
+import type { DeadlyAssault } from '@zzz-picker/constant'
 
 const QUERY = `
   id,

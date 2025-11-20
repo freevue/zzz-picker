@@ -11,13 +11,13 @@ import {
   join,
 } from '@fxts/core'
 import { Typo } from '@zzz-picker/components/v2'
-import type { GQL_Attribute } from '@zzz-picker/graphql'
+import type { Attribute } from '@zzz-picker/constant'
 import { usePlay, useStore } from '@zzz-picker/provider/hooks'
 import dayjs from 'dayjs'
 import { AnimatePresence, motion } from 'motion/react'
 import { useMemo } from 'react'
 
-const Attributes: React.FC<{ attributes: Array<GQL_Attribute> }> = (props) => {
+const Attributes: React.FC<{ attributes: Array<Attribute> }> = (props) => {
   return (
     <ul className="flex gap-1">
       {pipe(

@@ -3,13 +3,13 @@ import { isNull, isUndefined, pipe, sum } from '@fxts/core'
 import type {
   AgentCostSetting,
   AgentInfo,
-  EngineInfo,
+  Engine,
   AgentCostType,
   EngineCostType,
   CostTable,
 } from '@zzz-picker/constant'
 
-type Payload = [AgentCostSetting, AgentInfo | undefined, EngineInfo | undefined]
+type Payload = [AgentCostSetting, AgentInfo | undefined, Engine | undefined]
 type CostData = [AgentCostSetting, AgentCostType, EngineCostType]
 type ReturnTotalCost = number | ((payload: Payload | null) => number)
 
