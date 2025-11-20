@@ -52,94 +52,96 @@ const Setting: React.FC = () => {
       <Typo.Heading className="heading-4xl text-primary" heading={2}>
         Setting
       </Typo.Heading>
-      {pathname === '/unlimited' ? (
-        <div className="overflow-hidden rounded-4xl mt-4">
-          <img src="/images/bg.jpg" alt="" />
-        </div>
-      ) : (
-        <div className="flex flex-col gap-4 mt-8">
-          <div className="flex mb-4 items-center text-center gap-8">
-            <Typo.Heading className="heading-2xl w-1/3" heading={3}>
-              Theme
-            </Typo.Heading>
-            <div className="w-1/2 ml-auto">
-              <Tabs
-                list={[
-                  { label: 'Default', value: 'v2' },
-                  { label: 'Alice', value: 'alice' },
-                ]}
-                className="w-full"
-                value={selectTheme}
-                onChange={onThemeChange}
-              />
-            </div>
+      <div className="flex flex-col gap-4 mt-8">
+        <div className="flex mb-4 items-center text-center gap-8">
+          <Typo.Heading className="heading-2xl w-1/3" heading={3}>
+            Theme
+          </Typo.Heading>
+          <div className="w-1/2 ml-auto">
+            <Tabs
+              list={[
+                { label: 'Default', value: 'v2' },
+                { label: 'Alice', value: 'alice' },
+              ]}
+              className="w-full"
+              value={selectTheme}
+              onChange={onThemeChange}
+            />
           </div>
-          {state.totalCost !== Infinity && (
+        </div>
+        {pathname === '/unlimited' ? (
+          <div className="overflow-hidden rounded-4xl mt-4">
+            <img src="/images/bg.jpg" alt="" />
+          </div>
+        ) : (
+          <>
+            {state.totalCost !== Infinity && (
+              <div className="flex mb-4 items-center text-center gap-8">
+                <Typo.Heading className="heading-2xl w-1/3" heading={3}>
+                  Total Cost
+                </Typo.Heading>
+                <div className="w-1/2 ml-auto">
+                  <Form.Count
+                    min={0}
+                    max={30}
+                    value={state.totalCost}
+                    name="totalCost"
+                    onChange={onInputChange('totalCost')}
+                    className="bg-base/70"
+                  />
+                </div>
+              </div>
+            )}
             <div className="flex mb-4 items-center text-center gap-8">
               <Typo.Heading className="heading-2xl w-1/3" heading={3}>
-                Total Cost
+                Ban Count
               </Typo.Heading>
               <div className="w-1/2 ml-auto">
                 <Form.Count
                   min={0}
-                  max={30}
-                  value={state.totalCost}
-                  name="totalCost"
-                  onChange={onInputChange('totalCost')}
+                  max={5}
                   className="bg-base/70"
+                  value={state.banCount}
+                  name="banCount"
+                  onChange={onInputChange('banCount')}
                 />
               </div>
             </div>
-          )}
-          <div className="flex mb-4 items-center text-center gap-8">
-            <Typo.Heading className="heading-2xl w-1/3" heading={3}>
-              Ban Count
-            </Typo.Heading>
-            <div className="w-1/2 ml-auto">
-              <Form.Count
-                min={0}
-                max={5}
-                className="bg-base/70"
-                value={state.banCount}
-                name="banCount"
-                onChange={onInputChange('banCount')}
-              />
+            <div className="flex-1 flex flex-col overflow-hidden gap-4 mt-8">
+              <div className="flex items-center justify-between gap-16">
+                <Typo.Heading className="heading-4xl text-primary" heading={2}>
+                  Allow Agent
+                </Typo.Heading>
+                <Tabs
+                  list={['S', 'A']}
+                  className="w-1/2 ml-auto"
+                  value={selectRarity}
+                  onChange={onRarityChange}
+                />
+              </div>
+              <ul className="grid grid-cols-5 py-4 gap-4 flex-1">
+                {pipe(
+                  agents,
+                  filter(([, agent]) => agent.rarity === selectRarity),
+                  map(([id, agent]) => (
+                    <li key={id} className="flex flex-1 items-start justify-center">
+                      <Agent.Button
+                        naming
+                        hover
+                        onClick={onAgentChange}
+                        active={includes(id, state.allowAgent)}
+                        id={id}
+                        disabled={agent.isTeaser}
+                      />
+                    </li>
+                  )),
+                  toArray
+                )}
+              </ul>
             </div>
-          </div>
-          <div className="flex-1 flex flex-col overflow-hidden gap-4 mt-8">
-            <div className="flex items-center justify-between gap-16">
-              <Typo.Heading className="heading-4xl text-primary" heading={2}>
-                Allow Agent
-              </Typo.Heading>
-              <Tabs
-                list={['S', 'A']}
-                className="w-1/2 ml-auto"
-                value={selectRarity}
-                onChange={onRarityChange}
-              />
-            </div>
-            <ul className="grid grid-cols-5 py-4 gap-4 flex-1">
-              {pipe(
-                agents,
-                filter(([, agent]) => agent.rarity === selectRarity),
-                map(([id, agent]) => (
-                  <li key={id} className="flex flex-1 items-start justify-center">
-                    <Agent.Button
-                      naming
-                      hover
-                      onClick={onAgentChange}
-                      active={includes(id, state.allowAgent)}
-                      id={id}
-                      disabled={agent.isTeaser}
-                    />
-                  </li>
-                )),
-                toArray
-              )}
-            </ul>
-          </div>
-        </div>
-      )}
+          </>
+        )}
+      </div>
     </div>
   )
 }
