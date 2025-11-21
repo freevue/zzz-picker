@@ -43,10 +43,10 @@ const Agents: React.FC<Props> = (props) => {
         </div>
       )}
       <div>
-        <Typo.Heading className="heading-4xl text-primary">Agents</Typo.Heading>
-        <div className="mt-4 flex">
+        <div className="flex items-center justify-between gap-16">
+          <Typo.Heading className="heading-4xl text-primary">Agents</Typo.Heading>
           <Tabs
-            className="w-1/3 ml-auto"
+            className="w-1/2 ml-auto"
             list={['S', 'A']}
             value={rarity}
             onChange={(value) => setRarity(value as Rarity)}
