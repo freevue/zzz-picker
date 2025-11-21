@@ -1,4 +1,4 @@
-import { pipe, map, toArray, filter, includes, when, concat, reverse } from '@fxts/core'
+import { pipe, map, toArray, filter, includes, when, concat, reverse, sort } from '@fxts/core'
 import { useLocation } from '@remix-run/react'
 import { Typo, Agent, Tabs, Form } from '@zzz-picker/components/v2'
 import type { Rarity } from '@zzz-picker/constant'
@@ -123,6 +123,9 @@ const Setting: React.FC = () => {
                 {pipe(
                   agents,
                   filter(([, agent]) => agent.rarity === selectRarity),
+                  sort(([, prev], [, current]) => (prev.nameKo > current.nameKo ? -1 : 1)),
+                  sort(([, prev]) => (prev.isPickup ? 1 : -1)),
+                  sort(([, prev]) => (prev.isTeaser ? 1 : -1)),
                   map(([id, agent]) => (
                     <li key={id} className="flex flex-1 items-start justify-center">
                       <Agent.Button
