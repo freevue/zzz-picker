@@ -6,6 +6,7 @@ import type { Engine } from '@zzz-picker/constant'
 const QUERY = `
   id,
   nameKo: name_ko,
+  isPickup: is_pickup,
   exclusiveAgentId: exclusive_agent_id,
   rank,
   imageUrl: image_url,
