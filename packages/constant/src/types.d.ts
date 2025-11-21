@@ -92,6 +92,7 @@ export type AgentInfo = {
 }
 export type Engine = {
   id: number
+  isPickup: boolean
   nameKo: string
   exclusiveAgentId: AgentId
   rank: Rarity
