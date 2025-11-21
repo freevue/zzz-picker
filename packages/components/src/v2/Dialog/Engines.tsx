@@ -1,7 +1,7 @@
 import { Typo, Tabs } from '../'
 import { Cross } from '../../Icons'
 import Dialog from './'
-import { pipe, map, toArray, filter, includes, join, concat } from '@fxts/core'
+import { pipe, map, toArray, filter, includes, join, concat, sort } from '@fxts/core'
 import type { EngineId, Engine } from '@zzz-picker/constant'
 import type { Rarity } from '@zzz-picker/constant'
 import { useStore } from '@zzz-picker/provider/hooks'
@@ -111,6 +111,7 @@ const Engines: React.FC<Props> = (props) => {
             engines,
             // filter(([agentId]) => !includes(agentId, props.filterAgents || [])),
             filter(([engineId]) => !includes(engineId, props.allowEngines || [])),
+            sort(([, engine]) => (engine.isPickup ? -1 : 1)),
             filter(([, engine]) => engine.rank === rarity),
             map(([engineId, engine]) => (
               <Button
