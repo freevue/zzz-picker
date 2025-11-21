@@ -1,6 +1,6 @@
 import { Agent, Typo, Tabs } from '../'
 import Dialog from './'
-import { pipe, map, toArray, filter, includes, sortBy } from '@fxts/core'
+import { pipe, map, toArray, filter, includes, sort } from '@fxts/core'
 import type { AgentId } from '@zzz-picker/constant'
 import type { Rarity } from '@zzz-picker/constant'
 import { useStore } from '@zzz-picker/provider/hooks'
@@ -58,7 +58,9 @@ const Agents: React.FC<Props> = (props) => {
             filter(([agentId]) => !includes(agentId, props.filterAgents || [])),
             filter(([agentId]) => !includes(agentId, props.allowAgents || [])),
             filter(([, agent]) => agent.rarity === rarity),
-            sortBy(([agentId]) => agentId),
+            sort(([, prev], [, current]) => (prev.nameKo > current.nameKo ? -1 : 1)),
+            sort(([, prev]) => (prev.isPickup ? 1 : -1)),
+            sort(([, prev]) => (prev.isTeaser ? 1 : -1)),
             map(([agentId, agent]) => (
               <div key={agentId} className="flex items-center justify-center">
                 <Agent.Button
