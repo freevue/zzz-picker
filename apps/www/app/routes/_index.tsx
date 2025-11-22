@@ -8,6 +8,7 @@ import { LINKS } from '~/constant'
 
 const Main: React.FC = () => {
   const onResetClick = () => {
+    window.localStorage.removeItem(`zzz-picker-dialog-open`)
     window.localStorage.removeItem(STORAGE_KEY)
     window.location.reload()
   }

@@ -24,12 +24,11 @@ const Dialog: DialogType = (props) => {
     if (typeof window === 'undefined') return props.isOpen
     if (isUndefined(props.once)) return props.isOpen
 
-    const openHistory = window.localStorage.getItem(`zzz-picker-dialog-open-${props.name || ''}`)
+    const openHistory = window.localStorage.getItem(`zzz-picker-dialog-open`)
 
     if (openHistory === 'true') return false
 
-    props.isOpen &&
-      window.localStorage.setItem(`zzz-picker-dialog-open-${props.name || ''}`, 'true')
+    props.isOpen && window.localStorage.setItem(`zzz-picker-dialog-open`, 'true')
 
     return props.isOpen
   }, [props.isOpen, props.once, props.name])
