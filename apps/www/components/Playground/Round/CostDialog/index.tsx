@@ -67,7 +67,21 @@ const CostDialog: React.FC<Props> = (props) => {
           </span>
         </Typo.Heading>
         <div className="flex mt-8 items-end relative z-10 flex-1 gap-8">
-          <div className="w-xs h-full flex items-start justify-start">
+          <div
+            className={pipe(
+              [
+                'block',
+                'w-full',
+                'relative',
+                'w-xs',
+                'h-full',
+                'flex',
+                'items-start',
+                'justify-start',
+              ],
+              join(' ')
+            )}
+          >
             <img
               className={pipe(['w-full', 'block'], concat([]), join(' '))}
               src={agent.banner.url}
@@ -104,6 +118,7 @@ const CostDialog: React.FC<Props> = (props) => {
                       'bg-base',
                       'rounded-tr-4xl',
                       'rounded-bl-4xl',
+                      'relative',
                     ],
                     concat(['focus:outline-none', 'cursor-pointer', 'group']),
                     concat(engine ? ['bg-transparent'] : ['p-4']),
@@ -112,7 +127,11 @@ const CostDialog: React.FC<Props> = (props) => {
                   onClick={() => setIsEnginesOpen(true)}
                 >
                   {engine ? (
-                    <img className="block w-full" src={engine.imageUrl} alt="" />
+                    <img
+                      className={pipe(['block', 'w-full', 'relative'], join(' '))}
+                      src={engine.imageUrl}
+                      alt=""
+                    />
                   ) : (
                     <Plus className="stroke-ink size-full group-hover:stroke-primary" />
                   )}
