@@ -1,13 +1,15 @@
 import ClientOnly from '../ClientOnly'
 import Agents from './Agents'
 import Engines from './Engines'
-import { pipe, join, concat } from '@fxts/core'
+import { pipe, join, concat, isUndefined } from '@fxts/core'
 import { motion, AnimatePresence } from 'motion/react'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { createPortal } from 'react-dom'
 
 type Props = {
   isOpen: boolean
+  once?: boolean
+  name?: string
   children: React.ReactNode
   className?: string
   onClose?: () => void
@@ -18,6 +20,20 @@ type DialogType = React.FC<Props> & {
 }
 
 const Dialog: DialogType = (props) => {
+  const open = useMemo(() => {
+    if (typeof window === 'undefined') return props.isOpen
+    if (isUndefined(props.once)) return props.isOpen
+
+    const openHistory = window.localStorage.getItem(`zzz-picker-dialog-open-${props.name || ''}`)
+
+    if (openHistory === 'true') return false
+
+    props.isOpen &&
+      window.localStorage.setItem(`zzz-picker-dialog-open-${props.name || ''}`, 'true')
+
+    return props.isOpen
+  }, [props.isOpen, props.once, props.name])
+
   const onBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation()
     event.preventDefault()
@@ -35,7 +51,7 @@ const Dialog: DialogType = (props) => {
       }
     }
 
-    if (props.isOpen) {
+    if (open) {
       document.body.style.overflow = 'hidden'
       window.addEventListener('keydown', onKeyDown)
     } else {
@@ -47,14 +63,14 @@ const Dialog: DialogType = (props) => {
       document.body.style.overflow = 'auto'
       window.removeEventListener('keydown', onKeyDown)
     }
-  }, [props.isOpen])
+  }, [open])
 
   return (
     <ClientOnly fallback={null}>
       {() =>
         createPortal(
           <AnimatePresence initial={false}>
-            {props.isOpen ? (
+            {open ? (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

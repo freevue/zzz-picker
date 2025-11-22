@@ -1,6 +1,16 @@
 import CostDialog from '../CostDialog'
-import { join, pipe, toArray, concat, when, findIndex, filter, isNumber } from '@fxts/core'
-import { Form, Dialog } from '@zzz-picker/components/v2'
+import {
+  join,
+  pipe,
+  toArray,
+  concat,
+  when,
+  findIndex,
+  filter,
+  isNumber,
+  includes,
+} from '@fxts/core'
+import { Form, Dialog, Typo } from '@zzz-picker/components/v2'
 import {
   DEFAULT,
   type SelectAgent,
@@ -17,6 +27,7 @@ type Props = {
 }
 
 const Pick: React.FC<Props> = (props) => {
+  const [isEventDialogOpen, setIsEventDialogOpen] = useState(false)
   const { state: settingState } = useSetting()
   const { state, setState } = usePlay()
   const [selectedAgentId, setSelectedAgentId] = useState<SelectAgent>(null)
@@ -38,6 +49,8 @@ const Pick: React.FC<Props> = (props) => {
     setSelectedAgentId(agentId)
   }
   const onPickChange = (pickList: SelectAgent[]) => {
+    console.log(pickList)
+    setIsEventDialogOpen(includes(157829, pickList))
     setState((prev) =>
       pipe(
         { ...prev[props.roundId] },
@@ -151,6 +164,39 @@ const Pick: React.FC<Props> = (props) => {
             (index) => costList[index] || 0
           )}
         />
+      </Dialog>
+      <Dialog
+        className="w-2xl"
+        name="seed-birthday"
+        isOpen={isEventDialogOpen}
+        once
+        onClose={() => setIsEventDialogOpen(false)}
+      >
+        <Typo.Heading className="heading-4xl text-primary" heading={2}>
+          생일 축하해, 「시드」 | 꽃이 피는 도중에
+        </Typo.Heading>
+        <div className="flex flex-col gap-2 my-4">
+          <Typo.Body className="body-md text-foreground text-center">
+            「꽃바다의 꽃이 정말 예쁘게 피었어. 그런데 우리끼리만 감상하는 건 조금 이기적이지
+            않을까…」
+          </Typo.Body>
+          <Typo.Body className="body-md text-foreground text-center">
+            「응응~ 꼭 『숯덩이』가 『빅 시드』의 조종석을 독차지하려 했던 것처럼 말이야」
+          </Typo.Body>
+          <Typo.Body className="body-md text-foreground text-center">
+            「『빅 시드』~ 꽃을 꺾어다 꽃다발로 만들어서, 모두에게 보여주는 건 어떨까?」
+          </Typo.Body>
+          <Typo.Body className="body-md text-foreground text-center">
+            「영원히 만개한 꽃바다는 없대도, 우리가 이 꽃들을 기억하는 한 봄은 끝나지 않으니까」
+          </Typo.Body>
+        </div>
+        <div className="aspect-[720/960] w-full rounded-tr-2xl rounded-bl-2xl overflow-hidden">
+          <img
+            src="https://fastcdn.hoyoverse.com/content-v2/nap/160970/34ac54779478ecde5fcf9e0c5d99a7d7_1619640581666503425.png"
+            alt="seed-birthday"
+            className="w-full block"
+          />
+        </div>
       </Dialog>
     </>
   )
