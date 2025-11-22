@@ -13,11 +13,16 @@ function getEngineRarity(agent?: AgentInfo, engine?: Engine | null): ReturnEngin
     return (currentEngine: Engine | null) => getEngineRarity(agent, currentEngine)
   if (isNull(engine)) return null
 
-  if (engine.rank !== 'S') return 'aEngine'
-  if (!agent.isPickup) return 'sEngine'
-  if (Number(engine.exclusiveAgentId) === Number(agent.id)) return 'sExclusiveEngine'
+  if (engine.rank === 'S' && engine.isPickup) return 'sExclusiveEngine'
+  if (engine.rank === 'S') return 'sEngine'
 
-  return 'sEngine'
+  return 'aEngine'
+
+  // if (engine.rank !== 'S') return 'aEngine'
+  // if (agent.rarity === 'A' && engine.isPickup) return 'sExclusiveEngine'
+  // if (!agent.isPickup) return 'sEngine'
+  // if (Number(engine.exclusiveAgentId) === Number(agent.id)) return 'sExclusiveEngine'
+  // return 'sEngine'
 }
 
 export default getEngineRarity
