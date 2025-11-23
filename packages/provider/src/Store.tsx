@@ -1,9 +1,20 @@
 import { DB } from './utils'
-import { each, map, pipe, toArray } from '@fxts/core'
-import type { Engine, Agent, DeadlyAssault, Boss } from '@zzz-picker/constant'
+import { each, isNull, map, pipe, toArray, throwIf, toAsync, filter } from '@fxts/core'
+import type {
+  Engine,
+  Agent,
+  DeadlyAssault,
+  Boss,
+  PlayState,
+  AgentCostSetting,
+} from '@zzz-picker/constant'
 import dayjs, { type Dayjs } from 'dayjs'
-import { createContext, use, useMemo, Suspense } from 'react'
+import { createContext, use, useMemo, Suspense, useEffect } from 'react'
 
+type Cost = {
+  A: Array<[number, AgentCostSetting]>
+  B: Array<[number, AgentCostSetting]>
+}
 type Props = {
   children: React.ReactNode
   deadlyAssaultList: Promise<Array<DeadlyAssault>>
@@ -16,6 +27,7 @@ type State = {
   boss: Map<number, Boss>
   engines: Map<number, Engine>
   deadlyAssaultList: Array<Omit<DeadlyAssault, 'open'> & { open: Dayjs }>
+  save: (state: PlayState, cost: Cost) => Promise<void>
 }
 
 export const Context = createContext<State>({
@@ -23,6 +35,7 @@ export const Context = createContext<State>({
   boss: new Map(),
   engines: new Map(),
   deadlyAssaultList: [],
+  save: async () => {},
 })
 
 const Content: React.FC<Props> = (props) => {
@@ -30,6 +43,12 @@ const Content: React.FC<Props> = (props) => {
   const boss = use(props.getBoss)
   const engine = use(props.getEngine)
   const agent = use(props.getAgent)
+
+  useEffect(() => {
+    DB.getMatchLog(5).then((matchLog) => {
+      console.log({ ...matchLog, mach_at: dayjs(matchLog.mach_at).format('YYYY-MM-DD HH:mm:ss') })
+    })
+  }, [])
 
   return (
     <Context.Provider
@@ -77,6 +96,29 @@ const Content: React.FC<Props> = (props) => {
             toArray
           )
         }, [deadlyAssaultList]),
+        save: async (state, cost) => {
+          try {
+            const matchId = await pipe(
+              DB.postMatch(state),
+              throwIf(isNull, () => Error('매치 로그 저장 실패')),
+              (matchId) => matchId
+            )
+
+            await pipe(
+              [
+                await DB.postPersonalRound(state, cost),
+                await DB.postCommonRound(state, cost),
+                await DB.postUnlimitedRound(state, cost),
+              ],
+              toAsync,
+              filter((id) => !isNull(id)),
+              toArray,
+              DB.postPlayLog(matchId)
+            )
+          } catch (error: any) {
+            console.error(error.message)
+          }
+        },
       }}
     >
       {props.children}
