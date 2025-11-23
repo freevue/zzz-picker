@@ -1,35 +1,15 @@
 import { pipe, join } from '@fxts/core'
 import { Icons } from '@zzz-picker/components'
-import { usePlay } from '@zzz-picker/provider/hooks'
-import dayjs from 'dayjs'
+import { usePlay, useStore } from '@zzz-picker/provider/hooks'
 
 const Save: React.FC = () => {
+  const { save } = useStore()
   const { state, cost } = usePlay()
 
-  const onSaveClick = () => {
-    pipe(
-      {
-        state,
-        cost: { A: [...cost.A.entries()], B: [...cost.B.entries()] },
-      },
-      (data) => JSON.stringify(data, null, 2),
-      (data) => new Blob([data], { type: 'application/json' }),
-      URL.createObjectURL,
-      (url) => {
-        const link = document.createElement('a')
+  const onSaveClick = async () => {
+    await save(state, { A: [...cost.A.entries()], B: [...cost.B.entries()] })
 
-        link.href = url
-        link.download = `zzz-picker-${dayjs().format('YYYY-MM-DD-HH-mm-ss')}.json`
-
-        return { link, url }
-      },
-      ({ link, url }) => {
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-        URL.revokeObjectURL(url)
-      }
-    )
+    alert('저장되었습니다.')
   }
 
   return (
