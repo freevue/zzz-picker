@@ -44,12 +44,6 @@ const Content: React.FC<Props> = (props) => {
   const engine = use(props.getEngine)
   const agent = use(props.getAgent)
 
-  useEffect(() => {
-    DB.getMatchLog(5).then((matchLog) => {
-      console.log({ ...matchLog, mach_at: dayjs(matchLog.mach_at).format('YYYY-MM-DD HH:mm:ss') })
-    })
-  }, [])
-
   return (
     <Context.Provider
       value={{
