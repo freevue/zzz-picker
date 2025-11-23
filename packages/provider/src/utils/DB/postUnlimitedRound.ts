@@ -38,7 +38,7 @@ async function postUnlimitedRound({ unlimited }: PlayState, cost: Cost) {
       })),
       map(postPartyLog),
       toArray,
-      ([a_party_id, b_party_id]) => ({ a_party_id, b_party_id, round_type: ROUND_TYPE.COMMON }),
+      ([a_party_id, b_party_id]) => ({ a_party_id, b_party_id, round_type: ROUND_TYPE.UNLIMITED }),
       async (data) => await supabase.from('round_log').insert(data).select('id'),
       passError<{ id: number }>,
       ([{ id }]) => id
