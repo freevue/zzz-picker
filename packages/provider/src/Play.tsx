@@ -99,7 +99,7 @@ const Provider = (props: Props) => {
           cost: { A: new Map(), B: new Map() },
         })),
         ({ state, cost }) => {
-          setState({ ...DEFAULT_PLAY_STATE, ...state })
+          setState((prev) => ({ ...prev, ...state }))
           setCost({ A: new Map(cost.A), B: new Map(cost.B) })
         }
       )
@@ -147,11 +147,14 @@ const Provider = (props: Props) => {
 
   useEffect(() => {
     pipe(
-      settingState.banCount || DEFAULT.BAN_COUNT,
+      (settingState.banCount || DEFAULT.BAN_COUNT) - state.banList.length,
       range,
       map(() => null),
       toArray,
-      (banList) => setState((prev) => (prev ? { ...prev, banList } : DEFAULT_PLAY_STATE))
+      (banList) =>
+        setState((prev) =>
+          prev ? { ...prev, banList: [...prev.banList, ...banList] } : DEFAULT_PLAY_STATE
+        )
     )
   }, [settingState.banCount])
   useEffect(() => {

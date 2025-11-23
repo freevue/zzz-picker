@@ -109,6 +109,12 @@ const Content: React.FC<Props> = (props) => {
               toArray,
               DB.postPlayLog(matchId)
             )
+            await pipe(
+              state.banList,
+              filter((agentId) => !isNull(agentId)),
+              toArray,
+              DB.postBanLog(matchId)
+            )
           } catch (error: any) {
             console.error(error.message)
           }
