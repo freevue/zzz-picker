@@ -5,6 +5,7 @@ import Round from './Round'
 import TotalScore from './TotalScore'
 import { useLocation } from '@remix-run/react'
 import { Typo } from '@zzz-picker/components/v2'
+import { ROUND_TYPE } from '@zzz-picker/constant'
 import { AnimatePresence, motion } from 'motion/react'
 
 const Side: React.FC = () => {
@@ -24,8 +25,8 @@ const Side: React.FC = () => {
           <Nickname side="B" />
         </div>
         <div className="p-4 flex flex-col gap-20 mt-8">
-          <Round id="personal" />
-          <Round id={pathname === '/unlimited' ? 'unlimited' : 'common'} />
+          <Round id={ROUND_TYPE.PERSONAL} />
+          <Round id={pathname === '/unlimited' ? ROUND_TYPE.UNLIMITED : ROUND_TYPE.COMMON} />
         </div>
         <div className="p-4 my-8">
           <TotalScore />

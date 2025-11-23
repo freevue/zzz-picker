@@ -33,6 +33,11 @@ export enum SOCKET_EVENT {
   UNBAN = 'unban',
   JOIN = 'join',
 }
+export enum ROUND_TYPE {
+  PERSONAL = 'personal',
+  COMMON = 'common',
+  UNLIMITED = 'unlimited',
+}
 export const DEFAULT_PLAY_STATE: PlayState = {
   nickname: {
     A: '',
@@ -45,20 +50,20 @@ export const DEFAULT_PLAY_STATE: PlayState = {
     toArray
   ),
   common: {
-    key: 'common',
+    key: ROUND_TYPE.COMMON,
     title: '공용 무대',
     boss: null,
     A: DEFAULT.ROUNDE_SIDE,
     B: DEFAULT.ROUNDE_SIDE,
   },
   personal: {
-    key: 'personal',
+    key: ROUND_TYPE.PERSONAL,
     title: '개인 무대',
     A: { ...DEFAULT.ROUNDE_SIDE, boss: null },
     B: { ...DEFAULT.ROUNDE_SIDE, boss: null },
   },
   unlimited: {
-    key: 'unlimited',
+    key: ROUND_TYPE.UNLIMITED,
     title: '개인 무대',
     A: { ...DEFAULT.ROUNDE_SIDE, boss: null },
     B: { ...DEFAULT.ROUNDE_SIDE, boss: null },

@@ -1,3 +1,5 @@
+import type { ROUND_TYPE } from '.'
+
 type Source = {
   name: string
   url: string
@@ -9,7 +11,7 @@ type Image = {
 }
 
 export type Side = 'A' | 'B'
-export type RoundId = 'common' | 'personal' | 'unlimited'
+export type RoundId = ROUND_TYPE.COMMON | ROUND_TYPE.PERSONAL | ROUND_TYPE.UNLIMITED
 export type AgentId = number
 export type EngineId = number
 export type BossId = number
@@ -53,16 +55,16 @@ export type DeadlyAssault = {
 }
 
 export type CommonRound = {
-  key: 'common'
+  key: ROUND_TYPE.COMMON
   title: string
   boss: SelectBoss
 } & Record<Side, RoundSide>
 export type PersonalRound = {
-  key: 'personal'
+  key: ROUND_TYPE.PERSONAL
   title: string
 } & Record<Side, RoundSide & { boss: SelectBoss }>
 export type UnlimitedRound = Omit<PersonalRound, 'key'> & {
-  key: 'unlimited'
+  key: ROUND_TYPE.UNLIMITED
 }
 export type PlayState = {
   nickname: {
