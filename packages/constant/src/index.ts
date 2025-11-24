@@ -79,3 +79,7 @@ export const DEFAULT_COST_WEIGHT: CostWeight = {
 }
 
 export const STORAGE_KEY = 'zzz-picker-play'
+export enum STORAGE {
+  SAVE_KEY = 'zzz-picker-play',
+  AUTH_KEY = 'zzz-picker-auth',
+}
