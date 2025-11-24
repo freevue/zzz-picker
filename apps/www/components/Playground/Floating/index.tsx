@@ -28,7 +28,7 @@ const Floating: React.FC = () => {
           ),
           async () => {
             window.localStorage.setItem(STORAGE.AUTH_KEY, authKey)
-            await save(state, { A: [...cost.A.entries()], B: [...cost.B.entries()] })
+            await save(state, { A: [...cost.A.entries()], B: [...cost.B.entries()] }, authKey)
           }
         )
 

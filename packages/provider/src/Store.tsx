@@ -27,7 +27,7 @@ type State = {
   boss: Map<number, Boss>
   engines: Map<number, Engine>
   deadlyAssaultList: Array<Omit<DeadlyAssault, 'open'> & { open: Dayjs }>
-  save: (state: PlayState, cost: Cost) => Promise<void>
+  save: (state: PlayState, cost: Cost, password: string) => Promise<void>
   authCheck: (password: string) => Promise<boolean>
 }
 
@@ -98,10 +98,10 @@ const Content: React.FC<Props> = (props) => {
             toArray
           )
         }, [deadlyAssaultList]),
-        save: async (state, cost) => {
+        save: async (state, cost, password) => {
           try {
             const matchId = await pipe(
-              DB.postMatch(state),
+              DB.postMatch(state, password),
               throwIf(isNull, () => Error('매치 로그 저장 실패')),
               (matchId) => matchId
             )
