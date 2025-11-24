@@ -1,7 +1,6 @@
 import { passError } from '.'
 import { supabase } from '../'
 import { pipe } from '@fxts/core'
-import type { Agent } from '@zzz-picker/constant'
 
 const FOO = `
   agent_id,

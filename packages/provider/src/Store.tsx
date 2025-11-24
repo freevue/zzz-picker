@@ -9,7 +9,7 @@ import type {
   AgentCostSetting,
 } from '@zzz-picker/constant'
 import dayjs, { type Dayjs } from 'dayjs'
-import { createContext, use, useMemo, Suspense, useEffect } from 'react'
+import { createContext, use, useMemo, Suspense } from 'react'
 
 type Cost = {
   A: Array<[number, AgentCostSetting]>
