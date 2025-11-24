@@ -1,17 +1,11 @@
 import { pipe, join } from '@fxts/core'
-import { Icons } from '@zzz-picker/components'
-import { usePlay, useStore } from '@zzz-picker/provider/hooks'
+import { Save as SaveIcon } from '@zzz-picker/components/icons'
 
-const Save: React.FC = () => {
-  const { save } = useStore()
-  const { state, cost } = usePlay()
+type Props = {
+  onSave: () => void
+}
 
-  const onSaveClick = async () => {
-    await save(state, { A: [...cost.A.entries()], B: [...cost.B.entries()] })
-
-    alert('저장되었습니다.')
-  }
-
+const Save: React.FC<Props> = (props) => {
   return (
     <button
       type="button"
@@ -28,9 +22,9 @@ const Save: React.FC = () => {
         ],
         join(' ')
       )}
-      onClick={onSaveClick}
+      onClick={props.onSave}
     >
-      <Icons.Save className="size-7 stroke-content" />
+      <SaveIcon className="size-7 stroke-content" />
     </button>
   )
 }
