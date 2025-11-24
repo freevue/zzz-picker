@@ -12,6 +12,7 @@ type Props = {
   name?: string
   children: React.ReactNode
   className?: string
+  onOpen?: () => void
   onClose?: () => void
 }
 type DialogType = React.FC<Props> & {
@@ -68,7 +69,7 @@ const Dialog: DialogType = (props) => {
     <ClientOnly fallback={null}>
       {() =>
         createPortal(
-          <AnimatePresence initial={false}>
+          <AnimatePresence>
             {open ? (
               <motion.div
                 initial={{ opacity: 0 }}
@@ -99,6 +100,7 @@ const Dialog: DialogType = (props) => {
                 )}
               >
                 <motion.div
+                  onAnimationComplete={props.onOpen}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}

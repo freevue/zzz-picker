@@ -1,6 +1,7 @@
 import { concat, join, pipe } from '@fxts/core'
 
 type Props = {
+  ref?: React.RefObject<HTMLInputElement | null>
   value?: string | number
   placeholder?: string
   onChange?: (value: React.ChangeEvent<HTMLInputElement>) => void
@@ -21,6 +22,7 @@ const Input: React.FC<Props> = (props) => {
     <div className={pipe(['overflow-hidden'], concat([props.className || '']), join(' '))}>
       <label className="block h-full">
         <input
+          ref={props.ref}
           className={pipe(
             ['bg-content', 'text-ink', 'py-2', 'px-4', 'size-full'],
             concat(['focus:outline-none']),
