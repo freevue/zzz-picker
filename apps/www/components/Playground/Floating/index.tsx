@@ -11,11 +11,14 @@ import { useCallback, useRef, useState } from 'react'
 const Floating: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null)
   const [isOpen, setIsOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [isPasswordFormOpen, setIsPasswordFormOpen] = useState(false)
   const { save, authCheck } = useStore()
   const { state, cost } = usePlay()
   const onSave = useCallback(
     async (authKey: string) => {
+      setIsLoading(true)
+
       try {
         await pipe(
           authCheck(authKey),
@@ -36,6 +39,7 @@ const Floating: React.FC = () => {
         window.localStorage.removeItem(STORAGE.AUTH_KEY)
       } finally {
         setIsPasswordFormOpen(false)
+        setIsLoading(false)
       }
     },
     [state, cost, save, authCheck]
@@ -126,7 +130,6 @@ const Floating: React.FC = () => {
           />
         </div>
       </div>
-
       <Dialog
         isOpen={isPasswordFormOpen}
         onClose={() => setIsPasswordFormOpen(false)}
@@ -168,6 +171,36 @@ const Floating: React.FC = () => {
           </button>
         </Form>
       </Dialog>
+      <AnimatePresence>
+        {isLoading && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className={pipe(
+              [
+                'fixed',
+                'left-0',
+                'top-0',
+                'w-full',
+                'h-full',
+                'bg-base/70',
+                'z-9999',
+                'flex',
+                'justify-center',
+                'items-center',
+                'backdrop-blur-lg',
+              ],
+              join(' ')
+            )}
+          >
+            <div>
+              <img src="/images/loading.gif" alt="loading" className="w-full h-full object-cover" />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   )
 }
