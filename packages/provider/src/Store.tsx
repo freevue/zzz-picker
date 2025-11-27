@@ -29,6 +29,7 @@ type State = {
   deadlyAssaultList: Array<Omit<DeadlyAssault, 'open'> & { open: Dayjs }>
   save: (state: PlayState, cost: Cost, password: string) => Promise<void>
   authCheck: (password: string) => Promise<boolean>
+  getHistory: (key: string) => Promise<Array<any>>
 }
 
 export const Context = createContext<State>({
@@ -38,6 +39,7 @@ export const Context = createContext<State>({
   deadlyAssaultList: [],
   save: async () => {},
   authCheck: async () => false,
+  getHistory: async () => [],
 })
 
 const Content: React.FC<Props> = (props) => {
@@ -45,12 +47,6 @@ const Content: React.FC<Props> = (props) => {
   const boss = use(props.getBoss)
   const engine = use(props.getEngine)
   const agent = use(props.getAgent)
-
-  // useEffect(() => {
-  //   DB.getMatchLog(6).then((matchLog) => {
-  //     console.log({ ...matchLog, mach_at: dayjs(matchLog.mach_at).format('YYYY-MM-DD HH:mm:ss') })
-  //   })
-  // }, [])
 
   return (
     <Context.Provider
@@ -133,6 +129,9 @@ const Content: React.FC<Props> = (props) => {
           } catch {
             return false
           }
+        },
+        getHistory: async (key: string) => {
+          return await DB.getMatchLog(key)
         },
       }}
     >

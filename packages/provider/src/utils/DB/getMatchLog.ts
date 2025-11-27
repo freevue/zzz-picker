@@ -51,13 +51,12 @@ const QUERY = `
     )
   )
 `
-async function getMatchLog(id: number) {
+async function getMatchLog(key: string) {
   try {
     return await pipe(
       QUERY,
-      async (query) => await supabase.from('match_log').select(query).eq('id', id),
-      passError<any>,
-      ([match]) => match
+      async (query) => await supabase.from('match_log').select(query).eq('auth_key', key),
+      passError<any>
     )
   } catch {
     return []
