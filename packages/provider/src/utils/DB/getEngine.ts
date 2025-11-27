@@ -7,6 +7,7 @@ const QUERY = `
   id,
   nameKo: name_ko,
   isPickup: is_pickup,
+  isTeaser: is_teaser,
   exclusiveAgentId: exclusive_agent_id,
   rank,
   imageUrl: image_url,
@@ -16,7 +17,7 @@ async function getEngine(): Promise<Array<Engine>> {
   try {
     return await pipe(
       QUERY,
-      async (query) => await supabase.from('engines').select(query).eq('is_teaser', false),
+      async (query) => await supabase.from('engines').select(query).eq('isTeaser', false),
       passError<Engine>
     )
   } catch {
