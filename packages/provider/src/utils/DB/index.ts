@@ -12,6 +12,7 @@ export function passError<T>(payload: PostgrestResponse<T>) {
   )
 }
 
+export { default as QUERY } from './query'
 export { default as getDeadlyAssaultList } from './getDeadlyAssaultList'
 export { default as getBoss } from './getBoss'
 export { default as getEngine } from './getEngine'
