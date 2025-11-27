@@ -16,7 +16,7 @@ async function getEngine(): Promise<Array<Engine>> {
   try {
     return await pipe(
       QUERY,
-      async (query) => await supabase.from('engines').select(query),
+      async (query) => await supabase.from('engines').select(query).eq('is_teaser', false),
       passError<Engine>
     )
   } catch {
