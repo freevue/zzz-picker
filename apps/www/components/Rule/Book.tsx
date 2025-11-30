@@ -113,12 +113,12 @@ const Book: React.FC<Props> = (props) => {
                 <Table.Th>돌파당</Table.Th>
               </tr>
               <tr>
-                <Table.Th>전용 무기</Table.Th>
+                <Table.Th>S 픽업</Table.Th>
                 <Table.Td value={1} name="sExclusiveEngine.used" />
                 <Table.Td value={0.5} name="sExclusiveEngine.rate" />
               </tr>
               <tr>
-                <Table.Th>S급</Table.Th>
+                <Table.Th>S 상시</Table.Th>
                 <Table.Td value={0} name="sEngine.used" />
                 <Table.Td
                   value={1}
@@ -127,7 +127,7 @@ const Book: React.FC<Props> = (props) => {
                 />
               </tr>
               <tr>
-                <Table.Th>A급</Table.Th>
+                <Table.Th>A / B</Table.Th>
                 <Table.Td value={0} name="aEngine.used" />
                 <Table.Td value={0} name="aEngine.rate" />
               </tr>

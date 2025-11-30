@@ -79,7 +79,7 @@ const CostTable: React.FC = () => {
             <Table.Th>돌파당</Table.Th>
           </tr>
           <tr>
-            <Table.Th>전용 무기</Table.Th>
+            <Table.Th>S 픽업</Table.Th>
             <Table.Td
               name="sExclusiveEngine.used"
               value={costTable.sExclusiveEngine.used}
@@ -92,7 +92,7 @@ const CostTable: React.FC = () => {
             />
           </tr>
           <tr>
-            <Table.Th>S</Table.Th>
+            <Table.Th>S 상시</Table.Th>
             <Table.Td name="sEngine.used" value={costTable.sEngine.used} onChange={onChange} />
             <Table.Td
               name="sEngine.rate"
@@ -106,7 +106,7 @@ const CostTable: React.FC = () => {
             />
           </tr>
           <tr>
-            <Table.Th>A</Table.Th>
+            <Table.Th>A / B</Table.Th>
             <Table.Td name="aEngine.used" value={costTable.aEngine.used} onChange={onChange} />
             <Table.Td name="aEngine.rate" value={costTable.aEngine.rate} onChange={onChange} />
           </tr>
