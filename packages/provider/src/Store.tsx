@@ -1,5 +1,16 @@
 import { DB } from './utils'
-import { each, isNull, map, pipe, toArray, throwIf, toAsync, filter } from '@fxts/core'
+import {
+  each,
+  isNull,
+  map,
+  pipe,
+  toArray,
+  throwIf,
+  toAsync,
+  filter,
+  when,
+  isUndefined,
+} from '@fxts/core'
 import type {
   Engine,
   Agent,
@@ -9,7 +20,7 @@ import type {
   AgentCostSetting,
 } from '@zzz-picker/constant'
 import dayjs, { type Dayjs } from 'dayjs'
-import { createContext, use, useMemo, Suspense } from 'react'
+import { createContext, use, useMemo, Suspense, useState, useRef } from 'react'
 
 type Cost = {
   A: Array<[number, AgentCostSetting]>
@@ -30,6 +41,9 @@ type State = {
   save: (state: PlayState, cost: Cost, password: string) => Promise<void>
   authCheck: (password: string) => Promise<boolean>
   getHistory: (key: string) => Promise<Array<any>>
+  getAuthKey: () => Promise<
+    Array<{ id: string; nameKo: string; version: string; createdAt: string }>
+  >
 }
 
 export const Context = createContext<State>({
@@ -40,6 +54,7 @@ export const Context = createContext<State>({
   save: async () => {},
   authCheck: async () => false,
   getHistory: async () => [],
+  getAuthKey: async () => [],
 })
 
 const Content: React.FC<Props> = (props) => {
@@ -47,6 +62,7 @@ const Content: React.FC<Props> = (props) => {
   const boss = use(props.getBoss)
   const engine = use(props.getEngine)
   const agent = use(props.getAgent)
+  const matchLog = useRef<Map<string, any>>(new Map([]))
 
   return (
     <Context.Provider
@@ -130,8 +146,23 @@ const Content: React.FC<Props> = (props) => {
             return false
           }
         },
+        getAuthKey: async () => {
+          try {
+            return await DB.getAuthKey()
+          } catch {
+            return []
+          }
+        },
         getHistory: async (key: string) => {
-          return await DB.getMatchLog(key)
+          if (matchLog.current.has(key)) {
+            return matchLog.current.get(key)
+          }
+
+          return await pipe(DB.getMatchLog(key), (data) => {
+            matchLog.current.set(key, data)
+
+            return data
+          })
         },
       }}
     >
