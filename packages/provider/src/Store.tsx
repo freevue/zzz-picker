@@ -40,8 +40,9 @@ type State = {
   deadlyAssaultList: Array<Omit<DeadlyAssault, 'open'> & { open: Dayjs }>
   save: (state: PlayState, cost: Cost, password: string) => Promise<void>
   authCheck: (password: string) => Promise<boolean>
+  getAuthKey: (key: string) => Promise<Array<any>>
   getHistory: (key: string) => Promise<Array<any>>
-  getAuthKey: () => Promise<
+  getAuthKeyList: () => Promise<
     Array<{ id: string; nameKo: string; version: string; createdAt: string }>
   >
 }
@@ -55,6 +56,7 @@ export const Context = createContext<State>({
   authCheck: async () => false,
   getHistory: async () => [],
   getAuthKey: async () => [],
+  getAuthKeyList: async () => [],
 })
 
 const Content: React.FC<Props> = (props) => {
@@ -146,9 +148,16 @@ const Content: React.FC<Props> = (props) => {
             return false
           }
         },
-        getAuthKey: async () => {
+        getAuthKeyList: async () => {
           try {
-            return await DB.getAuthKey()
+            return await DB.getAuthKeyList()
+          } catch {
+            return []
+          }
+        },
+        getAuthKey: async (key: string) => {
+          try {
+            return await DB.getAuthKey(key)
           } catch {
             return []
           }
