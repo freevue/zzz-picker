@@ -25,6 +25,22 @@
     -webkit-user-select: none;
   }
 
+  .heading-huge {
+    font-family: 'Paperozi';
+    font-weight: var(--font-weight-black);
+    font-size: var(--text-8xl);
+  }
+
+  .heading-6xl {
+    font-family: 'Paperozi';
+    font-weight: var(--font-weight-black);
+    font-size: var(--text-6xl);
+  }
+  .heading-5xl {
+    font-family: 'Paperozi';
+    font-weight: var(--font-weight-black);
+    font-size: var(--text-5xl);
+  }
   .heading-4xl {
     font-family: 'Paperozi';
     font-weight: var(--font-weight-black);
