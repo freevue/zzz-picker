@@ -8,11 +8,16 @@ const QUERY = `
   version,
   createdAt: created_at
 `
-async function getAuthKey(key: string) {
+async function getAuthKeyList() {
   try {
     return await pipe(
       QUERY,
-      async (query) => await supabase.from('auth_key').select(query).eq('id', key),
+      async (query) =>
+        await supabase
+          .from('auth_key')
+          .select(query)
+          .eq('is_approval', false)
+          .lte('expired_at', new Date().toISOString()),
       passError<any>
     )
   } catch {
@@ -20,4 +25,4 @@ async function getAuthKey(key: string) {
   }
 }
 
-export default getAuthKey
+export default getAuthKeyList
