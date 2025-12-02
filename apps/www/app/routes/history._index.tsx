@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 
 const History: React.FC = () => {
-  const { getHistory, getAuthKey } = useStore()
+  const { getHistory, getAuthKeyList } = useStore()
   const [authKeyList, setAuthKeyList] = useState<
     Array<{ id: string; nameKo: string; version: string; createdAt: string }>
   >([])
@@ -15,7 +15,7 @@ const History: React.FC = () => {
     // })
 
     pipe(
-      getAuthKey(),
+      getAuthKeyList(),
       map((auth) => ({ ...auth, createdAt: dayjs(auth.createdAt).format('YYYY-MM-DD') })),
       toArray,
       (authKeyList) => setAuthKeyList(authKeyList)
