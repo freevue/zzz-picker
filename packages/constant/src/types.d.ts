@@ -126,3 +126,5 @@ export type Agent = {
   }
   engine: Array<Engine>
 }
+
+export * from './history.d'
