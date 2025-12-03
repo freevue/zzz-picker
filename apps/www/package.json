@@ -1,6 +1,6 @@
 {
   "name": "@zzz-picker/www",
-  "version": "3.5.0",
+  "version": "3.7.0",
   "type": "module",
   "scripts": {
     "dev": "remix vite:dev",
@@ -8,6 +8,7 @@
     "start": "remix-serve build/server/index.js"
   },
   "dependencies": {
+    "@fxts/core": "^1.21.1",
     "@remix-run/node": "^2.17.2",
     "@remix-run/react": "^2.17.2",
     "@remix-run/serve": "^2.17.2",
