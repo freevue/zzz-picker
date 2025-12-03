@@ -1,16 +1,5 @@
 import { DB } from './utils'
-import {
-  each,
-  isNull,
-  map,
-  pipe,
-  toArray,
-  throwIf,
-  toAsync,
-  filter,
-  when,
-  isUndefined,
-} from '@fxts/core'
+import { each, isNull, map, pipe, toArray, throwIf, toAsync, filter } from '@fxts/core'
 import type {
   Engine,
   Agent,
@@ -20,7 +9,7 @@ import type {
   AgentCostSetting,
 } from '@zzz-picker/constant'
 import dayjs, { type Dayjs } from 'dayjs'
-import { createContext, use, useMemo, Suspense, useState, useRef } from 'react'
+import { createContext, use, useMemo, Suspense, useRef } from 'react'
 
 type Cost = {
   A: Array<[number, AgentCostSetting]>
