@@ -29,7 +29,7 @@ const People: React.FC<Props> = (props) => {
           fixed={0}
           isActive={isActive}
         />
-        <Typo.Body className="text-ink heading-huge">분께서 참가하였습니다.</Typo.Body>
+        <Typo.Body className="text-ink heading-huge">분께서 참가하셨습니다.</Typo.Body>
       </div>
     </Wrap>
   )
