@@ -38,7 +38,7 @@ const Increase: React.FC<Props> = (props) => {
   return (
     <motion.p
       className={pipe(
-        ['flex-1', 'cursor-default'],
+        ['cursor-default'],
         concat([props.className || 'text-ink heading-3xl']),
         join(' ')
       )}
