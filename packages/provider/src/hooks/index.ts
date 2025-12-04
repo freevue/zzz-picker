@@ -100,7 +100,7 @@ export const useResultCalculation = () => {
         map((item) => item.score),
         sum
       ),
-    getTotalTime: (data: Array<PartyData>) =>
+    getRemainingTime: (data: Array<PartyData>) =>
       pipe(
         data,
         map((item) =>
@@ -112,7 +112,7 @@ export const useResultCalculation = () => {
 }
 export const useHistoryRecord = (data: Array<HistoryData>) => {
   const { state } = useSetting()
-  const { getCost, getTotalScore, getTotalTime } = useResultCalculation()
+  const { getCost, getTotalScore, getRemainingTime } = useResultCalculation()
   const list = useMemo(() => {
     return pipe(
       data,
@@ -130,12 +130,6 @@ export const useHistoryRecord = (data: Array<HistoryData>) => {
     )
   }, [data])
 
-  // roundTotalScore.A,
-  // settingState.totalCost === Infinity
-  //   ? 0
-  //   : roundTotalScore.A * (settingState.totalCost - totalCost.A) * DEFAULT_COST_RATE,
-  // roundTotalTime.A,
-
   return pipe(
     list,
     map(({ id, matchType, playData }) => ({
@@ -147,13 +141,13 @@ export const useHistoryRecord = (data: Array<HistoryData>) => {
           playData,
           score: getTotalScore(playData),
           totalCost: getCost(playData),
-          totalTime: getTotalTime(playData),
+          remainingTime: getRemainingTime(playData),
           totalScore: sum([
             getTotalScore(playData),
             matchType === 'original'
               ? getTotalScore(playData) * (state.totalCost - getCost(playData)) * DEFAULT_COST_RATE
               : 0,
-            getTotalTime(playData) * DEFAULT.TIME_BONUS,
+            getRemainingTime(playData) * DEFAULT.TIME_BONUS,
           ]),
         })),
         toArray,
