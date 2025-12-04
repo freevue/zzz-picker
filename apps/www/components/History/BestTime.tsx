@@ -30,15 +30,6 @@ const BestTime: React.FC<Props> = (props) => {
   const bestTime = useMemo(() => {
     if (isEmpty(data)) return null
 
-    console.log(
-      pipe(
-        data,
-        flatMap((item) => [item.aSide, item.bSide]),
-        sortBy(({ remainingTime }) => remainingTime),
-        toArray
-      )
-    )
-
     return pipe(
       data,
       flatMap((item) => [item.aSide, item.bSide]),
