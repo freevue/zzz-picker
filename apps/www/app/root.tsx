@@ -27,7 +27,7 @@ export const meta: MetaFunction = () => [
   { property: 'twitter:url', content: 'https://zzz-picker.freevue.dev' },
   { name: 'twitter:title', content: '젠레스 존 제로: 강습전 밴픽' },
   { name: 'twitter:description', content: '강습전 경기를 위한 밴픽 사이트입니다.' },
-  { name: 'twitter:image', content: 'https://zzz-picker.freevue.dev/og_image.jpg' },
+  { name: 'twitter:image', content: 'https://zzz-picker.freevue.dev/og_image.webp' },
 ]
 
 const Router: React.FC = () => {
