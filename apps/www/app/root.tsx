@@ -19,7 +19,7 @@ export const meta: MetaFunction = () => [
   { property: 'og:type', content: 'website' },
   { property: 'og:title', content: '젠레스 존 제로: 강습전 밴픽' },
   { property: 'og:description', content: '강습전 경기를 위한 밴픽 사이트입니다.' },
-  { property: 'og:image', content: 'https://zzz-picker.freevue.dev/og_image.jpg' },
+  { property: 'og:image', content: 'https://zzz-picker.freevue.dev/og_image.webp' },
 
   // Twitter Meta Tags
   { name: 'twitter:card', content: 'summary_large_image' },
