@@ -57,7 +57,7 @@ const BestMatch: React.FC<Props> = (props) => {
       >
         <Typo.Body className="text-ink heading-huge">가장 치열했던 경기는</Typo.Body>
         <div className="flex gap-16 items-center">
-          <div className="flex flex-col gap-4 items-center">
+          <div className="flex flex-col items-center">
             {pipe(
               bestMatch.aSide.playData,
               map((playData) => [
@@ -67,7 +67,7 @@ const BestMatch: React.FC<Props> = (props) => {
               ]),
               zipWithIndex,
               map(([index, agentIdList]) => (
-                <div key={index} className="flex gap-4 items-end">
+                <div key={index} className="flex items-end">
                   {pipe(
                     agentIdList,
                     map((agentId) => agents.get(agentId)),
@@ -84,9 +84,14 @@ const BestMatch: React.FC<Props> = (props) => {
               )),
               toArray
             )}
-            <Increase value={bestMatch.aSide.totalScore} isActive={isActive} fixed={0} />
+            <Increase
+              value={bestMatch.aSide.totalScore}
+              className="mt-8 heading-4xl text-ink"
+              isActive={isActive}
+              fixed={0}
+            />
           </div>
-          <div className="text-center">
+          <div className="text-center w-3xs">
             <Typo.Body className="text-ink heading-2xl">차이</Typo.Body>
             <Increase
               className="heading-6xl text-primary"
@@ -95,7 +100,7 @@ const BestMatch: React.FC<Props> = (props) => {
               fixed={0}
             />
           </div>
-          <div className="flex flex-col gap-4 items-center">
+          <div className="flex flex-col items-center">
             {pipe(
               bestMatch.bSide.playData,
               map((playData) => [
@@ -105,7 +110,7 @@ const BestMatch: React.FC<Props> = (props) => {
               ]),
               zipWithIndex,
               map(([index, agentIdList]) => (
-                <div key={index} className="flex gap-4 items-end">
+                <div key={index} className="flex items-end">
                   {pipe(
                     agentIdList,
                     map((agentId) => agents.get(agentId)),
@@ -122,7 +127,12 @@ const BestMatch: React.FC<Props> = (props) => {
               )),
               toArray
             )}
-            <Increase value={bestMatch.bSide.totalScore} isActive={isActive} fixed={0} />
+            <Increase
+              value={bestMatch.bSide.totalScore}
+              className="mt-8 heading-4xl text-ink"
+              isActive={isActive}
+              fixed={0}
+            />
           </div>
         </div>
       </div>

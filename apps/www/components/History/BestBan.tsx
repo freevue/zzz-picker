@@ -57,12 +57,12 @@ const BestBan: React.FC<Props> = (props) => {
     <Wrap onChange={onChange}>
       <div
         className={pipe(
-          ['transition-opacity', 'duration-300', 'flex', 'gap-2', 'flex-col', 'items-center'],
+          ['transition-opacity', 'duration-300', 'flex', 'gap-8', 'flex-col', 'items-center'],
           concat(['group-[.active]:opacity-100', 'opacity-0']),
           join(' ')
         )}
       >
-        <Typo.Body className="text-ink heading-huge">가장 많이 밴된 캐릭터</Typo.Body>
+        <Typo.Body className="text-ink heading-6xl">가장 많이 밴된 캐릭터</Typo.Body>
         <div className="flex gap-4">
           {pipe(
             bestBan,
@@ -72,7 +72,7 @@ const BestBan: React.FC<Props> = (props) => {
               <div key={agent.id} className="flex flex-col gap-4 items-center">
                 <img
                   className={pipe(
-                    ['max-w-lg', 'flex-1', 'block', 'transition-opacity', 'duration-300'],
+                    ['max-w-md', 'flex-1', 'block', 'transition-opacity', 'duration-300'],
                     concat(isActive ? ['opacity-100', 'delay-300'] : ['opacity-0']),
                     join(' ')
                   )}

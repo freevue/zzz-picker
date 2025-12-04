@@ -61,12 +61,12 @@ const BestPick: React.FC<Props> = (props) => {
     <Wrap onChange={onChange}>
       <div
         className={pipe(
-          ['transition-opacity', 'duration-300', 'flex', 'gap-2', 'flex-col', 'items-center'],
+          ['transition-opacity', 'duration-300', 'flex', 'gap-8', 'flex-col', 'items-center'],
           concat(['group-[.active]:opacity-100', 'opacity-0']),
           join(' ')
         )}
       >
-        <Typo.Body className="text-ink heading-huge">가장 많이 선택된 캐릭터</Typo.Body>
+        <Typo.Body className="text-ink heading-6xl">가장 많이 선택된 캐릭터</Typo.Body>
         <div className="flex gap-4">
           {pipe(
             bestPick,
@@ -77,7 +77,7 @@ const BestPick: React.FC<Props> = (props) => {
                 <img
                   key={agent!.id}
                   className={pipe(
-                    ['max-w-lg', 'flex-1', 'block', 'transition-opacity', 'duration-300'],
+                    ['max-w-md', 'flex-1', 'block', 'transition-opacity', 'duration-300'],
                     concat(isActive ? ['opacity-100', 'delay-300'] : ['opacity-0']),
                     join(' ')
                   )}

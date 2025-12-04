@@ -57,12 +57,12 @@ const BestBoss: React.FC<Props> = (props) => {
     <Wrap onChange={onChange}>
       <div
         className={pipe(
-          ['transition-opacity', 'duration-300', 'flex', 'gap-2', 'flex-col', 'items-center'],
+          ['transition-opacity', 'duration-300', 'flex', 'gap-8', 'flex-col', 'items-center'],
           concat(['group-[.active]:opacity-100', 'opacity-0']),
           join(' ')
         )}
       >
-        <Typo.Body className="text-ink heading-huge">가장 많이 죽은 녀석</Typo.Body>
+        <Typo.Body className="text-ink heading-6xl">가장 많이 죽은 녀석</Typo.Body>
         <div className="flex gap-4">
           {pipe(
             bestBoss,
