@@ -47,8 +47,8 @@ const BestPick: React.FC<Props> = (props) => {
     return pipe(
       forked,
       filter(({ count }) => count === maxCount),
-      map(({ agentId }) => agentId),
-      filter(isNumber),
+      map(({ agentId, count }) => ({ agentId, count })),
+      filter(({ agentId }) => isNumber(agentId)),
       toArray
     )
   }, [props.history])
@@ -70,19 +70,22 @@ const BestPick: React.FC<Props> = (props) => {
         <div className="flex gap-4">
           {pipe(
             bestPick,
-            map((agentId) => agents.get(agentId)),
-            filter((agent) => !isUndefined(agent)),
-            map((agent) => (
-              <img
-                key={agent.id}
-                className={pipe(
-                  ['max-w-lg', 'flex-1', 'block', 'transition-opacity', 'duration-300'],
-                  concat(isActive ? ['opacity-100', 'delay-300'] : ['opacity-0']),
-                  join(' ')
-                )}
-                src={agent.banner.url}
-                alt={agent.nameKo}
-              />
+            map(({ agentId, count }) => ({ agent: agents.get(agentId!), count })),
+            filter(({ agent }) => !isUndefined(agent)),
+            map(({ agent, count }) => (
+              <div key={agent!.id} className="flex flex-col gap-4 items-center">
+                <img
+                  key={agent!.id}
+                  className={pipe(
+                    ['max-w-lg', 'flex-1', 'block', 'transition-opacity', 'duration-300'],
+                    concat(isActive ? ['opacity-100', 'delay-300'] : ['opacity-0']),
+                    join(' ')
+                  )}
+                  src={agent!.banner.url}
+                  alt={agent!.nameKo}
+                />
+                <Typo.Body className="text-ink heading-4xl">{count}번 선택됨</Typo.Body>
+              </div>
             )),
             toArray
           )}

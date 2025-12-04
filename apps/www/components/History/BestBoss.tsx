@@ -67,25 +67,30 @@ const BestBoss: React.FC<Props> = (props) => {
           {pipe(
             bestBoss,
             map((boss) => (
-              <img
-                key={boss.id}
-                className={pipe(
-                  [
-                    'max-w-md',
-                    'flex-1',
-                    'block',
-                    'transition-opacity',
-                    'duration-300',
-                    'bg-ink',
-                    'rounded-tr-4xl',
-                    'rounded-bl-4xl',
-                  ],
-                  concat(isActive ? ['opacity-100', 'delay-300'] : ['opacity-0']),
-                  join(' ')
-                )}
-                src={`/images/boss/${boss.id}.webp`}
-                alt={boss.nameKo}
-              />
+              <div key={boss.id} className="flex flex-col gap-4 items-center">
+                <img
+                  className={pipe(
+                    [
+                      'max-w-md',
+                      'flex-1',
+                      'block',
+                      'transition-opacity',
+                      'duration-300',
+                      'bg-ink',
+                      'rounded-tr-4xl',
+                      'rounded-bl-4xl',
+                    ],
+                    concat(isActive ? ['opacity-100', 'delay-300'] : ['opacity-0']),
+                    join(' ')
+                  )}
+                  src={`/images/boss/${boss.id}.webp`}
+                  alt={boss.nameKo}
+                />
+                <div className="flex gap-2">
+                  <Typo.Heading className="text-primary heading-4xl">{boss.nameKo}</Typo.Heading>
+                  <Typo.Body className="text-ink heading-4xl">{boss.count}번 죽음</Typo.Body>
+                </div>
+              </div>
             )),
             toArray
           )}
