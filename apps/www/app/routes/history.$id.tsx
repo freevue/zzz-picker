@@ -52,6 +52,7 @@ const HistoryPage: React.FC = () => {
       <History.BestBoss history={history} />
       <History.BestBan history={history} />
       <History.BestPick history={history} />
+      <History.BestMatch history={history} />
     </div>
   )
 }
