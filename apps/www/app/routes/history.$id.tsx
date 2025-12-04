@@ -56,6 +56,8 @@ const HistoryPage: React.FC = () => {
       <History.BestPick history={history} />
       <History.BestMatch history={history} />
       <History.BestScore history={history} />
+      <History.BestTime history={history} />
+      <History.NextTime />
     </div>
   )
 }
