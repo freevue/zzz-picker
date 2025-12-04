@@ -8,7 +8,7 @@ export type AuthData = {
 }
 export type SelectData = {
   agentId: AgentId
-  engineId: EngineId
+  engineId: EngineId | null
   agentRate: number
   engineRate: number
   agentNameKo: string
@@ -33,6 +33,7 @@ export type BossData = {
 }
 export type HistoryData = {
   id: number
+  matchType: string
   aName: string
   bName: string
   machAt: string

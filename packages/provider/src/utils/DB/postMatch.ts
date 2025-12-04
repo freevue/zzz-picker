@@ -3,7 +3,7 @@ import { supabase } from '../'
 import { isEmpty, pipe } from '@fxts/core'
 import { type PlayState } from '@zzz-picker/constant'
 
-async function postMatch({ nickname }: PlayState, auth_key: string) {
+async function postMatch({ nickname }: PlayState, auth_key: string, match_type: string) {
   if (isEmpty(nickname.A) || isEmpty(nickname.B)) return null
 
   try {
@@ -11,6 +11,7 @@ async function postMatch({ nickname }: PlayState, auth_key: string) {
       {
         a_name: nickname.A,
         b_name: nickname.B,
+        match_type,
         auth_key,
       },
       async (data) => await supabase.from('match_log').insert(data).select('id'),

@@ -19,6 +19,7 @@ const QUERY = `
   aName: a_name,
   bName: b_name,
   machAt: mach_at,
+  matchType: match_type,
   banList: ban_log_match_id_fkey(
     agentId: agent_id
   ),
