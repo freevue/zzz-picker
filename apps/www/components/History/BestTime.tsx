@@ -84,14 +84,14 @@ const BestTime: React.FC<Props> = (props) => {
             )}
             <div className="flex gap-2 items-center mt-8">
               <Increase
-                value={(360 - bestTime.remainingTime) / 60}
+                value={(bestTime.remainingTime) / 60}
                 className="heading-6xl text-primary"
                 isActive={isActive}
                 fixed={0}
               />
               <Typo.Body className="text-ink heading-6xl mr-4">분</Typo.Body>
               <Increase
-                value={(360 - bestTime.remainingTime) % 60}
+                value={(bestTime.remainingTime) % 60}
                 className="heading-6xl text-primary"
                 isActive={isActive}
                 fixed={0}
