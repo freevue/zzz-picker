@@ -49,8 +49,8 @@ const Pick: React.FC<Props> = (props) => {
     setSelectedAgentId(agentId)
   }
   const onPickChange = (pickList: SelectAgent[]) => {
-    console.log(pickList)
-    setIsEventDialogOpen(includes(157829, pickList))
+    // console.log(pickList)
+    setIsEventDialogOpen(includes(155654, pickList))
     setState((prev) =>
       pipe(
         { ...prev[props.roundId] },
@@ -173,27 +173,24 @@ const Pick: React.FC<Props> = (props) => {
         onClose={() => setIsEventDialogOpen(false)}
       >
         <Typo.Heading className="heading-4xl text-primary" heading={2}>
-          생일 축하해, 「시드」 | 꽃이 피는 도중에
+          생일 축하해, 의현 | 소박한 만찬
         </Typo.Heading>
         <div className="flex flex-col gap-2 my-4">
           <Typo.Body className="body-md text-foreground text-center">
-            「꽃바다의 꽃이 정말 예쁘게 피었어. 그런데 우리끼리만 감상하는 건 조금 이기적이지
-            않을까…」
+            「복복 사저! 이 장수 찐빵은 사부님을 위해 특별히 준비한 거야. 게다가 사저는 아침에
+            부엌에서 『마지막으로 하나만 더 먹을게요』라고 하면서 이미 먹었잖아!」
           </Typo.Body>
           <Typo.Body className="body-md text-foreground text-center">
-            「응응~ 꼭 『숯덩이』가 『빅 시드』의 조종석을 독차지하려 했던 것처럼 말이야」
+            「인호, 준비하느라 애썼어. 신경 안 써도 돼, 너희들의 마음은 이미 충분히 전해졌으니까」
           </Typo.Body>
           <Typo.Body className="body-md text-foreground text-center">
-            「『빅 시드』~ 꽃을 꺾어다 꽃다발로 만들어서, 모두에게 보여주는 건 어떨까?」
-          </Typo.Body>
-          <Typo.Body className="body-md text-foreground text-center">
-            「영원히 만개한 꽃바다는 없대도, 우리가 이 꽃들을 기억하는 한 봄은 끝나지 않으니까」
+            「아니에요, 사부님. 평소보다 파만 한 움큼 더 넣었을 뿐인데요, 뭘~」
           </Typo.Body>
         </div>
         <div className="aspect-[720/960] w-full rounded-tr-2xl rounded-bl-2xl overflow-hidden">
           <img
-            src="https://fastcdn.hoyoverse.com/content-v2/nap/160970/34ac54779478ecde5fcf9e0c5d99a7d7_1619640581666503425.png"
-            alt="seed-birthday"
+            src="https://fastcdn.hoyoverse.com/content-v2/nap/161237/2c2ec6da2d12c48149dc3e34fd916c1c_5587138374661856310.png"
+            alt="birthday"
             className="w-full block"
           />
         </div>
