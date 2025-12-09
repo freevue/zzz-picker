@@ -49,8 +49,6 @@ const Pick: React.FC<Props> = (props) => {
     setSelectedAgentId(agentId)
   }
   const onPickChange = (pickList: SelectAgent[]) => {
-    // console.log(pickList)
-    setIsEventDialogOpen(includes(155654, pickList))
     setState((prev) =>
       pipe(
         { ...prev[props.roundId] },
