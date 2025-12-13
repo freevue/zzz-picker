@@ -1,15 +1,5 @@
 import CostDialog from '../CostDialog'
-import {
-  join,
-  pipe,
-  toArray,
-  concat,
-  when,
-  findIndex,
-  filter,
-  isNumber,
-  includes,
-} from '@fxts/core'
+import { join, pipe, toArray, concat, when, findIndex, filter, isNumber } from '@fxts/core'
 import { Form, Dialog, Typo } from '@zzz-picker/components/v2'
 import {
   DEFAULT,
