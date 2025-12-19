@@ -72,6 +72,10 @@
     font-size: var(--text-md);
   }
 
+  .body-3xl {
+    font-weight: var(--font-weight-bold);
+    font-size: var(--text-3xl);
+  }
   .body-2xl {
     font-weight: var(--font-weight-bold);
     font-size: var(--text-2xl);
