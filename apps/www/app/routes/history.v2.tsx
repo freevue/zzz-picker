@@ -19,7 +19,7 @@ const HistoryPage: React.FC = () => {
           (그저 100% 개발자 취향 데이터)
         </Typo.Body>
       </History.AppleSection>
-      <History.AppleTitle title="너무하다.. 너무해.." />
+      <History.AppleTitle title="이런 방식으로 사용이 가능하군요." />
       <History.AppleSection>
         <Typo.Body className="text-ink body-3xl text-center">
           강습전에 인기 있는 캐릭터는 정해져있습니다.
@@ -36,7 +36,7 @@ const HistoryPage: React.FC = () => {
           </Typo.Body>
         </div>
       </History.AppleSection>
-      <History.AppleTitle title="과연 휴고의 봄은 올까?" />
+      <History.AppleTitle title="휴고의 봄은 왔는가?" />
       <History.AppleSection>
         <Typo.Body className="text-ink body-3xl text-center">
           휴고는 이번에 픽업 기간을 가지게 되었습니다.
