@@ -202,7 +202,7 @@ const TotalScore: React.FC<Props> = () => {
             />
           </div>
         )}
-        <div className="flex items-center justify-between mt-4">
+        <div className="flex items-start justify-between mt-4">
           <div className="text-right flex-1 relative group">
             <Record
               className="text-primary! text-4xl!"
@@ -212,9 +212,23 @@ const TotalScore: React.FC<Props> = () => {
             />
             {isCounting && <HideRecord>{totalScore.A.toLocaleString()}</HideRecord>}
           </div>
-          <Typo.Heading className="w-1/3 text-center cursor-default heading-3xl">
-            총 점수
-          </Typo.Heading>
+          <div className="w-1/3 text-center">
+            <Typo.Heading className="cursor-default heading-3xl">총 점수</Typo.Heading>
+            <Record
+              className="heading-lg text-ink opacity-0"
+              value={
+                isCounting
+                  ? pipe(
+                      totalScore,
+                      ({ A, B }) => A - B,
+                      (value) => Math.abs(value)
+                    )
+                  : 0
+              }
+              fixed={0}
+              isHide={!isCounting}
+            />
+          </div>
           <div className="text-left flex-1 relative group">
             <Record
               className="text-primary! text-4xl!"
