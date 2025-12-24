@@ -110,11 +110,21 @@ const HistoryPage: React.FC = () => {
           <Typo.Body className="text-ink body-3xl text-center">끗! 모두 3영창 받으세요~</Typo.Body>
         </div>
         <div className="flex gap-10 items-center">
-          <img
-            className="w-lg block rounded-tr-4xl rounded-bl-4xl overflow-hidden"
-            src="/images/100.jpeg"
-            alt="앨리스"
-          />
+          <div className="flex flex-col gap-1">
+            <img
+              className="w-lg block rounded-tr-4xl rounded-bl-4xl overflow-hidden"
+              src="/images/100.jpeg"
+              alt="앨리스"
+            />
+            <a
+              href="https://x.com/corsa_24/status/2003420777945928099"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-ink opacity-70"
+            >
+              https://x.com/corsa_24/status/2003420777945928099
+            </a>
+          </div>
           <Typo.Heading className="text-primary text-left heading-huge italic">
             Happy <br />
             New Year!!
