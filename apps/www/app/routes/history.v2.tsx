@@ -109,13 +109,16 @@ const HistoryPage: React.FC = () => {
           />
           <Typo.Body className="text-ink body-3xl text-center">끗! 모두 3영창 받으세요~</Typo.Body>
         </div>
-        <div className="flex flex-col gap-3 items-center">
+        <div className="flex gap-10 items-center">
           <img
-            className="w-6xl block rounded-tr-4xl rounded-bl-4xl overflow-hidden"
-            src="/images/14.jpg"
+            className="w-lg block rounded-tr-4xl rounded-bl-4xl overflow-hidden"
+            src="/images/100.jpeg"
             alt="앨리스"
           />
-          <Typo.Body className="text-ink body-3xl text-center">이쁘긴해</Typo.Body>
+          <Typo.Heading className="text-primary text-left heading-huge italic">
+            Happy <br />
+            New Year!!
+          </Typo.Heading>
         </div>
       </History.AppleSection>
     </div>
