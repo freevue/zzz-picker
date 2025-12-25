@@ -1,5 +1,5 @@
 import { DB } from './utils'
-import { each, isNull, map, pipe, toArray, throwIf, toAsync, filter } from '@fxts/core'
+import { each, isNull, map, pipe, toArray, throwIf, toAsync, filter, isNumber } from '@fxts/core'
 import type {
   Engine,
   Agent,
@@ -116,16 +116,11 @@ const Content: React.FC<Props> = (props) => {
                 await DB.postUnlimitedRound(state, cost),
               ],
               toAsync,
-              filter((id) => !isNull(id)),
+              filter(isNumber),
               toArray,
               DB.postPlayLog(matchId)
             )
-            await pipe(
-              state.banList,
-              filter((agentId) => !isNull(agentId)),
-              toArray,
-              DB.postBanLog(matchId)
-            )
+            await pipe(state.banList, filter(isNumber), toArray, DB.postBanLog(matchId))
           } catch (error: any) {
             console.error(error.message)
           }
