@@ -22,9 +22,11 @@ const QUERY = `
 `
 async function getBoss(): Promise<Array<Boss>> {
   try {
-    return await pipe(
-      QUERY,
-      async (query) => await supabase.from('boss').select(query),
+    return pipe(
+      await supabase
+        .from('boss')
+        .select<string, Boss>(QUERY)
+        .setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600'),
       passError<Boss>
     )
   } catch {

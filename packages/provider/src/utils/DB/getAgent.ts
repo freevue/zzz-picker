@@ -47,9 +47,11 @@ const QUERY = `
 `
 async function getAgent(): Promise<Array<Agent>> {
   try {
-    return await pipe(
-      QUERY,
-      async (query) => await supabase.from('agents').select(query),
+    return pipe(
+      await supabase
+        .from('agents')
+        .select<string, Agent>(QUERY)
+        .setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600'),
       passError<Agent>
     )
   } catch {

@@ -22,9 +22,11 @@ const QUERY = `
 `
 async function getDeadlyAssaultList(): Promise<Array<DeadlyAssault>> {
   try {
-    return await pipe(
-      QUERY,
-      async (query) => await supabase.from('deadly_assault').select(query),
+    return pipe(
+      await supabase
+        .from('deadly_assault')
+        .select<string, DeadlyAssault>(QUERY)
+        .setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600'),
       passError<DeadlyAssault>
     )
   } catch {
