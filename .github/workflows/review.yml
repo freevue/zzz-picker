@@ -1,8 +1,19 @@
 name: Gemini AI Code Review (Clean)
 
 on:
-  pull_request:
-    types: [opened, synchronize]
+  # pull_request:
+  #   types: [opened, synchronize]
+  workflow_dispatch:
+    inputs:
+      eol_server_type:
+        description: 'Test'
+        required: true
+        default: 'DEV'
+        type: choice
+        options:
+          - DEV
+          - STAGE
+          - LIVE
 jobs:
   review:
     runs-on: ubuntu-latest
