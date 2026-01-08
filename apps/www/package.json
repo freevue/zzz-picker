@@ -18,6 +18,7 @@
     "@zzz-picker/provider": "workspace:*",
     "@zzz-picker/tailwind-config": "workspace:*",
     "@zzz-picker/utils": "workspace:*",
+    "@zzz-picker/supabase": "workspace:*",
     "dayjs": "^1.11.18",
     "isbot": "^4.4.0",
     "motion": "^12.23.22",

@@ -12,6 +12,7 @@
   "peerDependencies": {
     "@zzz-picker/constant": "workspace:*",
     "@zzz-picker/utils": "workspace:*",
+    "@zzz-picker/supabase": "workspace:*",
     "dayjs": "^1.11.18",
     "react": "catalog:react19",
     "react-dom": "catalog:react19"
