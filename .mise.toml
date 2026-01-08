@@ -1,0 +1,7 @@
+[tools]
+node = "24"
+pnpm = "10.27.0"
+
+[env]
+PNPM_HOME = "~/.pnpm-home"
+PNPM_STORE_PATH = "~/.local/share/pnpm/store"
