@@ -4,7 +4,8 @@
     "strict": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "types": ["node"]
+    "types": ["node"],
+    "skipLibCheck": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist", "assets", "**/__fixtures__/**", "**/__mocks__/**", "coverage"]
