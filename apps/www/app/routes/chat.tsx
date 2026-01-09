@@ -4,21 +4,42 @@ import { useActionData, useNavigation, useSubmit } from '@remix-run/react'
 import { chatWithGemini } from '@zzz-picker/supabase'
 import { motion, AnimatePresence } from 'motion/react'
 import { useState, useEffect, useRef } from 'react'
+import { z } from 'zod'
+
+const chatSchema = z.object({
+  message: z.string().min(1, '메시지를 입력해주세요.'),
+  history: z.array(
+    z.object({
+      role: z.enum(['user', 'model']),
+      parts: z.array(z.object({ text: z.string() })),
+    })
+  ),
+})
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData()
-  const message = formData.get('message') as string
-  const historyRaw = formData.get('history') as string
-  const history = historyRaw ? JSON.parse(historyRaw) : []
+  const message = formData.get('message')
+  const historyRaw = formData.get('history')
 
-  const userMessage = { role: 'user', parts: [{ text: message }] }
-  const newHistory = [...history, userMessage]
+  const result = chatSchema.safeParse({
+    message,
+    history: historyRaw ? JSON.parse(historyRaw as string) : [],
+  })
+
+  if (!result.success) {
+    return json({ error: '잘못된 요청 형식입니다. 데이터를 확인해주세요.' }, { status: 400 })
+  }
+
+  const { message: validatedMessage, history } = result.data
+  const userMessage = { role: 'user', parts: [{ text: validatedMessage }] }
+  const newHistory = [...history, userMessage] as any[]
 
   try {
     const response = await chatWithGemini(newHistory)
     return json({ response, userMessage })
   } catch (error: any) {
-    return json({ error: error.message }, { status: 500 })
+    console.error('Chat Error:', error)
+    return json({ error: 'AI 응답 생성 중 오류가 발생했습니다.' }, { status: 500 })
   }
 }
 
