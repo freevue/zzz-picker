@@ -16,14 +16,15 @@
     "@zzz-picker/components": "workspace:*",
     "@zzz-picker/constant": "workspace:*",
     "@zzz-picker/provider": "workspace:*",
+    "@zzz-picker/supabase": "workspace:*",
     "@zzz-picker/tailwind-config": "workspace:*",
     "@zzz-picker/utils": "workspace:*",
-    "@zzz-picker/supabase": "workspace:*",
     "dayjs": "^1.11.18",
     "isbot": "^4.4.0",
     "motion": "^12.23.22",
     "react": "catalog:react19",
-    "react-dom": "catalog:react19"
+    "react-dom": "catalog:react19",
+    "zod": "^4.3.5"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.17.2",
