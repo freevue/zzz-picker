@@ -2,6 +2,18 @@ import { AiDatabaseTools } from './ai-client'
 import { GoogleGenAI } from '@google/genai'
 
 /**
+ * Gemini 모델 상수 정의
+ */
+const MODELS = {
+  // 속도, 확장성, 최첨단 인텔리전스를 위해 설계된 가장 균형 잡힌 모델
+  INTELLIGENT: 'gemini-3-flash-preview',
+  // 최고의 가격 대비 성능, 에이전트 사용 사례에 적합
+  BALANCED: 'gemini-2.5-flash',
+  // 비용 효율성과 높은 처리량에 최적화된 가장 빠른 Flash 모델
+  FAST: 'gemini-2.5-flash-lite',
+} as const
+
+/**
  * Gemini 모델에게 제공할 도구 정의(Tool Definitions)입니다.
  */
 export const GeminiSupabaseTools = {
@@ -76,11 +88,20 @@ export const chatWithGemini = async (messages: any[]) => {
   }
 
   // 1차 생성 요청
-  let response = await client.models.generateContent({
-    model: 'gemini-2.0-flash-lite',
-    contents,
-    config: generateConfig,
-  })
+  let response
+  try {
+    // 1차 생성 요청: 최첨단 인텔리전스가 필요한 의도 파악 및 초기 도구 선정에는 INTELLIGENT 모델 사용
+    response = await client.models.generateContent({
+      model: MODELS.INTELLIGENT,
+      contents,
+      config: generateConfig,
+    })
+  } catch (error: any) {
+    if (error.status === 429) {
+      return '현재 요청이 많아 처리가 지연되고 있습니다. 잠시 후 다시 시도해 주세요.'
+    }
+    return `요청 처리 중 오류가 발생했습니다: ${error.message}`
+  }
 
   // 응답 처리
   let responseData = (response as any).response || response
@@ -147,12 +168,20 @@ export const chatWithGemini = async (messages: any[]) => {
       parts: functionResponses,
     })
 
-    // 다음 단계 생성 요청 (tools 설정 유지)
-    response = await client.models.generateContent({
-      model: 'gemini-2.0-flash-lite',
-      contents,
-      config: generateConfig,
-    })
+    // 다음 단계 생성 요청: 에이전트 작업 및 도구 결과 처리에는 BALANCED 모델 사용
+    // 단순 데이터 가공이 필요한 경우 FAST 모델(gemini-2.5-flash-lite)을 고려할 수 있음
+    try {
+      response = await client.models.generateContent({
+        model: MODELS.BALANCED,
+        contents,
+        config: generateConfig,
+      })
+    } catch (error: any) {
+      if (error.status === 429) {
+        return '데이터 조회 후 응답 생성 중 트래픽 초과로 실패했습니다. 잠시 후 다시 시도해 주세요.'
+      }
+      return `응답 생성 중 오류가 발생했습니다: ${error.message}`
+    }
 
     responseData = (response as any).response || response
     functionCalls = responseData.candidates?.[0]?.content?.parts?.filter((p: any) => p.functionCall)
