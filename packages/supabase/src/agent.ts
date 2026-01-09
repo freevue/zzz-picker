@@ -1,6 +1,5 @@
 import { AiDatabaseTools } from './ai-client'
-import { GoogleGenerativeAI } from '@google/generative-ai'
-import type { Content, Part } from '@google/generative-ai'
+import { GoogleGenAI } from '@google/genai'
 
 /**
  * Gemini 모델에게 제공할 도구 정의(Tool Definitions)입니다.
@@ -36,49 +35,72 @@ export const GeminiSupabaseTools = {
   },
 }
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || ''
-const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
+let client: GoogleGenAI | null = null
+
+const getClient = () => {
+  if (client) return client
+
+  const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY
+  if (!apiKey) {
+    throw new Error('GEMINI_API_KEY 또는 GOOGLE_API_KEY 환경 변수가 설정되지 않았습니다.')
+  }
+  client = new GoogleGenAI({ apiKey })
+  return client
+}
 
 /**
  * 보안을 위한 허용된 테이블 목록 (Whitelist)
  */
 const ALLOWED_TABLES = ['agents', 'match_log', 'teams', 'metadata']
 
-export const chatWithGemini = async (messages: Content[]) => {
-  const model = genAI.getGenerativeModel({
-    model: 'gemini-3-flash-preview',
-    tools: [
-      {
-        functionDeclarations: Object.entries(GeminiSupabaseTools).map(([name, tool]) => ({
-          name,
-          description: tool.description,
-          parameters: tool.parameters as any,
-        })),
-      },
-    ],
-  })
+export const chatWithGemini = async (messages: any[]) => {
+  const client = getClient()
 
-  const chat = model.startChat({
-    history: messages.slice(0, -1),
-    generationConfig: {
-      maxOutputTokens: 2048,
+  // messages는 이미 { role, parts } 형태의 배열로 가정
+  // generateContent를 위해 전체 히스토리를 contents로 사용
+  const contents = [...messages]
+
+  const tools = [
+    {
+      functionDeclarations: Object.entries(GeminiSupabaseTools).map(([name, tool]) => ({
+        name,
+        description: tool.description,
+        parameters: tool.parameters as any,
+      })),
     },
+  ]
+
+  const generateConfig = {
+    maxOutputTokens: 2048,
+    tools,
+  }
+
+  // 1차 생성 요청
+  let response = await client.models.generateContent({
+    model: 'gemini-2.0-flash-lite',
+    contents,
+    config: generateConfig,
   })
 
-  const lastMsg = messages[messages.length - 1]
-  const lastMessageText = lastMsg.parts[0].text || ''
+  // 응답 처리
+  let responseData = (response as any).response || response
+  let functionCalls = responseData.candidates?.[0]?.content?.parts?.filter(
+    (p: any) => p.functionCall
+  )
 
-  let response = await chat.sendMessage(lastMessageText)
-  let responseText = response.response.text()
-  let functionCalls = response.response.functionCalls()
-
-  // 다중 도구 호출 및 순차적 실행을 위한 루프
+  // Tool Call 루프
   while (functionCalls && functionCalls.length > 0) {
-    const functionResponses: Part[] = await Promise.all(
-      functionCalls.map(async (call) => {
+    // 모델의 Function Call 응답을 히스토리에 추가
+    const modelResponseContent = responseData.candidates?.[0]?.content
+    contents.push(modelResponseContent)
+
+    // Tool 실행
+    const functionResponses = await Promise.all(
+      functionCalls.map(async (part: any) => {
+        const call = part.functionCall
         const tool = (GeminiSupabaseTools as any)[call.name]
 
-        // 보안 필터: query_database 사용 시 테이블 화이트리스트 체크
+        // 보안 필터
         if (call.name === 'query_database') {
           const args = call.args as any
           const table = args.table as string
@@ -119,11 +141,22 @@ export const chatWithGemini = async (messages: Content[]) => {
       })
     )
 
-    // 도구 실행 결과를 모델에 전달하고 다음 응답 수신
-    response = await chat.sendMessage(functionResponses)
-    responseText = response.response.text()
-    functionCalls = response.response.functionCalls()
+    // 실행 결과(Function Response)를 히스토리에 추가
+    contents.push({
+      role: 'tool',
+      parts: functionResponses,
+    })
+
+    // 다음 단계 생성 요청 (tools 설정 유지)
+    response = await client.models.generateContent({
+      model: 'gemini-2.0-flash-lite',
+      contents,
+      config: generateConfig,
+    })
+
+    responseData = (response as any).response || response
+    functionCalls = responseData.candidates?.[0]?.content?.parts?.filter((p: any) => p.functionCall)
   }
 
-  return responseText
+  return responseData.candidates?.[0]?.content?.parts?.[0]?.text || ''
 }
