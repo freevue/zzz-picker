@@ -38,7 +38,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const response = await chatWithGemini(newHistory)
     return json({ response, userMessage })
   } catch (error: any) {
-    console.error('Chat Error:', error)
+    console.error('--- Chat Action Error ---')
+    console.error('Message:', error.message)
+    console.error('Stack:', error.stack)
+    console.error('--------------------------')
     return json({ error: 'AI 응답 생성 중 오류가 발생했습니다.' }, { status: 500 })
   }
 }

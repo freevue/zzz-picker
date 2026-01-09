@@ -36,8 +36,13 @@ export const GeminiSupabaseTools = {
   },
 }
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || ''
-const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
+const getGenAI = () => {
+  const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY
+  if (!apiKey) {
+    throw new Error('GEMINI_API_KEY 또는 GOOGLE_API_KEY 환경 변수가 설정되지 않았습니다.')
+  }
+  return new GoogleGenerativeAI(apiKey)
+}
 
 /**
  * 보안을 위한 허용된 테이블 목록 (Whitelist)
@@ -45,6 +50,7 @@ const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
 const ALLOWED_TABLES = ['agents', 'match_log', 'teams', 'metadata']
 
 export const chatWithGemini = async (messages: Content[]) => {
+  const genAI = getGenAI()
   const model = genAI.getGenerativeModel({
     model: 'gemini-3-flash-preview',
     tools: [
