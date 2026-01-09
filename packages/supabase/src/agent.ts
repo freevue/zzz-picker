@@ -1,5 +1,6 @@
 import { AiDatabaseTools } from './ai-client'
-import { GoogleGenerativeAI, Tool } from '@google/generative-ai'
+import { GoogleGenerativeAI } from '@google/generative-ai'
+import type { Content, Part } from '@google/generative-ai'
 
 /**
  * Gemini 모델에게 제공할 도구 정의(Tool Definitions)입니다.
@@ -35,13 +36,17 @@ export const GeminiSupabaseTools = {
   },
 }
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || ''
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
 
-export const chatWithGemini = async (
-  messages: { role: 'user' | 'model'; parts: { text: string }[] }[]
-) => {
+/**
+ * 보안을 위한 허용된 테이블 목록 (Whitelist)
+ */
+const ALLOWED_TABLES = ['agents', 'match_log', 'teams', 'metadata']
+
+export const chatWithGemini = async (messages: Content[]) => {
   const model = genAI.getGenerativeModel({
-    model: 'gemini-2.0-flash', // 사용자 요청에 따라 2.5를 사용하려 했으나 현재 사용 가능한 모델명으로 설정 (필요시 업데이트)
+    model: 'gemini-3-flash-preview',
     tools: [
       {
         functionDeclarations: Object.entries(GeminiSupabaseTools).map(([name, tool]) => ({
@@ -60,29 +65,65 @@ export const chatWithGemini = async (
     },
   })
 
-  const lastMessage = messages[messages.length - 1].parts[0].text
-  const result = await chat.sendMessage(lastMessage)
-  const response = await result.response
+  const lastMsg = messages[messages.length - 1]
+  const lastMessageText = lastMsg.parts[0].text || ''
 
-  // Tool Call 처리 로직 (단순 구현, 필요시 루프 확장 가능)
-  const call = response.functionCalls()?.[0]
-  if (call) {
-    const tool = (GeminiSupabaseTools as any)[call.name]
-    if (tool) {
-      const toolResult = await tool.execute(call.args)
-      const followUp = await chat.sendMessage([
-        {
+  let response = await chat.sendMessage(lastMessageText)
+  let responseText = response.response.text()
+  let functionCalls = response.response.functionCalls()
+
+  // 다중 도구 호출 및 순차적 실행을 위한 루프
+  while (functionCalls && functionCalls.length > 0) {
+    const functionResponses: Part[] = await Promise.all(
+      functionCalls.map(async (call) => {
+        const tool = (GeminiSupabaseTools as any)[call.name]
+
+        // 보안 필터: query_database 사용 시 테이블 화이트리스트 체크
+        if (call.name === 'query_database') {
+          const args = call.args as any
+          const table = args.table as string
+          if (!ALLOWED_TABLES.includes(table)) {
+            return {
+              functionResponse: {
+                name: call.name,
+                response: { content: `Error: '${table}' 테이블에 대한 접근 권한이 없습니다.` },
+              },
+            }
+          }
+        }
+
+        if (tool) {
+          try {
+            const toolResult = await tool.execute(call.args)
+            return {
+              functionResponse: {
+                name: call.name,
+                response: { content: toolResult || '조회된 데이터가 없습니다.' },
+              },
+            }
+          } catch (error: any) {
+            return {
+              functionResponse: {
+                name: call.name,
+                response: { content: `Error: ${error.message}` },
+              },
+            }
+          }
+        }
+        return {
           functionResponse: {
             name: call.name,
-            response: {
-              content: toolResult || '조회된 데이터가 없습니다. 사실에 기반하여 답하십시오.',
-            },
+            response: { content: '해당 도구를 찾을 수 없습니다.' },
           },
-        },
-      ])
-      return followUp.response.text()
-    }
+        }
+      })
+    )
+
+    // 도구 실행 결과를 모델에 전달하고 다음 응답 수신
+    response = await chat.sendMessage(functionResponses)
+    responseText = response.response.text()
+    functionCalls = response.response.functionCalls()
   }
 
-  return response.text()
+  return responseText
 }
