@@ -129,6 +129,9 @@ importers:
       '@zzz-picker/provider':
         specifier: workspace:*
         version: link:../../packages/provider
+      '@zzz-picker/supabase':
+        specifier: workspace:*
+        version: link:../../packages/supabase
       '@zzz-picker/tailwind-config':
         specifier: workspace:*
         version: link:../../packages/tailwind-config
@@ -220,6 +223,9 @@ importers:
       '@zzz-picker/constant':
         specifier: workspace:*
         version: link:../constant
+      '@zzz-picker/supabase':
+        specifier: workspace:*
+        version: link:../supabase
       '@zzz-picker/utils':
         specifier: workspace:*
         version: link:../utils
@@ -242,6 +248,15 @@ importers:
       '@types/react-dom':
         specifier: catalog:react19
         version: 19.2.3(@types/react@19.2.7)
+
+  packages/supabase:
+    dependencies:
+      '@supabase/supabase-js':
+        specifier: ^2.76.1
+        version: 2.90.0
+      '@zzz-picker/constant':
+        specifier: workspace:*
+        version: link:../constant
 
   packages/tailwind-config:
     dependencies:
