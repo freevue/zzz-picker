@@ -15,7 +15,7 @@ const Main: React.FC = () => {
 
   return (
     <div className="size-full flex flex-col items-center justify-center gap-10" style={{
-      backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)), url(https://fastcdn.hoyoverse.com/content-v2/plat/161616/3eac4aa…_5273261316780784121.jpeg)",
+      backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)), url('https://fastcdn.hoyoverse.com/content-v2/plat/161616/3eac4aa670a780229233fdbbaadaddaa_5273261316780784121.jpeg')",
       backgroundRepeat: "no-repeat",
       backgroundSize: "cover",
     }}>
