@@ -14,13 +14,17 @@ const Main: React.FC = () => {
   }
 
   return (
-    <div className="size-full flex flex-col items-center justify-center gap-10" style={{
-      backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)), url('https://fastcdn.hoyoverse.com/content-v2/plat/161616/3eac4aa670a780229233fdbbaadaddaa_5273261316780784121.jpeg')",
-      backgroundRepeat: "no-repeat",
-      backgroundSize: "cover",
-    }}>
-      <img src="/images/main/logo.png" alt="logo" className="w-32 block" />
-      <div className="flex items-center justify-center gap-10">
+    <div
+      className="size-full flex flex-col items-center justify-center gap-10"
+      style={{
+        backgroundImage:
+          "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)), url('https://fastcdn.hoyoverse.com/content-v2/plat/161616/3eac4aa670a780229233fdbbaadaddaa_5273261316780784121.jpeg')",
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+      }}
+    >
+      <img src="/images/main/logo.png" alt="logo" className="w-10 block fixed left-10 top-10" />
+      <div className="flex items-center justify-center gap-10 fixed right-10 top-10">
         {pipe(
           LINKS,
           zipWithIndex,
@@ -32,21 +36,23 @@ const Main: React.FC = () => {
               transition={{ duration: 0.2, delay: index * 0.2 }}
             >
               <Link to={link.href} className="text-center block group">
-                <div className="flex size-48 items-center justify-center bg-content/70 rounded-bl-4xl rounded-tr-4xl overflow-hidden p-2">
+                <div className="flex size-48 items-center justify-center bg-content rounded-bl-4xl rounded-tr-4xl overflow-hidden p-2">
                   <img
                     src={link.url}
                     alt={link.title}
                     className="block w-full group-hover:scale-105 transition-all duration-300"
                   />
                 </div>
-                <Typo.Heading className="heading-xl text-primary mt-2">{link.title}</Typo.Heading>
+                <Typo.Heading className="heading-xl text-primary mt-2 backdrop-brightness-50">
+                  {link.title}
+                </Typo.Heading>
               </Link>
             </motion.div>
           )),
           toArray
         )}
       </div>
-      <ul className="flex gap-6 fixed bottom-0 left-1/2 -translate-x-1/2 py-5">
+      <ul className="flex gap-6 fixed bottom-0 left-10 py-5">
         <li className="border-r border-ink/50 pr-6">
           <Rule />
         </li>
