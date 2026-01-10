@@ -46,7 +46,89 @@ export const DB_SCHEMA = {
         auth_key: '인증 키',
       },
     },
-    // 추가 테이블 정의 가능...
+    ban_log: {
+      description: '밴 기록',
+      columns: {
+        id: '일련번호',
+        match_id: '매치 ID',
+        agent_id: '밴 된 에이전트 ID',
+      },
+    },
+    play_log: {
+      description: '플레이 로그 (매치와 라운드 연결)',
+      columns: {
+        id: '일련번호',
+        match_id: '매치 ID',
+        round_id: '라운드 ID',
+      },
+    },
+    round_log: {
+      description: '라운드 기록 (각 팀의 파티 정보)',
+      columns: {
+        id: '일련번호',
+        round_type: '라운드 타입',
+        a_party_id: 'A팀 파티 ID',
+        b_party_id: 'B팀 파티 ID',
+      },
+    },
+    party_log: {
+      description: '파티 구성 및 성과',
+      columns: {
+        id: '일련번호',
+        select_1: '선택 에이전트 1',
+        select_2: '선택 에이전트 2',
+        select_3: '선택 에이전트 3',
+        boss_id: '상대 보스 ID',
+        score: '점수',
+        elapsed_time: '소요 시간',
+      },
+    },
+    deadly_assault: {
+      description: '엔강대 시즌 정보 (버전별 보스 정보)',
+      columns: {
+        id: '일련번호',
+        version: '버전 (예: 1.0)',
+        open_at: '시작 일시',
+        boss_1: '보스 1 ID',
+        boss_2: '보스 2 ID',
+        boss_3: '보스 3 ID',
+      },
+    },
+    attributes: {
+      description: '속성 메타데이터 (불, 얼음 등)',
+      columns: {
+        id: 'ID',
+        name_ko: '속성명 (한글)',
+      },
+    },
+    specialty: {
+      description: '특성 메타데이터 (강공, 격파 등)',
+      columns: {
+        id: 'ID',
+        name_ko: '특성명 (한글)',
+      },
+    },
+    faction: {
+      description: '진영 메타데이터',
+      columns: {
+        id: 'ID',
+        name_ko: '진영명 (한글)',
+      },
+    },
+    boss_weakness_attribute: {
+      description: '보스 약점 속성 매핑',
+      columns: {
+        boss_id: '보스 ID',
+        attribute_id: '속성 ID',
+      },
+    },
+    boss_resistance_attribute: {
+      description: '보스 내성 속성 매핑',
+      columns: {
+        boss_id: '보스 ID',
+        attribute_id: '속성 ID',
+      },
+    },
   },
   relationships: [
     {
@@ -56,5 +138,24 @@ export const DB_SCHEMA = {
       description: '에이전트는 전용 엔진을 가질 수 있음',
     },
     { from: 'match_log', to: 'play_log', type: 'one-to-many' },
+    { from: 'match_log', to: 'ban_log', type: 'one-to-many' },
+    {
+      from: 'play_log',
+      to: 'round_log',
+      type: 'one-to-one',
+      description: '플레이 로그는 하나의 라운드 정보를 가짐',
+    },
+    {
+      from: 'round_log',
+      to: 'party_log',
+      type: 'many-to-one',
+      description: '라운드는 A/B 두 개의 파티 정보를 참조',
+    },
+    {
+      from: 'deadly_assault',
+      to: 'boss',
+      type: 'many-to-one',
+      description: '시즌 정보는 3개의 보스 ID를 참조',
+    },
   ],
 }

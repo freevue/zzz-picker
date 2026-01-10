@@ -63,7 +63,22 @@ const getClient = () => {
 /**
  * 보안을 위한 허용된 테이블 목록 (Whitelist)
  */
-const ALLOWED_TABLES = ['agents', 'match_log', 'teams', 'metadata']
+const ALLOWED_TABLES = [
+  'agents',
+  'match_log',
+  'ban_log',
+  'play_log',
+  'round_log',
+  'party_log',
+  'deadly_assault',
+  'boss',
+  'engines',
+  'attributes',
+  'faction',
+  'specialty',
+  'boss_weakness_attribute',
+  'boss_resistance_attribute',
+]
 
 export const chatWithGemini = async (messages: any[]) => {
   const client = getClient()
@@ -97,8 +112,8 @@ export const chatWithGemini = async (messages: any[]) => {
       config: generateConfig,
     })
   } catch (error: any) {
-    if (error.status === 429) {
-      return '현재 요청이 많아 처리가 지연되고 있습니다. 잠시 후 다시 시도해 주세요.'
+    if (error.status === 429 || error.message?.includes('RESOURCE_EXHAUSTED')) {
+      return '현재 모델의 사용량이 토큰 제한에 도달했습니다. 잠시 후 다시 시도해주세요. (Token Limit Exceeded)'
     }
     return `요청 처리 중 오류가 발생했습니다: ${error.message}`
   }
@@ -171,14 +186,16 @@ export const chatWithGemini = async (messages: any[]) => {
     // 다음 단계 생성 요청: 에이전트 작업 및 도구 결과 처리에는 BALANCED 모델 사용
     // 단순 데이터 가공이 필요한 경우 FAST 모델(gemini-2.5-flash-lite)을 고려할 수 있음
     try {
+      // 다음 단계 생성 요청: 에이전트 작업 및 도구 결과 처리에는 BALANCED 모델 사용
+      // 반복적인 도구 호출이나 단순 데이터 가공은 가격 대비 성능이 좋은 BALANCED 모델이 적합
       response = await client.models.generateContent({
         model: MODELS.BALANCED,
         contents,
         config: generateConfig,
       })
     } catch (error: any) {
-      if (error.status === 429) {
-        return '데이터 조회 후 응답 생성 중 트래픽 초과로 실패했습니다. 잠시 후 다시 시도해 주세요.'
+      if (error.status === 429 || error.message?.includes('RESOURCE_EXHAUSTED')) {
+        return '작업 수행 중 토큰 제한에 도달했습니다. (Token Limit Exceeded)'
       }
       return `응답 생성 중 오류가 발생했습니다: ${error.message}`
     }
