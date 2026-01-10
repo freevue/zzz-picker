@@ -19,7 +19,7 @@ const Main: React.FC = () => {
       backgroundRepeat: "no-repeat",
       backgroundSize: "cover",
     }}>
-      <img src="/images/main/logo.png" alt="logo" className="w-32 block hover:animate-turbo" />
+      <img src="/images/main/logo.png" alt="logo" className="w-32 block" />
       <div className="flex items-center justify-center gap-10">
         {pipe(
           LINKS,
@@ -32,7 +32,7 @@ const Main: React.FC = () => {
               transition={{ duration: 0.2, delay: index * 0.2 }}
             >
               <Link to={link.href} className="text-center block group">
-                <div className="flex size-48 items-center justify-center bg-content rounded-bl-4xl rounded-tr-4xl overflow-hidden p-2">
+                <div className="flex size-48 items-center justify-center bg-content/70 rounded-bl-4xl rounded-tr-4xl overflow-hidden p-2">
                   <img
                     src={link.url}
                     alt={link.title}
