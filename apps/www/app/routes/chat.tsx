@@ -47,7 +47,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 }
 
 const Chat: React.FC = () => {
-  const [messages, setMessages] = useState<{ role: 'user' | 'model'; text: string }[]>([])
+  const [messages, setMessages] = useState<
+    { role: 'user' | 'model'; text: string; isLoading?: boolean }[]
+  >([])
   const [input, setInput] = useState('')
   const actionData = useActionData<typeof action>()
   const navigation = useNavigation()
@@ -58,11 +60,25 @@ const Chat: React.FC = () => {
 
   useEffect(() => {
     if (actionData && 'response' in actionData) {
-      setMessages((prev) => [
-        ...prev,
-        { role: 'user', text: actionData.userMessage.parts[0].text },
-        { role: 'model', text: actionData.response },
-      ])
+      setMessages((prev) => {
+        // 마지막 메시지가 로딩 중인 모델 메시지라면 교체
+        const newMessages = [...prev]
+        const lastMsg = newMessages[newMessages.length - 1]
+
+        if (lastMsg && lastMsg.role === 'model' && lastMsg.isLoading) {
+          // 로딩 메시지를 실제 응답으로 교체
+          newMessages[newMessages.length - 1] = { role: 'model', text: actionData.response }
+          // 그 이전이 유저 메시지일 텐데, 이는 그대로 둠 (Optimistic 값이 맞다고 가정)
+          return newMessages
+        }
+
+        // 만약 로딩 메시지가 없다면(새로고침 등), 그냥 추가
+        return [
+          ...prev,
+          { role: 'user', text: actionData.userMessage.parts[0].text },
+          { role: 'model', text: actionData.response },
+        ]
+      })
     }
   }, [actionData])
 
@@ -70,11 +86,21 @@ const Chat: React.FC = () => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
-  }, [messages, isSubmitting])
+  }, [messages]) // isSubmitting 의존성 제거 (메시지 상태로 제어)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim() || isSubmitting) return
+
+    const currentInput = input
+    setInput('') // 즉시 초기화
+
+    // Optimistic Update: 유저 메시지와 로딩 중인 모델 메시지 즉시 추가
+    setMessages((prev) => [
+      ...prev,
+      { role: 'user', text: currentInput },
+      { role: 'model', text: '', isLoading: true },
+    ])
 
     const historyForApi = messages.map((m) => ({
       role: m.role,
@@ -82,11 +108,14 @@ const Chat: React.FC = () => {
     }))
 
     const formData = new FormData()
-    formData.append('message', input)
+    formData.append('message', currentInput)
+    // 로딩 메시지는 제외하고 전송 (마지막 꺼는 아직 추가 안된 상태인 이전 messages 기준이므로 안전하지만,
+    // setMessages는 비동기라 messages가 아직 안바뀌었을 수 있음.
+    // 하지만 안전하게 historyForApi는 클로저의 stale state를 쓸 수도 있으니 주의.
+    // 기존 messages에는 아직 currentInput과 loading이 없으므로 historyForApi는 '이전' 히스토리임. 이게 맞음.
     formData.append('history', JSON.stringify(historyForApi))
 
     submit(formData, { method: 'post' })
-    setInput('')
   }
 
   return (
@@ -135,24 +164,18 @@ const Chat: React.FC = () => {
                     : 'bg-white/5 border border-white/10 text-slate-100'
                 }`}
               >
-                <p className="whitespace-pre-wrap leading-relaxed text-[0.95rem]">{msg.text}</p>
+                {msg.isLoading ? (
+                  <div className="flex gap-1.5 items-center h-6">
+                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400 [animation-delay:-0.3s]"></span>
+                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400 [animation-delay:-0.15s]"></span>
+                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400"></span>
+                  </div>
+                ) : (
+                  <p className="whitespace-pre-wrap leading-relaxed text-[0.95rem]">{msg.text}</p>
+                )}
               </div>
             </motion.div>
           ))}
-
-          {isSubmitting && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex justify-start"
-            >
-              <div className="bg-white/5 border border-white/10 rounded-2xl px-5 py-3.5 flex gap-1.5 items-center">
-                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400 [animation-delay:-0.3s]"></span>
-                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400 [animation-delay:-0.15s]"></span>
-                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400"></span>
-              </div>
-            </motion.div>
-          )}
         </AnimatePresence>
       </div>
 
