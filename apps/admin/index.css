@@ -1,0 +1,51 @@
+@import 'tailwindcss';
+@import '@zzz-picker/tailwind-config/theme';
+
+@theme {
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-base: var(--color-base);
+  --color-content: var(--color-content);
+  --color-ink: var(--color-ink);
+
+  /* Charade colors from packages/tailwind-config */
+  --color-charade-50: var(--charade-50);
+  --color-charade-100: var(--charade-100);
+  --color-charade-200: var(--charade-200);
+  --color-charade-300: var(--charade-300);
+  --color-charade-400: var(--charade-400);
+  --color-charade-500: var(--charade-500);
+  --color-charade-600: var(--charade-600);
+  --color-charade-700: var(--charade-700);
+  --color-charade-800: var(--charade-800);
+  --color-charade-900: var(--charade-900);
+  --color-charade-950: var(--charade-950);
+}
+
+:root {
+  --radius: 0.5rem;
+}
+
+body {
+  background-color: var(--charade-950);
+  color: var(--charade-100);
+  font-family: 'Inter', sans-serif;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--charade-800);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--charade-700);
+}
