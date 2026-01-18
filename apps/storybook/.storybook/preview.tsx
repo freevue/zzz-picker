@@ -1,6 +1,6 @@
 import '../src/index.css'
 import type { Preview } from '@storybook/react'
-import { Store, Apollo } from '@zzz-picker/provider'
+import { Store } from '@zzz-picker/provider'
 import React, { useEffect } from 'react'
 
 const preview: Preview = {
@@ -8,12 +8,13 @@ const preview: Preview = {
     theme: {
       name: 'Theme',
       description: 'Global theme for components',
-      defaultValue: 'v2',
+      defaultValue: '',
       toolbar: {
         icon: 'paintbrush',
         items: [
-          { value: 'alice', title: 'Alice' },
+          { value: '', title: 'Default' },
           { value: 'v2', title: 'V2' },
+          { value: 'alice', title: 'Alice' },
         ],
         showName: true,
       },
@@ -26,21 +27,48 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    viewport: {
+      viewports: {
+        streaming: {
+          name: 'Streaming View (OBS)',
+          styles: {
+            width: '1280px',
+            height: '720px',
+          },
+        },
+        mobile_streaming: {
+          name: 'Mobile Streaming',
+          styles: {
+            width: '360px',
+            height: '640px',
+          },
+        },
+      },
+      defaultViewport: 'streaming',
+    },
+    backgrounds: {
+      disable: true, // 테마 시스템과 충돌 방지를 위해 기본 배경색 기능 비활성화
+    },
   },
   decorators: [
     (Story, context) => {
       const theme = context.globals.theme
 
       useEffect(() => {
-        document.documentElement.className = theme
+        // html 태그에 테마 클래스 적용
+        const html = document.documentElement
+        html.classList.remove('v2', 'alice')
+        if (theme) {
+          html.classList.add(theme)
+        }
       }, [theme])
 
       return (
-        <Apollo>
-          <Store>
+        <Store>
+          <div className="p-8 min-h-screen font-sans transition-colors duration-200">
             <Story />
-          </Store>
-        </Apollo>
+          </div>
+        </Store>
       )
     },
   ],
