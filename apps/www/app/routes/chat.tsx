@@ -1,6 +1,8 @@
+import { pipe, concat, join } from '@fxts/core'
 import type { ActionFunctionArgs } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useActionData, useNavigation, useSubmit } from '@remix-run/react'
+import { Form, Typo } from '@zzz-picker/components/v2'
 import { chatWithGemini } from '@zzz-picker/supabase'
 import { motion, AnimatePresence } from 'motion/react'
 import { useState, useEffect, useRef } from 'react'
@@ -54,9 +56,12 @@ const Chat: React.FC = () => {
   const actionData = useActionData<typeof action>()
   const navigation = useNavigation()
   const submit = useSubmit()
-  const scrollRef = useRef<HTMLDivElement>(null)
-
   const isSubmitting = navigation.state === 'submitting'
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const [isFocused, setIsFocused] = useState(false)
+
+  const MODEL_PROFILE_URL =
+    'https://images.zzz.freevue.dev/images/agents/156728/8bbef43670d3f27df029bcb3fff252f3_4423906655536049482.webp'
 
   useEffect(() => {
     if (actionData && 'response' in actionData) {
@@ -119,99 +124,204 @@ const Chat: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen w-full flex-col bg-[var(--charade-950)] text-[var(--charade-100)]">
+    <div className="flex h-screen w-full flex-col bg-content text-ink">
       {/* Header */}
-      <header className="flex h-16 items-center border-b border-[var(--charade-50)]/10 bg-[var(--charade-950)]/20 px-6 backdrop-blur-md">
-        <h1 className="text-xl font-bold tracking-tight text-[var(--charade-50)]">ZZZ Assistant</h1>
+      <header className="flex h-20 items-center border-b border-white/10 bg-content/20 px-6 backdrop-blur-md">
+        <Typo.Heading className="text-2xl font-black tracking-tight text-ink">
+          ZZZ Assistant
+        </Typo.Heading>
         <div className="ml-3 flex items-center gap-2">
-          <span className="relative flex h-2 w-2">
+          <span className="relative flex h-2.5 w-2.5">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-secondary opacity-75"></span>
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-secondary"></span>
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-secondary"></span>
           </span>
-          <span className="text-xs text-[var(--charade-300)] uppercase tracking-widest">
+          <Typo.Body className="text-sm text-ink/50 uppercase tracking-widest font-black">
             Gemini 2.5 Flash
-          </span>
+          </Typo.Body>
         </div>
       </header>
 
       {/* Messages Area */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 scroll-smooth scrollbar-thin scrollbar-thumb-[var(--charade-50)]/10"
+        className="flex-1 overflow-y-auto overflow-x-hidden scroll-smooth scrollbar-hidden"
       >
-        <AnimatePresence>
-          {messages.length === 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex h-full flex-col items-center justify-center text-center opacity-40"
-            >
-              <div className="mb-4 text-4xl">🤖</div>
-              <p className="text-lg">무엇을 도와드릴까요?</p>
-              <p className="text-sm mt-1 italic">Supabase의 실시간 데이터를 기반으로 답변합니다.</p>
-            </motion.div>
-          )}
-
-          {messages.map((msg, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, scale: 0.95, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-            >
-              <div
-                className={`max-w-[85%] rounded-2xl px-5 py-3.5 shadow-2xl backdrop-blur-sm ${
-                  msg.role === 'user'
-                    ? 'bg-gradient-to-br from-secondary to-tertiary text-[var(--charade-50)]'
-                    : 'bg-[var(--charade-50)]/5 border border-[var(--charade-50)]/10 text-[var(--charade-200)]'
-                }`}
+        <div className="mx-auto max-w-3xl w-full p-4 md:px-0 md:py-8 space-y-8">
+          <AnimatePresence>
+            {messages.length === 0 && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex h-full flex-col items-center justify-center text-center opacity-40 py-20"
               >
-                {msg.isLoading ? (
-                  <div className="flex gap-1.5 items-center h-6">
-                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--charade-300)] [animation-delay:-0.3s]"></span>
-                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--charade-300)] [animation-delay:-0.15s]"></span>
-                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--charade-300)]"></span>
-                  </div>
-                ) : (
-                  <p className="whitespace-pre-wrap leading-relaxed text-[0.95rem]">{msg.text}</p>
+                <div className="size-32 rounded-3xl overflow-hidden bg-white/5 mb-6 border border-white/10">
+                  <img
+                    src={MODEL_PROFILE_URL}
+                    alt="Model Profile"
+                    className="size-full object-cover"
+                  />
+                </div>
+                <Typo.Heading className="text-2xl font-black mb-2">
+                  무엇을 도와드릴까요?
+                </Typo.Heading>
+                <Typo.Body className="text-lg italic opacity-70">
+                  강습전의 실시간 데이터를 기반으로 답변합니다.
+                </Typo.Body>
+              </motion.div>
+            )}
+
+            {messages.map((msg, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, x: msg.role === 'user' ? 20 : -20, y: 10 }}
+                animate={{ opacity: 1, x: 0, y: 0 }}
+                className={pipe(
+                  ['flex', 'gap-4', 'items-start'],
+                  concat(msg.role === 'user' ? ['flex-row-reverse'] : ['flex-row']),
+                  join(' ')
                 )}
-              </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
+              >
+                {msg.role === 'model' && (
+                  <div className="size-10 flex-shrink-0 rounded-xl overflow-hidden bg-white/5 border border-white/10 mt-1">
+                    <img
+                      src={MODEL_PROFILE_URL}
+                      alt="Model Profile"
+                      className="size-full object-cover"
+                    />
+                  </div>
+                )}
+                <div
+                  className={pipe(
+                    ['max-w-[85%]', 'p-6', 'shadow-2xl', 'backdrop-blur-md'],
+                    concat(
+                      msg.role === 'user'
+                        ? ['bg-secondary', 'text-white', 'rounded-3xl', 'rounded-tr-none']
+                        : [
+                            'bg-white/5',
+                            'text-ink',
+                            'rounded-3xl',
+                            'rounded-tl-none',
+                            'border',
+                            'border-white/10',
+                          ]
+                    ),
+                    join(' ')
+                  )}
+                >
+                  {msg.isLoading ? (
+                    <div className="flex gap-2 items-center h-8 px-2">
+                      <span className="h-2 w-2 animate-bounce rounded-full bg-ink/30 [animation-delay:-0.3s]"></span>
+                      <span className="h-2 w-2 animate-bounce rounded-full bg-ink/30 [animation-delay:-0.15s]"></span>
+                      <span className="h-2 w-2 animate-bounce rounded-full bg-ink/30"></span>
+                    </div>
+                  ) : (
+                    <Typo.Body
+                      className={pipe(
+                        ['text-xl', 'leading-relaxed'],
+                        concat(
+                          msg.role === 'user' ? ['text-white font-bold'] : ['text-ink font-medium']
+                        ),
+                        join(' ')
+                      )}
+                    >
+                      {msg.text}
+                    </Typo.Body>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
       </div>
 
       {/* Input Area */}
-      <footer className="p-4 md:p-8 bg-gradient-to-t from-[var(--charade-950)] to-transparent">
-        <form onSubmit={handleSubmit} className="mx-auto max-w-3xl relative">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            disabled={isSubmitting}
-            placeholder="메시지를 입력하세요..."
-            className="w-full rounded-2xl border border-[var(--charade-50)]/10 bg-[var(--charade-50)]/5 py-4 pl-5 pr-16 text-[var(--charade-50)] placeholder:text-[var(--charade-400)] focus:border-secondary/50 focus:outline-none focus:ring-4 focus:ring-secondary/10 transition-all backdrop-blur-xl"
-          />
+      <footer className="p-4 md:p-10 bg-gradient-to-t from-content to-transparent">
+        <Form
+          onSubmit={handleSubmit}
+          className="mx-auto max-w-3xl relative flex items-center gap-4"
+        >
+          <div className="relative flex-1 group">
+            <Form.Input
+              type="text"
+              name="message"
+              value={input}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="메시지를 입력하세요..."
+              className={pipe(
+                [
+                  'w-full',
+                  'h-16',
+                  'rounded-2xl',
+                  'border-2',
+                  'text-xl',
+                  'font-medium',
+                  'transition-all',
+                  'duration-300',
+                ],
+                concat(
+                  isFocused || input.trim()
+                    ? ['bg-primary', 'text-black', 'border-primary', 'placeholder:text-black/40']
+                    : [
+                        'bg-secondary/20',
+                        'text-ink',
+                        'border-secondary/30',
+                        'placeholder:text-ink/30',
+                      ]
+                ),
+                join(' ')
+              )}
+            />
+          </div>
           <button
             type="submit"
             disabled={isSubmitting || !input.trim()}
-            className="absolute right-2 top-2 h-10 w-10 rounded-xl bg-secondary text-[var(--charade-50)] shadow-lg shadow-secondary/20 transition-all hover:brightness-110 disabled:opacity-50 disabled:hover:bg-secondary flex items-center justify-center group"
+            className={pipe(
+              [
+                'flex-shrink-0',
+                'size-16',
+                'rounded-2xl',
+                'text-white',
+                'shadow-2xl',
+                'transition-all',
+                'duration-300',
+                'hover:scale-105',
+                'active:scale-95',
+                'disabled:opacity-20',
+                'disabled:grayscale',
+                'flex',
+                'items-center',
+                'justify-center',
+                'overflow-hidden',
+              ],
+              concat(
+                isFocused || input.trim()
+                  ? ['bg-primary', 'text-black', 'shadow-primary/30']
+                  : ['bg-secondary', 'text-white', 'shadow-secondary/30']
+              ),
+              join(' ')
+            )}
           >
-            <svg
-              className={`h-5 w-5 transform transition-transform ${isSubmitting ? 'scale-0' : 'group-hover:translate-x-0.5 group-hover:-translate-y-0.5'}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-              />
-            </svg>
+            {isSubmitting ? (
+              <span className="size-5 border-2 border-white/30 border-t-white animate-spin rounded-full" />
+            ) : (
+              <svg
+                className="h-6 w-6 transform -rotate-45"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2.5}
+                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                />
+              </svg>
+            )}
           </button>
-        </form>
+        </Form>
       </footer>
     </div>
   )
