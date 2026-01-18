@@ -119,23 +119,25 @@ const Chat: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen w-full flex-col bg-[#0a0a0a] text-slate-200">
+    <div className="flex h-screen w-full flex-col bg-[var(--charade-950)] text-[var(--charade-100)]">
       {/* Header */}
-      <header className="flex h-16 items-center border-b border-white/10 bg-black/20 px-6 backdrop-blur-md">
-        <h1 className="text-xl font-bold tracking-tight text-white">ZZZ Assistant</h1>
+      <header className="flex h-16 items-center border-b border-[var(--charade-50)]/10 bg-[var(--charade-950)]/20 px-6 backdrop-blur-md">
+        <h1 className="text-xl font-bold tracking-tight text-[var(--charade-50)]">ZZZ Assistant</h1>
         <div className="ml-3 flex items-center gap-2">
           <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-secondary opacity-75"></span>
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-secondary"></span>
           </span>
-          <span className="text-xs text-slate-400 uppercase tracking-widest">Gemini 2.5 Flash</span>
+          <span className="text-xs text-[var(--charade-300)] uppercase tracking-widest">
+            Gemini 2.5 Flash
+          </span>
         </div>
       </header>
 
       {/* Messages Area */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 scroll-smooth scrollbar-thin scrollbar-thumb-white/10"
+        className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 scroll-smooth scrollbar-thin scrollbar-thumb-[var(--charade-50)]/10"
       >
         <AnimatePresence>
           {messages.length === 0 && (
@@ -160,15 +162,15 @@ const Chat: React.FC = () => {
               <div
                 className={`max-w-[85%] rounded-2xl px-5 py-3.5 shadow-2xl backdrop-blur-sm ${
                   msg.role === 'user'
-                    ? 'bg-gradient-to-br from-indigo-600 to-violet-700 text-white'
-                    : 'bg-white/5 border border-white/10 text-slate-100'
+                    ? 'bg-gradient-to-br from-secondary to-tertiary text-[var(--charade-50)]'
+                    : 'bg-[var(--charade-50)]/5 border border-[var(--charade-50)]/10 text-[var(--charade-200)]'
                 }`}
               >
                 {msg.isLoading ? (
                   <div className="flex gap-1.5 items-center h-6">
-                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400 [animation-delay:-0.3s]"></span>
-                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400 [animation-delay:-0.15s]"></span>
-                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400"></span>
+                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--charade-300)] [animation-delay:-0.3s]"></span>
+                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--charade-300)] [animation-delay:-0.15s]"></span>
+                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--charade-300)]"></span>
                   </div>
                 ) : (
                   <p className="whitespace-pre-wrap leading-relaxed text-[0.95rem]">{msg.text}</p>
@@ -180,7 +182,7 @@ const Chat: React.FC = () => {
       </div>
 
       {/* Input Area */}
-      <footer className="p-4 md:p-8 bg-gradient-to-t from-black to-transparent">
+      <footer className="p-4 md:p-8 bg-gradient-to-t from-[var(--charade-950)] to-transparent">
         <form onSubmit={handleSubmit} className="mx-auto max-w-3xl relative">
           <input
             type="text"
@@ -188,12 +190,12 @@ const Chat: React.FC = () => {
             onChange={(e) => setInput(e.target.value)}
             disabled={isSubmitting}
             placeholder="메시지를 입력하세요..."
-            className="w-full rounded-2xl border border-white/10 bg-white/5 py-4 pl-5 pr-16 text-white placeholder:text-slate-500 focus:border-indigo-500/50 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all backdrop-blur-xl"
+            className="w-full rounded-2xl border border-[var(--charade-50)]/10 bg-[var(--charade-50)]/5 py-4 pl-5 pr-16 text-[var(--charade-50)] placeholder:text-[var(--charade-400)] focus:border-secondary/50 focus:outline-none focus:ring-4 focus:ring-secondary/10 transition-all backdrop-blur-xl"
           />
           <button
             type="submit"
             disabled={isSubmitting || !input.trim()}
-            className="absolute right-2 top-2 h-10 w-10 rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 transition-all hover:bg-indigo-500 disabled:opacity-50 disabled:hover:bg-indigo-600 flex items-center justify-center group"
+            className="absolute right-2 top-2 h-10 w-10 rounded-xl bg-secondary text-[var(--charade-50)] shadow-lg shadow-secondary/20 transition-all hover:brightness-110 disabled:opacity-50 disabled:hover:bg-secondary flex items-center justify-center group"
           >
             <svg
               className={`h-5 w-5 transform transition-transform ${isSubmitting ? 'scale-0' : 'group-hover:translate-x-0.5 group-hover:-translate-y-0.5'}`}
