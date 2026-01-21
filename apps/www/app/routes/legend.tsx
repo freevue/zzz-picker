@@ -4,7 +4,7 @@ import { DEFAULT } from '@zzz-picker/constant'
 import { Play, Setting } from '@zzz-picker/provider'
 import { useStore } from '@zzz-picker/provider/hooks'
 import { useMemo, useEffect } from 'react'
-import { CostTable, CommonBossCard, Header, Playground } from '~/components'
+import { AllowAgent, BanAgent, CostTable, CommonBossCard, Header, Playground } from '~/components'
 
 const Legend: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -62,6 +62,10 @@ const Legend: React.FC = () => {
             >
               <Header />
               <CommonBossCard />
+              <div className="flex gap-6 flex-col">
+                <AllowAgent />
+                <BanAgent />
+              </div>
               <CostTable />
             </div>
             <div
