@@ -19,7 +19,11 @@ export const meta: MetaFunction = () => [
   { property: 'og:type', content: 'website' },
   { property: 'og:title', content: '젠레스 존 제로: 강습전 밴픽' },
   { property: 'og:description', content: '강습전 경기를 위한 밴픽 사이트입니다.' },
-  { property: 'og:image', content: 'https://zzz-picker.freevue.dev/og_image.webp' },
+  {
+    property: 'og:image',
+    content:
+      'https://images.zzz.freevue.dev/images/background/1d986a52-eecd-4077-8029-ce027a551cd2.jpg',
+  },
 
   // Twitter Meta Tags
   { name: 'twitter:card', content: 'summary_large_image' },
@@ -27,7 +31,11 @@ export const meta: MetaFunction = () => [
   { property: 'twitter:url', content: 'https://zzz-picker.freevue.dev' },
   { name: 'twitter:title', content: '젠레스 존 제로: 강습전 밴픽' },
   { name: 'twitter:description', content: '강습전 경기를 위한 밴픽 사이트입니다.' },
-  { name: 'twitter:image', content: 'https://zzz-picker.freevue.dev/og_image.webp' },
+  {
+    name: 'twitter:image',
+    content:
+      'https://images.zzz.freevue.dev/images/background/1d986a52-eecd-4077-8029-ce027a551cd2.jpg',
+  },
 ]
 
 const Router: React.FC = () => {
