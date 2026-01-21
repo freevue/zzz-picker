@@ -1,4 +1,5 @@
 import { Text, Wrapper, Image } from './Docs'
+import { Link } from '@remix-run/react'
 import { Dialog, Typo } from '@zzz-picker/components/v2'
 import { useState } from 'react'
 
@@ -16,7 +17,16 @@ const DevLog: React.FC = () => {
       </button>
       <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <div className="flex flex-col gap-4 w-2xl">
-          <Typo.Heading className="heading-4xl text-primary">Dev Log</Typo.Heading>
+          <div className="flex items-end justify-between">
+            <Typo.Heading className="heading-4xl text-primary">Dev Log</Typo.Heading>
+            <Link
+              className="text-ink/70 body-lg hover:text-primary cursor-pointer focus:outline-none"
+              to="https://github.com/freevue"
+              target="_blank"
+            >
+              개발자 Profile
+            </Link>
+          </div>
           <div className="flex flex-col gap-8">
             <Wrapper title="2025-11-16">
               <Text>피드백 반영</Text>
