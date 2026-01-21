@@ -1,4 +1,3 @@
-import BottomSheet from './BottomSheet'
 import Floating from './Floating'
 import Nickname from './Nickname'
 import Round from './Round'
@@ -31,7 +30,7 @@ const Side: React.FC = () => {
         <div className="p-4 my-8">
           <TotalScore />
         </div>
-        <BottomSheet />
+        {/* <BottomSheet /> */}
         <Floating />
       </motion.div>
     </AnimatePresence>
