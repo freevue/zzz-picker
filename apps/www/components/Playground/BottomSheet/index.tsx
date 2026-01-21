@@ -20,4 +20,6 @@ const BottomSheet = () => {
   )
 }
 
+export { AllowAgent, BanAgent }
+
 export default BottomSheet

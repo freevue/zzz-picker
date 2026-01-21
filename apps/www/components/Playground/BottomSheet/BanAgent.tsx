@@ -14,11 +14,11 @@ const BanAgent = () => {
 
   return (
     <div className="flex-1 overflow-hidden p-4">
-      <Typo.Heading className="heading-2xl text-primary" heading={3}>
-        Ban
-      </Typo.Heading>
+      <Typo.Heading className="heading-3xl text-primary mb-4">Ban Agent</Typo.Heading>
       <div className="w-full overflow-x-auto overflow-y-hidden mt-4">
         <Form.Party
+          size="sm"
+          color="var(--color-base)"
           filterAgents={settingState.allowAgent}
           value={playState.banList}
           onChange={onChange}

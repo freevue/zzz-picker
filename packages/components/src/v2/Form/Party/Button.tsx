@@ -15,6 +15,8 @@ type Props = {
   allowAgents?: AgentId[]
   banAgents?: AgentId[]
   filterAgents?: AgentId[]
+  className?: string
+  color?: string
 }
 
 const Button: React.FC<Props> = (props) => {
@@ -40,6 +42,7 @@ const Button: React.FC<Props> = (props) => {
         className={pipe(
           ['group/wrap', 'relative'],
           concat([
+            props.className || '',
             'not-last:after:content-[""]',
             'not-last:after:block',
             'not-last:after:absolute',
@@ -65,6 +68,7 @@ const Button: React.FC<Props> = (props) => {
             join(' ')
           )}
           flat
+          color={props.color}
           size={props.size}
           id={props.id || 0}
         >

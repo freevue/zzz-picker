@@ -13,6 +13,7 @@ type Props = {
   banAgents?: AgentId[]
   filterAgents?: AgentId[]
   reverse?: boolean
+  color?: string
   onChange?: (value: SelectAgent[]) => void
   onClick?: (agentId: AgentId) => void
 }
@@ -62,6 +63,7 @@ const Party: React.FC<Props> = (props) => {
         map(([index, agentId]) => (
           <Button
             cost={props.cost?.[index]}
+            color={props.color}
             onClick={props.onClick}
             onSelect={props.onChange && onClick(index)}
             onDelete={onDelete(index)}
