@@ -17,6 +17,7 @@ type Props = {
   naming?: boolean
   hover?: boolean
   active?: boolean
+  color?: string
 }
 
 const Button: React.FC<Props> = (props) => {
@@ -69,7 +70,7 @@ const Button: React.FC<Props> = (props) => {
           concat(['group-disabled:grayscale-100', 'group-disabled:cursor-not-allowed']),
           join(' ')
         )}
-        style={{ backgroundColor: agent?.color || 'var(--color-content)' }}
+        style={{ backgroundColor: agent?.color || props.color || 'var(--color-content)' }}
       >
         {agent ? (
           <Profile
