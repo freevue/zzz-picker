@@ -32,11 +32,19 @@ export enum SOCKET_EVENT {
   BAN = 'ban',
   UNBAN = 'unban',
   JOIN = 'join',
+  BAN_CONFIRM = 'ban_confirm',
 }
 export enum ROUND_TYPE {
   PERSONAL = 'personal',
   COMMON = 'common',
   UNLIMITED = 'unlimited',
+}
+export enum BAN_PHASE {
+  A_SELECT = 'a_select', // A가 2명 제시
+  B_BAN = 'b_ban', // B가 1명 밴
+  B_SELECT = 'b_select', // B가 2명 제시 (그룹 제한)
+  A_BAN = 'a_ban', // A가 1명 밴
+  END = 'end', // 밴 종료
 }
 export const DEFAULT_PLAY_STATE: PlayState = {
   nickname: {
