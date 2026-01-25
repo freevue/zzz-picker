@@ -53,6 +53,7 @@ const CreateRoomForm: React.FC<Props> = (props) => {
               onChange={onNicknameChange('A')}
               placeholder="닉네임을 입력해주세요"
             />
+            <input type="hidden" name="A" value={users.A} />
           </div>
           <div>
             <Typo.Heading className="heading-4xl text-ink text-right mb-4" heading={2}>
@@ -64,6 +65,7 @@ const CreateRoomForm: React.FC<Props> = (props) => {
               onChange={onNicknameChange('B')}
               placeholder="닉네임을 입력해주세요"
             />
+            <input type="hidden" name="B" value={users.B} />
           </div>
         </div>
         <button

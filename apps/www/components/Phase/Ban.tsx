@@ -1,85 +1,140 @@
-import type { Rols, RealtimeState } from '.'
+import type { Rols, RoomData } from '.'
+import { ROOM_PHASE } from '.'
 import { pipe, filter, map, toArray, concat, join, isNull } from '@fxts/core'
 import { Typo, Form } from '@zzz-picker/components/v2'
-import { SOCKET_EVENT, BAN_PHASE, type SelectAgent } from '@zzz-picker/constant'
-import { useSocket, useStore } from '@zzz-picker/provider/hooks'
-import { useState, useMemo } from 'react'
+import { BAN_PHASE, type SelectAgent } from '@zzz-picker/constant'
+import { useStore } from '@zzz-picker/provider/hooks'
+import { useMemo, useState } from 'react'
 
 type Props = {
   role: Rols
-  state: RealtimeState
+  room: RoomData
+  onUpdate: (nextRoom: RoomData) => void
 }
 
 const Ban: React.FC<Props> = (props) => {
-  const [phase, setPhase] = useState<BAN_PHASE>(BAN_PHASE.A_SELECT)
-  const [candidates, setCandidates] = useState<[SelectAgent, SelectAgent]>([null, null])
-  const [bannedList, setBannedList] = useState<number[]>([])
-
   const { agents } = useStore()
-  const { send } = useSocket(
-    (payload) => {
-      if (payload.phase) setPhase(payload.phase)
-      if (payload.candidates) setCandidates(payload.candidates)
-      if (payload.bannedList) setBannedList(payload.bannedList)
-    },
-    { event: [SOCKET_EVENT.BAN, SOCKET_EVENT.BAN_CONFIRM] }
-  )
+  const [selectedToBan, setSelectedToBan] = useState<number | null>(null)
 
-  const DEALER_GROUP = [1, 2, 3] // 강공, 명파, 이상 (DB Specialty ID 기준 확인 필요)
+  const banState = props.room.state.ban
+  const phase = banState.phase as BAN_PHASE
+  const candidates = banState.candidates as [SelectAgent, SelectAgent]
+  const bannedList = banState.list as number[]
 
-  const getAgentGroup = (agentId: number | null) => {
+  const getAgentPosition = (agentId: number | null) => {
     if (isNull(agentId)) return null
-    const specialtyId = agents.get(agentId)?.specialty.id
-    return specialtyId && DEALER_GROUP.includes(specialtyId) ? 'DEALER' : 'SUPPORTER'
+    return agents.get(agentId)?.specialty.id
   }
 
-  const allowAgents = useMemo(() => {
-    const list = pipe(
+  // 포지션 그룹 정의 (DB Specialty ID 기준)
+  // 딜러: 이상(1), 명파(2), 강공(3)
+  const DEALER_IDS = [1, 2, 3]
+  // 서포터: 지원(4), 방어(5), 격파(6)
+  const SUPPORTER_IDS = [4, 5, 6]
+
+  const getAgentGroup = (specialtyId?: number) => {
+    if (!specialtyId) return null
+    if (DEALER_IDS.includes(specialtyId)) return 'DEALER'
+    if (SUPPORTER_IDS.includes(specialtyId)) return 'SUPPORTER'
+    return null
+  }
+
+  // 허용된 에이전트 목록 (Protected - 서버 데이터 기준)
+  const protectedAgents = useMemo(() => {
+    return pipe(
       agents,
-      filter(([, agent]) => agent.isAllow && agent.isPickup && agent.rarity === 'S'),
+      filter(([, agent]) => agent.isAllow),
       map(([id]) => id),
-      filter((id) => !bannedList.includes(id)),
       toArray
     )
+  }, [agents])
 
+  // 전체 선택 가능한 풀 (S급 픽업 & Allow Agent 제외)
+  const pool = useMemo(() => {
+    return pipe(
+      agents,
+      filter(([, agent]) => agent.isPickup && agent.rarity === 'S'),
+      map(([id]) => id),
+      // Rule: 허용된 에이전트는 밴 목록에서 아예 제외 (보이지 않음)
+      filter((id) => !protectedAgents.includes(id)),
+      toArray
+    )
+  }, [agents, protectedAgents])
+
+  // 비활성화 목록 계산 (Disabled Logic - Position Rule Only)
+  const disabledAgents = useMemo(() => {
+    // 1. 이미 밴 리스트에 포함된 캐릭터 (중복 선택 불가)
+    const list = [...bannedList]
+
+    // 2. 룰: B선수가 선택한(밴한) 캐릭터와 *같은 포지션 그룹*의 캐릭터 선택 불가
+    // 딜러(강공, 이상, 명파) <-> 서포터(격파, 지원, 방어)
     if (phase === BAN_PHASE.B_SELECT) {
-      const lastBannedGroup = getAgentGroup(bannedList[bannedList.length - 1])
-      return list.filter((id) => getAgentGroup(id) !== lastBannedGroup)
+      const lastBannedId = bannedList[bannedList.length - 1]
+      const lastBannedSpecialty = getAgentPosition(lastBannedId)
+      const lastBannedGroup = getAgentGroup(lastBannedSpecialty)
+
+      // 풀 전체를 순회하며 그룹이 같은지 확인
+      const sameGroupAgents = pool.filter((id) => {
+        const agentSpecialty = getAgentPosition(id)
+        return getAgentGroup(agentSpecialty) === lastBannedGroup
+      })
+      list.push(...sameGroupAgents)
     }
 
     return list
-  }, [agents, phase, bannedList])
+  }, [pool, phase, bannedList, agents])
 
   const onChange =
     (index: number) =>
     ([agent]: SelectAgent[]) => {
       const nextCandidates = [...candidates] as [SelectAgent, SelectAgent]
       nextCandidates[index] = agent
-      setCandidates(nextCandidates)
-      send(SOCKET_EVENT.BAN, { role: props.role, candidates: nextCandidates, phase })
+
+      props.onUpdate({
+        ...props.room,
+        state: {
+          ...props.room.state,
+          ban: { ...banState, candidates: nextCandidates },
+        },
+      })
     }
+
+  const updateBanState = (nextPhase: BAN_PHASE, nextBannedList: number[], nextCandidates: any) => {
+    const isEnd = nextPhase === BAN_PHASE.END
+    props.onUpdate({
+      ...props.room,
+      state: {
+        ...props.room.state,
+        phase: isEnd ? ROOM_PHASE.PICK : props.room.state.phase,
+        ban: {
+          ...banState,
+          phase: nextPhase,
+          list: nextBannedList,
+          candidates: nextCandidates,
+        },
+      },
+    })
+    setSelectedToBan(null) // 밴 확정 후 초기화
+  }
 
   const onConfirm = () => {
     let nextPhase = phase
-    let nextBannedList = [...bannedList]
-    let nextCandidates: [SelectAgent, SelectAgent] = [null, null]
+    let nextCandidates = candidates
 
     if (phase === BAN_PHASE.A_SELECT) {
       nextPhase = BAN_PHASE.B_BAN
-      nextCandidates = candidates
-    } else if (phase === BAN_PHASE.B_BAN) {
-      // 캔디데이트 중 하나 밴 (여기선 간단히 첫번째라고 가정, 실제론 클릭 로직 필요)
     } else if (phase === BAN_PHASE.B_SELECT) {
       nextPhase = BAN_PHASE.A_BAN
-      nextCandidates = candidates
     }
 
-    send(SOCKET_EVENT.BAN_CONFIRM, {
-      role: props.role,
-      phase: nextPhase,
-      bannedList: nextBannedList,
-      candidates: nextCandidates,
-    })
+    updateBanState(nextPhase, bannedList, nextCandidates)
+  }
+
+  const onBanConfirm = () => {
+    if (!selectedToBan) return
+    const nextBannedList = [...bannedList, selectedToBan]
+    const nextPhase = phase === BAN_PHASE.B_BAN ? BAN_PHASE.B_SELECT : BAN_PHASE.END
+    updateBanState(nextPhase, nextBannedList, [null, null])
   }
 
   const isMyTurn = useMemo(() => {
@@ -105,59 +160,86 @@ const Ban: React.FC<Props> = (props) => {
     }
   }
 
+  const isSelectionPhase = [BAN_PHASE.A_SELECT, BAN_PHASE.B_SELECT].includes(phase)
+  const isBanActionPhase = [BAN_PHASE.B_BAN, BAN_PHASE.A_BAN].includes(phase)
+
   return (
     <div className="flex flex-col items-center">
-      <Typo.Heading className="heading-4xl text-ink mb-10" heading={1}>
+      <Typo.Heading className="heading-4xl text-ink mb-2" heading={1}>
         {getInstruction()}
       </Typo.Heading>
 
-      <div className="flex gap-10">
+      {/* Allow Agents Display */}
+      {protectedAgents.length > 0 && (
+        <div className="mb-8 flex flex-col items-center gap-4">
+          <span className="text-xs font-bold text-primary uppercase tracking-widest border border-primary px-2 py-0.5 rounded-full">
+            Allow
+          </span>
+          <Form.Party
+            size="md"
+            value={protectedAgents}
+            deleteable={false}
+            cost={undefined} // Cost 표시 안 함
+          />
+        </div>
+      )}
+
+      <div className="flex gap-10 mt-4">
         {candidates.map((agent, index) => (
-          <div key={index} className="relative">
+          <div
+            key={index}
+            className={pipe(
+              ['relative', 'rounded-3xl', 'border-4', 'transition-all'],
+              concat(
+                selectedToBan === agent && agent !== null
+                  ? ['border-primary shadow-[0_0_20px_rgba(var(--primary-rgb),0.4)]']
+                  : ['border-transparent']
+              ),
+              join(' ')
+            )}
+          >
             <Form.Party
               size="xl"
-              filterAgents={allowAgents}
+              banAgents={disabledAgents}
+              filterAgents={protectedAgents}
               value={[agent]}
-              onChange={
-                isMyTurn && [BAN_PHASE.A_SELECT, BAN_PHASE.B_SELECT].includes(phase)
-                  ? onChange(index)
-                  : undefined
+              onChange={isMyTurn && isSelectionPhase ? onChange(index) : undefined}
+              onClick={
+                isMyTurn && isBanActionPhase && agent ? (id) => setSelectedToBan(id) : undefined
               }
-              deleteable={isMyTurn}
+              deleteable={isMyTurn && isSelectionPhase}
             />
-            {[BAN_PHASE.B_BAN, BAN_PHASE.A_BAN].includes(phase) && isMyTurn && agent && (
-              <button
-                onClick={() => {
-                  const nextBannedList = [...bannedList, agent as number]
-                  const nextPhase = phase === BAN_PHASE.B_BAN ? BAN_PHASE.B_SELECT : BAN_PHASE.END
-                  send(SOCKET_EVENT.BAN_CONFIRM, {
-                    role: props.role,
-                    phase: nextPhase,
-                    bannedList: nextBannedList,
-                    candidates: [null, null],
-                  })
-                }}
-                className="absolute -top-2 -right-2 bg-primary text-white p-2 rounded-full z-20"
-              >
-                BAN
-              </button>
-            )}
           </div>
         ))}
       </div>
 
-      {isMyTurn && [BAN_PHASE.A_SELECT, BAN_PHASE.B_SELECT].includes(phase) && (
+      {isMyTurn && isSelectionPhase && (
         <button
           onClick={onConfirm}
           disabled={candidates.includes(null)}
           className={pipe(
-            ['px-8', 'py-3', 'rounded-xl', 'mt-10', 'heading-xl'],
+            ['px-12', 'py-4', 'rounded-2xl', 'mt-10', 'heading-2xl'],
             concat(['bg-content', 'text-ink', 'hover:bg-primary', 'hover:text-content']),
-            concat(['disabled:opacity-50 disabled:cursor-not-allowed']),
+            concat(['disabled:opacity-50 disabled:cursor-not-allowed', 'cursor-pointer']),
             join(' ')
           )}
         >
           제시 확정
+        </button>
+      )}
+
+      {isMyTurn && isBanActionPhase && (
+        <button
+          onClick={onBanConfirm}
+          disabled={!selectedToBan}
+          className={pipe(
+            ['px-12', 'py-4', 'rounded-2xl', 'mt-10', 'heading-2xl'],
+            concat(['bg-primary', 'text-content', 'hover:scale-105']),
+            concat(['disabled:opacity-50 disabled:cursor-not-allowed', 'cursor-pointer']),
+            join(' ')
+          )}
+        >
+          밴 확정
         </button>
       )}
 

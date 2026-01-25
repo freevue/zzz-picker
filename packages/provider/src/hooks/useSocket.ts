@@ -3,7 +3,7 @@ import { pipe, each, values, includes, filter } from '@fxts/core'
 import { SOCKET_EVENT } from '@zzz-picker/constant'
 import { useContext, useEffect } from 'react'
 
-type Receive = (payload: Record<string, any>) => void
+type Receive = (payload: Record<string, any>, eventName: SOCKET_EVENT) => void
 type Options = {
   event: Array<SOCKET_EVENT>
 }
@@ -17,7 +17,7 @@ const useSocket = (receive?: Receive, options?: Options) => {
 
   useEffect(() => {
     const onSocket = (event: Event) => {
-      receive?.((event as CustomEvent<Record<string, any>>).detail)
+      receive?.((event as CustomEvent<Record<string, any>>).detail, event.type as SOCKET_EVENT)
     }
 
     pipe(

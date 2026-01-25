@@ -64,24 +64,23 @@ const RoomInfo: React.FC<Props> = (props) => {
       <ul className="flex flex-col gap-14">
         {pipe(
           props.list,
-          map(({ token, uuid, nickname, role }) => (
-            <li key={token} className="">
-              <div className="flex items-end gap-2 mb-2">
-                {role !== 'H' && <p className="text-ink body-lg">플레이어 {role}:</p>}
-                <Typo.Heading className="heading-3xl text-primary" heading={2}>
-                  {role == 'H' ? '관전자' : nickname}
-                </Typo.Heading>
-              </div>
-              <div className="flex w-full overflow-hidden gap-4 items-center">
-                <LinkButton href={`${window.location.origin}/realtime/${uuid}?a=${token}`}>
-                  접속
-                </LinkButton>
-                <CopyButton value={`${window.location.origin}/realtime/${uuid}?a=${token}`}>
-                  링크복사
-                </CopyButton>
-              </div>
-            </li>
-          )),
+          map(({ nickname, role, token }) => {
+            const joinUrl = `${window.location.origin}/realtime/join?u=${token}`
+            return (
+              <li key={role} className="">
+                <div className="flex items-end gap-2 mb-2">
+                  {role !== 'H' && <p className="text-ink body-lg">플레이어 {role}:</p>}
+                  <Typo.Heading className="heading-3xl text-primary" heading={2}>
+                    {role == 'H' ? '관전자' : nickname}
+                  </Typo.Heading>
+                </div>
+                <div className="flex w-full overflow-hidden gap-4 items-center">
+                  <LinkButton href={joinUrl}>접속</LinkButton>
+                  <CopyButton value={joinUrl}>링크복사</CopyButton>
+                </div>
+              </li>
+            )
+          }),
           toArray
         )}
       </ul>

@@ -15,6 +15,7 @@ type Props = {
   max?: number
   min?: number
   step?: number
+  disabled?: boolean
 }
 
 const Input: React.FC<Props> = (props) => {
@@ -41,6 +42,7 @@ const Input: React.FC<Props> = (props) => {
           onKeyDown={props.onKeyDown}
           autoComplete="off"
           placeholder={props.placeholder}
+          disabled={props.disabled}
         />
       </label>
     </div>

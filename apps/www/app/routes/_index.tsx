@@ -2,11 +2,32 @@ import { join, pipe, zipWithIndex, map, toArray, concat } from '@fxts/core'
 import { Link } from '@remix-run/react'
 import { Typo, Tooltip } from '@zzz-picker/components/v2'
 import { STORAGE_KEY } from '@zzz-picker/constant'
+import { supabase } from '@zzz-picker/provider'
 import { motion } from 'motion/react'
+import { useEffect } from 'react'
 import { Rule, DevLog } from '~/components'
 import { LINKS } from '~/constant'
 
 const Main: React.FC = () => {
+  useEffect(() => {
+    const url = new URL(window.location.href)
+    const token = url.searchParams.get('a')
+
+    if (token) {
+      // 1. 토큰으로 유저 정보 조회
+      supabase
+        .from('realtime_user')
+        .select('room_id')
+        .eq('id', token)
+        .single()
+        .then(({ data }) => {
+          if (data?.room_id) {
+            window.location.href = `/realtime/${data.room_id}?a=${token}`
+          }
+        })
+    }
+  }, [])
+
   const onResetClick = () => {
     window.localStorage.removeItem(`zzz-picker-dialog-open`)
     window.localStorage.removeItem(STORAGE_KEY)

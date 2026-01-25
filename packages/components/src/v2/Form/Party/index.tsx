@@ -15,7 +15,7 @@ type Props = {
   reverse?: boolean
   color?: string
   onChange?: (value: SelectAgent[]) => void
-  onClick?: (agentId: AgentId) => void
+  onClick?: (agentId: AgentId, index?: number) => void
 }
 
 const Party: React.FC<Props> = (props) => {
@@ -64,7 +64,7 @@ const Party: React.FC<Props> = (props) => {
           <Button
             cost={props.cost?.[index]}
             color={props.color}
-            onClick={props.onClick}
+            onClick={(id) => props.onClick?.(id, index)}
             onSelect={props.onChange && onClick(index)}
             onDelete={onDelete(index)}
             size={props.size}
