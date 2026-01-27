@@ -3,7 +3,7 @@ import { pipe, concat, join, isNumber, map, toArray, filter } from '@fxts/core'
 import { Icons } from '@zzz-picker/components'
 import { Typo, Form, Dialog } from '@zzz-picker/components/v2'
 import type { SelectAgent, Side, AgentCostSetting } from '@zzz-picker/constant'
-import { useStore, useSetting, useAgent, useEngine } from '@zzz-picker/provider/hooks'
+import { useStore, useSetting } from '@zzz-picker/provider/hooks'
 import { getTotalCost } from '@zzz-picker/utils'
 import { motion, AnimatePresence } from 'motion/react'
 import { useState, useMemo } from 'react'
@@ -430,7 +430,7 @@ const Pick: React.FC<Props> = (props) => {
               onChange={canEdit ? handlePickChange(mySide, round) : undefined}
               onClick={
                 canEdit
-                  ? (id, idx) => {
+                  ? (_id, idx) => {
                       setDetailTarget({ side: mySide, index: startIndex + (idx || 0) })
                     }
                   : undefined

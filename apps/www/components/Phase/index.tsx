@@ -8,6 +8,7 @@ import type { Side } from '@zzz-picker/constant'
 import { supabase } from '@zzz-picker/provider'
 import { useSocket } from '@zzz-picker/provider/hooks'
 import { REALTIME_SUBSCRIBE_STATES } from '@zzz-picker/provider/realtime'
+import { motion, AnimatePresence } from 'motion/react'
 import { useEffect, useEffectEvent, useState } from 'react'
 
 export type Rols = Side | 'H'
@@ -237,8 +238,20 @@ const Phase: React.FC<Props> = (props) => {
   }
 
   return (
-    <div className="flex flex-col items-center min-h-screen py-20 px-10">
-      <div className="w-full max-w-7xl">{renderPhase()}</div>
+    <div className="flex flex-col items-center min-h-screen py-20 px-4 md:px-10">
+      <div className="w-full max-w-7xl">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={room.state.phase}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.5 }}
+          >
+            {renderPhase()}
+          </motion.div>
+        </AnimatePresence>
+      </div>
       <Status role={props.role} room={room} />
     </div>
   )
