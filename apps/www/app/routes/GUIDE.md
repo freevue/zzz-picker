@@ -47,6 +47,10 @@ aliases: [routes, pages]
 - [@remix-run/node](https://remix.run/docs/en/main/file-conventions/entry.server)
 - [@remix-run/react](https://remix.run/docs/en/main/file-conventions/entry.client)
 
+### Docs
+
+- [REALTIME](./REALTIME.md)
+
 ## Remix: 라우팅 및 데이터 액션
 
 - **Data Action**: `/chat` 라우트는 Remix `action`을 통해 사용자의 메시지를 서버로 전송하고, `chatWithGemini` 서비스를 호출하여 응답을 받아옵니다.
