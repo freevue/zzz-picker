@@ -9,7 +9,12 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 
   return {
-    plugins: [tailwindcss(), remix()],
+    plugins: [
+      tailwindcss(),
+      remix({
+        ignoredRouteFiles: ['**/*.md'],
+      }),
+    ],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
