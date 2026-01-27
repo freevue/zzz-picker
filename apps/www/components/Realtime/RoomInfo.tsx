@@ -14,7 +14,7 @@ type Props = {
   onReset: () => void
 }
 
-const COMON_CLASS = [
+const COMMON_CLASS = [
   'cursor-pointer',
   'flex',
   'items-center',
@@ -29,7 +29,7 @@ const LinkButton: React.FC<{ children: React.ReactNode; href: string }> = (props
   return (
     <a
       href={props.href}
-      className={pipe(['bg-secondary', 'text-ink'], concat(COMON_CLASS), join(' '))}
+      className={pipe(['bg-secondary', 'text-ink'], concat(COMMON_CLASS), join(' '))}
     >
       {props.children}
     </a>
@@ -45,13 +45,13 @@ const CopyButton: React.FC<{ children: React.ReactNode; value: string }> = (prop
     <button
       type="button"
       onClick={onClick}
-      className={pipe(['bg-primary', 'text-content'], concat(COMON_CLASS), join(' '))}
+      className={pipe(['bg-primary', 'text-content'], concat(COMMON_CLASS), join(' '))}
     >
       {props.children}
     </button>
   )
 }
-const RoomInfo: React.FC<Props> = (props) => {
+export const RoomInfo: React.FC<Props> = (props) => {
   return (
     <motion.div
       className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-2/4"
@@ -94,5 +94,3 @@ const RoomInfo: React.FC<Props> = (props) => {
     </motion.div>
   )
 }
-
-export default RoomInfo

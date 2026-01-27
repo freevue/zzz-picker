@@ -14,7 +14,7 @@ type Props = {
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
 }
 
-const CreateRoomForm: React.FC<Props> = (props) => {
+export const CreateRoomForm: React.FC<Props> = (props) => {
   const [league, setLeague] = useState<string>(TABS[0].value)
   const [users, setUsers] = useState<Record<Side, string>>({ A: '', B: '' })
 
@@ -89,5 +89,3 @@ const CreateRoomForm: React.FC<Props> = (props) => {
     </motion.div>
   )
 }
-
-export default CreateRoomForm

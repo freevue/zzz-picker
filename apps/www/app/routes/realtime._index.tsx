@@ -12,7 +12,7 @@ type Token = {
   nickname: string
 }
 
-const RealtimeRoot: React.FC = () => {
+export const RealtimeRoot: React.FC = () => {
   const [tokens, setTokens] = useState<Token[] | null>(null)
 
   const onCreateChannel = async (event: React.FormEvent<HTMLFormElement>) => {

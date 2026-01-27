@@ -3,7 +3,7 @@ import { Socket, supabase } from '@zzz-picker/provider'
 import { useEffect, useState } from 'react'
 import { Phase } from '~/components'
 
-const RealtimeRoom: React.FC = () => {
+export const RealtimeRoom: React.FC = () => {
   const { roomId } = useParams()
   const [searchParams] = useSearchParams()
   const [room, setRoom] = useState<any>(null)

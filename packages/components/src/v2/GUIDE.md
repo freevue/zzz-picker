@@ -1,0 +1,50 @@
+---
+triger: model_decision
+tags: [package, ui, design-system]
+aliases: [v2-components, ui-kit]
+---
+
+# Components V2 GUIDE
+
+## Purpose
+
+- 프로젝트의 공통 UI 컴포넌트(Atom, Molecule)들을 관리합니다.
+
+## Files
+
+- [Agent](./Agent)
+- [Dialog](./Dialog)
+- [Form](./Form)
+- [Table](./Table)
+- [Tabs](./Tabs)
+- [Tooltip](./Tooltip)
+- [Typo](./Typo)
+- [index.ts](./index.ts)
+
+## Exports
+
+- **Form**: 폼 관련 컴포넌트 (Input, Nickname 등)
+- **Typo**: 타이포그래피 관련 컴포넌트 (Heading, Body 등)
+- **Tabs**: 탭 전환 컴포넌트
+
+## Dependencies
+
+### External
+
+- [motion/react](https://motion.dev/docs/react-quick-start)
+- [@fxts/core](https://fxts.dev/)
+
+## React: 컴포넌트 설계 규칙
+
+- **SRP (Single Responsibility Principle)**: 각 컴포넌트는 타이포그래피, 폼 입력 등 단일 기능에 집중합니다.
+- **V2 디자인 시스템**: 프리미엄 디자인을 위한 고유의 스타일 토큰과 `Vanilla CSS`를 기반으로 설계되었습니다.
+- **Named Export**: 트리쉐이킹 최적화를 위해 모든 컴포넌트는 `named export` 방식으로 노출합니다.
+
+## Example
+
+```tsx
+import { Typo, Form } from '@zzz-picker/components/v2';
+
+<Typo.Heading>Hello</Typo.Heading>
+<Form.Input name="test" />
+```

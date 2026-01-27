@@ -28,7 +28,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return redirect(`/realtime/${user.room_id}?a=${user.id}`)
 }
 
-export default function JoinRoom() {
+export const JoinRoom = () => {
   // loader에서 항상 redirect하므로 이 컴포넌트는 렌더링되지 않음
   return null
 }
+
+export default JoinRoom
