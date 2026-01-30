@@ -1,6 +1,6 @@
 import { AdminBoss } from '../Admin/AdminBoss'
 import { AdminPickSide } from '../Admin/AdminPickSide'
-import { pipe, concat, join } from '@fxts/core'
+import { pipe, join } from '@fxts/core'
 import { Typo } from '@zzz-picker/components/v2'
 import type { SelectAgent, Side } from '@zzz-picker/constant'
 
@@ -27,13 +27,7 @@ export const PlayerRound: React.FC<Props> = ({
 }) => {
   return (
     <div className="w-full flex flex-col items-center">
-      <Typo.Heading
-        className={pipe(
-          ['heading-3xl text-ink text-center mb-4'],
-          concat(roundId === 'common' ? ['mt-12'] : []),
-          join(' ')
-        )}
-      >
+      <Typo.Heading className={pipe(['heading-3xl text-ink text-center mb-4'], join(' '))}>
         {title}
       </Typo.Heading>
       <div className="flex flex-col items-center gap-6">

@@ -95,9 +95,9 @@ const PlayerPick: React.FC<Props> = ({ room, role, onUpdate, onComplete }) => {
   }
 
   return (
-    <div className="flex flex-col items-center w-full max-w-7xl mx-auto p-4 gap-10">
+    <div className="flex flex-col items-center w-full max-w-7xl mx-auto px-4 py-20 gap-10">
       {/* Rows */}
-      <div className="w-full flex flex-col gap-10 items-center">
+      <div className="w-full flex gap-14 flex-wrap items-center">
         <PlayerRound
           roundId="personal"
           title="개인 무대"
@@ -110,7 +110,6 @@ const PlayerPick: React.FC<Props> = ({ room, role, onUpdate, onComplete }) => {
           }}
           onUpdate={handleUpdate}
         />
-
         <PlayerRound
           roundId="common"
           title="공용 무대"
@@ -146,11 +145,7 @@ const PlayerPick: React.FC<Props> = ({ room, role, onUpdate, onComplete }) => {
           // Cast to any to avoid type mismatch if local PickInfo differs from Dialog's expected type,
           // though we should sync them.
           return (
-            <Dialog
-              isOpen={!!detailTarget}
-              onClose={() => setDetailTarget(null)}
-              className="w-auto max-w-none bg-transparent shadow-none p-0 overflow-visible"
-            >
+            <Dialog isOpen={!!detailTarget} onClose={() => setDetailTarget(null)}>
               <PlayerPickDialog
                 pickInfo={tInfo as any}
                 agent={tAgent}

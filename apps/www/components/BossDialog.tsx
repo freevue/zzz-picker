@@ -37,15 +37,16 @@ const BossDialog: React.FC<Props> = (props) => {
   }, [deadlyAssaultList, boss])
 
   return (
-    <div className="w-2xl">
+    <div className="max-w-2xl">
       <Typo.Heading className="heading-4xl text-primary">Boss</Typo.Heading>
-      <ul className="flex flex-wrap mt-8 w-full justify-between">
+      <ul className="flex flex-wrap mt-8 gap-6 w-full justify-between">
         {pipe(
           currentDeadlyAssault,
           zipWithIndex,
           map(([index, boss]) => (
             <motion.li
               key={index}
+              className="mx-auto"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.2, delay: index * 0.2 }}
