@@ -48,6 +48,7 @@ const Tabs: React.FC<Props> = (props) => {
               concat(props.value === tab.value ? ['bg-primary', 'text-content'] : ['text-ink']),
               join(' ')
             )}
+            type="button"
           >
             <span className="heading-lg">{tab.label}</span>
           </button>

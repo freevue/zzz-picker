@@ -92,20 +92,15 @@ const Ban: React.FC<Props> = (props) => {
     return list
   }, [pool, phase, bannedList, agents])
 
-  const onChange =
-    (index: number) =>
-    ([agent]: SelectAgent[]) => {
-      const nextCandidates = [...candidates] as [SelectAgent, SelectAgent]
-      nextCandidates[index] = agent
-
-      props.onUpdate({
-        ...props.room,
-        state: {
-          ...props.room.state,
-          ban: { ...banState, candidates: nextCandidates },
-        },
-      })
-    }
+  const onChange = (banList: SelectAgent[]) => {
+    props.onUpdate({
+      ...props.room,
+      state: {
+        ...props.room.state,
+        ban: { ...banState, candidates: banList },
+      },
+    })
+  }
 
   const updateBanState = (nextPhase: BAN_PHASE, nextBannedList: number[], nextCandidates: any) => {
     // 밴 종료 시 즉시 페이즈를 전환하지 않고 BAN_PHASE.END 상태로 유지하여 타이머를 돌림
@@ -192,11 +187,6 @@ const Ban: React.FC<Props> = (props) => {
   const isSelectionPhase = [BAN_PHASE.A_SELECT, BAN_PHASE.B_SELECT].includes(phase)
   const isBanActionPhase = [BAN_PHASE.B_BAN, BAN_PHASE.A_BAN].includes(phase)
 
-  const getButtonText = () => {
-    if (isSelectionPhase) return '제시 확정'
-    return '밴 확정'
-  }
-
   const isButtonDisabled = () => {
     if (!isMyTurn) return true
     if (isSelectionPhase) return candidates.includes(null)
@@ -210,8 +200,10 @@ const Ban: React.FC<Props> = (props) => {
     else if (isBanActionPhase) onBanConfirm()
   }
 
-  // 2개의 밴 슬롯 생성
-  const banSlots = [0, 1]
+  // 밴 슬롯 데이터 (최대 2개 고정)
+  const displayBannedList = useMemo(() => {
+    return [bannedList[0] ?? null, bannedList[1] ?? null]
+  }, [bannedList])
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 md:py-16 text-center">
@@ -227,147 +219,85 @@ const Ban: React.FC<Props> = (props) => {
       </Typo.Heading>
 
       {/* [TOP] Banned List - 2 Slots */}
-      <div className="mb-16 md:mb-24 flex gap-4 md:gap-10 justify-center">
-        {banSlots.map((index) => {
-          const agentId = bannedList[index]
-          const agent = agentId ? agents.get(agentId) : null
-
-          return (
-            <div
-              key={index}
-              className="relative size-28 md:size-36 bg-netural/10 rounded-bl-3xl md:rounded-bl-4xl rounded-tr-3xl md:rounded-tr-4xl border-2 border-dashed border-netural/30 flex items-center justify-center overflow-hidden"
-            >
-              <AnimatePresence mode="wait">
-                {agent && (
-                  <motion.div
-                    key={agentId}
-                    initial={{ scale: 0.8, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0.8, opacity: 0 }}
-                    className="size-full relative"
-                  >
-                    <img
-                      src={agent.profile.url}
-                      alt={agent.nameKo}
-                      className="size-full object-cover grayscale"
-                    />
-                    <div className="absolute inset-0 bg-red-900/60 flex items-center justify-center">
-                      <span className="text-white text-sm md:text-xl font-black tracking-widest -rotate-12 border-2 md:border-4 border-white px-1 md:px-2 py-0.5 md:py-1">
-                        BANNED
-                      </span>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          )
-        })}
+      <div className="flex justify-center">
+        <Form.Party size="xl" value={displayBannedList} />
       </div>
 
-      {/* [MIDDLE] Candidates */}
-      <div className="mb-12 md:mb-20 flex gap-4 md:gap-10 justify-center min-h-[8rem] md:h-40 items-center">
-        {candidates.map((agentId, index) => {
-          const isBannedCandidate = bannedList.includes(Number(agentId))
-          // 팝업으로 연출 중인 에이전트도 후보 목록에서 일단 숨김 (선택 방지)
-          const isCurrentlyShowingInPopup = popupAgentId === agentId
+      {/* [MIDDLE] Candidates & Action Button */}
+      <div className="my-20 flex items-center flex-col gap-10">
+        <Form.Party
+          size="xl"
+          banAgents={disabledAgents}
+          filterAgents={protectedAgents}
+          value={candidates}
+          onChange={onChange}
+          onClick={(id) => {
+            if (isBanActionPhase && isMyTurn) {
+              setSelectedToBan(id)
+            }
+          }}
+          focusId={selectedToBan || undefined}
+          disabledHover
+          deleteable={isMyTurn && isSelectionPhase}
+        />
 
-          return (
-            <AnimatePresence key={index}>
-              {!isBannedCandidate && !isCurrentlyShowingInPopup && agentId !== null && (
-                <motion.div
-                  className={pipe(
-                    [
-                      'relative',
-                      'rounded-bl-3xl',
-                      'md:rounded-bl-4xl',
-                      'rounded-tr-3xl',
-                      'md:rounded-tr-4xl',
-                      'border-4',
-                      'transition-all',
-                    ],
-                    concat(
-                      selectedToBan === agentId
-                        ? ['border-primary shadow-[0_0_30px_rgba(var(--primary-rgb),0.6)]']
-                        : ['border-transparent']
-                    ),
-                    join(' ')
-                  )}
-                >
-                  <Form.Party
-                    size="xl"
-                    banAgents={disabledAgents}
-                    filterAgents={protectedAgents}
-                    value={[agentId]}
-                    onChange={isMyTurn && isSelectionPhase ? onChange(index) : undefined}
-                    onClick={
-                      isMyTurn && isBanActionPhase && agentId
-                        ? (id) => setSelectedToBan(id)
-                        : undefined
-                    }
-                    deleteable={isMyTurn && isSelectionPhase}
-                  />
-                </motion.div>
-              )}
-              {agentId === null && (
-                <div className="size-28 md:size-36 rounded-bl-3xl md:rounded-bl-4xl rounded-tr-3xl md:rounded-tr-4xl border-4 border-transparent">
-                  <Form.Party
-                    size="xl"
-                    banAgents={disabledAgents}
-                    filterAgents={protectedAgents}
-                    value={[null]}
-                    onChange={isMyTurn && isSelectionPhase ? onChange(index) : undefined}
-                    deleteable={isMyTurn && isSelectionPhase}
-                  />
-                </div>
-              )}
-            </AnimatePresence>
-          )
-        })}
-      </div>
-
-      {/* [ACTION] Confirm Button */}
-      <div className="mb-12 md:mb-16">
-        <button
-          onClick={onConfirmAction}
-          disabled={isButtonDisabled() || countdown !== null}
-          className={pipe(
-            [
-              'px-8 md:px-12',
-              'py-3 md:py-4',
-              'rounded-xl md:rounded-2xl',
-              'heading-xl md:heading-2xl',
-              'transition-all',
-              'relative',
-              'overflow-hidden',
-            ],
-            concat(
-              !(isButtonDisabled() || countdown !== null)
-                ? ['bg-primary text-content cursor-pointer hover:scale-105 shadow-xl']
-                : ['bg-content text-ink opacity-30 cursor-not-allowed']
-            ),
-            join(' ')
-          )}
-        >
-          {countdown !== null ? `${countdown}s` : getButtonText()}
-          {countdown !== null && (
+        <AnimatePresence>
+          {isMyTurn && (
             <motion.div
-              className="absolute bottom-0 left-0 h-1 bg-white/30"
-              initial={{ width: '100%' }}
-              animate={{ width: '0%' }}
-              transition={{ duration: 5, ease: 'linear' }}
-            />
+              initial={{ opacity: 0, x: -20, scale: 0.8 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: -20, scale: 0.8 }}
+              className="relative"
+            >
+              <button
+                onClick={onConfirmAction}
+                disabled={isButtonDisabled() || countdown !== null}
+                className={pipe(
+                  [
+                    'px-8 py-4',
+                    'rounded-2xl',
+                    'heading-2xl',
+                    'transition-all',
+                    'relative',
+                    'overflow-hidden',
+                    'flex items-center justify-center',
+                  ],
+                  concat(
+                    !(isButtonDisabled() || countdown !== null)
+                      ? ['bg-primary text-content cursor-pointer hover:scale-105 shadow-xl']
+                      : ['bg-content text-ink opacity-30 cursor-not-allowed']
+                  ),
+                  join(' ')
+                )}
+              >
+                <Typo.Heading className="z-10 text-center break-keep">
+                  {countdown !== null ? `${countdown}s` : '선택 완료'}
+                </Typo.Heading>
+                {countdown !== null && (
+                  <motion.div
+                    className="absolute bottom-0 left-0 h-1.5 bg-white/40"
+                    initial={{ width: '100%' }}
+                    animate={{ width: '0%' }}
+                    transition={{ duration: 5, ease: 'linear' }}
+                  />
+                )}
+              </button>
+            </motion.div>
           )}
-        </button>
+        </AnimatePresence>
       </div>
 
       {/* [BOTTOM] Allow Agents Display - Improved */}
       {protectedAgents.length > 0 && (
         <div className="mt-8 border-t border-ink/10 pt-12 md:pt-16 max-w-2xl mx-auto">
-          <div className="flex flex-col items-center gap-4 scale-90 pointer-events-none">
-            <span className="text-[10px] md:text-xs font-bold text-ink/40 uppercase tracking-[0.3em]">
-              Protected Agents
-            </span>
-            <Form.Party size="sm" value={protectedAgents} deleteable={false} />
+          <div className="flex flex-wrap justify-center items-center gap-4 scale-90 pointer-events-none">
+            {pipe(
+              protectedAgents,
+              map((agentId) => (
+                <Form.Party key={agentId} size="sm" value={[agentId]} deleteable={false} />
+              )),
+              toArray
+            )}
           </div>
         </div>
       )}

@@ -1,9 +1,10 @@
 import { useRoundedSize } from '../..'
 import Button from './Button'
-import { pipe, concat, join, map, toArray, zipWithIndex, findIndex } from '@fxts/core'
+import { pipe, concat, join, map, toArray, zipWithIndex, findIndex, filter } from '@fxts/core'
 import type { AgentId, SelectAgent } from '@zzz-picker/constant'
 
 type Props = {
+  disabledHover?: boolean
   value: SelectAgent[]
   cost?: number[]
   className?: string
@@ -14,6 +15,9 @@ type Props = {
   filterAgents?: AgentId[]
   reverse?: boolean
   color?: string
+  hideEmpty?: boolean
+  focusId?: AgentId
+  activeIndices?: number[]
   onChange?: (value: SelectAgent[]) => void
   onClick?: (agentId: AgentId, index?: number) => void
 }
@@ -24,7 +28,7 @@ const Party: React.FC<Props> = (props) => {
   const onClick = (index: number) => (agentId: SelectAgent) => {
     pipe(
       [...props.value],
-      (list) => {
+      (list: SelectAgent[]) => {
         const currentIndex = findIndex((id) => id === agentId, list)
 
         list[index] = agentId
@@ -32,7 +36,7 @@ const Party: React.FC<Props> = (props) => {
 
         return list
       },
-      (list) => props.onChange?.(list)
+      (list: SelectAgent[]) => props.onChange?.(list)
     )
   }
   const onDelete = (index: number) => (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -40,12 +44,12 @@ const Party: React.FC<Props> = (props) => {
 
     pipe(
       [...props.value],
-      (list) => {
+      (list: SelectAgent[]) => {
         list[index] = null
 
         return list
       },
-      (list) => props.onChange?.(list)
+      (list: SelectAgent[]) => props.onChange?.(list)
     )
   }
 
@@ -60,7 +64,8 @@ const Party: React.FC<Props> = (props) => {
       {pipe(
         props.value,
         zipWithIndex,
-        map(([index, agentId]) => (
+        filter(([_, agentId]: [number, SelectAgent]) => !props.hideEmpty || !!agentId),
+        map(([index, agentId]: [number, SelectAgent]) => (
           <Button
             cost={props.cost?.[index]}
             color={props.color}
@@ -70,6 +75,9 @@ const Party: React.FC<Props> = (props) => {
             size={props.size}
             id={agentId}
             key={index}
+            active={props.activeIndices?.includes(index)}
+            focusId={props.focusId}
+            disabledHover={props.disabledHover}
             filterAgents={props.filterAgents}
             deleteable={props.deleteable}
             allowAgents={props.allowAgents}

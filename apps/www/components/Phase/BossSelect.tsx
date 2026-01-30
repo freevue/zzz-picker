@@ -56,17 +56,17 @@ const BossSelect: React.FC<Props> = (props) => {
   const currentBossId = props.room.state.boss
 
   return (
-    <div className="flex flex-col items-center gap-10 pb-20">
-      <Typo.Heading className="heading-4xl text-ink" heading={1}>
+    <div className="py-20 px-4 h-screen overflow-y-auto">
+      <Typo.Heading className="heading-4xl text-ink text-center" heading={1}>
         {isPlayerB ? '공통 무대를 선택해주세요' : '플레이어 B가 보스를 선택 중입니다...'}
       </Typo.Heading>
-
-      <ul className="flex flex-wrap mt-10 w-full justify-center gap-10">
+      <ul className="flex flex-wrap mt-10 w-full justify-center gap-4 max-w-4xl mx-auto">
         {pipe(
           bosses,
           zipWithIndex,
           map(([index, boss]) => (
             <motion.li
+              className="flex-1 w-1/3"
               key={boss.id}
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -74,7 +74,7 @@ const BossSelect: React.FC<Props> = (props) => {
             >
               <button
                 className={pipe(
-                  ['w-64', 'group', 'block', 'focus:outline-none', 'relative'],
+                  ['w-full', 'group', 'block', 'focus:outline-none', 'relative'],
                   concat(isPlayerB ? ['cursor-pointer'] : ['cursor-default']),
                   join(' ')
                 )}

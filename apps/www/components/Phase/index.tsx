@@ -1,7 +1,6 @@
 import Ban from './Ban'
 import BossSelect from './BossSelect'
 import Pick from './Pick'
-import Status from './Status'
 import { Typo } from '@zzz-picker/components/v2'
 import { SOCKET_EVENT, DEFAULT_PLAY_STATE, type SelectAgent } from '@zzz-picker/constant'
 import type { Side } from '@zzz-picker/constant'
@@ -35,7 +34,7 @@ export type RoomData = {
     }
     ban: {
       phase: string
-      candidates: [SelectAgent, SelectAgent]
+      candidates: SelectAgent[]
       list: number[]
     }
     picks: {
@@ -238,22 +237,17 @@ const Phase: React.FC<Props> = (props) => {
   }
 
   return (
-    <div className="flex flex-col items-center min-h-screen py-20 px-4 md:px-10">
-      <div className="w-full max-w-7xl">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={room.state.phase}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.5 }}
-          >
-            {renderPhase()}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-      <Status role={props.role} room={room} />
-    </div>
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={room.state.phase}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.5 }}
+      >
+        {renderPhase()}
+      </motion.div>
+    </AnimatePresence>
   )
 }
 

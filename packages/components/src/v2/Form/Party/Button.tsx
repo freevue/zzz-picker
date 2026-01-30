@@ -17,6 +17,9 @@ type Props = {
   filterAgents?: AgentId[]
   className?: string
   color?: string
+  disabledHover?: boolean
+  active?: boolean
+  focusId?: AgentId
 }
 
 const Button: React.FC<Props> = (props) => {
@@ -71,6 +74,8 @@ const Button: React.FC<Props> = (props) => {
           color={props.color}
           size={props.size}
           id={props.id || 0}
+          active={props.active}
+          focus={props.focusId === props.id}
         >
           <Icons.Plus className="size-2/4 stroke-ink group-hover/button:stroke-primary" />
         </Agent.Button>
@@ -112,11 +117,11 @@ const Button: React.FC<Props> = (props) => {
                 'bg-content/50',
                 'backdrop-blur-sm',
                 'cursor-pointer',
-                'opacity-0',
                 'transition-opacity',
                 'duration-200',
               ],
               concat(['group-hover/wrap:opacity-100', 'focus:outline-none']),
+              concat([props.disabledHover ? 'opacity-100' : 'opacity-0']),
               join(' ')
             )}
           >

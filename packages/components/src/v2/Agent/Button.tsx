@@ -18,6 +18,7 @@ type Props = {
   hover?: boolean
   active?: boolean
   color?: string
+  focus?: boolean
 }
 
 const Button: React.FC<Props> = (props) => {
@@ -77,6 +78,7 @@ const Button: React.FC<Props> = (props) => {
             className={pipe(
               ['size-full', 'transition-transform', 'duration-200'],
               concat(props.hover ? ['group-hover:scale-105'] : []),
+              concat(props.focus ? ['scale-120'] : []),
               join(' ')
             )}
             id={Number(agent.id)}

@@ -17,7 +17,7 @@ const Status: React.FC<Props> = (props) => {
     if (status === REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
       send(SOCKET_EVENT.JOIN, { role: props.role })
     }
-  }, [status, props.role]) // props.role 추가
+  }, [status])
 
   return (
     <div
