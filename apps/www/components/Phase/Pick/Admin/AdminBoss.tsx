@@ -1,10 +1,8 @@
 import { concat, join, pipe } from '@fxts/core'
 import { Icons } from '@zzz-picker/components'
-import { Dialog } from '@zzz-picker/components/v2'
 import type { Side } from '@zzz-picker/constant'
 import { useStore } from '@zzz-picker/provider/hooks'
-import { useMemo, useState } from 'react'
-import { BossDialog } from '~/components'
+import { useMemo } from 'react'
 
 type Props = {
   roundId: 'personal' | 'common'
@@ -19,10 +17,9 @@ type Props = {
 
 const SingleBossButton: React.FC<{
   bossId: number | null
-  onClick: () => void
   isPersonal?: boolean
   side?: Side
-}> = ({ bossId, onClick, isPersonal, side }) => {
+}> = ({ bossId, isPersonal, side }) => {
   const { boss } = useStore()
   const bossData = useMemo(() => (bossId === null ? undefined : boss.get(bossId)), [boss, bossId])
 
@@ -41,7 +38,6 @@ const SingleBossButton: React.FC<{
         join(' ')
       )}
       type="button"
-      onClick={onClick}
     >
       {bossData ? (
         <img
@@ -56,52 +52,23 @@ const SingleBossButton: React.FC<{
   )
 }
 
-export const AdminBoss: React.FC<Props> = ({ roundId, boss, singleSide, onUpdate }) => {
-  const [target, setTarget] = useState<Side | 'common' | null>(null)
-
-  const onBossChange = (event: React.MouseEvent<HTMLButtonElement>) => {
-    if (!target) return
-    const bossId = Number(event.currentTarget.value)
-    onUpdate({
-      side: target === 'common' ? undefined : target,
-      bossId,
-      isCommon: target === 'common',
-    })
-    setTarget(null)
-  }
-
+export const AdminBoss: React.FC<Props> = ({ roundId, boss, singleSide }) => {
   return (
     <div className="w-full px-4">
       <div className="flex overflow-hidden rounded-bl-2xl rounded-tr-2xl w-44 mx-auto">
         {roundId === 'common' ? (
-          <SingleBossButton bossId={boss?.common ?? null} onClick={() => setTarget('common')} />
+          <SingleBossButton bossId={boss?.common ?? null} />
         ) : (
           <>
             {(!singleSide || singleSide === 'A') && (
-              <SingleBossButton
-                bossId={boss?.A ?? null}
-                isPersonal
-                side="A"
-                onClick={() => setTarget('A')}
-              />
+              <SingleBossButton bossId={boss?.A ?? null} isPersonal side="A" />
             )}
             {(!singleSide || singleSide === 'B') && (
-              <SingleBossButton
-                bossId={boss?.B ?? null}
-                isPersonal
-                side="B"
-                onClick={() => setTarget('B')}
-              />
+              <SingleBossButton bossId={boss?.B ?? null} isPersonal side="B" />
             )}
           </>
         )}
       </div>
-      <Dialog isOpen={!!target} onClose={() => setTarget(null)}>
-        <BossDialog
-          active={(target === 'common' ? boss?.common : target ? boss?.[target] : null) ?? null}
-          onClick={onBossChange}
-        />
-      </Dialog>
     </div>
   )
 }

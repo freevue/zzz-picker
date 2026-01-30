@@ -26,7 +26,7 @@ export const PlayerRound: React.FC<Props> = ({
   onUpdate,
 }) => {
   return (
-    <div className="w-full flex flex-col items-center">
+    <div className="flex flex-col items-center">
       <Typo.Heading className={pipe(['heading-3xl text-ink text-center mb-4'], join(' '))}>
         {title}
       </Typo.Heading>

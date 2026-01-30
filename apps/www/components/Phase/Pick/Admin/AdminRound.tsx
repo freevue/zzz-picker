@@ -1,6 +1,6 @@
 import { AdminBoss } from './AdminBoss'
 import { AdminPickSide } from './AdminPickSide'
-import { pipe, concat, join } from '@fxts/core'
+import { pipe, join } from '@fxts/core'
 import { Typo } from '@zzz-picker/components/v2'
 import type { SelectAgent } from '@zzz-picker/constant'
 
@@ -29,16 +29,10 @@ type Props = {
 export const AdminRound: React.FC<Props> = ({ roundId, title, data, banAgents, onUpdate }) => {
   return (
     <div className="w-full">
-      <Typo.Heading
-        className={pipe(
-          ['heading-3xl text-ink text-center mb-4'],
-          concat(roundId === 'common' ? ['mt-24'] : []),
-          join(' ')
-        )}
-      >
+      <Typo.Heading className={pipe(['heading-3xl text-ink text-center mb-4'], join(' '))}>
         {title}
       </Typo.Heading>
-      <div className="flex justify-between items-center mt-8">
+      <div className="flex gap-10 items-center mt-8">
         <AdminPickSide
           side="A"
           pickList={data.A.pickList}

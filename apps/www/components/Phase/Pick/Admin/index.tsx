@@ -109,73 +109,76 @@ const AdminPick: React.FC<Props> = ({ room, onUpdate, onComplete }) => {
   }
 
   return (
-    <div className="flex flex-col items-center w-full max-w-7xl mx-auto p-4 gap-10">
-      {/* Header: Nicknames */}
-      <div className="flex w-full p-4 gap-5 items-center bg-base sticky top-0 z-30 justify-center">
-        <Form.Nickname
-          side="A"
-          value={room.names.A}
-          placeholder="닉네임을 입력해주세요"
-          onChange={(e) => handleNicknameChange('A', e.target.value)}
-          className="w-80"
-        />
-        <Typo.Heading className="heading-3xl text-ink">VS</Typo.Heading>
-        <Form.Nickname
-          side="B"
-          value={room.names.B}
-          placeholder="닉네임을 입력해주세요"
-          onChange={(e) => handleNicknameChange('B', e.target.value)}
-          className="w-80"
-        />
-      </div>
+    <div className="flex flex-col items-end p-4 gap-10">
+      <div>
+        {/* Header: Nicknames */}
+        <div className="flex p-4 gap-5 items-center bg-base sticky top-0 z-30 justify-center">
+          <Form.Nickname
+            side="A"
+            value={room.names.A}
+            placeholder="닉네임을 입력해주세요"
+            onChange={(e) => handleNicknameChange('A', e.target.value)}
+            className="w-80"
+          />
+          <Typo.Heading className="heading-3xl text-ink">VS</Typo.Heading>
+          <Form.Nickname
+            side="B"
+            value={room.names.B}
+            placeholder="닉네임을 입력해주세요"
+            onChange={(e) => handleNicknameChange('B', e.target.value)}
+            className="w-80"
+          />
+        </div>
 
-      {/* Rows */}
-      <div className="w-full flex flex-col gap-20">
-        <AdminRound
-          roundId="personal"
-          title="개인 무대"
-          banAgents={banList}
-          data={{
-            A: {
-              pickList: picks.A.slice(0, 3).map((p: any) => p.agentId),
-              costList: getCosts('A').slice(0, 3),
-            },
-            B: {
-              pickList: picks.B.slice(0, 3).map((p: any) => p.agentId),
-              costList: getCosts('B').slice(0, 3),
-            },
-            boss: personalBoss,
-          }}
-          onUpdate={handleUpdate}
-        />
+        {/* Rows */}
+        <div className="flex flex-col p-4 gap-20">
+          <AdminRound
+            roundId="personal"
+            title="개인 무대"
+            banAgents={banList}
+            data={{
+              A: {
+                pickList: picks.A.slice(0, 3).map((p: any) => p.agentId),
+                costList: getCosts('A').slice(0, 3),
+              },
+              B: {
+                pickList: picks.B.slice(0, 3).map((p: any) => p.agentId),
+                costList: getCosts('B').slice(0, 3),
+              },
+              boss: personalBoss,
+            }}
+            onUpdate={handleUpdate}
+          />
 
-        <AdminRound
-          roundId="common"
-          title="공용 무대"
-          banAgents={banList}
-          data={{
-            A: {
-              pickList: picks.A.slice(3, 6).map((p: any) => p.agentId),
-              costList: getCosts('A').slice(3, 6),
-            },
-            B: {
-              pickList: picks.B.slice(3, 6).map((p: any) => p.agentId),
-              costList: getCosts('B').slice(3, 6),
-            },
-            boss: { common: commonBoss },
-          }}
-          onUpdate={handleUpdate}
-        />
-      </div>
+          <AdminRound
+            roundId="common"
+            title="공용 무대"
+            banAgents={banList}
+            data={{
+              A: {
+                pickList: picks.A.slice(3, 6).map((p: any) => p.agentId),
+                costList: getCosts('A').slice(3, 6),
+              },
+              B: {
+                pickList: picks.B.slice(3, 6).map((p: any) => p.agentId),
+                costList: getCosts('B').slice(3, 6),
+              },
+              boss: { common: commonBoss },
+            }}
+            onUpdate={handleUpdate}
+          />
+        </div>
 
-      {/* Footer / Floating */}
-      <div className="my-10">
-        <button
-          onClick={onComplete}
-          className="px-16 py-5 bg-primary text-content rounded-2xl heading-2xl hover:scale-105 transition-all shadow-xl cursor-pointer"
-        >
-          모든 선택 완료 및 결과 저장
-        </button>
+        {/* Footer / Floating */}
+        <div className="flex justify-center mt-10">
+          <button
+            onClick={onComplete}
+            type="button"
+            className="px-16 py-5 bg-primary text-content rounded-2xl heading-2xl hover:scale-105 transition-all shadow-xl cursor-pointer"
+          >
+            모든 선택 완료 및 결과 저장
+          </button>
+        </div>
       </div>
 
       {/* Detail Dialog */}

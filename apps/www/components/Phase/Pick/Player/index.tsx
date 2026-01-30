@@ -97,7 +97,7 @@ const PlayerPick: React.FC<Props> = ({ room, role, onUpdate, onComplete }) => {
   return (
     <div className="flex flex-col items-center w-full max-w-7xl mx-auto px-4 py-20 gap-10">
       {/* Rows */}
-      <div className="w-full flex gap-14 flex-wrap items-center">
+      <div className="w-full flex gap-14 flex-wrap items-center justify-center">
         <PlayerRound
           roundId="personal"
           title="개인 무대"
