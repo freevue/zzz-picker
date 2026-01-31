@@ -120,6 +120,7 @@ const Phase: React.FC<Props> = (props) => {
       ...nextRoom,
       state: ensureRealtimeState(nextRoom.state),
     }
+    console.log('[Phase] onUpdateRoom:', safeRoom.state.play)
     setRoom(safeRoom)
 
     // 1. 실시간 브로드캐스트
@@ -205,7 +206,9 @@ const Phase: React.FC<Props> = (props) => {
       case ROOM_PHASE.BAN:
         return <Ban role={props.role} room={room} onUpdate={onUpdateRoom} />
       case ROOM_PHASE.PICK:
-        return <Pick role={props.role} room={room} onUpdate={onUpdateRoom} />
+        return props.role === 'H' ? null : (
+          <Pick role={props.role} room={room} onUpdate={onUpdateRoom} />
+        )
       case ROOM_PHASE.DONE:
         return (
           <div className="flex flex-col items-center gap-10">

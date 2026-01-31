@@ -13,13 +13,15 @@ type Props = {
   }
   singleSide?: Side
   onUpdate: (updates: { side?: Side; bossId: number; isCommon?: boolean }) => void
+  onClick?: (side?: Side) => void
 }
 
 const SingleBossButton: React.FC<{
   bossId: number | null
   isPersonal?: boolean
   side?: Side
-}> = ({ bossId, isPersonal, side }) => {
+  onClick?: () => void
+}> = ({ bossId, isPersonal, side, onClick }) => {
   const { boss } = useStore()
   const bossData = useMemo(() => (bossId === null ? undefined : boss.get(bossId)), [boss, bossId])
 
@@ -38,6 +40,7 @@ const SingleBossButton: React.FC<{
         join(' ')
       )}
       type="button"
+      onClick={onClick}
     >
       {bossData ? (
         <img
@@ -52,19 +55,29 @@ const SingleBossButton: React.FC<{
   )
 }
 
-export const AdminBoss: React.FC<Props> = ({ roundId, boss, singleSide }) => {
+export const AdminBoss: React.FC<Props> = ({ roundId, boss, singleSide, onClick }) => {
   return (
     <div className="w-full px-4">
       <div className="flex overflow-hidden rounded-bl-2xl rounded-tr-2xl w-44 mx-auto">
         {roundId === 'common' ? (
-          <SingleBossButton bossId={boss?.common ?? null} />
+          <SingleBossButton bossId={boss?.common ?? null} onClick={() => onClick?.()} />
         ) : (
           <>
             {(!singleSide || singleSide === 'A') && (
-              <SingleBossButton bossId={boss?.A ?? null} isPersonal side="A" />
+              <SingleBossButton
+                bossId={boss?.A ?? null}
+                isPersonal
+                side="A"
+                onClick={() => onClick?.('A')}
+              />
             )}
             {(!singleSide || singleSide === 'B') && (
-              <SingleBossButton bossId={boss?.B ?? null} isPersonal side="B" />
+              <SingleBossButton
+                bossId={boss?.B ?? null}
+                isPersonal
+                side="B"
+                onClick={() => onClick?.('B')}
+              />
             )}
           </>
         )}

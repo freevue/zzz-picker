@@ -1,4 +1,4 @@
-import { pipe, toArray, map, join, concat, split, filter } from '@fxts/core'
+import { pipe, toArray, map, join, concat, split, filter, flatMap } from '@fxts/core'
 import { useParams, useSearchParams } from '@remix-run/react'
 import { DEFAULT } from '@zzz-picker/constant'
 import { Play, Setting, Socket } from '@zzz-picker/provider'
@@ -10,11 +10,54 @@ import { AllowAgent, BanAgent, CostTable, CommonBossCard, Header, Playground } f
 
 const OriginalContent: React.FC = () => {
   const { state } = useSocket()
-  const { setState } = usePlay()
+  const { setState, setCost } = usePlay()
   const play = useMemo(() => state.play, [state])
   const realtime = useMemo(() => state.realtime, [state])
 
   useEffect(() => {
+    pipe(
+      [
+        pipe(
+          [state.play.common.A, state.play.personal.A, state.play.unlimited.A],
+          flatMap((item) => item.pickCost || []),
+          toArray
+        ),
+        pipe(
+          [state.play.common.B, state.play.personal.B, state.play.unlimited.B],
+          flatMap((item) => item.pickCost || []),
+          toArray
+        ),
+      ] as const,
+      ([aSide, bSide]) => {
+        setCost((prev) => {
+          const aSideCost = new Map(prev.A)
+          const bSideCost = new Map(prev.B)
+
+          for (const item of aSide) {
+            if (item === null) continue
+
+            aSideCost.set(item.agentId, {
+              agentId: item.agentId,
+              agentRate: item.agentRate,
+              engineId: item.engineId,
+              engineRate: item.engineRate,
+            })
+          }
+          for (const item of bSide) {
+            if (item === null) continue
+
+            bSideCost.set(item.agentId, {
+              agentId: item.agentId,
+              agentRate: item.agentRate,
+              engineId: item.engineId,
+              engineRate: item.engineRate,
+            })
+          }
+
+          return { A: aSideCost, B: bSideCost }
+        })
+      }
+    )
     pipe(
       { ...play },
       (prev) => ({

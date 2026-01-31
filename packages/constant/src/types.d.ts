@@ -21,6 +21,7 @@ export type RoundSide = {
   time: number
   result: number
   pickList: [SelectAgent, SelectAgent, SelectAgent]
+  pickCost?: [AgentCostSetting | null, AgentCostSetting | null, AgentCostSetting | null]
 }
 export type PlayCostMap = Map<number, CostTable>
 export type Rarity = 'S' | 'A' | 'B'

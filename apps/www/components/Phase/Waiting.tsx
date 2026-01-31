@@ -13,9 +13,9 @@ type Props = {
 const Waiting: React.FC<Props> = ({ role, room, onUpdate }) => {
   const [countdown, setCountdown] = useState<number | null>(null)
 
-  const isOnlineA = !!room.state?.status?.['A']
-  const isOnlineB = !!room.state?.status?.['B']
-  const isOnlineH = !!room.state?.status?.['H']
+  const isOnlineA = !!room.state?.realtime.status?.['A']
+  const isOnlineB = !!room.state?.realtime.status?.['B']
+  const isOnlineH = !!room.state?.realtime.status?.['H']
 
   const allConnected = isOnlineA && isOnlineB && isOnlineH
 
@@ -38,7 +38,10 @@ const Waiting: React.FC<Props> = ({ role, room, onUpdate }) => {
           ...room,
           state: {
             ...room.state,
-            phase: ROOM_PHASE.BOSS_SELECT,
+            realtime: {
+              ...room.state.realtime,
+              phase: ROOM_PHASE.BOSS_SELECT,
+            },
           },
         })
       }

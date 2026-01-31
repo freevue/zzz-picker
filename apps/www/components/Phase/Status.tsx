@@ -30,7 +30,7 @@ const Status: React.FC<Props> = (props) => {
       <div className="flex flex-col gap-1">
         {props.room.users.map((user) => {
           const roleKey = user.role === 'Host' ? 'H' : (user.role as Side)
-          const isOnline = !!props.room.state.status[roleKey]
+          const isOnline = !!props.room.state.realtime.status[roleKey]
 
           return (
             <div key={user.id} className="flex items-center gap-2">

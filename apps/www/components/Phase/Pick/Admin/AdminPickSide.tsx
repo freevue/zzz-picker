@@ -41,6 +41,7 @@ export const AdminPickSide: React.FC<Props> = ({
           deleteable={!!onPickChange}
           onChange={onPickChange}
           onClick={(id, idx) => onPickClick?.(id, idx || 0)}
+          disabledHover
         />
       </div>
     </div>

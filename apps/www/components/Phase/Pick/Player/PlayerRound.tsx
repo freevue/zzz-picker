@@ -45,6 +45,9 @@ export const PlayerRound: React.FC<Props> = ({
             singleSide={side}
             boss={roundId === 'common' ? { common: data.boss } : { [side]: data.boss }}
             onUpdate={(updates) => onUpdate({ ...updates, roundId })}
+            onClick={(bossSide) =>
+              onUpdate({ base: { boss: true, side: bossSide || side, roundId } })
+            }
           />
         </div>
       </div>

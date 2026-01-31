@@ -1,4 +1,5 @@
-import { supabase, SUPABASE_URL, SUPABASE_ANON_KEY } from './utils'
+import { supabase } from './utils'
+import { pipe, flatMap, filter, isNull, toArray } from '@fxts/core'
 import { REALTIME_SUBSCRIBE_STATES, type RealtimeChannel } from '@supabase/supabase-js'
 import {
   SOCKET_EVENT,
@@ -7,6 +8,7 @@ import {
   type PlayState,
   type RealtimeState,
   type AgentCostSetting,
+  type SelectAgent,
 } from '@zzz-picker/constant'
 import { createContext, useEffect, useRef, useState, useMemo, useCallback } from 'react'
 
@@ -17,7 +19,10 @@ export type PickInfo = {
   engineRate: number
 }
 
-export type Cost = Record<Side, Map<number, AgentCostSetting>>
+export type Cost = {
+  A: Map<number, AgentCostSetting>
+  B: Map<number, AgentCostSetting>
+}
 
 export type RoomData = {
   id: string
@@ -34,6 +39,10 @@ type Context = {
   room: RoomData | null
   state: RealtimeState
   cost: Cost
+  allPickList: {
+    A: SelectAgent[]
+    B: SelectAgent[]
+  }
   send: (event: SOCKET_EVENT, payload: Record<string, any>) => void
 }
 type Props = {
@@ -48,6 +57,10 @@ const state: Context = {
   room: null,
   state: DEFAULT_REALTIME_STATE,
   cost: { A: new Map(), B: new Map() },
+  allPickList: {
+    A: [],
+    B: [],
+  },
   send: () => {},
 }
 
@@ -62,6 +75,23 @@ const Provider: React.FC<Props> = (props) => {
     A: new Map(),
     B: new Map(),
   })
+
+  // sync Play.tsx logic
+  const allPickList = useMemo(() => {
+    const getPickList = (side: Side) =>
+      pipe(
+        state.play || DEFAULT_REALTIME_STATE.play,
+        (state) => [state.common[side], state.personal[side], state.unlimited[side]],
+        flatMap((item) => item.pickList),
+        filter((agentId) => !isNull(agentId)),
+        toArray
+      )
+
+    return {
+      A: getPickList('A'),
+      B: getPickList('B'),
+    }
+  }, [state])
 
   const ensureRealtimeState = (s: any): RealtimeState => {
     if (!s) return DEFAULT_REALTIME_STATE
@@ -375,6 +405,7 @@ const Provider: React.FC<Props> = (props) => {
         room,
         state,
         cost,
+        allPickList,
         send: useCallback((event: SOCKET_EVENT, payload: Record<string, any>) => {
           if (channelRef.current) {
             channelRef.current.send({ type: 'broadcast', event, payload })

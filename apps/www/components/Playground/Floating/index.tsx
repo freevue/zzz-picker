@@ -1,6 +1,6 @@
 import Reset from './Reset'
 import Save from './Save'
-import { pipe, join, concat, isNull, throwIf } from '@fxts/core'
+import { pipe, join, concat, isNull, throwIf, split, filter, toArray } from '@fxts/core'
 import { Icons } from '@zzz-picker/components'
 import { Dialog, Form, Typo } from '@zzz-picker/components/v2'
 import { STORAGE } from '@zzz-picker/constant'
@@ -28,11 +28,20 @@ const Floating: React.FC = () => {
           ),
           async () => {
             window.localStorage.setItem(STORAGE.AUTH_KEY, authKey)
+
+            const [gameType] = pipe(
+              window.location.pathname,
+              split('/'),
+              filter((item) => item !== ''),
+              filter((item) => item !== 'realtime'),
+              toArray
+            )
+
             await save(
               state,
               { A: [...cost.A.entries()], B: [...cost.B.entries()] },
               authKey,
-              window.location.pathname.replace('/', '')
+              gameType
             )
           }
         )

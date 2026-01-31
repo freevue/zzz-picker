@@ -7,10 +7,11 @@ import type { SelectAgent, Side, AgentCostSetting } from '@zzz-picker/constant'
 import { useStore, useSetting } from '@zzz-picker/provider/hooks'
 import { getTotalCost } from '@zzz-picker/utils'
 import { useState } from 'react'
+import { BossDialog } from '~/components'
 
 type Props = {
   room: RoomData
-  role: 'A' | 'B'
+  role: Side
   onUpdate: (nextRoom: RoomData) => void
   onComplete: () => void
 }
@@ -20,20 +21,30 @@ const PlayerPick: React.FC<Props> = ({ room, role, onUpdate, onComplete }) => {
   const { costTable } = useSetting()
 
   const [detailTarget, setDetailTarget] = useState<{ side: Side; index: number } | null>(null)
+  const [bossTarget, setBossTarget] = useState<{
+    roundId: 'personal' | 'common'
+    side?: Side
+  } | null>(null)
 
   const getPicksFromPlay = (side: Side) => {
     const r1 = room.state.play.personal[side].pickList
+    const c1 = room.state.play.personal[side].pickCost || [null, null, null]
     const r2 =
       room.game_type === 'unlimited'
         ? room.state.play.unlimited[side].pickList
         : room.state.play.common[side].pickList
+    const c2 =
+      room.game_type === 'unlimited'
+        ? room.state.play.unlimited[side].pickCost || [null, null, null]
+        : room.state.play.common[side].pickCost || [null, null, null]
+
     return [...r1, ...r2].map(
-      (agentId) =>
+      (agentId, index) =>
         ({
           agentId,
-          engineId: null as number | null,
-          agentRate: 0,
-          engineRate: 1,
+          engineId: ([...c1, ...c2][index]?.engineId || null) as number | null,
+          agentRate: ([...c1, ...c2][index]?.agentRate || 0) as number,
+          engineRate: ([...c1, ...c2][index]?.engineRate || 1) as number,
         }) as PickInfo
     )
   }
@@ -60,7 +71,18 @@ const PlayerPick: React.FC<Props> = ({ room, role, onUpdate, onComplete }) => {
   }
 
   const handleUpdate = (updates: any) => {
-    const { roundId, side, picks: newPicks, bossId, isCommon } = updates
+    const { roundId, side, picks: newPicks, bossId, isCommon, detail, base } = updates
+
+    if (detail) {
+      const offset = roundId !== 'personal' ? 3 : 0
+      setDetailTarget({ side, index: detail.index + offset })
+      return
+    }
+
+    if (base?.boss) {
+      setBossTarget({ roundId: base.roundId, side: base.side })
+      return
+    }
 
     if (newPicks) {
       const roundKey =
@@ -127,8 +149,34 @@ const PlayerPick: React.FC<Props> = ({ room, role, onUpdate, onComplete }) => {
     const currentPicks = [...picks[side]]
     currentPicks[index] = { ...currentPicks[index], ...updates }
 
+    // Derive round pick lists (Agent IDs)
     const round1 = currentPicks.slice(0, 3).map((p) => p.agentId)
     const round2 = currentPicks.slice(3, 6).map((p) => p.agentId)
+
+    // Derive cost settings with explicit casting and logging
+    const c1 = currentPicks.slice(0, 3).map((p) =>
+      p.agentId
+        ? {
+            agentId: Number(p.agentId),
+            engineId: p.engineId ? Number(p.engineId) : null,
+            agentRate: Number(p.agentRate || 0),
+            engineRate: Number(p.engineRate || 1),
+          }
+        : null
+    )
+    const c2 = currentPicks.slice(3, 6).map((p) =>
+      p.agentId
+        ? {
+            agentId: Number(p.agentId),
+            engineId: p.engineId ? Number(p.engineId) : null,
+            agentRate: Number(p.agentRate || 0),
+            engineRate: Number(p.engineRate || 1),
+          }
+        : null
+    )
+
+    console.log('[PlayerPick] handleDetailUpdate:', { side, index, updates, c1, c2 })
+
     const roundKey2 = room.game_type === 'unlimited' ? 'unlimited' : 'common'
 
     onUpdate({
@@ -139,15 +187,35 @@ const PlayerPick: React.FC<Props> = ({ room, role, onUpdate, onComplete }) => {
           ...room.state.play,
           personal: {
             ...room.state.play.personal,
-            [side]: { ...room.state.play.personal[side], pickList: round1 },
+            [side]: {
+              ...room.state.play.personal[side],
+              pickList: round1 as any,
+              pickCost: c1 as any,
+            },
           },
           [roundKey2]: {
             ...(room.state.play as any)[roundKey2],
-            [side]: { ...(room.state.play as any)[roundKey2][side], pickList: round2 },
+            [side]: {
+              ...(room.state.play as any)[roundKey2][side],
+              pickList: round2 as any,
+              pickCost: c2 as any,
+            },
           },
         },
       } as any,
     })
+  }
+
+  const handleBossSelect = (bossId: number) => {
+    if (!bossTarget) return
+    const { roundId, side } = bossTarget
+    handleUpdate({
+      roundId,
+      bossId,
+      isCommon: roundId === 'common',
+      side: side || role,
+    })
+    setBossTarget(null)
   }
 
   return (
@@ -211,6 +279,12 @@ const PlayerPick: React.FC<Props> = ({ room, role, onUpdate, onComplete }) => {
             </Dialog>
           )
         })()}
+      <Dialog isOpen={!!bossTarget} onClose={() => setBossTarget(null)}>
+        <BossDialog
+          active={null}
+          onClick={(e) => handleBossSelect(Number(e.currentTarget.value))}
+        />
+      </Dialog>
     </div>
   )
 }

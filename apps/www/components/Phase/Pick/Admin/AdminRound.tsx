@@ -48,6 +48,7 @@ export const AdminRound: React.FC<Props> = ({ roundId, title, data, banAgents, o
             roundId={roundId}
             boss={data.boss}
             onUpdate={(updates) => onUpdate({ ...updates, roundId })}
+            onClick={(bossSide) => onUpdate({ base: { boss: true, side: bossSide, roundId } })}
           />
         </div>
         <AdminPickSide

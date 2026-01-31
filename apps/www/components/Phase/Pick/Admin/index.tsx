@@ -7,6 +7,7 @@ import type { SelectAgent, Side, AgentCostSetting } from '@zzz-picker/constant'
 import { useStore, useSetting } from '@zzz-picker/provider/hooks'
 import { getTotalCost } from '@zzz-picker/utils'
 import { useState } from 'react'
+import { BossDialog } from '~/components'
 
 type Props = {
   room: RoomData
@@ -26,21 +27,31 @@ const AdminPick: React.FC<Props> = ({ room, onUpdate, onComplete }) => {
   const { costTable } = useSetting()
 
   const [detailTarget, setDetailTarget] = useState<{ side: Side; index: number } | null>(null)
+  const [bossTarget, setBossTarget] = useState<{
+    roundId: 'personal' | 'common'
+    side?: Side
+  } | null>(null)
   const [isEnginesOpen, setIsEnginesOpen] = useState(false)
 
   const getPicksFromPlay = (side: Side) => {
     const r1 = room.state.play.personal[side].pickList
+    const c1 = room.state.play.personal[side].pickCost || [null, null, null]
     const r2 =
       room.game_type === 'unlimited'
         ? room.state.play.unlimited[side].pickList
         : room.state.play.common[side].pickList
+    const c2 =
+      room.game_type === 'unlimited'
+        ? room.state.play.unlimited[side].pickCost || [null, null, null]
+        : room.state.play.common[side].pickCost || [null, null, null]
+
     return [...r1, ...r2].map(
-      (agentId) =>
+      (agentId, index) =>
         ({
           agentId,
-          engineId: null as number | null,
-          agentRate: 0,
-          engineRate: 1,
+          engineId: ([...c1, ...c2][index]?.engineId || null) as number | null,
+          agentRate: ([...c1, ...c2][index]?.agentRate || 0) as number,
+          engineRate: ([...c1, ...c2][index]?.engineRate || 1) as number,
         }) as PickInfo
     )
   }
@@ -67,7 +78,18 @@ const AdminPick: React.FC<Props> = ({ room, onUpdate, onComplete }) => {
   }
 
   const handleUpdate = (updates: any) => {
-    const { roundId, side, picks: newPicks, bossId, isCommon } = updates
+    const { roundId, side, picks: newPicks, bossId, isCommon, detail, base } = updates
+
+    if (detail) {
+      const offset = roundId !== 'personal' ? 3 : 0
+      setDetailTarget({ side, index: detail.index + offset })
+      return
+    }
+
+    if (base?.boss) {
+      setBossTarget({ roundId: base.roundId, side: base.side })
+      return
+    }
 
     if (newPicks) {
       const roundKey =
@@ -134,6 +156,10 @@ const AdminPick: React.FC<Props> = ({ room, onUpdate, onComplete }) => {
     const currentPicks = [...picks[side]]
     currentPicks[index] = { ...currentPicks[index], ...updates }
 
+    const c1 = currentPicks.slice(0, 3).map((p) => p as unknown as AgentCostSetting)
+    const c2 = currentPicks.slice(3, 6).map((p) => p as unknown as AgentCostSetting)
+
+    // PickList (AgentIds)
     const round1 = currentPicks.slice(0, 3).map((p) => p.agentId)
     const round2 = currentPicks.slice(3, 6).map((p) => p.agentId)
     const roundKey2 = room.game_type === 'unlimited' ? 'unlimited' : 'common'
@@ -146,15 +172,31 @@ const AdminPick: React.FC<Props> = ({ room, onUpdate, onComplete }) => {
           ...room.state.play,
           personal: {
             ...room.state.play.personal,
-            [side]: { ...room.state.play.personal[side], pickList: round1 },
+            [side]: { ...room.state.play.personal[side], pickList: round1, pickCost: c1 },
           },
           [roundKey2]: {
             ...(room.state.play as any)[roundKey2],
-            [side]: { ...(room.state.play as any)[roundKey2][side], pickList: round2 },
+            [side]: {
+              ...(room.state.play as any)[roundKey2][side],
+              pickList: round2,
+              pickCost: c2,
+            },
           },
         },
       } as any,
     })
+  }
+
+  const handleBossSelect = (bossId: number) => {
+    if (!bossTarget) return
+    const { roundId, side } = bossTarget
+    handleUpdate({
+      roundId,
+      side,
+      bossId,
+      isCommon: roundId === 'common',
+    })
+    setBossTarget(null)
   }
 
   const handleNicknameChange = (side: Side, value: string) => {
@@ -315,6 +357,12 @@ const AdminPick: React.FC<Props> = ({ room, onUpdate, onComplete }) => {
               </div>
             )
           })()}
+      </Dialog>
+      <Dialog isOpen={!!bossTarget} onClose={() => setBossTarget(null)}>
+        <BossDialog
+          active={null}
+          onClick={(e) => handleBossSelect(Number(e.currentTarget.value))}
+        />
       </Dialog>
     </div>
   )
