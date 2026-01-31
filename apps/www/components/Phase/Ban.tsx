@@ -2,8 +2,8 @@ import type { Rols, RoomData } from '.'
 import { ROOM_PHASE } from '.'
 import { pipe, filter, map, toArray, concat, join, isNull } from '@fxts/core'
 import { Typo, Form } from '@zzz-picker/components/v2'
-import { BAN_PHASE, type SelectAgent } from '@zzz-picker/constant'
-import { useStore } from '@zzz-picker/provider/hooks'
+import { BAN_PHASE, type SelectAgent, SOCKET_EVENT } from '@zzz-picker/constant'
+import { useStore, useSocket } from '@zzz-picker/provider/hooks'
 import { motion, AnimatePresence } from 'motion/react'
 import { useMemo, useState, useEffect, useRef } from 'react'
 
@@ -17,10 +17,10 @@ const Ban: React.FC<Props> = (props) => {
   const { agents } = useStore()
   const [selectedToBan, setSelectedToBan] = useState<number | null>(null)
 
-  const banState = props.room.state.ban
-  const phase = banState.phase as BAN_PHASE
-  const candidates = banState.candidates as [SelectAgent, SelectAgent]
-  const bannedList = banState.list as number[]
+  const realtime = (props.room.state as any).realtime || {}
+  const phase = realtime.banPhase || BAN_PHASE.A_SELECT
+  const candidates = realtime.banCandidates || [null, null]
+  const bannedList = props.room.state.play.banList
 
   // Popup & Timer States
   const [popupAgentId, setPopupAgentId] = useState<number | null>(null)
@@ -92,29 +92,48 @@ const Ban: React.FC<Props> = (props) => {
     return list
   }, [pool, phase, bannedList, agents])
 
+  const { send } = useSocket()
+
   const onChange = (banList: SelectAgent[]) => {
+    if (!isMyTurn) return
+
+    // Validate if any selected agent is in disabledAgents
+    const isInvalid = banList.some((id) => id && disabledAgents.includes(id))
+    if (isInvalid) {
+      // Create a toast or just ignore? Ignoring is safest for now
+      return
+    }
+
+    // 실시간 후보군 공유
+    send(SOCKET_EVENT.BAN, { confirm: false, banCandidates: banList })
+
     props.onUpdate({
       ...props.room,
       state: {
         ...props.room.state,
-        ban: { ...banState, candidates: banList },
-      },
+        realtime: {
+          ...props.room.state.realtime,
+          banCandidates: banList,
+        },
+      } as any,
     })
   }
-
-  const updateBanState = (nextPhase: BAN_PHASE, nextBannedList: number[], nextCandidates: any) => {
+  const updateBanState = (nextPhase: BAN_PHASE, nextBannedList: any[], nextCandidates: any) => {
     // 밴 종료 시 즉시 페이즈를 전환하지 않고 BAN_PHASE.END 상태로 유지하여 타이머를 돌림
     props.onUpdate({
       ...props.room,
       state: {
         ...props.room.state,
-        ban: {
-          ...banState,
-          phase: nextPhase,
-          list: nextBannedList,
-          candidates: nextCandidates,
+        realtime: {
+          ...props.room.state.realtime,
+          banPhase: nextPhase,
+          banCandidates: nextCandidates,
         },
-      },
+        play: {
+          ...props.room.state.play,
+          banList: nextBannedList,
+        },
+      } as any,
     })
     setSelectedToBan(null) // 밴 확정 후 초기화
   }
@@ -141,14 +160,17 @@ const Ban: React.FC<Props> = (props) => {
     if (countdown !== null && countdown > 0) {
       timerRef.current = setTimeout(() => setCountdown(countdown - 1), 1000)
     } else if (countdown === 0) {
-      // 타이머 종료 시 Host가 최종 페이즈 전환 주도
-      if (props.role === 'H') {
+      // 타이머 종료 시 Host 혹은 Player A가 최종 페이즈 전환 주도 (Host 부재 시 Fallback)
+      if (props.role === 'H' || props.role === 'A') {
         props.onUpdate({
           ...props.room,
           state: {
             ...props.room.state,
-            phase: ROOM_PHASE.PICK,
-          },
+            realtime: {
+              ...props.room.state.realtime,
+              phase: ROOM_PHASE.PICK,
+            },
+          } as any,
         })
       }
     }
@@ -173,9 +195,19 @@ const Ban: React.FC<Props> = (props) => {
 
   const onBanConfirm = () => {
     if (!selectedToBan) return
-    const nextBannedList = [...bannedList, selectedToBan]
+
+    // 슬롯 기반 밴 리스트 업데이트
+    const nextBannedList = [...bannedList]
+    const emptyIndex = nextBannedList.indexOf(null)
+    if (emptyIndex !== -1) {
+      nextBannedList[emptyIndex] = selectedToBan
+    }
+
     const nextPhase = phase === BAN_PHASE.B_BAN ? BAN_PHASE.B_SELECT : BAN_PHASE.END
     updateBanState(nextPhase, nextBannedList, [null, null])
+
+    // 실시간 확정 이벤트 전송 (Next Phase 포함)
+    send(SOCKET_EVENT.BAN, { confirm: true, agentId: selectedToBan, nextPhase })
   }
 
   const isMyTurn = useMemo(() => {
@@ -220,17 +252,17 @@ const Ban: React.FC<Props> = (props) => {
 
       {/* [TOP] Banned List - 2 Slots */}
       <div className="flex justify-center">
-        <Form.Party size="xl" value={displayBannedList} />
+        <Form.Party size="xl" value={displayBannedList as any} />
       </div>
 
       {/* [MIDDLE] Candidates & Action Button */}
       <div className="my-20 flex items-center flex-col gap-10">
         <Form.Party
           size="xl"
-          banAgents={disabledAgents}
-          filterAgents={protectedAgents}
-          value={candidates}
-          onChange={onChange}
+          banAgents={disabledAgents as any}
+          filterAgents={protectedAgents as any}
+          value={candidates as any}
+          onChange={isMyTurn && isSelectionPhase ? onChange : undefined}
           onClick={(id) => {
             if (isBanActionPhase && isMyTurn) {
               setSelectedToBan(id)

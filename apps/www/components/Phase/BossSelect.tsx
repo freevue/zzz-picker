@@ -1,8 +1,8 @@
 import { ROOM_PHASE, type RoomData, type Rols } from './index'
 import { pipe, map, toArray, concat, join, zipWithIndex } from '@fxts/core'
 import { Typo } from '@zzz-picker/components/v2'
-import { BAN_PHASE, type Boss } from '@zzz-picker/constant'
-import { useStore } from '@zzz-picker/provider/hooks'
+import { BAN_PHASE, type Boss, SOCKET_EVENT } from '@zzz-picker/constant'
+import { useStore, useSocket } from '@zzz-picker/provider/hooks'
 import { motion } from 'motion/react'
 import { useMemo } from 'react'
 
@@ -23,37 +23,55 @@ const BossSelect: React.FC<Props> = (props) => {
     return allowedIds.map((id) => bossMap.get(id)).filter(Boolean) as Boss[]
   }, [bossMap, deadlyAssaultList])
 
+  const { send } = useSocket()
   const handleSelect = (bossId: number) => {
     if (props.role !== 'B') return
 
-    // Update Boss State Only (Realtime sharing)
+    // 실시간 후보군 공유
+    send(SOCKET_EVENT.BOSS, { confirm: false, bossId, roundKey: 'common' })
+
     props.onUpdate({
       ...props.room,
       state: {
         ...props.room.state,
-        boss: bossId,
-      },
+        realtime: {
+          ...props.room.state.realtime,
+          bossCandidates: bossId,
+        },
+      } as any,
     })
   }
 
   const handleConfirm = () => {
-    if (props.role !== 'B' || !props.room.state.boss) return
+    const currentBossId = (props.room.state as any).realtime?.bossCandidates
+    if (props.role !== 'B' || !currentBossId) return
 
     props.onUpdate({
       ...props.room,
       state: {
         ...props.room.state,
-        phase: ROOM_PHASE.BAN,
-        ban: {
-          ...props.room.state.ban,
-          phase: BAN_PHASE.A_SELECT,
+        realtime: {
+          ...props.room.state.realtime,
+          phase: ROOM_PHASE.BAN,
+          banPhase: BAN_PHASE.A_SELECT,
+          bossCandidates: null, // 확정 시 초기화
         },
-      },
+        play: {
+          ...props.room.state.play,
+          common: {
+            ...props.room.state.play.common,
+            boss: currentBossId,
+          },
+        },
+      } as any,
     })
+
+    // 실시간 확정 이벤트 전송
+    send(SOCKET_EVENT.BOSS, { confirm: true, bossId: currentBossId, roundKey: 'common' })
   }
 
   const isPlayerB = props.role === 'B'
-  const currentBossId = props.room.state.boss
+  const currentBossId = (props.room.state as any).realtime?.bossCandidates
 
   return (
     <div className="py-20 px-4 h-screen overflow-y-auto">

@@ -3,5 +3,8 @@ export { default as Setting, Context as SettingContext } from './Setting'
 export { default as Play, Context as PlayContext } from './Play'
 export { default as Socket, Context as SocketContext } from './Socket'
 export { supabase } from './utils'
+export * from './hooks'
 
 export type * from './Play'
+export type { RoomData, PickInfo, Cost } from './Socket'
+export type { PlayState } from '@zzz-picker/constant'

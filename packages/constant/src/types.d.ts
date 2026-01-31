@@ -76,6 +76,17 @@ export type PlayState = {
   personal: PersonalRound
   unlimited: UnlimitedRound
 }
+export type RealtimeState = {
+  play: PlayState
+  realtime: {
+    phase: string
+    banPhase?: string
+    bossCandidates: SelectBoss
+    banCandidates: Array<SelectAgent>
+    ready: { A: boolean; B: boolean }
+    status: Record<string, boolean>
+  }
+}
 export type AgentCostSetting = {
   agentId: AgentId
   engineId: EngineId | null

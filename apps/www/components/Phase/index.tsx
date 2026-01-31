@@ -2,7 +2,7 @@ import Ban from './Ban'
 import BossSelect from './BossSelect'
 import Pick from './Pick'
 import { Typo } from '@zzz-picker/components/v2'
-import { SOCKET_EVENT, DEFAULT_PLAY_STATE, type SelectAgent } from '@zzz-picker/constant'
+import { SOCKET_EVENT, type RealtimeState, DEFAULT_REALTIME_STATE } from '@zzz-picker/constant'
 import type { Side } from '@zzz-picker/constant'
 import { supabase } from '@zzz-picker/provider'
 import { useSocket } from '@zzz-picker/provider/hooks'
@@ -25,38 +25,7 @@ export type RoomData = {
   game_type: string
   names: { A: string; B: string }
   users: Array<{ id: string; role: string; nickname: string }>
-  state: {
-    phase: ROOM_PHASE
-    boss: number | null
-    personalBoss?: {
-      A: number | null
-      B: number | null
-    }
-    ban: {
-      phase: string
-      candidates: SelectAgent[]
-      list: number[]
-    }
-    picks: {
-      A: Array<{
-        agentId: SelectAgent
-        engineId: number | null
-        agentRate: number
-        engineRate: number
-      }>
-      B: Array<{
-        agentId: SelectAgent
-        engineId: number | null
-        agentRate: number
-        engineRate: number
-      }>
-    }
-    status: Record<string, boolean>
-    ready: {
-      A: boolean
-      B: boolean
-    }
-  }
+  state: RealtimeState
 }
 
 type Props = {
@@ -65,25 +34,47 @@ type Props = {
 }
 
 const Phase: React.FC<Props> = (props) => {
-  const [room, setRoom] = useState<RoomData>(props.initialRoom)
+  const ensureRealtimeState = (s: any): RealtimeState => {
+    if (!s) return DEFAULT_REALTIME_STATE
+    if (s.play && s.realtime) return s as RealtimeState
+    return {
+      ...DEFAULT_REALTIME_STATE,
+      play: s.play || DEFAULT_REALTIME_STATE.play,
+      realtime: s.realtime || DEFAULT_REALTIME_STATE.realtime,
+    }
+  }
+
+  const [room, setRoom] = useState<RoomData>(() => ({
+    ...props.initialRoom,
+    state: ensureRealtimeState(props.initialRoom.state),
+  }))
   const { status, send } = useSocket(
     (payload: any, eventName: SOCKET_EVENT) => {
       if (eventName === SOCKET_EVENT.SYNC && payload.room) {
-        setRoom(payload.room)
+        setRoom({
+          ...payload.room,
+          state: ensureRealtimeState(payload.room.state),
+        })
       }
 
       if (eventName === SOCKET_EVENT.JOIN && payload.role) {
         const joinedRole = payload.role === 'Host' ? 'H' : payload.role
-        setRoom((prev) => ({
-          ...prev,
-          state: {
-            ...prev.state,
-            status: {
-              ...prev.state.status,
-              [joinedRole]: true,
+        setRoom((prev) => {
+          const realtime = (prev.state as any).realtime || {}
+          return {
+            ...prev,
+            state: {
+              ...prev.state,
+              realtime: {
+                ...realtime,
+                status: {
+                  ...realtime.status,
+                  [joinedRole]: true,
+                },
+              },
             },
-          },
-        }))
+          }
+        })
       }
     },
     { event: [SOCKET_EVENT.SYNC, SOCKET_EVENT.JOIN] }
@@ -125,17 +116,21 @@ const Phase: React.FC<Props> = (props) => {
   }, [status])
 
   const onUpdateRoom = (nextRoom: RoomData) => {
-    setRoom(nextRoom)
+    const safeRoom = {
+      ...nextRoom,
+      state: ensureRealtimeState(nextRoom.state),
+    }
+    setRoom(safeRoom)
 
     // 1. 실시간 브로드캐스트
-    send(SOCKET_EVENT.SYNC, { room: nextRoom })
+    send(SOCKET_EVENT.SYNC, { room: safeRoom })
 
     // 2. DB 영속성 저장
-    if (nextRoom.id) {
+    if (safeRoom.id) {
       supabase
         .from('realtime_room')
-        .update({ state: nextRoom.state })
-        .eq('id', nextRoom.id)
+        .update({ state: safeRoom.state })
+        .eq('id', safeRoom.id)
         .then(({ error }) => {
           if (error) console.error('상태 저장 실패:', error)
         })
@@ -149,49 +144,48 @@ const Phase: React.FC<Props> = (props) => {
     const storageData = JSON.parse(localStorage.getItem('zzz-picker-play') || '{}')
     const league = room.game_type
 
-    // 픽 정보를 cost 맵으로 변환 (기존 시스템 호환용)
-    const costA = (room.state.picks?.A || [])
-      .map((p: any) =>
-        p.agentId
+    const getPicksFromPlay = (side: Side) => {
+      const r1 = room.state.play.personal[side].pickList
+      const r2 =
+        room.game_type === 'unlimited'
+          ? room.state.play.unlimited[side].pickList
+          : room.state.play.common[side].pickList
+      return [...r1, ...r2]
+    }
+
+    const costA = getPicksFromPlay('A')
+      .map((agentId) =>
+        agentId
           ? [
-              p.agentId,
+              agentId,
               {
-                agentId: p.agentId,
-                engineId: p.engineId,
-                agentRate: p.agentRate,
-                engineRate: p.engineRate,
+                agentId,
+                engineId: null,
+                agentRate: 0,
+                engineRate: 1,
               },
             ]
           : null
       )
-      .filter(Boolean)
-    const costB = (room.state.picks?.B || [])
-      .map((p: any) =>
-        p.agentId
+      .filter((v): v is [number, any] => v !== null)
+    const costB = getPicksFromPlay('B')
+      .map((agentId) =>
+        agentId
           ? [
-              p.agentId,
+              agentId,
               {
-                agentId: p.agentId,
-                engineId: p.engineId,
-                agentRate: p.agentRate,
-                engineRate: p.engineRate,
+                agentId,
+                engineId: null,
+                agentRate: 0,
+                engineRate: 1,
               },
             ]
           : null
       )
-      .filter(Boolean)
+      .filter((v): v is [number, any] => v !== null)
 
     storageData[league] = {
-      state: {
-        ...DEFAULT_PLAY_STATE,
-        ...room.state,
-        nickname: room.names,
-        banList: room.state.ban.list,
-        common: {
-          ...DEFAULT_PLAY_STATE.common,
-          boss: room.state.boss,
-        },
-      },
+      state: room.state.play,
       cost: {
         A: costA,
         B: costB,
@@ -203,7 +197,8 @@ const Phase: React.FC<Props> = (props) => {
   }
 
   const renderPhase = () => {
-    switch (room.state.phase) {
+    const phase = room.state.realtime.phase
+    switch (phase) {
       case ROOM_PHASE.WAITING:
       case ROOM_PHASE.BOSS_SELECT:
         return <BossSelect role={props.role} room={room} onUpdate={onUpdateRoom} />
@@ -239,7 +234,7 @@ const Phase: React.FC<Props> = (props) => {
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        key={room.state.phase}
+        key={room.state.realtime.phase}
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -10 }}

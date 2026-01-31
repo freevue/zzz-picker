@@ -10,6 +10,7 @@ import {
   throwIf,
   when,
   isUndefined,
+  split,
 } from '@fxts/core'
 import {
   DEFAULT,
@@ -51,13 +52,21 @@ const saveData = (
     B: [number, AgentCostSetting][]
   }
 ) => {
+  const [gameType] = pipe(
+    window.location.pathname,
+    split('/'),
+    filter((item) => item !== ''),
+    filter((item) => item !== 'realtime'),
+    toArray
+  )
+
   pipe(
     window.localStorage.getItem(STORAGE_KEY),
     when(isNull, () => JSON.stringify({})),
     (data) => JSON.parse(data),
     (prevItem) => ({
       ...prevItem,
-      [window.location.pathname]: { state, cost },
+      [gameType]: { state, cost },
     }),
     (newItem) => JSON.stringify(newItem),
     (data) => window.localStorage.setItem(STORAGE_KEY, data)

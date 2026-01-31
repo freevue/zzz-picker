@@ -1,58 +1,40 @@
 import { Context as SocketContext } from '../Socket'
-import { pipe, each, values, includes, filter } from '@fxts/core'
 import { SOCKET_EVENT } from '@zzz-picker/constant'
-import { useContext, useEffect, useRef } from 'react'
+import { useContext, useEffect } from 'react'
 
-type Receive = (payload: Record<string, any>, eventName: SOCKET_EVENT) => void
-type Options = {
-  event: Array<SOCKET_EVENT>
-}
-
-const useSocket = (receive?: Receive, options?: Options) => {
-  const { channel, status, events } = useContext(SocketContext)
-  const receiveRef = useRef(receive)
-
-  if (!channel) {
-    throw new Error('채널에 연결되지 않았습니다.')
-  }
+const useSocket = (
+  onMessage?: (payload: any, event: SOCKET_EVENT) => void,
+  options?: { event: SOCKET_EVENT | SOCKET_EVENT[] }
+) => {
+  const context = useContext(SocketContext)
 
   useEffect(() => {
-    receiveRef.current = receive
-  }, [receive])
+    if (!onMessage) return
 
-  useEffect(() => {
-    const onSocket = (event: Event) => {
-      receiveRef.current?.(
-        (event as CustomEvent<Record<string, any>>).detail,
-        event.type as SOCKET_EVENT
-      )
+    const { events: eventTarget } = context
+    const eventsOption = options?.event
+    const eventList = Array.isArray(eventsOption)
+      ? eventsOption
+      : eventsOption
+        ? [eventsOption]
+        : []
+
+    const handler = (e: any) => {
+      onMessage(e.detail, e.type as SOCKET_EVENT)
     }
 
-    const targetEvents = options?.event || values(SOCKET_EVENT)
-
-    pipe(
-      targetEvents,
-      each((eventName) => {
-        events.addEventListener(eventName, onSocket)
-      })
-    )
+    eventList.forEach((event) => {
+      eventTarget.addEventListener(event, handler)
+    })
 
     return () => {
-      pipe(
-        targetEvents,
-        each((eventName) => {
-          events.removeEventListener(eventName, onSocket)
-        })
-      )
+      eventList.forEach((event) => {
+        eventTarget.removeEventListener(event, handler)
+      })
     }
-  }, [channel, events, JSON.stringify(options?.event)])
+  }, [context.events, onMessage, options?.event])
 
-  return {
-    status,
-    send: (event: SOCKET_EVENT, payload: Record<string, any>) => {
-      channel.send({ type: 'broadcast', event, payload })
-    },
-  }
+  return context
 }
 
 export default useSocket

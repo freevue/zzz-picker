@@ -11,6 +11,7 @@ type Token = {
 }
 type Props = {
   list: Token[]
+  gameType: string
   onReset: () => void
 }
 
@@ -65,7 +66,8 @@ export const RoomInfo: React.FC<Props> = (props) => {
         {pipe(
           props.list,
           map(({ nickname, role, token }) => {
-            const joinUrl = `${window.location.origin}/realtime/join?u=${token}`
+            const isHost = role === 'H'
+            const joinUrl = `${window.location.origin}/realtime/${isHost ? `${props.gameType}/` : ''}${token}`
             return (
               <li key={role} className="">
                 <div className="flex items-end gap-2 mb-2">

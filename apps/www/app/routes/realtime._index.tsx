@@ -1,5 +1,5 @@
 import { isNull } from '@fxts/core'
-import { type Side } from '@zzz-picker/constant'
+import { type Side, DEFAULT_REALTIME_STATE } from '@zzz-picker/constant'
 import { supabase } from '@zzz-picker/provider'
 import { AnimatePresence } from 'motion/react'
 import { useState } from 'react'
@@ -7,13 +7,14 @@ import { CreateRoomForm, RoomInfo } from '~/components/Realtime'
 
 type Token = {
   uuid: string
-  role: Side | 'H'
+  role: 'A' | 'B' | 'H'
   token: string
   nickname: string
 }
 
 export const RealtimeRoot: React.FC = () => {
   const [tokens, setTokens] = useState<Token[] | null>(null)
+  const [gameType, setGameType] = useState<string>('original')
 
   const onCreateChannel = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -24,11 +25,19 @@ export const RealtimeRoot: React.FC = () => {
     const nicknameB = formData.get('B') as string
 
     // 1. 방 생성
+    const initialState = {
+      ...DEFAULT_REALTIME_STATE,
+      play: {
+        ...DEFAULT_REALTIME_STATE.play,
+        nickname: { A: nicknameA, B: nicknameB },
+      },
+    }
+
     const { data: room, error: roomError } = await supabase
       .from('realtime_room')
       .insert({
         game_type: league,
-        names: { A: nicknameA, B: nicknameB },
+        state: initialState,
       })
       .select()
       .single()
@@ -62,6 +71,7 @@ export const RealtimeRoot: React.FC = () => {
     }))
 
     setTokens(tokenList)
+    setGameType(league)
   }
 
   return (
@@ -69,7 +79,7 @@ export const RealtimeRoot: React.FC = () => {
       {isNull(tokens) ? (
         <CreateRoomForm onSubmit={onCreateChannel} />
       ) : (
-        <RoomInfo list={tokens} onReset={() => setTokens(null)} />
+        <RoomInfo list={tokens} gameType={gameType} onReset={() => setTokens(null)} />
       )}
     </AnimatePresence>
   )

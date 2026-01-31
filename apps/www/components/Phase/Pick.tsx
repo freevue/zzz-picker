@@ -4,11 +4,16 @@ import { ROOM_PHASE, type RoomData, type Rols } from './index'
 import { pipe, concat, join, isNumber, map, toArray, filter } from '@fxts/core'
 import { Icons } from '@zzz-picker/components'
 import { Typo, Form, Dialog } from '@zzz-picker/components/v2'
-import type { SelectAgent, Side, AgentCostSetting } from '@zzz-picker/constant'
-import { useStore, useSetting } from '@zzz-picker/provider/hooks'
+import {
+  type SelectAgent,
+  type Side,
+  type AgentCostSetting,
+  SOCKET_EVENT,
+} from '@zzz-picker/constant'
+import { useStore, useSetting, useSocket } from '@zzz-picker/provider/hooks'
 import { getTotalCost } from '@zzz-picker/utils'
 import { motion } from 'motion/react'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { BossDialog } from '~/components'
 
 type Props = {
@@ -22,13 +27,6 @@ type PickInfo = {
   engineId: number | null
   agentRate: number
   engineRate: number
-}
-
-const DEFAULT_PICK: PickInfo = {
-  agentId: null,
-  engineId: null,
-  agentRate: 0,
-  engineRate: 1,
 }
 
 // ----------------------------------------------------------------------------
@@ -103,6 +101,7 @@ const BossButton = ({
 // ----------------------------------------------------------------------------
 
 const Pick: React.FC<Props> = (props) => {
+  const { send, cost } = useSocket()
   const { agents, engines } = useStore()
   const { costTable, state: settingState } = useSetting()
 
@@ -114,32 +113,60 @@ const Pick: React.FC<Props> = (props) => {
 
   const isHost = props.role === 'H'
 
-  // Ensure we have 6 slots for Default
-  const defaultPicks = Array(6).fill(DEFAULT_PICK)
-  const picks = props.room.state.picks || {
-    A: [...defaultPicks],
-    B: [...defaultPicks],
+  useEffect(() => {
+    console.log('[Pick] Rendered. Role:', props.role)
+    console.log('[Pick] Cost State:', cost)
+  }, [props.role, cost])
+
+  // Reconstruct flat 6-slot picks from PlayState rounds
+  const getPicksFromPlay = (side: Side) => {
+    const r1 = props.room.state.play.personal[side].pickList
+    const r2 =
+      props.room.game_type === 'unlimited'
+        ? props.room.state.play.unlimited[side].pickList
+        : props.room.state.play.common[side].pickList
+
+    return [...r1, ...r2].map((agentId) => {
+      const info = isNumber(agentId) ? cost[side].get(agentId) : null
+      return {
+        agentId,
+        engineId: info?.engineId || null,
+        agentRate: info?.agentRate || 0,
+        engineRate: info?.engineRate || 1,
+      } as PickInfo
+    })
   }
 
-  if (picks.A.length < 6) picks.A = [...picks.A, ...Array(6 - picks.A.length).fill(DEFAULT_PICK)]
-  if (picks.B.length < 6) picks.B = [...picks.B, ...Array(6 - picks.B.length).fill(DEFAULT_PICK)]
+  const picks = {
+    A: getPicksFromPlay('A'),
+    B: getPicksFromPlay('B'),
+  }
 
-  const personalBoss = props.room.state.personalBoss || { A: null, B: null }
-  const commonBoss = props.room.state.boss
-  const readyState = props.room.state.ready || { A: false, B: false }
-  const banList = props.room.state.ban?.list || []
+  const personalBoss = {
+    A: props.room.state.play.personal.A.boss,
+    B: props.room.state.play.personal.B.boss,
+  }
+  const commonBoss = props.room.state.play.common.boss
+  const readyState = props.room.state.realtime.ready || { A: false, B: false }
+  const banList = props.room.state.play.banList || []
 
   // Helpers for Ban Agents
   const onComplete = () => {
     if (!isHost) return
     props.onUpdate({
       ...props.room,
-      state: { ...props.room.state, phase: ROOM_PHASE.DONE },
+      state: {
+        ...props.room.state,
+        realtime: {
+          ...props.room.state.realtime,
+          phase: ROOM_PHASE.DONE,
+        },
+      } as any,
     })
   }
 
   // --- Rendering Admin View ---
-  if (isHost) {
+  if (props.role === 'H') {
     return <AdminPick room={props.room} onUpdate={props.onUpdate} onComplete={onComplete} />
   }
 
@@ -149,8 +176,11 @@ const Pick: React.FC<Props> = (props) => {
       ...props.room,
       state: {
         ...props.room.state,
-        ready: { ...readyState, [side]: nextReady },
-      },
+        realtime: {
+          ...props.room.state.realtime,
+          ready: { ...readyState, [side]: nextReady },
+        },
+      } as any,
     })
   }
 
@@ -175,8 +205,8 @@ const Pick: React.FC<Props> = (props) => {
     )
   }, [agents])
 
-  // ... rest of the existing code ...  // Computed
-  const getPickList = (side: Side): SelectAgent[] => picks[side].map((p: PickInfo) => p.agentId)
+  // Computed
+  const getPickList = (side: Side): any[] => picks[side].map((p: PickInfo) => p.agentId)
 
   const getCosts = (side: Side) => {
     return picks[side].map((p: PickInfo) => {
@@ -191,24 +221,24 @@ const Pick: React.FC<Props> = (props) => {
   const handlePickChange = (side: Side, round: 1 | 2) => (newAgents: SelectAgent[]) => {
     if (readyState[side]) return
 
-    const currentPicks = [...picks[side]]
-    const startIndex = round === 1 ? 0 : 3
-
-    newAgents.forEach((agentId, i) => {
-      const targetIndex = startIndex + i
-      const oldAgentId = currentPicks[targetIndex].agentId
-
-      if (oldAgentId !== agentId) {
-        currentPicks[targetIndex] = { ...DEFAULT_PICK, agentId }
-      }
-    })
+    const roundKey =
+      round === 1 ? 'personal' : props.room.game_type === 'unlimited' ? 'unlimited' : 'common'
 
     props.onUpdate({
       ...props.room,
       state: {
         ...props.room.state,
-        picks: { ...picks, [side]: currentPicks },
-      },
+        play: {
+          ...props.room.state.play,
+          [roundKey]: {
+            ...(props.room.state.play as any)[roundKey],
+            [side]: {
+              ...(props.room.state.play as any)[roundKey][side],
+              pickList: newAgents,
+            },
+          },
+        },
+      } as any,
     })
   }
 
@@ -219,15 +249,12 @@ const Pick: React.FC<Props> = (props) => {
     if (readyState[side]) return
 
     const currentInfo = picks[side][index]
-    const nextInfo = { ...currentInfo, ...updates }
+    if (!currentInfo?.agentId) return
 
-    const nextPicks = { ...picks }
-    nextPicks[side] = [...nextPicks[side]]
-    nextPicks[side][index] = nextInfo
-
-    props.onUpdate({
-      ...props.room,
-      state: { ...props.room.state, picks: nextPicks },
+    send(SOCKET_EVENT.COST, {
+      side,
+      agentId: currentInfo.agentId,
+      updates,
     })
   }
 
@@ -243,7 +270,13 @@ const Pick: React.FC<Props> = (props) => {
     if (bossTarget === 'common') {
       props.onUpdate({
         ...props.room,
-        state: { ...props.room.state, boss: bossId },
+        state: {
+          ...props.room.state,
+          play: {
+            ...props.room.state.play,
+            common: { ...props.room.state.play.common, boss: bossId },
+          },
+        },
       })
     } else {
       const { side } = bossTarget
@@ -251,13 +284,18 @@ const Pick: React.FC<Props> = (props) => {
         ...props.room,
         state: {
           ...props.room.state,
-          personalBoss: { ...personalBoss, [side]: bossId },
+          play: {
+            ...props.room.state.play,
+            personal: {
+              ...props.room.state.play.personal,
+              [side]: { ...props.room.state.play.personal[side], boss: bossId },
+            },
+          },
         },
       })
     }
     setBossTarget(null)
   }
-
 
   // --- Views ---
 
@@ -272,15 +310,23 @@ const Pick: React.FC<Props> = (props) => {
     const canEditA = isMeA && !readyState.A
     const canEditB = isMeB && !readyState.B
 
-    // Boss Click Permissions
-    const onBossClickA =
-      round === 1 && canEditA ? () => setBossTarget({ type: 'personal', side: 'A' }) : undefined
+    const onBossClickA = () => {
+      console.log('[Pick] Boss Click A')
+      if (round === 1 && canEditA) {
+        setBossTarget({ type: 'personal', side: 'A' })
+      }
+    }
 
-    const onBossClickB = canEditB
-      ? round === 1
-        ? () => setBossTarget({ type: 'personal', side: 'B' })
-        : () => setBossTarget('common')
-      : undefined
+    const onBossClickB = () => {
+      console.log('[Pick] Boss Click B')
+      if (!canEditB) return
+
+      if (round === 1) {
+        setBossTarget({ type: 'personal', side: 'B' })
+      } else {
+        setBossTarget('common')
+      }
+    }
 
     return (
       <div className="flex flex-col items-center w-full mb-16 last:mb-0 px-4">
@@ -318,17 +364,22 @@ const Pick: React.FC<Props> = (props) => {
             <Form.Party
               size="md"
               reverse={false}
-              value={getPickList('A').slice(startIndex, endIndex)}
+              value={getPickList('A').slice(startIndex, endIndex) as any}
               cost={getCosts('A').slice(startIndex, endIndex)}
-              deleteable={canEditA || isHost}
-              onChange={canEditA || isHost ? handlePickChange('A', round) : undefined}
+              deleteable={canEditA}
+              onChange={canEditA ? handlePickChange('A', round) : undefined}
               onClick={
-                canEditA || isHost
-                  ? (_id, idx) => setDetailTarget({ side: 'A', index: startIndex + (idx || 0) })
+                canEditA
+                  ? (_id, idx) => {
+                      console.log('[Pick] Party Click A', idx)
+                      setDetailTarget({ side: 'A', index: startIndex + (idx || 0) })
+                    }
                   : undefined
               }
-              allowAgents={protectedAgents}
-              banAgents={banList}
+              allowAgents={protectedAgents as any}
+              banAgents={banList as any}
+              disabledHover={true}
+              className="!overflow-visible"
             />
           </div>
 
@@ -407,17 +458,22 @@ const Pick: React.FC<Props> = (props) => {
             <Form.Party
               size="md"
               reverse={true}
-              value={getPickList('B').slice(startIndex, endIndex)}
+              value={getPickList('B').slice(startIndex, endIndex) as any}
               cost={getCosts('B').slice(startIndex, endIndex)}
               deleteable={canEditB || isHost}
               onChange={canEditB || isHost ? handlePickChange('B', round) : undefined}
               onClick={
                 canEditB || isHost
-                  ? (_id, idx) => setDetailTarget({ side: 'B', index: startIndex + (idx || 0) })
+                  ? (_id, idx) => {
+                      console.log('[Pick] Party Click B', idx)
+                      setDetailTarget({ side: 'B', index: startIndex + (idx || 0) })
+                    }
                   : undefined
               }
-              allowAgents={settingState.allowAgent}
-              banAgents={banList}
+              allowAgents={settingState.allowAgent as any}
+              banAgents={banList as any}
+              disabledHover={true}
+              className="!overflow-visible"
             />
           </div>
         </div>

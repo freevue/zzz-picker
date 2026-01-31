@@ -1,4 +1,4 @@
-import type { CostWeight, CostTable, RoundSide, PlayState } from './types.d'
+import type { CostWeight, CostTable, RoundSide, PlayState, RealtimeState } from './types.d'
 import { pipe, range, map, toArray } from '@fxts/core'
 
 export * from './types.d'
@@ -33,6 +33,10 @@ export enum SOCKET_EVENT {
   UNBAN = 'unban',
   JOIN = 'join',
   BAN_CONFIRM = 'ban_confirm',
+  COST = 'cost',
+  BOSS = 'boss',
+  READY = 'ready',
+  STATUS = 'status',
 }
 export enum ROUND_TYPE {
   PERSONAL = 'personal',
@@ -75,6 +79,18 @@ export const DEFAULT_PLAY_STATE: PlayState = {
     title: '개인 무대',
     A: { ...DEFAULT.ROUNDE_SIDE, boss: null },
     B: { ...DEFAULT.ROUNDE_SIDE, boss: null },
+  },
+}
+
+export const DEFAULT_REALTIME_STATE: RealtimeState = {
+  play: DEFAULT_PLAY_STATE,
+  realtime: {
+    phase: 'WAITING',
+    banPhase: 'a_select',
+    bossCandidates: null,
+    banCandidates: [null, null],
+    ready: { A: false, B: false },
+    status: { A: false, B: false, H: false },
   },
 }
 
