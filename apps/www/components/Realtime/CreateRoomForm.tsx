@@ -1,13 +1,12 @@
 import { pipe, concat, join } from '@fxts/core'
 import { Typo, Tabs, Form } from '@zzz-picker/components/v2'
-import type { Side } from '@zzz-picker/constant'
 import { motion } from 'motion/react'
 import { useState } from 'react'
 
 const TABS = [
-  { label: '정식 로프꾼', value: '/original' },
-  { label: '레전드 로프꾼', value: '/legend' },
-  { label: '공허사냥꾼', value: '/unlimited' },
+  { label: '정식 로프꾼', value: 'original' },
+  { label: '레전드 로프꾼', value: 'legend' },
+  { label: '공허사냥꾼', value: 'unlimited' },
 ]
 
 type Props = {
@@ -16,14 +15,6 @@ type Props = {
 
 export const CreateRoomForm: React.FC<Props> = (props) => {
   const [league, setLeague] = useState<string>(TABS[0].value)
-  const [users, setUsers] = useState<Record<Side, string>>({ A: '', B: '' })
-
-  const onNicknameChange = (side: Side) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUsers((prev) => ({
-      ...prev,
-      [side]: event.target.value,
-    }))
-  }
 
   return (
     <motion.div
@@ -34,10 +25,10 @@ export const CreateRoomForm: React.FC<Props> = (props) => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2, delay: 0.2 }}
     >
-      <Form onSubmit={props.onSubmit}>
+      <Form onSubmit={props.onSubmit} className="w-4xl">
         <Tabs
           list={TABS}
-          className="bg-content! w-2/3 mx-auto"
+          className="bg-content! mx-auto"
           value={league}
           onChange={setLeague}
           name="league"
@@ -47,44 +38,26 @@ export const CreateRoomForm: React.FC<Props> = (props) => {
             <Typo.Heading className="heading-4xl text-ink mb-4 text-right" heading={2}>
               A 플레이어
             </Typo.Heading>
-            <Form.Nickname
-              side="A"
-              value={users.A}
-              onChange={onNicknameChange('A')}
-              placeholder="닉네임을 입력해주세요"
-            />
-            <input type="hidden" name="A" value={users.A} />
+            <Form.Nickname side="A" placeholder="닉네임을 입력해주세요" />
           </div>
-          <Typo.Heading className="heading-4xl text-primary mb-4 text-center" heading={2}>
+          <Typo.Heading className="heading-4xl text-primary text-center" heading={2}>
             VS
           </Typo.Heading>
           <div>
             <Typo.Heading className="heading-4xl text-ink text-left mb-4" heading={2}>
               B 플레이어
             </Typo.Heading>
-            <Form.Nickname
-              side="B"
-              value={users.B}
-              onChange={onNicknameChange('B')}
-              placeholder="닉네임을 입력해주세요"
-            />
-            <input type="hidden" name="B" value={users.B} />
+            <Form.Nickname side="B" placeholder="닉네임을 입력해주세요" />
           </div>
         </div>
         <button
           type="submit"
           className={pipe(
-            ['px-8', 'py-2', 'rounded-xl', 'block', 'focus:outline-none', 'mx-auto'],
-            concat(['text-ink', 'bg-content', 'cursor-pointer', 'heading-3xl']),
-            concat(['hover:text-content', 'hover:bg-primary']),
-            concat([
-              'disabled:cursor-not-allowed',
-              'disabled:bg-content/50',
-              'disabled:text-ink/50',
-            ]),
+            ['px-8', 'py-2', 'card-3', 'full', 'block', 'focus:outline-none', 'mx-auto'],
+            concat(['text-ink', 'bg-base', 'cursor-pointer', 'heading-2xl']),
+            concat(['hover:text-base', 'hover:bg-primary']),
             join(' ')
           )}
-          disabled={!users.A || !users.B}
         >
           채널생성
         </button>

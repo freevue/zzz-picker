@@ -4,6 +4,7 @@ import type { Side } from '@zzz-picker/constant'
 
 type Props = {
   side: Side
+  name?: string
 } & Omit<React.ComponentProps<typeof Form.Input>, 'name' | 'type'>
 
 const Nickname: React.FC<Props> = (props) => {
@@ -12,11 +13,9 @@ const Nickname: React.FC<Props> = (props) => {
       {...props}
       type="text"
       className={pipe(
-        [],
-        concat(
-          props.side === 'A' ? ['rounded-bl-3xl', 'rounded-tr-3xl', '[&_input]:text-right'] : []
-        ),
-        concat(props.side === 'B' ? ['rounded-br-3xl', 'rounded-tl-3xl'] : []),
+        ['card-2'],
+        concat(props.side === 'A' ? ['[&_input]:text-right'] : []),
+        concat(props.side === 'B' ? ['reverse'] : []),
         concat([
           '[&_input]:text-4xl',
           '[&_input]:text-primary',

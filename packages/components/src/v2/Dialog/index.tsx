@@ -1,3 +1,4 @@
+import { Cross } from '../../Icons'
 import ClientOnly from '../ClientOnly'
 import Agents from './Agents'
 import Engines from './Engines'
@@ -12,6 +13,7 @@ type Props = {
   name?: string
   children: React.ReactNode
   className?: string
+  closeable?: boolean
   onOpen?: () => void
   onClose?: () => void
 }
@@ -108,17 +110,26 @@ const Dialog: DialogType = (props) => {
                   className={pipe(
                     [
                       'min-w-fit',
-                      'rounded-bl-4xl',
-                      'rounded-tr-4xl',
+                      'card',
                       'bg-content',
                       'text-foreground',
                       'overflow-hidden',
                       'p-8',
+                      'relative',
                     ],
                     join(' ')
                   )}
                   onClick={onContentClick}
                 >
+                  {props.closeable && (
+                    <button
+                      type="button"
+                      onClick={props.onClose}
+                      className="absolute top-8 right-8 cursor-pointer"
+                    >
+                      <Cross className="size-10 stroke-primary" />
+                    </button>
+                  )}
                   {props.children}
                 </motion.div>
               </motion.div>

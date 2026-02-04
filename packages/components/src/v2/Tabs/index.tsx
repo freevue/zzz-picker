@@ -6,7 +6,8 @@ type Tab = {
 }
 type Props = {
   list: (Tab | string)[]
-  value: string
+  value?: string
+  defaultValue?: string
   name?: string
   onChange?: (value: string) => void
   className?: string
@@ -20,7 +21,7 @@ const Tabs: React.FC<Props> = (props) => {
   return (
     <div
       className={pipe(
-        ['flex', 'overflow-hidden', 'rounded-xl', 'bg-base/70'],
+        ['flex', 'overflow-hidden', 'card-3', 'full', 'bg-base/70'],
         concat([props.className || '']),
         join(' ')
       )}
@@ -55,7 +56,9 @@ const Tabs: React.FC<Props> = (props) => {
         )),
         toArray
       )}
-      {props.name && <input type="hidden" name={props.name} value={props.value} />}
+      {props.name && (
+        <input type="hidden" name={props.name} value={props.defaultValue || props.value || ''} />
+      )}
     </div>
   )
 }

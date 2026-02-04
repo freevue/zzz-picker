@@ -1,5 +1,5 @@
-import { isNull } from '@fxts/core'
-import { type Side, DEFAULT_REALTIME_STATE } from '@zzz-picker/constant'
+import { isEmpty, isNull, map, pipe, throwIf, toArray } from '@fxts/core'
+import { DEFAULT_REALTIME_STATE } from '@zzz-picker/constant'
 import { supabase } from '@zzz-picker/provider'
 import { AnimatePresence } from 'motion/react'
 import { useState } from 'react'
@@ -19,59 +19,74 @@ export const RealtimeRoot: React.FC = () => {
   const onCreateChannel = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    const formData = new FormData(event.currentTarget)
-    const league = (formData.get('league') as string)?.replace('/', '') // /legend -> legend
-    const nicknameA = formData.get('A') as string
-    const nicknameB = formData.get('B') as string
+    try {
+      const { game_type, state } = pipe(
+        new FormData(event.currentTarget),
+        (formData) => ({
+          game_type: formData.get('league') as string,
+          A: formData.get('A-nickname'),
+          B: formData.get('B-nickname'),
+        }),
+        throwIf(
+          ({ A }) => isEmpty(A),
+          () => Error('A 플레이어 닉네임을 입력해주세요')
+        ),
+        throwIf(
+          ({ B }) => isEmpty(B),
+          () => Error('B 플레이어 닉네임을 입력해주세요')
+        ),
+        ({ A, B, game_type }) => ({
+          game_type,
+          state: {
+            ...DEFAULT_REALTIME_STATE,
+            play: {
+              ...DEFAULT_REALTIME_STATE.play,
+              nickname: { A, B },
+            },
+          },
+        })
+      )
 
-    // 1. 방 생성
-    const initialState = {
-      ...DEFAULT_REALTIME_STATE,
-      play: {
-        ...DEFAULT_REALTIME_STATE.play,
-        nickname: { A: nicknameA, B: nicknameB },
-      },
+      const { data: room, error: roomError } = await supabase
+        .from('realtime_room')
+        .insert({ game_type, state })
+        .select()
+        .single()
+
+      if (roomError || !room) {
+        throw Error('방 생성에 실패했습니다.')
+      }
+
+      const { data: users, error: userError } = await supabase
+        .from('realtime_user')
+        .insert([
+          { room_id: room.id, role: 'H', nickname: 'Host' },
+          { room_id: room.id, role: 'A', nickname: state.play.nickname.A },
+          { room_id: room.id, role: 'B', nickname: state.play.nickname.B },
+        ])
+        .select()
+
+      if (userError || !users) {
+        throw Error('유저 생성에 실패했습니다.')
+      }
+
+      pipe(
+        users,
+        map((user) => ({
+          role: user.role,
+          uuid: room.id,
+          token: user.id,
+          nickname: user.nickname,
+        })),
+        toArray,
+        (list) => {
+          setTokens(list)
+          setGameType(game_type)
+        }
+      )
+    } catch (error: any) {
+      alert(error.message || '방 생성에 실패했습니다.')
     }
-
-    const { data: room, error: roomError } = await supabase
-      .from('realtime_room')
-      .insert({
-        game_type: league,
-        state: initialState,
-      })
-      .select()
-      .single()
-
-    if (roomError || !room) {
-      alert('방 생성에 실패했습니다.')
-      return
-    }
-
-    // 2. 기본 유저 생성 (Host, A, B)
-    const { data: users, error: userError } = await supabase
-      .from('realtime_user')
-      .insert([
-        { room_id: room.id, role: 'Host', nickname: 'Host' },
-        { room_id: room.id, role: 'A', nickname: nicknameA },
-        { room_id: room.id, role: 'B', nickname: nicknameB },
-      ])
-      .select()
-
-    if (userError || !users) {
-      alert('유저 생성에 실패했습니다.')
-      return
-    }
-
-    // 3. 토큰 리스트 생성 (유저 ID를 토큰으로 사용)
-    const tokenList = users.map((user) => ({
-      role: user.role === 'Host' ? ('H' as const) : (user.role as Side),
-      uuid: room.id,
-      token: user.id, // 유저 UUID를 토큰으로 사용
-      nickname: user.nickname,
-    }))
-
-    setTokens(tokenList)
-    setGameType(league)
   }
 
   return (

@@ -13,20 +13,22 @@ type TableType = React.FC<Props> & {
 
 const Table: TableType = (props) => {
   return (
-    <table
+    <div
       className={pipe(
-        ['w-full', 'overflow-hidden', 'rounded-bl-3xl', 'rounded-tr-3xl'],
+        ['w-full', 'card-2', 'border', 'border-solid', 'border-secondary'],
         concat([props.className || '']),
         join(' ')
       )}
     >
-      <colgroup>
-        <col width="*" />
-        <col width="40%" />
-        <col width="40%" />
-      </colgroup>
-      <tbody>{props.children}</tbody>
-    </table>
+      <table className="w-full">
+        <colgroup>
+          <col width="*" />
+          <col width="40%" />
+          <col width="40%" />
+        </colgroup>
+        <tbody>{props.children}</tbody>
+      </table>
+    </div>
   )
 }
 

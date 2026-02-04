@@ -9,16 +9,7 @@ const Th: React.FC<Props> = (props) => {
   return (
     <th
       className={pipe(
-        [
-          'p-2',
-          'text-center',
-          'bg-secondary',
-          'border-secondary',
-          'border-b',
-          'border-r',
-          'heading-lg',
-          'text-ink',
-        ],
+        ['p-2', 'text-center', 'bg-secondary', 'heading-lg', 'text-ink'],
         concat([props.className || '']),
         join(' ')
       )}

@@ -43,7 +43,7 @@ const Td: React.FC<Props> = (props) => {
   return (
     <td
       className={pipe(
-        ['text-center', 'h-14', 'bg-base/70', 'border-b', 'border-r', 'relative', 'group/td'],
+        ['text-center', 'h-14', 'bg-base/70', 'border-t', 'border-l', 'relative', 'group/td'],
         concat([props.className || '']),
         concat(['hover:bg-tertiary', 'border-secondary']),
         join(' ')

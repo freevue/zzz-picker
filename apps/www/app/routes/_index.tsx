@@ -55,7 +55,7 @@ const Main: React.FC = () => {
               transition={{ duration: 0.2, delay: index * 0.2 }}
             >
               <Link to={link.href} className="text-center flex items-center gap-6 group">
-                <div className="flex size-48 items-center justify-center bg-content rounded-bl-4xl rounded-tr-4xl overflow-hidden p-2">
+                <div className="flex size-48 items-center justify-center bg-content card p-2">
                   <img
                     src={link.url}
                     alt={link.title}
@@ -71,8 +71,7 @@ const Main: React.FC = () => {
                       '-translate-x-8',
                       'p-4',
                       'bg-content',
-                      'rounded-bl-3xl',
-                      'rounded-tr-3xl',
+                      'card-2',
                     ],
                     concat(['group-hover:opacity-100', 'group-hover:translate-x-0']),
                     join(' ')

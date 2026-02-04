@@ -21,10 +21,10 @@ const COMMON_CLASS = [
   'items-center',
   'justify-center',
   'flex-1',
-  'overflow-hidden',
   'heading-2xl',
   'h-16',
-  'rounded-xl',
+  'card-2',
+  'full',
 ]
 const LinkButton: React.FC<{ children: React.ReactNode; href: string }> = (props) => {
   return (
@@ -52,10 +52,11 @@ const CopyButton: React.FC<{ children: React.ReactNode; value: string }> = (prop
     </button>
   )
 }
+
 export const RoomInfo: React.FC<Props> = (props) => {
   return (
     <motion.div
-      className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-2/4"
+      className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-2xl"
       key="links"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -68,13 +69,16 @@ export const RoomInfo: React.FC<Props> = (props) => {
           map(({ nickname, role, token }) => {
             const isHost = role === 'H'
             const joinUrl = `${window.location.origin}/realtime/${isHost ? `${props.gameType}/` : ''}${token}`
+
             return (
               <li key={role} className="">
-                <div className="flex items-end gap-2 mb-2">
-                  {role !== 'H' && <p className="text-ink body-lg">플레이어 {role}:</p>}
+                <div className="flex items-end gap-4 mb-2">
                   <Typo.Heading className="heading-3xl text-primary" heading={2}>
                     {role == 'H' ? '관전자' : nickname}
                   </Typo.Heading>
+                  {role !== 'H' && (
+                    <p className="text-ink/70 body-lg font-semibold">플레이어 {role}</p>
+                  )}
                 </div>
                 <div className="flex w-full overflow-hidden gap-4 items-center">
                   <LinkButton href={joinUrl}>접속</LinkButton>
@@ -88,7 +92,11 @@ export const RoomInfo: React.FC<Props> = (props) => {
       </ul>
       <button
         type="button"
-        className="block cursor-pointer w-1/4 bg-content text-ink heading-2xl h-16 rounded-xl mx-auto mt-14"
+        className={pipe(
+          ['px-8', 'py-2', 'card-3', 'full', 'block', 'focus:outline-none', 'mx-auto', 'mt-14'],
+          concat(['text-ink', 'bg-base', 'cursor-pointer', 'heading-2xl']),
+          join(' ')
+        )}
         onClick={props.onReset}
       >
         초기화
