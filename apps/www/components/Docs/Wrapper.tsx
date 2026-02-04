@@ -9,7 +9,9 @@ type Props = {
 const Wrapper: React.FC<Props> = (props) => {
   return (
     <div>
-      <Typo.Heading className="heading-xl text-netural mb-1">{props.title}</Typo.Heading>
+      <Typo.Heading heading={2} className="heading-xl text-netural mb-1">
+        {props.title}
+      </Typo.Heading>
       <Card>{props.children}</Card>
     </div>
   )
