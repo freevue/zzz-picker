@@ -8,13 +8,7 @@ type Props = {
 
 const Image: React.FC<Props> = (props) => {
   return (
-    <div
-      className={pipe(
-        ['w-full', 'overflow-hidden', 'rounded-bl-2xl', 'rounded-tr-2xl'],
-        concat([props.className || '']),
-        join(' ')
-      )}
-    >
+    <div className={pipe(['w-full', 'card-2'], concat([props.className || '']), join(' '))}>
       <img src={props.src} alt={props.alt} className="block w-full" />
     </div>
   )
