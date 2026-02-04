@@ -15,9 +15,9 @@ const DevLog: React.FC = () => {
       >
         개발일지
       </button>
-      <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <div className="flex flex-col gap-4 w-2xl">
-          <div className="flex items-end justify-between">
+      <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)} closeable>
+        <div className="flex flex-col gap-4 max-w-2xl w-full">
+          <div className="flex flex-col gap-1">
             <Typo.Heading className="heading-4xl text-primary">Dev Log</Typo.Heading>
             <Link
               className="text-ink/70 body-lg hover:text-primary cursor-pointer focus:outline-none"

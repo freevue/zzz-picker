@@ -90,13 +90,12 @@ const Dialog: DialogType = (props) => {
                     'z-50',
                     'flex',
                     'items-start',
-                    'py-24',
-                    'px-8',
                     'justify-center',
                     'overflow-y-auto',
                     'backdrop-blur-lg',
                     'scrollbar-hidden',
                   ],
+                  concat(['sm:px-8', 'sm:py-24']),
                   concat([props.className || '']),
                   join(' ')
                 )}
@@ -110,13 +109,13 @@ const Dialog: DialogType = (props) => {
                   className={pipe(
                     [
                       'min-w-fit',
-                      'card',
                       'bg-content',
                       'text-foreground',
                       'overflow-hidden',
                       'p-8',
                       'relative',
                     ],
+                    concat(['sm:card']),
                     join(' ')
                   )}
                   onClick={onContentClick}

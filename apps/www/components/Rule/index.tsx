@@ -14,8 +14,8 @@ const Rule: React.FC = () => {
       >
         경기 룰
       </button>
-      <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <Book className="flex flex-col gap-4 w-2xl" />
+      <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)} closeable>
+        <Book className="flex flex-col gap-4 max-w-2xl w-full" />
       </Dialog>
     </>
   )

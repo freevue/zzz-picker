@@ -21,7 +21,7 @@ const Tabs: React.FC<Props> = (props) => {
   return (
     <div
       className={pipe(
-        ['flex', 'overflow-hidden', 'card-3', 'full', 'bg-base/70'],
+        ['flex', 'overflow-hidden', 'card-3', 'full', 'bg-base/70', 'flex-wrap'],
         concat([props.className || '']),
         join(' ')
       )}
