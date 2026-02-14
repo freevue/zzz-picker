@@ -42,25 +42,25 @@ body {
 @utility card-* {
   @apply overflow-hidden;
 
-  border-radius: 4px calc(40px / --value(integer)) 4px calc(40px / --value(integer));
+  border-radius: 4px calc(4rem / --value(integer)) 4px calc(4rem / --value(integer));
 
   &.full {
-    border-radius: calc(40px / --value(integer));
+    border-radius: calc(4rem / --value(integer));
   }
   &.reverse {
-    border-radius: calc(40px / --value(integer)) 4px calc(40px / --value(integer)) 4px;
+    border-radius: calc(4rem / --value(integer)) 4px calc(4rem / --value(integer)) 4px;
   }
 }
 
 @utility card {
   @apply overflow-hidden;
 
-  border-radius: 4px 40px 4px 40px;
+  border-radius: 4px 3rem 4px 3rem;
 
   &.full {
-    border-radius: 40px;
+    border-radius: 3rem;
   }
   &.reverse {
-    border-radius: 40px 4px 40px 4px;
+    border-radius: 3rem 4px 3rem 4px;
   }
 }
