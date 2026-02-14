@@ -7,7 +7,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./hooks": "./src/hooks/index.ts",
-    "./realtime": "./src/realtime.ts"
+    "./realtime": "./src/realtime.ts",
+    "./store": "./src/Store.tsx"
   },
   "peerDependencies": {
     "@zzz-picker/constant": "workspace:*",

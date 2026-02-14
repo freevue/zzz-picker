@@ -145,6 +145,25 @@ const Provider: React.FC<Props> = (props) => {
     setChannel(newChannel)
 
     newChannel
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'realtime_room',
+          filter: `id=eq.${props.channelId}`,
+        },
+        (payload) => {
+          console.log('[Socket] Postgres Change:', payload)
+          if (payload.new) {
+            const newRoom = payload.new as RoomData
+            setRoom((prev) => ({ ...prev, ...newRoom }))
+            if (newRoom.state) {
+              setState(ensureRealtimeState(newRoom.state))
+            }
+          }
+        }
+      )
       .on('broadcast', { event: '*' }, ({ event, payload }) => {
         console.log({ event })
         if (event === SOCKET_EVENT.SYNC) {
