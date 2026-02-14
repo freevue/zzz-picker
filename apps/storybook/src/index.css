@@ -1,28 +1,5 @@
 @import 'tailwindcss';
-@import '@zzz-picker/tailwind-config/theme';
-
-@theme {
-  --color-primary: var(--color-primary);
-  --color-secondary: var(--color-secondary);
-  --color-tertiary: var(--color-tertiary);
-  --color-netural: var(--color-netural);
-  --color-base: var(--color-base);
-  --color-content: var(--color-content);
-  --color-ink: var(--color-ink);
-
-  /* Charade colors */
-  --color-charade-50: var(--charade-50);
-  --color-charade-100: var(--charade-100);
-  --color-charade-200: var(--charade-200);
-  --color-charade-300: var(--charade-300);
-  --color-charade-400: var(--charade-400);
-  --color-charade-500: var(--charade-500);
-  --color-charade-600: var(--charade-600);
-  --color-charade-700: var(--charade-700);
-  --color-charade-800: var(--charade-800);
-  --color-charade-900: var(--charade-900);
-  --color-charade-950: var(--charade-950);
-}
+@import '../../packages/components/src/index.css';
 
 :root {
   --radius: 0.5rem;
