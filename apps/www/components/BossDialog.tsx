@@ -57,12 +57,7 @@ const BossDialog: React.FC<Props> = (props) => {
                 value={boss?.id}
                 onClick={props.onClick}
               >
-                <div
-                  className={pipe(
-                    ['w-full', 'overflow-hidden', 'rounded-bl-4xl', 'rounded-tr-4xl', 'bg-netural'],
-                    join(' ')
-                  )}
-                >
+                <div className={pipe(['w-full', 'card', 'bg-netural'], join(' '))}>
                   {boss && (
                     <img className="block w-full" src={`/images/boss/${boss.id}.webp`} alt="" />
                   )}

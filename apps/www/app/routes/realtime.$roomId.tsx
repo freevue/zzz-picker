@@ -1,7 +1,7 @@
 import { pipe, split, map, toArray } from '@fxts/core'
 import { useParams, useSearchParams } from '@remix-run/react'
 import { DEFAULT } from '@zzz-picker/constant'
-import { Socket, supabase, useSocket, Setting, Play } from '@zzz-picker/provider'
+import { Socket, supabase, useSocket, Setting, Play, Store } from '@zzz-picker/provider'
 import { useEffect, useState, useMemo } from 'react'
 import { Phase } from '~/components'
 
@@ -64,12 +64,14 @@ export const RealtimeRoom: React.FC = () => {
 
   return (
     <Setting option={options}>
-      <Play>
-        <Socket channelId={room.id}>
-          <SocketTester />
-          <Phase role={role} initialRoom={room} />
-        </Socket>
-      </Play>
+      <Store>
+        <Play>
+          <Socket channelId={room.id}>
+            <SocketTester />
+            <Phase role={role} initialRoom={room} />
+          </Socket>
+        </Play>
+      </Store>
     </Setting>
   )
 }

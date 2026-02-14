@@ -1,6 +1,6 @@
 import Ban from './Ban'
-import BossSelect from './BossSelect'
-import Pick from './Pick'
+import BossSelect from './Boss'
+import ParticipantPhase from './Participant'
 import { Typo } from '@zzz-picker/components/v2'
 import { SOCKET_EVENT, type RealtimeState, DEFAULT_REALTIME_STATE } from '@zzz-picker/constant'
 import type { Side } from '@zzz-picker/constant'
@@ -198,6 +198,12 @@ const Phase: React.FC<Props> = (props) => {
   }
 
   const renderPhase = () => {
+    // Player View (New Design)
+    if (props.role !== 'H') {
+      return <ParticipantPhase role={props.role} room={room} onUpdate={onUpdateRoom} />
+    }
+
+    // Host View (Original Admin Logic)
     const phase = room.state.realtime.phase
     switch (phase) {
       case ROOM_PHASE.WAITING:
@@ -206,27 +212,19 @@ const Phase: React.FC<Props> = (props) => {
       case ROOM_PHASE.BAN:
         return <Ban role={props.role} room={room} onUpdate={onUpdateRoom} />
       case ROOM_PHASE.PICK:
-        return props.role === 'H' ? null : (
-          <Pick role={props.role} room={room} onUpdate={onUpdateRoom} />
-        )
+        return null
       case ROOM_PHASE.DONE:
         return (
           <div className="flex flex-col items-center gap-10">
             <Typo.Heading className="heading-4xl text-ink" heading={1}>
               모든 선택이 완료되었습니다.
             </Typo.Heading>
-            {props.role === 'H' ? (
-              <button
-                onClick={onFinish}
-                className="px-12 py-4 bg-primary text-content rounded-2xl heading-2xl cursor-pointer"
-              >
-                결과 저장 및 경기 페이지로 이동
-              </button>
-            ) : (
-              <Typo.Body className="body-xl opacity-50 text-center">
-                관리자가 결과를 저장하고 경기를 시작할 때까지 잠시만 기다려주세요.
-              </Typo.Body>
-            )}
+            <button
+              onClick={onFinish}
+              className="px-12 py-4 bg-primary text-content rounded-2xl heading-2xl cursor-pointer"
+            >
+              결과 저장 및 경기 페이지로 이동
+            </button>
           </div>
         )
       default:

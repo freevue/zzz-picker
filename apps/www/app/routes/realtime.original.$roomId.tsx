@@ -6,7 +6,7 @@ import { supabase } from '@zzz-picker/provider'
 import { useSocket, useStore, usePlay } from '@zzz-picker/provider/hooks'
 import { useEffect, useMemo } from 'react'
 import { useState } from 'react'
-import { AllowAgent, BanAgent, CostTable, CommonBossCard, Header, Playground } from '~/components'
+import { Realtime, BanAgent, CostTable, CommonBossCard, Header, Playground } from '~/components'
 
 const OriginalContent: React.FC = () => {
   const { state } = useSocket()
@@ -95,7 +95,7 @@ const OriginalContent: React.FC = () => {
         <Header />
         <CommonBossCard />
         <div className="flex gap-6 flex-col">
-          <AllowAgent />
+          <Realtime.Host.AllowAgent />
           <BanAgent />
         </div>
         <CostTable />
@@ -153,7 +153,7 @@ const Original: React.FC = () => {
       .eq('id', token)
       .single()
       .then(async ({ data: userData, error: userError }) => {
-        if (userError || !userData || userData.role !== 'Host') {
+        if (userError || !userData || userData.role !== 'H') {
           // If not found or not Host, just stop loading (or could redirect/error)
           setLoading(false)
           return
@@ -169,15 +169,15 @@ const Original: React.FC = () => {
   if (!room) return <div>접속 권한이 없습니다.</div>
 
   return (
-    <Socket channelId={room.id}>
-      <Setting option={options}>
-        <div className="w-full h-full overflow-auto scrollbar-hidden">
-          <Play>
+    <Setting option={options}>
+      <Play>
+        <Socket channelId={room.id}>
+          <div className="w-full h-full overflow-auto scrollbar-hidden">
             <OriginalContent />
-          </Play>
-        </div>
-      </Setting>
-    </Socket>
+          </div>
+        </Socket>
+      </Play>
+    </Setting>
   )
 }
 
