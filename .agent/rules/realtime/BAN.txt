@@ -1,0 +1,67 @@
+title Ban
+
+participant Host
+participant Supabase
+participant A Side
+participant B Side
+
+space
+
+note over Host, B Side: Boss 선택 완료 후 진행. (공허사냥꾼 경기는 Boss 선택을 생략)
+
+space
+
+box right of A Side: 1차 밴을 진행할 캐릭터(Pickup S급 캐릭터) 2개 선택
+
+Supabase<<-A Side: Ban 선택 전파
+
+activate Supabase
+
+Supabase-->>Host: 현재 선택된 Ban 정보 전파
+Supabase-->>B Side: 현재 선택된 Ban 정보 전파
+
+deactivate Supabase
+
+space
+
+Supabase<<-B Side: 2개의 캐릭터중 한가지 Ban을 최종 선택
+
+
+activate Supabase
+
+Supabase-->Host: 1차 Ban 정보 전파
+Supabase-->A Side: 1차 Ban 정보 전파
+
+deactivate Supabase
+
+space
+
+box right of B Side: 2차 밴을 진행할 캐릭터(Pickup S급 캐릭터) 2개 선택
+
+note over B Side: 1차 밴에 나온 캐릭터와 다른 포지션을 선택 (강공, 이상, 명파 < - > 지원, 격파, 방어)
+
+space
+
+Supabase<<-B Side: Ban 선택 전파
+
+activate Supabase
+
+Supabase-->>Host: 현재 선택된 Ban 정보 전파
+Supabase-->>A Side: 현재 선택된 Ban 정보 전파
+
+deactivate Supabase
+
+space
+
+Supabase<<-A Side: 2개의 캐릭터중 한가지 Ban을 최종 선택
+
+activate Supabase
+
+Supabase-->Host: 2차 Ban 정보 전파
+Supabase-->B Side: 2차 Ban 정보 전파
+
+deactivate Supabase
+
+space
+
+== Pick 페이즈로 이동 ==
