@@ -15,7 +15,7 @@ const Table: TableType = (props) => {
   return (
     <div
       className={pipe(
-        ['w-full', 'card-2', 'border', 'border-solid', 'border-secondary'],
+        ['w-full', 'card', 'border', 'border-solid', 'border-secondary'],
         concat([props.className || '']),
         join(' ')
       )}
