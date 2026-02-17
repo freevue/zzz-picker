@@ -1,4 +1,4 @@
-import type { ROUND_TYPE } from '.'
+import type { ROUND_TYPE, BAN_PHASE } from '.'
 
 type Source = {
   name: string
@@ -77,12 +77,11 @@ export type PlayState = {
   personal: PersonalRound
   unlimited: UnlimitedRound
 }
-export type RealtimeState = {
+export type RoomState = {
   play: PlayState
   realtime: {
     phase: string
-    banPhase?: string
-    bossCandidates: SelectBoss
+    banPhase: BAN_PHASE
     banCandidates: Array<SelectAgent>
     ready: { A: boolean; B: boolean }
     status: Record<string, boolean>
