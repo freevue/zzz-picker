@@ -159,7 +159,7 @@ const BanPhase: React.FC<Props> = (props) => {
       </div>
       {/* 현재 Ban이 가능한 캐릭터들을 리스트업합니다. */}
       <div className="flex-1 overflow-y-auto">
-        <ul className="grid grid-cols-4 gap-2 gap-y-6 px-4 w-full max-w-2xl mx-auto">
+        <ul className="grid grid-cols-4 gap-2 gap-y-6 p-4 w-full max-w-2xl mx-auto">
           {pipe(
             agents,
             map(([, agent]) => agent),
