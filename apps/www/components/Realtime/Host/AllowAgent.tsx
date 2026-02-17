@@ -15,11 +15,11 @@ const AllowAgent = () => {
     )
   }, [agents, state.allowAgent])
 
-  return agents.size > 0 && allowAgents.length === 0 ? null : (
-    <div className="flex-1 overflow-hidden p-4">
+  return (
+    <div className="overflow-hidden p-4">
       <Typo.Heading className="heading-3xl text-primary mb-4">Allow Agent</Typo.Heading>
       <div className="w-full overflow-x-auto overflow-y-hidden mt-4">
-        <ul className="card-3 bg-base min-h-24 flex w-fit">
+        <ul className="card bg-base min-h-24 flex w-fit">
           {pipe(
             allowAgents,
             map((agent) => (

@@ -2,7 +2,6 @@ import PlayerPick from './Pick/Player'
 import { type RoomData } from './index'
 import { type Side } from '@zzz-picker/constant'
 import { useSocket } from '@zzz-picker/provider/hooks'
-import { useEffect } from 'react'
 
 type Props = {
   role: Side
@@ -12,11 +11,6 @@ type Props = {
 
 const Pick: React.FC<Props> = (props) => {
   const { cost } = useSocket()
-
-  useEffect(() => {
-    console.log('[Pick] Rendered. Role:', props.role)
-    console.log('[Pick] Cost State:', cost)
-  }, [props.role, cost])
 
   const readyState = props.room.state.realtime.ready || { A: false, B: false }
 

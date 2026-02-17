@@ -175,9 +175,7 @@ const PlayerPick: React.FC<Props> = ({ room, role, onUpdate, onComplete }) => {
         : null
     )
 
-    console.log('[PlayerPick] handleDetailUpdate:', { side, index, updates, c1, c2 })
-
-    const roundKey2 = room.game_type === 'unlimited' ? 'unlimited' : 'common'
+    const roundKey2 = room.gameType === 'unlimited' ? 'unlimited' : 'common'
 
     onUpdate({
       ...room,

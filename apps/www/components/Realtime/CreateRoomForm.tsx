@@ -1,12 +1,13 @@
 import { pipe, concat, join } from '@fxts/core'
 import { Typo, Tabs, Form } from '@zzz-picker/components/v2'
+import { GAME_TYPE } from '@zzz-picker/constant'
 import { motion } from 'motion/react'
 import { useState } from 'react'
 
 const TABS = [
-  { label: '정식 로프꾼', value: 'original' },
-  { label: '레전드 로프꾼', value: 'legend' },
-  { label: '공허사냥꾼', value: 'unlimited' },
+  { label: '정식 로프꾼', value: GAME_TYPE.ORIGINAL },
+  { label: '레전드 로프꾼', value: GAME_TYPE.LEGEND },
+  { label: '공허사냥꾼', value: GAME_TYPE.UNLIMITED },
 ]
 
 type Props = {
