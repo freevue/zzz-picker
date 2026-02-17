@@ -19,6 +19,8 @@
   --color-base: var(--charade-800);
   --color-content: var(--charade-700);
 
+  --color-disabled: #ef4444;
+
   --color-ink: var(--charade-50);
 
   --animate-turbo: spin 0.1s linear infinite;
