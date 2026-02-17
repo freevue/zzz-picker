@@ -1,5 +1,6 @@
 import Ban from './Ban'
 import BossSelect from './Boss'
+import Pick from './Pick'
 import { type RoomState, DEFAULT_PLAY_STATE, DEFAULT_REALTIME_STATE } from '@zzz-picker/constant'
 import { ROOM_PHASE, GAME_TYPE, type Side } from '@zzz-picker/constant'
 import { useSocket } from '@zzz-picker/provider/hooks'
@@ -33,6 +34,8 @@ const Component: React.FC<{
       return <BossSelect role={props.role} room={props.room} onUpdate={props.onUpdate} />
     case ROOM_PHASE.BAN:
       return <Ban role={props.role} room={props.room} onUpdate={props.onUpdate} />
+    case ROOM_PHASE.PICK:
+      return <Pick role={props.role} room={props.room} onUpdate={props.onUpdate} />
     default:
       return null
   }
@@ -43,8 +46,8 @@ const Phase: React.FC<Props> = (props) => {
 
   const roomState = useMemo<RoomState>(() => {
     return {
-      play: socketState.play || props.initialRoom.play || DEFAULT_PLAY_STATE,
-      realtime: socketState.realtime || props.initialRoom.realtime || DEFAULT_REALTIME_STATE,
+      play: { ...socketState.play, ...props.initialRoom.play },
+      realtime: { ...socketState.realtime, ...props.initialRoom.realtime },
     }
   }, [socketState, props.initialRoom])
 

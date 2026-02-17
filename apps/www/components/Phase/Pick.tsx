@@ -1,39 +1,73 @@
-import PlayerPick from './Pick/Player'
-import { type RoomData } from './index'
-import { type Side } from '@zzz-picker/constant'
+import { PickPhase } from '@zzz-picker/components/realtime'
+import { type Side, type RoomState, GAME_TYPE } from '@zzz-picker/constant'
 import { useSocket } from '@zzz-picker/provider/hooks'
 
 type Props = {
-  role: Side
-  room: RoomData
-  onUpdate: (nextRoom: RoomData) => void
+  role: Side | 'H'
+  room: RoomState
+  gameType?: GAME_TYPE
+  onUpdate: (data: RoomState) => void
 }
 
 const Pick: React.FC<Props> = (props) => {
   const { cost } = useSocket()
+  const side = props.role === 'H' ? 'A' : props.role
 
-  const readyState = props.room.state.realtime.ready || { A: false, B: false }
+  const pickList = {
+    personal: props.room.play.personal[side].pickList,
+    common: props.room.play.common[side].pickList,
+  }
 
-  const toggleReady = (side: Side) => {
-    const nextReady = !readyState[side]
+  const pickCost = {
+    personal: props.room.play.personal[side].pickCost || [null, null, null],
+    common: props.room.play.common[side].pickCost || [null, null, null],
+  }
+
+  const boss = {
+    personal: props.room.play.personal[side].boss,
+    common: props.room.play.common.boss,
+  }
+
+  const banList = props.room.play.banList
+
+  const handleSelectAgent = (round: 'personal' | 'common', index: number, agentId: number) => {
+    const roundKey = round === 'personal' ? 'personal' : 'common'
+    const prevPickList = [...props.room.play[roundKey][side].pickList] as [
+      number | null,
+      number | null,
+      number | null,
+    ]
+    prevPickList[index] = agentId || null
+
     props.onUpdate({
       ...props.room,
-      state: {
-        ...props.room.state,
-        realtime: {
-          ...props.room.state.realtime,
-          ready: { ...readyState, [side]: nextReady },
+      play: {
+        ...props.room.play,
+        [roundKey]: {
+          ...props.room.play[roundKey],
+          [side]: {
+            ...props.room.play[roundKey][side],
+            pickList: prevPickList,
+          },
         },
-      } as any,
+      },
     })
   }
 
+  const handleSubmit = () => {
+    // TODO: Socket 이벤트로 ready 상태 전송
+  }
+
   return (
-    <PlayerPick
-      room={props.room}
+    <PickPhase
       role={props.role}
-      onUpdate={props.onUpdate}
-      onComplete={() => toggleReady(props.role as Side)}
+      pickList={pickList as any}
+      pickCost={pickCost as any}
+      boss={boss as any}
+      banList={banList}
+      onSelectAgent={handleSelectAgent}
+      onSubmit={handleSubmit}
+      disabled={props.role === 'H'}
     />
   )
 }
