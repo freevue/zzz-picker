@@ -6,7 +6,7 @@ import { supabase } from '@zzz-picker/provider'
 import { useSocket, useStore, usePlay } from '@zzz-picker/provider/hooks'
 import { useEffect, useMemo } from 'react'
 import { useState } from 'react'
-import { Realtime, BanAgent, CostTable, CommonBossCard, Header, Playground } from '~/components'
+import { Realtime, CostTable, CommonBossCard, Header, Playground } from '~/components'
 
 const OriginalContent: React.FC = () => {
   const { state } = useSocket()
@@ -62,7 +62,7 @@ const OriginalContent: React.FC = () => {
       { ...play },
       (prev) => ({
         ...prev,
-        common: { ...prev.common, boss: prev.common.boss || realtime.bossCandidates },
+        common: { ...prev.common, boss: prev.common.boss },
       }),
       (play) => {
         setState((prev) => ({ ...prev, ...play }))
@@ -96,7 +96,7 @@ const OriginalContent: React.FC = () => {
         <CommonBossCard />
         <div className="flex gap-6 flex-col">
           <Realtime.Host.AllowAgent />
-          <BanAgent />
+          <Realtime.Host.BanAgent />
         </div>
         <CostTable />
       </div>
