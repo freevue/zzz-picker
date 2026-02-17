@@ -58,6 +58,10 @@ body {
   }
 }
 
+@utility aspect-portrait {
+  aspect-ratio: 683 / 1024;
+}
+
 @utility card {
   @apply overflow-hidden;
 
