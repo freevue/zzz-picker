@@ -1,6 +1,6 @@
 import Item from './Item'
 import Tip from './Tip'
-import { pipe, range, map, toArray, zipWithIndex } from '@fxts/core'
+import { pipe, map, toArray, zipWithIndex } from '@fxts/core'
 import { Typo } from '@zzz-picker/components/v2'
 import type { AgentId, SelectAgent } from '@zzz-picker/constant'
 

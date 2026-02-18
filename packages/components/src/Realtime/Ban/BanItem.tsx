@@ -1,5 +1,5 @@
 import { pipe, concat, join } from '@fxts/core'
-import { SelectAgent } from '@zzz-picker/constant'
+import { type SelectAgent } from '@zzz-picker/constant'
 import { useAgent } from '@zzz-picker/provider'
 
 type Props = {
