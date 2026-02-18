@@ -105,8 +105,8 @@ const Pick: React.FC<Props> = (props) => {
             onChange={onTimeChange}
             className={pipe(
               ['w-56', 'h-14', 'bg-content', 'overflow-hidden'],
-              concat(props.side === 'A' ? ['rounded-tr-2xl'] : []),
-              concat(props.side === 'B' ? ['rounded-tl-2xl'] : []),
+              concat(props.side === 'A' ? ['card', '!rounded-bl-[4px]'] : []),
+              concat(props.side === 'B' ? ['card', 'reverse', '!rounded-br-[4px]'] : []),
               join(' ')
             )}
           />
@@ -132,10 +132,14 @@ const Pick: React.FC<Props> = (props) => {
             className={pipe(
               ['w-56', 'h-14', 'bg-content', '[&_input]:text-3xl', '[&_input]:font-black'],
               concat(
-                props.side === 'A' ? ['rounded-bl-2xl', 'ml-auto', '[&_input]:text-right'] : []
+                props.side === 'A'
+                  ? ['card', '!rounded-tr-[4px]', 'ml-auto', '[&_input]:text-right']
+                  : []
               ),
               concat(
-                props.side === 'B' ? ['rounded-br-2xl', 'mr-auto', '[&_input]:text-left'] : []
+                props.side === 'B'
+                  ? ['card', 'reverse', '!rounded-tl-[4px]', 'mr-auto', '[&_input]:text-left']
+                  : []
               ),
               join(' ')
             )}

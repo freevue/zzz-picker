@@ -83,7 +83,7 @@ const BossButton: React.FC<Props & { side: Side }> = (props) => {
 const Personal: React.FC<Props> = (props) => {
   return (
     <div className="w-full px-4">
-      <div className="flex overflow-hidden rounded-bl-2xl rounded-tr-2xl">
+      <div className="flex overflow-hidden card-2 inverse">
         <BossButton roundId={props.roundId} side="A" />
         <BossButton roundId={props.roundId} side="B" />
       </div>
