@@ -13,17 +13,23 @@ export const useRoundedSize = (size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl', reverse?
   const rounded = useMemo(() => {
     switch (size) {
       case 'xs':
-        return reverse ? 'rounded-tl-2xl rounded-br-2xl' : 'rounded-bl-2xl rounded-tr-2xl'
+        // return reverse ? 'rounded-tl-2xl rounded-br-2xl' : 'rounded-bl-2xl rounded-tr-2xl'
+        return reverse ? 'card reverse' : 'card'
       case 'sm':
-        return reverse ? 'rounded-tl-3xl rounded-br-3xl' : 'rounded-bl-3xl rounded-tr-3xl'
+        // return reverse ? 'rounded-tl-3xl rounded-br-3xl' : 'rounded-bl-3xl rounded-tr-3xl'
+        return reverse ? 'card reverse' : 'card'
       case 'md':
-        return reverse ? 'rounded-tl-3xl rounded-br-3xl' : 'rounded-bl-3xl rounded-tr-3xl'
+        // return reverse ? 'rounded-tl-3xl rounded-br-3xl' : 'rounded-bl-3xl rounded-tr-3xl'
+        return reverse ? 'card reverse' : 'card'
       case 'lg':
-        return reverse ? 'rounded-tl-4xl rounded-br-4xl' : 'rounded-bl-4xl rounded-tr-4xl'
+        // return reverse ? 'rounded-tl-4xl rounded-br-4xl' : 'rounded-bl-4xl rounded-tr-4xl'
+        return reverse ? 'card reverse' : 'card'
       case 'xl':
-        return reverse ? 'rounded-tl-4xl rounded-br-4xl' : 'rounded-bl-4xl rounded-tr-4xl'
+        // return reverse ? 'rounded-tl-4xl rounded-br-4xl' : 'rounded-bl-4xl rounded-tr-4xl'
+        return reverse ? 'card reverse' : 'card'
       default:
-        return reverse ? 'rounded-tl-2xl rounded-br-2xl' : 'rounded-bl-3xl rounded-tr-3xl'
+        // return reverse ? 'rounded-tl-2xl rounded-br-2xl' : 'rounded-bl-3xl rounded-tr-3xl'
+        return reverse ? 'card reverse' : 'card'
     }
   }, [size, reverse])
 

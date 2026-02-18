@@ -1,4 +1,4 @@
-import type { CostWeight, CostTable, RoundSide, PlayState, RealtimeState } from './types.d'
+import type { CostWeight, CostTable, RoundSide, PlayState, RoomState } from './types.d'
 import { pipe, range, map, toArray } from '@fxts/core'
 
 export * from './types.d'
@@ -43,6 +43,18 @@ export enum ROUND_TYPE {
   COMMON = 'common',
   UNLIMITED = 'unlimited',
 }
+export enum GAME_TYPE {
+  ORIGINAL = 'original',
+  LEGEND = 'legend',
+  UNLIMITED = 'unlimited',
+}
+export enum ROOM_PHASE {
+  WAITING = 'WAITING',
+  BOSS_SELECT = 'BOSS_SELECT',
+  BAN = 'BAN',
+  PICK = 'PICK',
+  DONE = 'DONE',
+}
 export enum BAN_PHASE {
   A_SELECT = 'a_select', // A가 2명 제시
   B_BAN = 'b_ban', // B가 1명 밴
@@ -82,16 +94,16 @@ export const DEFAULT_PLAY_STATE: PlayState = {
   },
 }
 
-export const DEFAULT_REALTIME_STATE: RealtimeState = {
+export const DEFAULT_REALTIME_STATE = {
+  phase: ROOM_PHASE.WAITING,
+  ready: { A: false, B: false },
+  status: { A: false, B: false, H: false },
+  banPhase: BAN_PHASE.A_SELECT,
+  banCandidates: [null, null],
+}
+export const DEFAULT_ROOM_STATE: RoomState = {
   play: DEFAULT_PLAY_STATE,
-  realtime: {
-    phase: 'WAITING',
-    banPhase: 'a_select',
-    bossCandidates: null,
-    banCandidates: [null, null],
-    ready: { A: false, B: false },
-    status: { A: false, B: false, H: false },
-  },
+  realtime: DEFAULT_REALTIME_STATE,
 }
 
 export const PRETTY_AGENT_ID = 156728

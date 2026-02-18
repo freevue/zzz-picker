@@ -26,6 +26,7 @@ async function getDeadlyAssaultList(): Promise<Array<DeadlyAssault>> {
       await supabase
         .from('deadly_assault')
         .select<string, DeadlyAssault>(QUERY)
+        .order('open_at', { ascending: false })
         .setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600'),
       passError<DeadlyAssault>
     )

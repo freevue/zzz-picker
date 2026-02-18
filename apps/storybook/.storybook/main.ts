@@ -11,9 +11,18 @@ const config: StorybookConfig = {
     name: '@storybook/react-vite',
     options: {},
   },
-  viteFinal: async (config) => {
-    return config
-  },
+  // viteFinal: async (config) => {
+  //   const { mergeConfig } = await import('vite')
+
+  //   return mergeConfig(config, {
+  //     resolve: {
+  //       alias: {
+  //         '@': path.resolve(__dirname, '../../apps/www'),
+  //         '~': path.resolve(__dirname, '../../apps/www'),
+  //       },
+  //     },
+  //   })
+  // },
 }
 
 export default config

@@ -25,6 +25,16 @@
   }
 }
 
+@keyframes shadow-twinkles {
+  0%,
+  100% {
+    filter: drop-shadow(2px 4px 2px black);
+  }
+  50% {
+    filter: drop-shadow(2px 4px 10px black);
+  }
+}
+
 /* 앱별 커스텀 스타일 */
 body {
   height: 100vh;
@@ -42,25 +52,35 @@ body {
 @utility card-* {
   @apply overflow-hidden;
 
-  border-radius: 4px calc(40px / --value(integer)) 4px calc(40px / --value(integer));
+  border-radius: 4px calc(2rem * --value(integer)) 4px calc(2rem * --value(integer));
 
   &.full {
-    border-radius: calc(40px / --value(integer));
+    border-radius: calc(2rem * --value(integer));
+  }
+  &.inverse {
+    border-radius: 4px calc(2rem / --value(integer)) 4px calc(2rem / --value(integer));
   }
   &.reverse {
-    border-radius: calc(40px / --value(integer)) 4px calc(40px / --value(integer)) 4px;
+    border-radius: calc(2rem * --value(integer)) 4px calc(2rem * --value(integer)) 4px;
+    &.inverse {
+      border-radius: calc(2rem / --value(integer)) 4px calc(2rem / --value(integer)) 4px;
+    }
   }
+}
+
+@utility aspect-portrait {
+  aspect-ratio: 683 / 1024;
 }
 
 @utility card {
   @apply overflow-hidden;
 
-  border-radius: 4px 40px 4px 40px;
+  border-radius: 4px 2rem 4px 2rem;
 
   &.full {
-    border-radius: 40px;
+    border-radius: 2rem;
   }
   &.reverse {
-    border-radius: 40px 4px 40px 4px;
+    border-radius: 2rem 4px 2rem 4px;
   }
 }

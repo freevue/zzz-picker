@@ -4,9 +4,11 @@ import { REALTIME_SUBSCRIBE_STATES, type RealtimeChannel } from '@supabase/supab
 import {
   SOCKET_EVENT,
   DEFAULT_REALTIME_STATE,
+  DEFAULT_PLAY_STATE,
+  DEFAULT_ROOM_STATE,
+  type RoomState,
   type Side,
   type PlayState,
-  type RealtimeState,
   type AgentCostSetting,
   type SelectAgent,
 } from '@zzz-picker/constant'
@@ -26,10 +28,8 @@ export type Cost = {
 
 export type RoomData = {
   id: string
-  game_type: string
-  names: { A: string; B: string }
-  users: Array<{ id: string; role: string; nickname: string }>
-  state: RealtimeState
+  gameType: string
+  state: RoomState
 }
 
 type Context = {
@@ -37,7 +37,7 @@ type Context = {
   channel: RealtimeChannel | null
   status: REALTIME_SUBSCRIBE_STATES
   room: RoomData | null
-  state: RealtimeState
+  state: RoomState
   cost: Cost
   allPickList: {
     A: SelectAgent[]
@@ -55,7 +55,7 @@ const state: Context = {
   channel: null,
   status: REALTIME_SUBSCRIBE_STATES.CLOSED,
   room: null,
-  state: DEFAULT_REALTIME_STATE,
+  state: DEFAULT_ROOM_STATE,
   cost: { A: new Map(), B: new Map() },
   allPickList: {
     A: [],
@@ -70,7 +70,7 @@ const Provider: React.FC<Props> = (props) => {
   const events = useRef(new EventTarget())
   const [status, setStatus] = useState<REALTIME_SUBSCRIBE_STATES>(REALTIME_SUBSCRIBE_STATES.CLOSED)
   const [room, setRoom] = useState<RoomData | null>(null)
-  const [state, setState] = useState<RealtimeState>(DEFAULT_REALTIME_STATE)
+  const [state, setState] = useState<RoomState>(DEFAULT_ROOM_STATE)
   const [cost, setCost] = useState<Cost>({
     A: new Map(),
     B: new Map(),
@@ -80,7 +80,7 @@ const Provider: React.FC<Props> = (props) => {
   const allPickList = useMemo(() => {
     const getPickList = (side: Side) =>
       pipe(
-        state.play || DEFAULT_REALTIME_STATE.play,
+        state.play || DEFAULT_REALTIME_STATE,
         (state) => [state.common[side], state.personal[side], state.unlimited[side]],
         flatMap((item) => item.pickList),
         filter((agentId) => !isNull(agentId)),
@@ -93,14 +93,14 @@ const Provider: React.FC<Props> = (props) => {
     }
   }, [state])
 
-  const ensureRealtimeState = (s: any): RealtimeState => {
-    if (!s) return DEFAULT_REALTIME_STATE
-    if (s.play && s.realtime) return s as RealtimeState
+  const ensureRealtimeState = (state: RoomState): RoomState => {
+    if (!state) return DEFAULT_ROOM_STATE
+    if (state.play && state.realtime) return state as RoomState
     // 구버전(flat) 데이터 대응: 최소한의 크래시 방지
     return {
-      ...DEFAULT_REALTIME_STATE,
-      play: s.play || DEFAULT_REALTIME_STATE.play,
-      realtime: s.realtime || DEFAULT_REALTIME_STATE.realtime,
+      ...DEFAULT_ROOM_STATE,
+      play: state.play || DEFAULT_PLAY_STATE,
+      realtime: state.realtime || DEFAULT_REALTIME_STATE,
     }
   }
 
@@ -130,8 +130,6 @@ const Provider: React.FC<Props> = (props) => {
   useEffect(() => {
     if (!props.channelId) return
 
-    console.log('[Socket] Initializing new channel for:', props.channelId)
-
     const newChannel = supabase.channel(`room:zzz:pick:${props.channelId}`, {
       config: {
         broadcast: { self: true },
@@ -145,8 +143,25 @@ const Provider: React.FC<Props> = (props) => {
     setChannel(newChannel)
 
     newChannel
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'realtime_room',
+          filter: `id=eq.${props.channelId}`,
+        },
+        (payload) => {
+          if (payload.new) {
+            const newRoom = payload.new as RoomData
+            setRoom((prev) => ({ ...prev, ...newRoom }))
+            if (newRoom.state) {
+              setState(ensureRealtimeState(newRoom.state))
+            }
+          }
+        }
+      )
       .on('broadcast', { event: '*' }, ({ event, payload }) => {
-        console.log({ event })
         if (event === SOCKET_EVENT.SYNC) {
           if (payload.room) {
             setRoom(payload.room)
@@ -200,34 +215,45 @@ const Provider: React.FC<Props> = (props) => {
 
               return next
             })
-
-            // Update local Room state (for UI components using room.names or room.users)
-            setRoom((prev) => {
-              if (!prev) return null
-              // Keep room.names for compatibility if type expects it,
-              // though DB doesn't have it. RoomData type definition might need update but for now specific valid.
-              const nextNames = { ...(prev as any).names, [side]: nickname }
-              const nextUsers = prev.users.map((u) => (u.role === side ? { ...u, nickname } : u))
-              return { ...prev, names: nextNames, users: nextUsers }
-            })
           }
         }
 
         if (event === SOCKET_EVENT.PICK) {
-          const { side, roundKey, pickList } = payload
-          setState((prev) => ({
-            ...prev,
-            play: {
-              ...prev.play,
-              [roundKey]: {
-                ...(prev.play[roundKey as keyof PlayState] as any),
-                [side]: {
-                  ...(prev.play[roundKey as keyof PlayState] as any)[side],
-                  pickList,
+          const { side, roundKey, pickList, pickCost, complete, nextPhase } = payload
+          setState((prev) => {
+            const next = {
+              ...prev,
+              play: {
+                ...prev.play,
+                [roundKey]: {
+                  ...(prev.play[roundKey as keyof PlayState] as any),
+                  [side]: {
+                    ...(prev.play[roundKey as keyof PlayState] as any)[side],
+                    ...(pickList ? { pickList } : {}),
+                    ...(pickCost ? { pickCost } : {}),
+                  },
                 },
               },
-            },
-          }))
+            }
+
+            if (complete && nextPhase) {
+              next.realtime = {
+                ...next.realtime,
+                phase: nextPhase,
+              }
+            }
+
+            // DB sync
+            if (complete) {
+              supabase
+                .from('realtime_room')
+                .update({ state: next })
+                .eq('id', props.channelId)
+                .then(() => {})
+            }
+
+            return next
+          })
         }
 
         if (event === SOCKET_EVENT.BAN) {
@@ -237,23 +263,28 @@ const Provider: React.FC<Props> = (props) => {
             if (confirm) {
               const nextBanList = [...prev.play.banList]
 
-              // Prevent duplicate entry
-              if (agentId && nextBanList.includes(agentId)) {
-                return prev
+              // If agentId is provided, fill the first null slot
+              if (agentId) {
+                // Prevent duplicate entry
+                if (!nextBanList.includes(agentId)) {
+                  const emptyIndex = nextBanList.findIndex((item) => item === null)
+                  if (emptyIndex !== -1) {
+                    nextBanList[emptyIndex] = agentId
+                  }
+                }
               }
 
-              const emptyIndex = nextBanList.findIndex((item) => item === null)
-              if (emptyIndex !== -1) {
-                nextBanList[emptyIndex] = agentId
-              }
               next.play = {
                 ...prev.play,
                 banList: nextBanList,
               }
+
+              const isBanEnd = nextPhase === 'end' // BAN_PHASE.END
               next.realtime = {
                 ...prev.realtime,
-                banCandidates: [null, null],
+                ...(agentId ? { banCandidates: [null, null] } : {}),
                 ...(nextPhase ? { banPhase: nextPhase } : {}),
+                ...(isBanEnd ? { phase: 'PICK' } : {}), // ROOM_PHASE.PICK
               }
 
               // Persist to DB
@@ -273,11 +304,13 @@ const Provider: React.FC<Props> = (props) => {
         }
 
         if (event === SOCKET_EVENT.BOSS) {
-          const { confirm, bossId, roundKey, side } = payload as {
+          console.log('[Socket] BOSS Event Received:', payload)
+          const { confirm, bossId, roundKey, side, nextPhase } = payload as {
             confirm: boolean
             bossId: number
             roundKey: keyof PlayState
             side: Side
+            nextPhase?: string
           }
           setState((prev) => {
             const next = { ...prev }
@@ -303,7 +336,7 @@ const Provider: React.FC<Props> = (props) => {
               next.play = nextPlay
               next.realtime = {
                 ...prev.realtime,
-                bossCandidates: null,
+                ...(nextPhase ? { phase: nextPhase } : {}),
               }
 
               // Persist to DB
@@ -314,6 +347,7 @@ const Provider: React.FC<Props> = (props) => {
                 .then(() => {})
             } else {
               // Update candidates AND play state for preview
+              console.log('[Socket] Updating Preview State:', { bossId, roundKey })
               const nextPlay = { ...prev.play }
               if (roundKey === 'common') {
                 nextPlay.common = {
@@ -336,23 +370,41 @@ const Provider: React.FC<Props> = (props) => {
 
               next.realtime = {
                 ...prev.realtime,
-                bossCandidates: bossId,
               }
             }
-            console.log({ next })
             return next
           })
         }
 
         if (event === SOCKET_EVENT.READY) {
           const { side, ready } = payload
-          setState((prev) => ({
-            ...prev,
-            realtime: {
-              ...prev.realtime,
-              ready: { ...prev.realtime.ready, [side]: ready },
-            },
-          }))
+          setState((prev) => {
+            const nextReady = { ...prev.realtime.ready, [side]: ready }
+            let nextPhase = prev.realtime.phase
+
+            // 양쪽 모두 준비 완료 시, PICK 페이즈라면 DONE으로 이동
+            if (prev.realtime.phase === 'PICK' && nextReady.A && nextReady.B) {
+              nextPhase = 'DONE'
+            }
+
+            const next = {
+              ...prev,
+              realtime: {
+                ...prev.realtime,
+                ready: nextReady,
+                phase: nextPhase,
+              },
+            }
+
+            // DB sync
+            supabase
+              .from('realtime_room')
+              .update({ state: next })
+              .eq('id', props.channelId)
+              .then(() => {})
+
+            return next
+          })
         }
 
         if (event === SOCKET_EVENT.STATUS) {
@@ -386,7 +438,6 @@ const Provider: React.FC<Props> = (props) => {
         )
       })
       .subscribe((status) => {
-        console.log('[Socket] Subscription Status changed:', status)
         setStatus(status)
       })
 

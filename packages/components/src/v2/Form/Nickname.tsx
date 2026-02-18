@@ -13,7 +13,7 @@ const Nickname: React.FC<Props> = (props) => {
       {...props}
       type="text"
       className={pipe(
-        ['card-2'],
+        ['card'],
         concat(props.side === 'A' ? ['[&_input]:text-right'] : []),
         concat(props.side === 'B' ? ['reverse'] : []),
         concat([

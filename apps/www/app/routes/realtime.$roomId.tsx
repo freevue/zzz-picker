@@ -1,15 +1,16 @@
 import { pipe, split, map, toArray } from '@fxts/core'
 import { useParams, useSearchParams } from '@remix-run/react'
-import { DEFAULT } from '@zzz-picker/constant'
-import { Socket, supabase, useSocket, Setting, Play } from '@zzz-picker/provider'
+import { DEFAULT, DEFAULT_ROOM_STATE, type RoomState, type Side } from '@zzz-picker/constant'
+import { Socket, supabase, Setting, Play, Store } from '@zzz-picker/provider'
 import { useEffect, useState, useMemo } from 'react'
 import { Phase } from '~/components'
 
 export const RealtimeRoom: React.FC = () => {
   const { roomId: token } = useParams() // URL param is now the User Token
   const [searchParams] = useSearchParams()
-  const [room, setRoom] = useState<any>(null)
-  const [me, setMe] = useState<any>(null)
+  const [room, setRoom] = useState<RoomState>(DEFAULT_ROOM_STATE)
+  const [channelId, setChannelId] = useState<string | null>(null)
+  const [role, setRole] = useState<Side | 'H'>('A')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -38,17 +39,21 @@ export const RealtimeRoom: React.FC = () => {
         }
 
         const roomData = userData.room
+        setChannelId(roomData.id)
+        setRole(userData.role as Side | 'H')
 
         // Fetch full room data including all users (to reconstruct room state consistent with other views)
-        const { data: fullRoomData } = await supabase
+        const { data } = await supabase
           .from('realtime_room')
           .select('*, users:realtime_user(*)')
           .eq('id', roomData.id)
           .single()
 
-        if (fullRoomData) {
-          setRoom(fullRoomData)
-          setMe(userData)
+        if (data) {
+          setRoom((prev) => ({
+            realtime: { ...prev.realtime, ...data.realtime },
+            play: { ...prev.play, ...data.play },
+          }))
         } else {
           setError('방 정보를 찾을 수 없습니다.')
         }
@@ -56,34 +61,26 @@ export const RealtimeRoom: React.FC = () => {
       })
   }, [token])
 
-  const role = me?.role === 'Host' ? 'H' : (me?.role as 'A' | 'B')
-
   if (loading) return <div>Loading...</div>
   if (error) return <div>{error}</div>
-  if (!room || !me) return <div>접속 정보를 불러올 수 없습니다.</div>
+  if (!channelId) return <div>방 정보를 찾을 수 없습니다.</div>
 
   return (
     <Setting option={options}>
-      <Play>
-        <Socket channelId={room.id}>
-          <SocketTester />
-          <Phase role={role} initialRoom={room} />
-        </Socket>
-      </Play>
+      <Store>
+        <Play>
+          <Socket channelId={channelId}>
+            <Phase
+              role={role}
+              id={channelId}
+              gameType={room.play?.common?.key as any}
+              initialRoom={room}
+            />
+          </Socket>
+        </Play>
+      </Store>
     </Setting>
   )
-}
-
-const SocketTester: React.FC = () => {
-  const { status } = useSocket()
-
-  useEffect(() => {
-    if (status === 'SUBSCRIBED') {
-      console.log('[SocketTester] Channel subscribed')
-    }
-  }, [status])
-
-  return null
 }
 
 export default RealtimeRoom

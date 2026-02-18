@@ -65,7 +65,7 @@ const preview: Preview = {
 
       return (
         <Store>
-          <div className="p-8 min-h-screen font-sans transition-colors duration-200">
+          <div className="size-full">
             <Story />
           </div>
         </Store>

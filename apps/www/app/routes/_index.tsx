@@ -71,7 +71,7 @@ const Main: React.FC = () => {
                       '-translate-x-8',
                       'p-4',
                       'bg-content',
-                      'card-2',
+                      'card',
                     ],
                     concat(['group-hover:opacity-100', 'group-hover:translate-x-0']),
                     join(' ')
