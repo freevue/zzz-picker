@@ -43,7 +43,7 @@ const Main: React.FC = () => {
       }}
     >
       <img src="/images/main/logo.png" alt="logo" className="w-10 block fixed left-10 top-10" />
-      <div className="flex flex-col gap-4 fixed left-10 top-1/2 -translate-y-1/2">
+      <div className="flex flex-col gap-4 fixed left-1/2 bottom-2 -translate-x-1/2">
         {pipe(
           LINKS,
           zipWithIndex,
@@ -85,7 +85,7 @@ const Main: React.FC = () => {
           toArray
         )}
       </div>
-      <ul className="flex gap-6 fixed bottom-0 right-10 py-5">
+      <ul className="flex gap-6 fixed bottom-0 left-1/2 -translate-x-1/2 py-5">
         <li className="border-r border-ink/50 pr-6">
           <Rule />
         </li>
