@@ -1,5 +1,11 @@
 import { PickPhase } from '@zzz-picker/components/realtime'
-import { type Side, type RoomState, type AgentCostSetting, GAME_TYPE } from '@zzz-picker/constant'
+import {
+  type Side,
+  type RoomState,
+  type AgentCostSetting,
+  GAME_TYPE,
+  SOCKET_EVENT,
+} from '@zzz-picker/constant'
 import { useSocket, useStore, useSetting } from '@zzz-picker/provider/hooks'
 import { getTotalCost } from '@zzz-picker/utils'
 import { useMemo } from 'react'
@@ -12,7 +18,7 @@ type Props = {
 }
 
 const Pick: React.FC<Props> = (props) => {
-  const { cost } = useSocket()
+  const { send } = useSocket()
   const { agents, engines } = useStore()
   const { costTable } = useSetting()
   const side = props.role === 'H' ? 'A' : props.role
@@ -77,19 +83,11 @@ const Pick: React.FC<Props> = (props) => {
       }
     }
 
-    props.onUpdate({
-      ...props.room,
-      play: {
-        ...props.room.play,
-        [roundKey]: {
-          ...props.room.play[roundKey],
-          [side]: {
-            ...props.room.play[roundKey][side],
-            pickList: prevPickList,
-            pickCost: prevPickCost,
-          },
-        },
-      },
+    send(SOCKET_EVENT.PICK, {
+      side,
+      roundKey,
+      pickList: prevPickList,
+      pickCost: prevPickCost,
     })
   }
 
@@ -109,36 +107,24 @@ const Pick: React.FC<Props> = (props) => {
     ]
     prevPickCost[index] = null
 
-    props.onUpdate({
-      ...props.room,
-      play: {
-        ...props.room.play,
-        [roundKey]: {
-          ...props.room.play[roundKey],
-          [side]: {
-            ...props.room.play[roundKey][side],
-            pickList: prevPickList,
-            pickCost: prevPickCost,
-          },
-        },
-      },
+    send(SOCKET_EVENT.PICK, {
+      side,
+      roundKey,
+      pickList: prevPickList,
+      pickCost: prevPickCost,
     })
   }
 
   const onSelectBoss = (round: 'personal' | 'common', bossId: number) => {
     const roundKey = round === 'personal' ? 'personal' : 'common'
-    props.onUpdate({
-      ...props.room,
-      play: {
-        ...props.room.play,
-        [roundKey]: {
-          ...props.room.play[roundKey],
-          [side]: {
-            ...props.room.play[roundKey][side],
-            boss: bossId,
-          },
-        },
-      },
+    // Boss 선택은 SOCKET_EVENT.BOSS를 사용할 수도 있지만, Pick Phase 내에서의 동작이므로 로컬 업데이트 후
+    // 필요하다면 별도 이벤트를 쏘거나 PICK 이벤트에 포함시킬 수 있음.
+    // 기존 Socket.tsx에 BOSS 이벤트 핸들러가 있으므로 그것을 활용
+    send(SOCKET_EVENT.BOSS, {
+      confirm: false,
+      bossId,
+      roundKey,
+      side,
     })
   }
 
@@ -151,23 +137,18 @@ const Pick: React.FC<Props> = (props) => {
     ]
     prevPickCost[index] = setting
 
-    props.onUpdate({
-      ...props.room,
-      play: {
-        ...props.room.play,
-        [roundKey]: {
-          ...props.room.play[roundKey],
-          [side]: {
-            ...props.room.play[roundKey][side],
-            pickCost: prevPickCost,
-          },
-        },
-      },
+    send(SOCKET_EVENT.PICK, {
+      side,
+      roundKey,
+      pickCost: prevPickCost,
     })
   }
 
   const onSubmit = () => {
-    // TODO: Socket 이벤트로 ready 상태 전송
+    send(SOCKET_EVENT.READY, {
+      side,
+      ready: true,
+    })
   }
 
   return (
@@ -183,7 +164,7 @@ const Pick: React.FC<Props> = (props) => {
       onSelectBoss={onSelectBoss}
       onCostChange={onCostChange}
       onSubmit={onSubmit}
-      disabled={props.role === 'H'}
+      disabled={props.room.realtime.ready[side]}
     />
   )
 }

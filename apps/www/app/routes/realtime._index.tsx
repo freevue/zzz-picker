@@ -1,5 +1,5 @@
 import { isEmpty, isNull, map, pipe, throwIf, toArray } from '@fxts/core'
-import { DEFAULT_REALTIME_STATE } from '@zzz-picker/constant'
+import { DEFAULT_REALTIME_STATE, DEFAULT_PLAY_STATE } from '@zzz-picker/constant'
 import { supabase } from '@zzz-picker/provider'
 import { AnimatePresence } from 'motion/react'
 import { useState } from 'react'
@@ -38,9 +38,9 @@ export const RealtimeRoot: React.FC = () => {
         ({ A, B, game_type }) => ({
           game_type,
           state: {
-            ...DEFAULT_REALTIME_STATE,
+            realtime: DEFAULT_REALTIME_STATE,
             play: {
-              ...DEFAULT_REALTIME_STATE.play,
+              ...DEFAULT_PLAY_STATE,
               nickname: { A, B },
             },
           },

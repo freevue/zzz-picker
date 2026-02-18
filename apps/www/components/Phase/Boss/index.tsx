@@ -1,3 +1,4 @@
+import { pipe, sort, find, throwIf, isUndefined } from '@fxts/core'
 import { BossSelector } from '@zzz-picker/components/realtime'
 import {
   type Boss,
@@ -7,6 +8,7 @@ import {
   ROOM_PHASE,
 } from '@zzz-picker/constant'
 import { useStore, useSocket } from '@zzz-picker/provider/hooks'
+import dayjs from 'dayjs'
 import { useMemo } from 'react'
 
 type Props = {
@@ -20,11 +22,19 @@ const BossSelect: React.FC<Props> = (props) => {
   const { send } = useSocket()
 
   const bosses = useMemo(() => {
-    const currentAssault = deadlyAssaultList[0]
-    if (!currentAssault) return []
-
-    const allowedIds = [currentAssault.boss1.id, currentAssault.boss2.id, currentAssault.boss3.id]
-    return allowedIds.map((id) => bossMap.get(id)).filter(Boolean) as Boss[]
+    try {
+      return pipe(
+        deadlyAssaultList,
+        sort((prev, curr) => curr.open.diff(prev.open)),
+        find((deadlyAssault) => dayjs(deadlyAssault.open).isBefore(dayjs())),
+        throwIf(isUndefined, () => Error('')),
+        ({ boss1, boss2, boss3 }) => [boss1.id, boss2.id, boss3.id]
+      )
+        .map((id) => bossMap.get(id))
+        .filter(Boolean) as Boss[]
+    } catch {
+      return []
+    }
   }, [bossMap, deadlyAssaultList])
 
   const activeIndex = useMemo(() => {
@@ -37,6 +47,17 @@ const BossSelect: React.FC<Props> = (props) => {
 
   const onSelect = (event: React.MouseEvent<HTMLButtonElement>) => {
     const bossId = Number(event.currentTarget.value)
+
+    props.onUpdate({
+      ...props.room,
+      play: {
+        ...props.room.play,
+        common: {
+          ...props.room.play.common,
+          boss: bossId,
+        },
+      },
+    })
 
     send(SOCKET_EVENT.BOSS, {
       confirm: false,

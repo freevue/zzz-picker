@@ -55,21 +55,29 @@ const Ban: React.FC<Props> = (props) => {
   const handleSelectAgent = (agentId: AgentId) => {
     // 후보 제시 페이즈 (A_SELECT, B_SELECT): banCandidates 업데이트
     const current = [...props.room.realtime.banCandidates]
+    let nextCandidates = [...current]
 
     // 이미 선택되어 있으면 해제
     if (includes(agentId, current)) {
-      const next = current.map((id) => (id === agentId ? null : id))
-      send(SOCKET_EVENT.BAN, { banCandidates: next })
-      return
+      nextCandidates = current.map((id) => (id === agentId ? null : id))
+    } else {
+      // 빈 슬롯에 추가
+      const emptyIndex = current.findIndex((id) => id === null)
+      if (emptyIndex !== -1) {
+        nextCandidates[emptyIndex] = agentId
+      }
     }
 
-    // 빈 슬롯에 추가
-    const emptyIndex = current.findIndex((id) => id === null)
-    if (emptyIndex !== -1) {
-      const next = [...current]
-      next[emptyIndex] = agentId
-      send(SOCKET_EVENT.BAN, { banCandidates: next })
-    }
+    // Optimistic Update
+    props.onUpdate({
+      ...props.room,
+      realtime: {
+        ...props.room.realtime,
+        banCandidates: nextCandidates,
+      },
+    })
+
+    send(SOCKET_EVENT.BAN, { banCandidates: nextCandidates })
   }
 
   const handleSubmit = (selectedBanId: AgentId | null) => {
@@ -80,6 +88,28 @@ const Ban: React.FC<Props> = (props) => {
       // 밴 확정 페이즈 (B_BAN, A_BAN): 선택된 캐릭터를 최종 밴
       if (!selectedBanId) return
 
+      // Optimistic Update
+      const nextBanList = [...props.room.play.banList]
+      // Replace first null
+      const emptyIndex = nextBanList.findIndex((item) => item === null)
+      if (emptyIndex !== -1) {
+        nextBanList[emptyIndex] = selectedBanId
+      }
+
+      props.onUpdate({
+        ...props.room,
+        play: {
+          ...props.room.play,
+          banList: nextBanList,
+        },
+        realtime: {
+          ...props.room.realtime,
+          banCandidates: [null, null],
+          banPhase: nextPhase,
+        },
+      })
+      console.log('[Ban] Optimistic Update (Confirm):', { nextBanList, nextPhase })
+
       send(SOCKET_EVENT.BAN, {
         confirm: true,
         agentId: selectedBanId,
@@ -87,6 +117,15 @@ const Ban: React.FC<Props> = (props) => {
       })
     } else {
       // 후보 제시 페이즈 (A_SELECT, B_SELECT): 후보 2명 확정, 페이즈 전환
+      // Optimistic Update
+      props.onUpdate({
+        ...props.room,
+        realtime: {
+          ...props.room.realtime,
+          banPhase: nextPhase,
+        },
+      })
+
       send(SOCKET_EVENT.BAN, {
         confirm: true,
         nextPhase,

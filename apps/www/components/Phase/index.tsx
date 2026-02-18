@@ -1,11 +1,11 @@
 import Ban from './Ban'
 import BossSelect from './Boss'
 import Pick from './Pick'
-import { type RoomState, DEFAULT_PLAY_STATE, DEFAULT_REALTIME_STATE } from '@zzz-picker/constant'
+import { type RoomState } from '@zzz-picker/constant'
 import { ROOM_PHASE, GAME_TYPE, type Side } from '@zzz-picker/constant'
 import { useSocket } from '@zzz-picker/provider/hooks'
 import { motion, AnimatePresence } from 'motion/react'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 
 export type Rols = Side | 'H'
 
@@ -43,18 +43,18 @@ const Component: React.FC<{
 
 const Phase: React.FC<Props> = (props) => {
   const { state: socketState } = useSocket()
-  const [localRoom, setLocalRoom] = useState<RoomState | null>(null)
-
   const roomState = useMemo<RoomState>(() => {
-    const base = {
-      play: { ...socketState.play, ...props.initialRoom.play },
-      realtime: { ...socketState.realtime, ...props.initialRoom.realtime },
-    }
-    return localRoom ? { ...base, play: { ...base.play, ...localRoom.play } } : base
-  }, [socketState, props.initialRoom, localRoom])
+    // Socket state is the single source of truth.
+    console.log('[Phase] Current Room State:', {
+      phase: socketState.realtime.phase,
+      socketPhase: socketState.realtime.phase,
+    })
+    return socketState
+  }, [socketState])
 
   const onUpdateRoom = useCallback((data: RoomState) => {
-    setLocalRoom(data)
+    console.log('[Phase] onUpdateRoom called (ignored for sync fix):', data.realtime.phase)
+    // Intentionally doing nothing to enforce Single Source of Truth from Socket
   }, [])
 
   return (
