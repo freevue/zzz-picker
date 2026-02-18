@@ -25,6 +25,16 @@
   }
 }
 
+@keyframes shadow-twinkles {
+  0%,
+  100% {
+    filter: drop-shadow(2px 4px 2px black);
+  }
+  50% {
+    filter: drop-shadow(2px 4px 10px black);
+  }
+}
+
 /* 앱별 커스텀 스타일 */
 body {
   height: 100vh;
