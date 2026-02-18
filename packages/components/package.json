@@ -16,9 +16,9 @@
       "default": "./src/v2/index.ts"
     },
     "./realtime": {
-      "types": "./src/realtime/index.ts",
-      "import": "./src/realtime/index.ts",
-      "default": "./src/realtime/index.ts"
+      "types": "./src/Realtime/index.ts",
+      "import": "./src/Realtime/index.ts",
+      "default": "./src/Realtime/index.ts"
     },
     "./icons": {
       "types": "./src/Icons/index.ts",
