@@ -5,7 +5,7 @@ import { type RoomState, DEFAULT_PLAY_STATE, DEFAULT_REALTIME_STATE } from '@zzz
 import { ROOM_PHASE, GAME_TYPE, type Side } from '@zzz-picker/constant'
 import { useSocket } from '@zzz-picker/provider/hooks'
 import { motion, AnimatePresence } from 'motion/react'
-import { useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 export type Rols = Side | 'H'
 
@@ -43,15 +43,19 @@ const Component: React.FC<{
 
 const Phase: React.FC<Props> = (props) => {
   const { state: socketState } = useSocket()
+  const [localRoom, setLocalRoom] = useState<RoomState | null>(null)
 
   const roomState = useMemo<RoomState>(() => {
-    return {
+    const base = {
       play: { ...socketState.play, ...props.initialRoom.play },
       realtime: { ...socketState.realtime, ...props.initialRoom.realtime },
     }
-  }, [socketState, props.initialRoom])
+    return localRoom ? { ...base, play: { ...base.play, ...localRoom.play } } : base
+  }, [socketState, props.initialRoom, localRoom])
 
-  const onUpdateRoom = () => {}
+  const onUpdateRoom = useCallback((data: RoomState) => {
+    setLocalRoom(data)
+  }, [])
 
   return (
     <AnimatePresence mode="wait">

@@ -16,7 +16,7 @@ const RealtimeView: React.FC = () => {
       initialRoom={{
         play: {
           ...DEFAULT_PLAY_STATE,
-          common: { ...DEFAULT_PLAY_STATE.common, boss: 7 },
+          common: { ...DEFAULT_PLAY_STATE.common, boss: 1 },
           banList: [155659, 127403],
         },
         realtime: {
