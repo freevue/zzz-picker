@@ -219,20 +219,41 @@ const Provider: React.FC<Props> = (props) => {
         }
 
         if (event === SOCKET_EVENT.PICK) {
-          const { side, roundKey, pickList } = payload
-          setState((prev) => ({
-            ...prev,
-            play: {
-              ...prev.play,
-              [roundKey]: {
-                ...(prev.play[roundKey as keyof PlayState] as any),
-                [side]: {
-                  ...(prev.play[roundKey as keyof PlayState] as any)[side],
-                  pickList,
+          const { side, roundKey, pickList, pickCost, complete, nextPhase } = payload
+          setState((prev) => {
+            const next = {
+              ...prev,
+              play: {
+                ...prev.play,
+                [roundKey]: {
+                  ...(prev.play[roundKey as keyof PlayState] as any),
+                  [side]: {
+                    ...(prev.play[roundKey as keyof PlayState] as any)[side],
+                    ...(pickList ? { pickList } : {}),
+                    ...(pickCost ? { pickCost } : {}),
+                  },
                 },
               },
-            },
-          }))
+            }
+
+            if (complete && nextPhase) {
+              next.realtime = {
+                ...next.realtime,
+                phase: nextPhase,
+              }
+            }
+
+            // DB sync
+            if (complete) {
+              supabase
+                .from('realtime_room')
+                .update({ state: next })
+                .eq('id', props.channelId)
+                .then(() => {})
+            }
+
+            return next
+          })
         }
 
         if (event === SOCKET_EVENT.BAN) {
@@ -245,12 +266,11 @@ const Provider: React.FC<Props> = (props) => {
               // If agentId is provided, fill the first null slot
               if (agentId) {
                 // Prevent duplicate entry
-                if (nextBanList.includes(agentId)) {
-                  return prev
-                }
-                const emptyIndex = nextBanList.findIndex((item) => item === null)
-                if (emptyIndex !== -1) {
-                  nextBanList[emptyIndex] = agentId
+                if (!nextBanList.includes(agentId)) {
+                  const emptyIndex = nextBanList.findIndex((item) => item === null)
+                  if (emptyIndex !== -1) {
+                    nextBanList[emptyIndex] = agentId
+                  }
                 }
               }
 
@@ -258,10 +278,13 @@ const Provider: React.FC<Props> = (props) => {
                 ...prev.play,
                 banList: nextBanList,
               }
+
+              const isBanEnd = nextPhase === 'end' // BAN_PHASE.END
               next.realtime = {
                 ...prev.realtime,
                 ...(agentId ? { banCandidates: [null, null] } : {}),
                 ...(nextPhase ? { banPhase: nextPhase } : {}),
+                ...(isBanEnd ? { phase: 'PICK' } : {}), // ROOM_PHASE.PICK
               }
 
               // Persist to DB
@@ -281,6 +304,7 @@ const Provider: React.FC<Props> = (props) => {
         }
 
         if (event === SOCKET_EVENT.BOSS) {
+          console.log('[Socket] BOSS Event Received:', payload)
           const { confirm, bossId, roundKey, side, nextPhase } = payload as {
             confirm: boolean
             bossId: number
@@ -323,6 +347,7 @@ const Provider: React.FC<Props> = (props) => {
                 .then(() => {})
             } else {
               // Update candidates AND play state for preview
+              console.log('[Socket] Updating Preview State:', { bossId, roundKey })
               const nextPlay = { ...prev.play }
               if (roundKey === 'common') {
                 nextPlay.common = {
@@ -353,13 +378,33 @@ const Provider: React.FC<Props> = (props) => {
 
         if (event === SOCKET_EVENT.READY) {
           const { side, ready } = payload
-          setState((prev) => ({
-            ...prev,
-            realtime: {
-              ...prev.realtime,
-              ready: { ...prev.realtime.ready, [side]: ready },
-            },
-          }))
+          setState((prev) => {
+            const nextReady = { ...prev.realtime.ready, [side]: ready }
+            let nextPhase = prev.realtime.phase
+
+            // 양쪽 모두 준비 완료 시, PICK 페이즈라면 DONE으로 이동
+            if (prev.realtime.phase === 'PICK' && nextReady.A && nextReady.B) {
+              nextPhase = 'DONE'
+            }
+
+            const next = {
+              ...prev,
+              realtime: {
+                ...prev.realtime,
+                ready: nextReady,
+                phase: nextPhase,
+              },
+            }
+
+            // DB sync
+            supabase
+              .from('realtime_room')
+              .update({ state: next })
+              .eq('id', props.channelId)
+              .then(() => {})
+
+            return next
+          })
         }
 
         if (event === SOCKET_EVENT.STATUS) {
