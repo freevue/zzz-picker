@@ -1,3 +1,4 @@
+import { Cross } from '@zzz-picker/components/icons'
 import { motion, AnimatePresence } from 'motion/react'
 import { useEffect, useCallback } from 'react'
 
@@ -91,7 +92,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ image, onClose }) => {
             {/* 다운로드 버튼 */}
             <button
               onClick={handleDownload}
-              className="absolute top-2 right-12 w-8 h-8 rounded-full bg-content text-white flex items-center justify-center transition-colors cursor-pointer"
+              className="absolute top-4 right-14 size-8 rounded-full bg-content text-white flex items-center justify-center transition-colors cursor-pointer"
               type="button"
             >
               <svg
@@ -114,10 +115,10 @@ const ImageModal: React.FC<ImageModalProps> = ({ image, onClose }) => {
             {/* 닫기 버튼 */}
             <button
               onClick={onClose}
-              className="absolute top-2 right-2 w-8 h-8 rounded-full bg-content text-white flex items-center justify-center transition-colors cursor-pointer"
+              className="absolute top-4 right-4 size-8 rounded-full bg-content text-white flex items-center justify-center transition-colors cursor-pointer"
               type="button"
             >
-              ✕
+              <Cross className="size-5" />
             </button>
           </motion.div>
         </motion.div>
