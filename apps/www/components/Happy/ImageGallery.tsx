@@ -35,7 +35,7 @@ const ISOLDE = {
   url: 'https://images.zzz.freevue.dev/images/npc/isolde/3a5e7466-26e1-46d1-a9fa-7123eee4c140.jpg',
   description: '이졸데 한복 배너',
   agent_id: 3,
-  agents: { name_ko: '이졸', name_en: 'isolde' }
+  agents: { name_ko: '이졸데', name_en: 'isolde' }
 }
 const PLAYER_LIST = [BELLE, WISE, ISOLDE]
 
