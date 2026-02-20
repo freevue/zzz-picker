@@ -70,6 +70,7 @@ const ImageGallery: React.FC = () => {
             agents: {
               name_ko: '벨',
               name_en: 'belle'
+            }
           }, {
             id: 2,
             url: 'https://images.zzz.freevue.dev/images/playable/86f9a294-0937-45af-bf40-5594b073aba7.png',
@@ -79,7 +80,7 @@ const ImageGallery: React.FC = () => {
               name_ko: '와이즈',
               name_en: 'wise'
             }
-          ]),
+          }]),
           zipWithIndex,
           map(([index, image]) => (
             <motion.div
