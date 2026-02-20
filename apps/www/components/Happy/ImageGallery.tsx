@@ -37,7 +37,7 @@ const ISOLDE = {
   agent_id: 3,
   agents: { name_ko: '이졸', name_en: 'isolde' }
 }
-const PLAYER_LIST = [BELLE, WISE]
+const PLAYER_LIST = [BELLE, WISE, ISOLDE]
 
 const ImageGallery: React.FC = () => {
   const [images, setImages] = useState<AgentImage[]>([])
