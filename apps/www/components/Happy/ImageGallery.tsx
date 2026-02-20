@@ -62,7 +62,7 @@ const ImageGallery: React.FC = () => {
         {pipe(
           images,
           sort((prev, cur) => prev.agents.name_ko.localeCompare(cur.agents.name_ko)),
-          concat([
+          concat([{
             id: 1,
             url: 'https://images.zzz.freevue.dev/images/playable/23abb0a2-570b-4785-a1da-cbbe34f6e2e6.jpg',
             description: '벨 한복 배너',
@@ -70,7 +70,7 @@ const ImageGallery: React.FC = () => {
             agents: {
               name_ko: '벨',
               name_en: 'belle'
-            },
+          }, {
             id: 2,
             url: 'https://images.zzz.freevue.dev/images/playable/86f9a294-0937-45af-bf40-5594b073aba7.png',
             description: '와이즈 한복 배너',
