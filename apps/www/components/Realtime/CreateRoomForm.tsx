@@ -55,7 +55,7 @@ export const CreateRoomForm: React.FC<Props> = (props) => {
           type="submit"
           className={pipe(
             ['px-8', 'py-2', 'card-3', 'full', 'block', 'focus:outline-none', 'mx-auto'],
-            concat(['text-ink', 'bg-base', 'cursor-pointer', 'heading-2xl']),
+            concat(['text-ink', 'bg-primary/80', 'cursor-pointer', 'heading-2xl']),
             concat(['hover:text-base', 'hover:bg-primary']),
             join(' ')
           )}
