@@ -23,26 +23,33 @@ const Pick: React.FC<Props> = (props) => {
   const { costTable } = useSetting()
   const side = props.role === 'H' ? 'A' : props.role
 
+  const round2Key = props.gameType === GAME_TYPE.UNLIMITED ? 'unlimited' : 'common'
+
   const pickList = {
     personal: props.room.play.personal[side].pickList,
-    common: props.room.play.common[side].pickList,
+    common: props.room.play[round2Key][side].pickList,
   }
 
   const pickCost = {
     personal: props.room.play.personal[side].pickCost || [null, null, null],
-    common: props.room.play.common[side].pickCost || [null, null, null],
+    common: props.room.play[round2Key][side].pickCost || [null, null, null],
   }
 
   const boss = {
     personal: props.room.play.personal[side].boss,
-    common: props.room.play.common.boss,
+    common:
+      props.gameType === GAME_TYPE.UNLIMITED
+        ? props.room.play.unlimited[side].boss
+        : props.room.play.common.boss,
   }
 
   const banList = props.room.play.banList
 
   // 각 슬롯의 Cost 계산
   const slotCosts = useMemo(() => {
-    const calcRoundCosts = (roundKey: 'personal' | 'common'): [number, number, number] => {
+    const calcRoundCosts = (
+      roundKey: 'personal' | 'unlimited' | 'common'
+    ): [number, number, number] => {
       const pickList = props.room.play[roundKey][side].pickList
       const pickCost = props.room.play[roundKey][side].pickCost || [null, null, null]
       return pickList.map((agentId: number | null, index: number) => {
@@ -55,12 +62,17 @@ const Pick: React.FC<Props> = (props) => {
     }
     return {
       personal: calcRoundCosts('personal'),
-      common: calcRoundCosts('common'),
+      common: calcRoundCosts(round2Key),
     }
-  }, [props.room.play, side, agents, engines, costTable])
+  }, [props.room.play, side, agents, engines, costTable, round2Key])
 
   const onSelectAgent = (round: 'personal' | 'common', index: number, agentId: number) => {
-    const roundKey = round === 'personal' ? 'personal' : 'common'
+    const roundKey =
+      round === 'personal'
+        ? 'personal'
+        : props.gameType === GAME_TYPE.UNLIMITED
+          ? 'unlimited'
+          : 'common'
     const prevPickList = [...props.room.play[roundKey][side].pickList] as [
       number | null,
       number | null,
@@ -92,7 +104,12 @@ const Pick: React.FC<Props> = (props) => {
   }
 
   const onRemoveAgent = (round: 'personal' | 'common', index: number) => {
-    const roundKey = round === 'personal' ? 'personal' : 'common'
+    const roundKey =
+      round === 'personal'
+        ? 'personal'
+        : props.gameType === GAME_TYPE.UNLIMITED
+          ? 'unlimited'
+          : 'common'
     const prevPickList = [...props.room.play[roundKey][side].pickList] as [
       number | null,
       number | null,
@@ -116,7 +133,12 @@ const Pick: React.FC<Props> = (props) => {
   }
 
   const onSelectBoss = (round: 'personal' | 'common', bossId: number) => {
-    const roundKey = round === 'personal' ? 'personal' : 'common'
+    const roundKey =
+      round === 'personal'
+        ? 'personal'
+        : props.gameType === GAME_TYPE.UNLIMITED
+          ? 'unlimited'
+          : 'common'
     // Boss 선택은 SOCKET_EVENT.BOSS를 사용할 수도 있지만, Pick Phase 내에서의 동작이므로 로컬 업데이트 후
     // 필요하다면 별도 이벤트를 쏘거나 PICK 이벤트에 포함시킬 수 있음.
     // 기존 Socket.tsx에 BOSS 이벤트 핸들러가 있으므로 그것을 활용
@@ -129,7 +151,12 @@ const Pick: React.FC<Props> = (props) => {
   }
 
   const onCostChange = (round: 'personal' | 'common', index: number, setting: AgentCostSetting) => {
-    const roundKey = round === 'personal' ? 'personal' : 'common'
+    const roundKey =
+      round === 'personal'
+        ? 'personal'
+        : props.gameType === GAME_TYPE.UNLIMITED
+          ? 'unlimited'
+          : 'common'
     const prevPickCost = [...(props.room.play[roundKey][side].pickCost || [null, null, null])] as [
       AgentCostSetting | null,
       AgentCostSetting | null,
@@ -149,11 +176,13 @@ const Pick: React.FC<Props> = (props) => {
       side,
       ready: true,
     })
+    window.alert('게임으로 돌아가 경기를 준비하세요.')
   }
 
   return (
     <PickPhase
       role={props.role}
+      gameType={props.gameType}
       pickList={pickList as any}
       pickCost={pickCost as any}
       boss={boss as any}

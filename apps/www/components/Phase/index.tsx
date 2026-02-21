@@ -1,5 +1,6 @@
 import Ban from './Ban'
 import BossSelect from './Boss'
+import End from './End'
 import Pick from './Pick'
 import { type RoomState } from '@zzz-picker/constant'
 import { ROOM_PHASE, GAME_TYPE, type Side } from '@zzz-picker/constant'
@@ -26,6 +27,7 @@ const Component: React.FC<{
   phase: ROOM_PHASE
   role: Rols
   room: RoomState
+  gameType: GAME_TYPE
   onUpdate: (data: RoomState) => void
 }> = (props) => {
   switch (props.phase) {
@@ -35,7 +37,16 @@ const Component: React.FC<{
     case ROOM_PHASE.BAN:
       return <Ban role={props.role} room={props.room} onUpdate={props.onUpdate} />
     case ROOM_PHASE.PICK:
-      return <Pick role={props.role} room={props.room} onUpdate={props.onUpdate} />
+      return (
+        <Pick
+          role={props.role}
+          room={props.room}
+          gameType={props.gameType}
+          onUpdate={props.onUpdate}
+        />
+      )
+    case ROOM_PHASE.DONE:
+      return <End />
     default:
       return null
   }
@@ -71,6 +82,7 @@ const Phase: React.FC<Props> = (props) => {
           phase={roomState.realtime.phase as ROOM_PHASE}
           role={props.role}
           room={roomState}
+          gameType={props.gameType}
           onUpdate={onUpdateRoom}
         />
       </motion.div>
