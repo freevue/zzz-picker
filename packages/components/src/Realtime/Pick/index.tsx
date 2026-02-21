@@ -13,12 +13,14 @@ import {
   type BossId,
   type Side,
   type AgentCostSetting,
+  GAME_TYPE,
 } from '@zzz-picker/constant'
 
 type RoundKey = 'personal' | 'common'
 
 type Props = {
   role: Side | 'H'
+  gameType?: GAME_TYPE
   pickList: {
     personal: [SelectAgent, SelectAgent, SelectAgent]
     common: [SelectAgent, SelectAgent, SelectAgent]
@@ -118,7 +120,7 @@ const PickPhase: React.FC<Props> = (props) => {
             <BossSlot
               bossId={currentBoss}
               onClick={() => {
-                if (active && isPersonalRound) {
+                if (active && (isPersonalRound || props.gameType === GAME_TYPE.UNLIMITED)) {
                   setIsBossDialogOpen(true)
                 }
               }}

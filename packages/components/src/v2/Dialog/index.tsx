@@ -124,7 +124,7 @@ const Dialog: DialogType = (props) => {
                     <button
                       type="button"
                       onClick={props.onClose}
-                      className="absolute top-8 right-8 cursor-pointer"
+                      className="absolute top-8 right-8 cursor-pointer z-10"
                     >
                       <Cross className="size-10 stroke-primary" />
                     </button>

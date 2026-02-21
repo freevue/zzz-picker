@@ -76,6 +76,14 @@ const Provider: React.FC<Props> = (props) => {
     B: new Map(),
   })
 
+  const dbUpdateTimerRef = useRef<NodeJS.Timeout | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (dbUpdateTimerRef.current) clearTimeout(dbUpdateTimerRef.current)
+    }
+  }, [])
+
   // sync Play.tsx logic
   const allPickList = useMemo(() => {
     const getPickList = (side: Side) =>
@@ -114,11 +122,12 @@ const Provider: React.FC<Props> = (props) => {
       .then(({ data }) => {
         if (data) {
           setRoom(data)
-          setState((prev) => ({
-            ...prev,
-            play: { ...prev.play, ...data.state.play },
-            realtime: { ...prev.realtime, ...data.state.realtime },
-          }))
+          setState((prev) =>
+            ensureRealtimeState({
+              ...prev,
+              ...data.state,
+            })
+          )
         }
       })
   }, [props.channelId])
@@ -243,14 +252,17 @@ const Provider: React.FC<Props> = (props) => {
               }
             }
 
-            // DB sync
-            if (complete) {
+            // DB sync with 500ms Debounce
+            if (dbUpdateTimerRef.current) {
+              clearTimeout(dbUpdateTimerRef.current)
+            }
+            dbUpdateTimerRef.current = setTimeout(() => {
               supabase
                 .from('realtime_room')
                 .update({ state: next })
                 .eq('id', props.channelId)
                 .then(() => {})
-            }
+            }, 500)
 
             return next
           })
@@ -371,6 +383,13 @@ const Provider: React.FC<Props> = (props) => {
               next.realtime = {
                 ...prev.realtime,
               }
+
+              // Persist to DB for Preview state
+              supabase
+                .from('realtime_room')
+                .update({ state: next })
+                .eq('id', props.channelId)
+                .then(() => {})
             }
             return next
           })
@@ -446,6 +465,35 @@ const Provider: React.FC<Props> = (props) => {
       setChannel(null)
     }
   }, [props.channelId])
+
+  // 동기화: allPickList가 갱신될 때마다 cost Map에 없다면 추가하여 화면(PartySlot) 연동 트리거 작동
+  useEffect(() => {
+    const updateCost = (side: Side, agentId: number | null) => {
+      if (agentId === null) return
+
+      setCost((prev) => {
+        // 이미 렌더링을 위해 Map에 있다면 무시
+        if (prev[side].has(agentId)) return prev
+
+        const newCost = {
+          A: new Map(prev.A),
+          B: new Map(prev.B),
+        }
+
+        newCost[side].set(agentId, {
+          agentId,
+          engineId: null,
+          agentRate: 0,
+          engineRate: 1,
+        })
+
+        return newCost
+      })
+    }
+
+    for (const agentId of allPickList.A) updateCost('A', agentId)
+    for (const agentId of allPickList.B) updateCost('B', agentId)
+  }, [allPickList])
 
   return (
     <Context.Provider

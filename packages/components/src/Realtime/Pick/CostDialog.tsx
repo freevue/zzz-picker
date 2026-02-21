@@ -206,12 +206,6 @@ const CostDialog: React.FC<Props> = (props) => {
       >
         <Typo.Heading className="heading-4xl text-primary" heading={2}>
           {agent.fullNameKo}
-          <span
-            className="absolute -top-2 -right-2 text-9xl font-black block scale-200 opacity-50 italic"
-            style={{ color: agent.color || 'var(--color-secondary)' }}
-          >
-            {agent.rarity}
-          </span>
         </Typo.Heading>
         <div
           className={pipe(

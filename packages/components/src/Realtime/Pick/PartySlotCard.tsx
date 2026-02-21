@@ -57,7 +57,7 @@ const PartySlotCard: React.FC<Props> = ({ agentId, cost, onClick }) => {
             />
           </div>
           {/* Cost 표시 (좌상단) */}
-          {cost !== undefined && cost > 0 && (
+          {cost !== undefined && cost >= 0 && (
             <div
               className={pipe(
                 [
@@ -78,7 +78,7 @@ const PartySlotCard: React.FC<Props> = ({ agentId, cost, onClick }) => {
           )}
         </>
       ) : (
-        <Plus className="size-1/3 stroke-ink/30" />
+        <Plus className="size-1/2 stroke-ink" />
       )}
     </div>
   )

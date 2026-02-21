@@ -48,7 +48,7 @@ const BossSlot: React.FC<Props> = ({ bossId, onClick }) => {
           alt={bossData.nameKo}
         />
       ) : (
-        <Plus className="size-2/4 stroke-ink/30 group-hover/button:stroke-primary" />
+        <Plus className="size-1/2 stroke-ink group-hover/button:stroke-primary" />
       )}
     </button>
   )
