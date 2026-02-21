@@ -83,7 +83,7 @@ const CostDialog: React.FC<Props> = (props) => {
             )}
           >
             <img
-              className={pipe(['w-full', 'block'], concat([]), join(' '))}
+              className={pipe(['w-full', 'block'], concat(['inverse', 'card-2']), join(' '))}
               src={agent.banner.url}
               alt={agent.nameKo}
             />
