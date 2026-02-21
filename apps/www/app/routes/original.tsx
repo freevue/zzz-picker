@@ -56,7 +56,7 @@ const Original: React.FC = () => {
                 ],
                 concat(['bg-cover', 'bg-no-repeat', 'bg-[center_30px]']),
                 concat([
-                  'alice:bg-[url("https://act-webstatic.hoyoverse.com/event-static-hoyowiki-admin/2025/08/04/01f84d7fdcdbef65d8a9c94416e81d91_2128704813195499621.png?x-oss-process=image%2Fformat%2Cwebp")]',
+                  'alice:bg-[url("https://images.zzz.freevue.dev/images/agents/156728/fde380b0-338d-4842-84e4-8527d2481c88.png")]',
                 ]),
                 join(' ')
               )}
