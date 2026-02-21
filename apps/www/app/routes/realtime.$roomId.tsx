@@ -1,6 +1,12 @@
 import { pipe, split, map, toArray } from '@fxts/core'
 import { useParams, useSearchParams } from '@remix-run/react'
-import { DEFAULT, DEFAULT_ROOM_STATE, type RoomState, type Side } from '@zzz-picker/constant'
+import {
+  DEFAULT,
+  DEFAULT_ROOM_STATE,
+  type RoomState,
+  type Side,
+  GAME_TYPE,
+} from '@zzz-picker/constant'
 import { Socket, supabase, Setting, Play, Store } from '@zzz-picker/provider'
 import { useEffect, useState, useMemo } from 'react'
 import { Phase } from '~/components'
@@ -11,6 +17,7 @@ export const RealtimeRoom: React.FC = () => {
   const [room, setRoom] = useState<RoomState>(DEFAULT_ROOM_STATE)
   const [channelId, setChannelId] = useState<string | null>(null)
   const [role, setRole] = useState<Side | 'H'>('A')
+  const [gameType, setGameType] = useState<GAME_TYPE>(GAME_TYPE.ORIGINAL)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -41,6 +48,7 @@ export const RealtimeRoom: React.FC = () => {
         const roomData = userData.room
         setChannelId(roomData.id)
         setRole(userData.role as Side | 'H')
+        setGameType(roomData.game_type as GAME_TYPE)
 
         // Fetch full room data including all users (to reconstruct room state consistent with other views)
         const { data } = await supabase
@@ -70,12 +78,7 @@ export const RealtimeRoom: React.FC = () => {
       <Store>
         <Play>
           <Socket channelId={channelId}>
-            <Phase
-              role={role}
-              id={channelId}
-              gameType={room.play?.common?.key as any}
-              initialRoom={room}
-            />
+            <Phase role={role} id={channelId} gameType={gameType} initialRoom={room} />
           </Socket>
         </Play>
       </Store>
