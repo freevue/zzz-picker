@@ -22,7 +22,7 @@ export const meta: MetaFunction = () => [
   {
     property: 'og:image',
     content:
-      'https://images.zzz.freevue.dev/images/background/d45cc90b-5c45-48de-b104-661d09dfd90d.webp',
+      'https://images.zzz.freevue.dev/images/background/f9eb4038-eec0-4c8b-b147-e7eb90967510.jpg',
   },
 
   // Twitter Meta Tags
@@ -34,7 +34,7 @@ export const meta: MetaFunction = () => [
   {
     name: 'twitter:image',
     content:
-      'https://images.zzz.freevue.dev/images/background/d45cc90b-5c45-48de-b104-661d09dfd90d.webp',
+      'https://images.zzz.freevue.dev/images/background/f9eb4038-eec0-4c8b-b147-e7eb90967510.jpg',
   },
 ]
 
