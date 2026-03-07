@@ -43,7 +43,7 @@ const Main: React.FC = () => {
       }}
     >
       <img src="/images/main/logo.png" alt="logo" className="w-10 block fixed left-10 top-10" />
-      <div className="flex gap-6 fixed left-1/2 bottom-24 -translate-x-1/2">
+      <div className="flex gap-2 flex-col fixed right-4 top-1/2 -translate-y-1/2">
         {pipe(
           LINKS,
           zipWithIndex,
@@ -54,7 +54,7 @@ const Main: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.2, delay: index * 0.2 }}
             >
-              <Link to={link.href} className="text-center flex flex-col-reverse items-center gap-4 group">
+              <Link to={link.href} className="text-center flex flex-row-reverse items-center gap-4 group">
                 <div className="flex size-48 items-center justify-center bg-content card p-2">
                   <img
                     src={link.url}
