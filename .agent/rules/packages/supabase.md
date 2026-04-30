@@ -10,12 +10,12 @@ aliases: [supabase-client, gemini-service]
 
 - Supabase 클라이언트 설정 및 AI(Gemini) 모델 연동 로직을 담당합니다.
 
-## Files
+## Files (Original)
 
-- [agent.ts](./agent.ts)
-- [ai-client.ts](./ai-client.ts)
-- [index.ts](./index.ts)
-- [schema.ts](./schema.ts)
+- `agent.ts`
+- `ai-client.ts`
+- `index.ts`
+- `schema.ts`
 
 ## Exports
 

@@ -10,12 +10,12 @@ aliases: [r2-package, storage-service]
 
 - Cloudflare R2 버킷과 상호작용하기 위한 클라이언트 설정 및 파일 관리 유틸리티(업로드 경로 생성, 파일 브라우징 등)를 제공합니다.
 
-## Files
+## Files (Original)
 
-- [client.ts](./client.ts)
-- [presigned.ts](./presigned.ts)
-- [browser.ts](./browser.ts)
-- [index.ts](./index.ts)
+- `client.ts`
+- `presigned.ts`
+- `browser.ts`
+- `index.ts`
 
 ## Exports
 

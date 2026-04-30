@@ -10,15 +10,15 @@ aliases: [utils-package]
 
 - 어플리케이션 전반에서 사용되는 범용 유틸리티 함수(UUID 생성)와 게임 핵심 로직(코스트 계산, 진영 암복호화)을 담당합니다.
 
-## Files
+## Files (Original)
 
-- [createUUID.ts](./createUUID.ts)
-- [encryptRole.ts](./encryptRole.ts)
-- [decryptRole.ts](./decryptRole.ts)
-- [getAgentCost.ts](./getAgentCost.ts)
-- [getEngineCost.ts](./getEngineCost.ts)
-- [getTotalCost.ts](./getTotalCost.ts)
-- [index.ts](./index.ts)
+- `createUUID.ts`
+- `encryptRole.ts`
+- `decryptRole.ts`
+- `getAgentCost.ts`
+- `getEngineCost.ts`
+- `getTotalCost.ts`
+- `index.ts`
 
 ## Exports
 

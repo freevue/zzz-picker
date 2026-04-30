@@ -10,12 +10,12 @@ aliases: [styles, design-tokens]
 
 - 프로젝트 전체에서 공통으로 사용되는 디자인 토큰(컬러, 폰트, 간격)과 글로벌 CSS 스타일을 정의합니다.
 
-## Files
+## Files (Original)
 
-- [base.css](./base.css)
-- [theme.css](./theme.css)
-- [fonts.css](./fonts.css)
-- [index.css](./index.css)
+- `base.css`
+- `theme.css`
+- `fonts.css`
+- `index.css`
 
 ## Exports
 

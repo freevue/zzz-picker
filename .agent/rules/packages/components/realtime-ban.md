@@ -27,9 +27,3 @@ import BanPhase from './Ban'
   onSubmit={(id) => console.log(id)}
 />
 ```
-
-## Dependencies
-
-- [BanItem](./BanItem.tsx)
-- [CandiBanItem](./CandiBanItem.tsx)
-- [CandiBanList](./CandiBanList.tsx)

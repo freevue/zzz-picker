@@ -30,11 +30,3 @@ import PickPhase from './Pick'
   // ... callbacks
 />
 ```
-
-## Dependencies
-
-- [PartySlotCard](./PartySlotCard.tsx)
-- [BossSlot](./BossSlot.tsx)
-- [AgentGrid](./AgentGrid.tsx)
-- [BossSelectDialog](./BossSelectDialog.tsx)
-- [CostDialog](./CostDialog.tsx)
