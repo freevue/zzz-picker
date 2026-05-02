@@ -43,7 +43,7 @@ const Main: React.FC = () => {
       }}
     >
       <img src="/images/main/logo.png" alt="logo" className="w-10 block fixed left-10 top-10" />
-      <div className="flex gap-2 flex-row fixed left-1/2 bottom-6 -translate-x-1/2">
+      <div className="flex gap-2 flex-row fixed left-1/2 bottom-8 -translate-x-1/2">
         {pipe(
           LINKS,
           zipWithIndex,
