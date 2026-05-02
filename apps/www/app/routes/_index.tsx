@@ -39,7 +39,7 @@ const Main: React.FC = () => {
       className="size-full flex flex-col items-center justify-center gap-10 bg-center bg-no-repeat bg-cover"
       style={{
         backgroundImage:
-          "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)), url('https://images.zzz.freevue.dev/images/background/6d962773-2a81-41af-a49a-70d019d27f4d.png')",
+          "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)), url('https://images.zzz.freevue.dev/images/background/7ddd5862-142b-48c5-81ac-06cb79d10d6a.webp')",
       }}
     >
       <img src="/images/main/logo.png" alt="logo" className="w-10 block fixed left-10 top-10" />
