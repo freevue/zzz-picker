@@ -39,7 +39,7 @@ const Main: React.FC = () => {
       className="size-full flex flex-col items-center justify-center gap-10 bg-center bg-no-repeat bg-cover"
       style={{
         backgroundImage:
-          "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)), url('https://images.zzz.freevue.dev/images/background/33055931-e3a6-4ecb-a0e9-01591292c903.jpg')",
+          "linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)), url('https://images.zzz.freevue.dev/images/background/33055931-e3a6-4ecb-a0e9-01591292c903.jpg')",
       }}
     >
       <img src="/images/main/logo.png" alt="logo" className="w-10 block fixed left-10 top-10" />
@@ -85,7 +85,7 @@ const Main: React.FC = () => {
           toArray
         )}
       </div>
-      <ul className="flex gap-6 fixed bottom-0 right-5 py-5">
+      <ul className="flex gap-6 fixed top-6 left-30 py-5">
         <li className="border-r border-ink/50 pr-6">
           <Rule />
         </li>
