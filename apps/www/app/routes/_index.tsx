@@ -39,11 +39,11 @@ const Main: React.FC = () => {
       className="size-full flex flex-col items-center justify-center gap-10 bg-center bg-no-repeat bg-cover"
       style={{
         backgroundImage:
-          "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)), url('https://images.zzz.freevue.dev/images/background/7ddd5862-142b-48c5-81ac-06cb79d10d6a.webp')",
+          "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5)), url('https://images.zzz.freevue.dev/images/background/33055931-e3a6-4ecb-a0e9-01591292c903.jpg')",
       }}
     >
       <img src="/images/main/logo.png" alt="logo" className="w-10 block fixed left-10 top-10" />
-      <div className="flex gap-2 flex-row fixed left-1/2 bottom-16 -translate-x-1/2">
+      <div className="flex gap-2 flex-row fixed right-16 bottom-16">
         {pipe(
           LINKS,
           zipWithIndex,
@@ -85,7 +85,7 @@ const Main: React.FC = () => {
           toArray
         )}
       </div>
-      <ul className="flex gap-6 fixed bottom-0 left-1/2 -translate-x-1/2 py-5">
+      <ul className="flex gap-6 fixed bottom-0 right-5 py-5">
         <li className="border-r border-ink/50 pr-6">
           <Rule />
         </li>
