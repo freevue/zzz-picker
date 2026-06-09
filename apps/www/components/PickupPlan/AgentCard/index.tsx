@@ -53,8 +53,10 @@ const AgentCard: React.FC<Props> = (props) => {
           }`}
         >
           <img
-            src={props.agent.profile.url}
+            src={`${props.agent.profile.url}?c=v2`}
             alt={props.agent.nameKo}
+            crossOrigin="anonymous"
+            data-agent-img-id={props.agent.id}
             className={`w-full h-full object-cover select-none transition-all duration-300 ${
               isGray ? 'grayscale contrast-[0.85] opacity-40' : 'grayscale-0 opacity-100'
             }`}
@@ -64,8 +66,10 @@ const AgentCard: React.FC<Props> = (props) => {
         {hasWeapon && exclusiveEngine && (
           <div className="absolute bottom-0 right-0 w-8 h-8 rounded-full overflow-hidden border border-[var(--color-secondary)] bg-[var(--color-content)] flex items-center justify-center shadow-lg z-10">
             <img
-              src={exclusiveEngine.iconUrl || exclusiveEngine.imageUrl}
+              src={`${exclusiveEngine.iconUrl || exclusiveEngine.imageUrl}?c=v2`}
               alt={exclusiveEngine.nameKo}
+              crossOrigin="anonymous"
+              data-engine-img-id={props.agent.id}
               className="w-full h-full object-cover select-none"
             />
           </div>

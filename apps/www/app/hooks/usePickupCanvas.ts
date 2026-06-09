@@ -112,7 +112,16 @@ export function usePickupCanvas(props: UsePickupCanvasProps) {
         const posY = padding + row * (rowHeight + gapY)
 
         try {
-          const agentImg = await loadImage(agent.profile.url)
+          let agentImg: HTMLImageElement
+          const domAgentImg = document.querySelector(
+            `img[data-agent-img-id="${agent.id}"]`
+          ) as HTMLImageElement | null
+
+          if (domAgentImg && domAgentImg.complete && domAgentImg.naturalWidth > 0) {
+            agentImg = domAgentImg
+          } else {
+            agentImg = await loadImage(agent.profile.url)
+          }
 
           ctx.save()
           ctx.beginPath()
@@ -163,7 +172,16 @@ export function usePickupCanvas(props: UsePickupCanvasProps) {
             const wx = posX + avatarSize - weaponSize + 2
             const wy = posY + avatarSize - weaponSize + 2
 
-            const engineImg = await loadImage(exclusiveEngine.iconUrl || exclusiveEngine.imageUrl)
+            let engineImg: HTMLImageElement
+            const domEngineImg = document.querySelector(
+              `img[data-engine-img-id="${agent.id}"]`
+            ) as HTMLImageElement | null
+
+            if (domEngineImg && domEngineImg.complete && domEngineImg.naturalWidth > 0) {
+              engineImg = domEngineImg
+            } else {
+              engineImg = await loadImage(exclusiveEngine.iconUrl || exclusiveEngine.imageUrl)
+            }
 
             ctx.save()
             ctx.beginPath()
