@@ -58,7 +58,6 @@ const AgentCard: React.FC<Props> = (props) => {
             className={`w-full h-full object-cover select-none transition-all duration-300 ${
               isGray ? 'grayscale contrast-[0.85] opacity-40' : 'grayscale-0 opacity-100'
             }`}
-            crossOrigin="anonymous"
           />
         </div>
 
@@ -68,7 +67,6 @@ const AgentCard: React.FC<Props> = (props) => {
               src={exclusiveEngine.iconUrl || exclusiveEngine.imageUrl}
               alt={exclusiveEngine.nameKo}
               className="w-full h-full object-cover select-none"
-              crossOrigin="anonymous"
             />
           </div>
         )}

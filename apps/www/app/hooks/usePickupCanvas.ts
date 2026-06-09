@@ -25,14 +25,36 @@ type UsePickupCanvasProps = {
 }
 
 export function usePickupCanvas(props: UsePickupCanvasProps) {
-  const loadImage = (src: string): Promise<HTMLImageElement> => {
-    return new Promise((resolve, reject) => {
-      const img = new Image()
-      img.crossOrigin = 'anonymous'
-      img.src = src
-      img.onload = () => resolve(img)
-      img.onerror = () => reject(new Error(`이미지 로드 실패: ${src}`))
-    })
+  const loadImage = async (src: string): Promise<HTMLImageElement> => {
+    try {
+      const response = await fetch(src, {
+        method: 'GET',
+        mode: 'cors',
+        cache: 'no-cache',
+      })
+      if (!response.ok) {
+        throw new Error(`HTTP status ${response.status}`)
+      }
+      const blob = await response.blob()
+      const objectUrl = URL.createObjectURL(blob)
+
+      return new Promise((resolve, reject) => {
+        const img = new Image()
+        img.onload = () => {
+          URL.revokeObjectURL(objectUrl)
+          resolve(img)
+        }
+        img.onerror = () => {
+          URL.revokeObjectURL(objectUrl)
+          reject(new Error('이미지 객체 로드 실패'))
+        }
+        img.src = objectUrl
+      })
+    } catch (err) {
+      throw new Error(
+        `이미지 로드 실패: ${src} (${err instanceof Error ? err.message : String(err)})`
+      )
+    }
   }
 
   const generateImage = async () => {
@@ -100,7 +122,8 @@ export function usePickupCanvas(props: UsePickupCanvasProps) {
           ctx.restore()
 
           // 테두리 하이라이트선 그리기
-          ctx.strokeStyle = state === 1 ? getThemeColor('--color-primary') : getThemeColor('--color-secondary')
+          ctx.strokeStyle =
+            state === 1 ? getThemeColor('--color-primary') : getThemeColor('--color-secondary')
           ctx.lineWidth = 3
           ctx.beginPath()
           ctx.arc(posX + avatarSize / 2, posY + avatarSize / 2, avatarSize / 2, 0, Math.PI * 2)
@@ -165,7 +188,6 @@ export function usePickupCanvas(props: UsePickupCanvasProps) {
           ctx.textAlign = 'center'
           ctx.textBaseline = 'top'
           ctx.fillText(agent.nameKo, posX + avatarSize / 2, posY + avatarSize + nameOffset)
-
         } catch (imageErr) {
           console.error(`${agent.nameKo} 이미지 렌더링 실패:`, imageErr)
           ctx.fillStyle = getThemeColor('--color-netural')
@@ -182,7 +204,6 @@ export function usePickupCanvas(props: UsePickupCanvasProps) {
 
       const dataUrl = canvas.toDataURL('image/png')
       props.onSuccess(dataUrl)
-
     } catch (err) {
       console.error('캔버스 이미지 빌드 중 오류:', err)
       alert('이미지 파일 변환에 실패했습니다. 브라우저 보안 설정을 확인해 주시기 바랍니다.')
