@@ -65,25 +65,15 @@ html.alice {
 }
 
 html.v2 {
-  --charade-50: #eef1f7;
-  --charade-100: #d2dbea;
-  --charade-200: #a7bad8;
-  --charade-300: #7f9dc7;
-  --charade-400: #6882a7;
-  --charade-500: #546988;
-  --charade-600: #41526b;
-  --charade-700: #2f3d50;
-  --charade-800: #1f2937;
-  --charade-900: #131b25;
-  --charade-950: #0c1119;
+  --color-primary: #e2ff3b;     /* 시그니처 형광 네온 옐로우 */
+  --color-secondary: #00f0ff;   /* 테크니컬 시아노/블루 */
+  --color-tertiary: #ff4500;    /* 경고 오렌지 레드 */
+  --color-netural: #1c2331;     /* 비활성 면 / 서브 요소 배경색 */
 
-  --color-primary: #fbbf24;
-  --color-secondary: #6366f1;
-  --color-tertiary: #312e81;
-  --color-netural: #fffbeb;
+  --color-base: #0c0f12;        /* 메인 배경색 (매우 어두운 카본 다크 그레이) */
+  --color-content: #141920;     /* 콘텐츠 카드 배경색 (차콜 블루) */
 
-  --color-base: var(--charade-800);
-  --color-content: var(--charade-700);
-
-  --color-ink: var(--charade-50);
+  --color-ink: #ffffff;         /* 메인 화이트 텍스트 */
+  --color-disabled: #374151;    /* 비활성화 색상 */
 }
+
