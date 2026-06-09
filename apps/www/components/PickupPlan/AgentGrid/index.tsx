@@ -25,7 +25,7 @@ type Props = {
 
 const AgentGrid: React.FC<Props> = (props) => {
   return (
-    <div className="flex-1 overflow-y-auto pr-1 py-4 scrollbar-thin scrollbar-thumb-[var(--color-netural)]">
+    <div className="flex-1 overflow-y-auto pr-1 py-4 scrollbar-hidden">
       <div className="w-full py-4">
         {props.pickupAgents.length === 0 ? (
           <div className="py-12 text-center text-xs text-[var(--color-ink)]/40">

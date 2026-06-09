@@ -1,7 +1,15 @@
+import type { MetaFunction } from '@remix-run/node'
 import { useStore } from '@zzz-picker/provider/hooks'
 import { useEffect, useMemo, useState } from 'react'
-import { AgentGrid, PreviewModal } from '~/components/PickupPlan'
 import { usePickupCanvas } from '~/app/hooks/usePickupCanvas'
+import { AgentGrid, PreviewModal } from '~/components/PickupPlan'
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: 'ZZZ 픽업 플랜 | zzz-picker' },
+    { name: 'description', content: '여러분의 픽업 플랜을 보여주세요!' },
+  ]
+}
 
 type Agent = {
   id: number
