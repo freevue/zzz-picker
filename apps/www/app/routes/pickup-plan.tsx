@@ -4,10 +4,34 @@ import { useEffect, useMemo, useState } from 'react'
 import { usePickupCanvas } from '~/app/hooks/usePickupCanvas'
 import { AgentGrid, PreviewModal } from '~/components/PickupPlan'
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({ matches }) => {
+  const parentMeta = matches.flatMap((match) => match.meta ?? [])
+
+  const filteredParentMeta = parentMeta.filter((m: any) => {
+    if ('title' in m) return false
+    if (
+      'name' in m &&
+      typeof m.name === 'string' &&
+      ['description', 'twitter:title', 'twitter:description'].includes(m.name)
+    )
+      return false
+    if (
+      'property' in m &&
+      typeof m.property === 'string' &&
+      ['og:title', 'og:description'].includes(m.property)
+    )
+      return false
+    return true
+  })
+
   return [
+    ...filteredParentMeta,
     { title: 'ZZZ 픽업 플랜 | zzz-picker' },
     { name: 'description', content: '여러분의 픽업 플랜을 보여주세요!' },
+    { property: 'og:title', content: 'ZZZ 픽업 플랜 | zzz-picker' },
+    { property: 'og:description', content: '여러분의 픽업 플랜을 보여주세요!' },
+    { name: 'twitter:title', content: 'ZZZ 픽업 플랜 | zzz-picker' },
+    { name: 'twitter:description', content: '여러분의 픽업 플랜을 보여주세요!' },
   ]
 }
 
