@@ -1,8 +1,9 @@
 ---
-triger: model_decision
-tags: [component, realtime, multiplayer]
-aliases: [realtime-components]
+name: app-www-components-realtime
+description: 실시간 밴픽 경기를 위한 방 생성 및 참여 정보 관리를 담당하는 컴포넌트들에 대한 정의입니다.
+trigger: model_decision
 ---
+
 
 # Realtime GUIDE
 

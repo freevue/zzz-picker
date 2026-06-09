@@ -1,8 +1,9 @@
 ---
-triger: model_decision
-tags: [component, simulation, game-board]
-aliases: [playground-components, game-main]
+name: app-www-components-playground
+description: 실제 밴픽 시뮬레이션이 이루어지는 메인 경기 판을 구성하는 Playground 컴포넌트에 대한 정의입니다.
+trigger: model_decision
 ---
+
 
 # Playground GUIDE
 

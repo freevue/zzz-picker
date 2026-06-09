@@ -1,8 +1,9 @@
 ---
-triger: model_decision
-tags: [package, css, tailwind, theme]
-aliases: [styles, design-tokens]
+name: tailwind-config
+description: 프로젝트 전체에서 공통으로 사용되는 디자인 토큰과 글로벌 CSS 스타일을 정의합니다.
+trigger: model_decision
 ---
+
 
 # Tailwind Config GUIDE
 

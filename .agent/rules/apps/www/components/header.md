@@ -1,8 +1,9 @@
 ---
-triger: model_decision
-tags: [component, layout, navigation]
-aliases: [header-component, global-menu]
+name: app-www-components-header
+description: 어플리케이션의 상단 네비게이션과 유틸리티 메뉴를 제공하는 Header 컴포넌트에 대한 정의입니다.
+trigger: model_decision
 ---
+
 
 # Header GUIDE
 

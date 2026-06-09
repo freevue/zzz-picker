@@ -1,8 +1,9 @@
 ---
-triger: model_decision
-tags: [app, remix, entry-point, root]
-aliases: [app-source, main-entry]
+name: app-www-overview
+description: 어플리케이션의 엔트리 포인트이며 전체 페이지에 공통으로 적용되는 레이아웃을 정의합니다.
+trigger: model_decision
 ---
+
 
 # App Source GUIDE
 

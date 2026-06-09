@@ -1,8 +1,9 @@
 ---
-triger: model_decision
-tags: [package, storage, cloudflare-r2, aws-sdk]
-aliases: [r2-package, storage-service]
+name: r2-storage
+description: Cloudflare R2 버킷과 상호작용하기 위한 클라이언트 설정 및 파일 관리 유틸리티입니다.
+trigger: model_decision
 ---
+
 
 # R2 Storage GUIDE
 

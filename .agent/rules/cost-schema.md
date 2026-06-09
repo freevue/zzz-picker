@@ -1,8 +1,11 @@
 ---
+name: cost-schema
+description: 캐릭터 및 무기의 돌파 등급에 따른 Cost 계산 방식과 데이터 구조에 대한 정의입니다.
 trigger: always_on
 ---
 
 # 캐릭터의 Cost에 대한 설명
+
 
 경기를 진행함에 있어 캐릭터의 경우 고유의 설정(돌파)이 존재합니다. 해당 설정에 따라 Cost가 정해집니다.
 
@@ -68,3 +71,8 @@ localStorage에는 Map이 저장이 안되는 것을 감안하여, 데이터 셋
 ```
 
 위와 같이 Map 형식에서 각각의 Side별 배열로 담은 객체를 활용합니다.
+
+## 관련 룰
+
+- [캐릭터(에이전트) 정의 (Agent Definition)](./zzz-agent.md)
+

@@ -1,8 +1,11 @@
 ---
-description: zzz-picker의 Supabase 데이터베이스 스키마 및 테이블 구조 설명
+name: database-schema
+description: zzz-picker의 Supabase 데이터베이스 스키마 및 테이블 구조 상세 설명입니다.
+trigger: model_decision
 ---
 
 # Database Schema
+
 
 `zzz-picker` 프로젝트는 Supabase를 백엔드로 사용하며, 주요 데이터는 PostgreSQL 테이블에 저장됩니다.
 

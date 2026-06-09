@@ -1,8 +1,9 @@
 ---
-triger: model_decision
-tags: [component, chat, gemini]
-aliases: [chat-components]
+name: app-www-components-chat
+description: 어플리케이션의 실시간 채팅(Gemini) 인터페이스를 구성하는 컴포넌트들에 대한 정의입니다.
+trigger: model_decision
 ---
+
 
 # Chat GUIDE
 

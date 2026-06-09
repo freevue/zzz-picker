@@ -1,9 +1,11 @@
 ---
+name: banpick-rule
+description: 캐릭터 Ban 및 캐릭터/무기/보스 Pick 과정에 대한 상세 규칙입니다.
 trigger: model_decision
-description: Ban, Pick Rule에 대한 설명서
 ---
 
 zzz-picker의 주요 기능인 캐릭터에 대한 Ban과 캐릭터 및 무기, 라운드에 대한 보스 Pick에 대한 설명입니다.
+
 
 ## 전체 Steps
 
@@ -38,4 +40,9 @@ zzz-picker의 주요 기능인 캐릭터에 대한 Ban과 캐릭터 및 무기, 
 
 - 각 선수는 2개의 파티를 구성합니다.
   - 각 파티당 3개의 캐릭터와 선택적으로 무기를 추가할 수 있습니다.
-- Cost 제헌이 있는 경우 제한을 넘길 수 없습니다.
+- Cost 제한이 있는 경우 제한을 넘길 수 없습니다.
+
+## 관련 룰
+
+- [캐릭터 및 엔진 코스트 설정 (Cost Schema)](./cost-schema.md)
+

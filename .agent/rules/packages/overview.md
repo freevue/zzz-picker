@@ -1,8 +1,9 @@
 ---
-triger: model_decision
-tags: [monorepo, workspace, architecture]
-aliases: [packages-overview]
+name: packages-overview
+description: 프로젝트의 공유 로직과 공통 기능을 분리하여 관리하는 모노레포 패키지들에 대한 개요입니다.
+trigger: model_decision
 ---
+
 
 # Packages Overview GUIDE
 

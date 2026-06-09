@@ -1,4 +1,11 @@
+---
+name: realtime-ban-component
+description: 실시간 밴 페이즈(Ban Phase)의 UI 컴포넌트 구조와 Props에 대한 정의입니다.
+trigger: model_decision
+---
+
 # Ban Component
+
 
 ## Information
 

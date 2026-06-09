@@ -1,9 +1,11 @@
 ---
+name: zzz-engine
+description: zzz-picker에서 사용되는 무기(Engine)의 등급, 돌파, 전용 무기 등에 대한 정의입니다.
 trigger: model_decision
-description: 캐릭터가 사용하는 무기를 의미합니다. 무기에 대한 설명입니다.
 ---
 
 zzz-picker에서 사용되는 무기(Engine)에 대한 의미 및 설명입니다.
+
 
 ## Rarity
 

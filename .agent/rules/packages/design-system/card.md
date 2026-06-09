@@ -1,4 +1,11 @@
+---
+name: design-system-card
+description: 콘텐츠를 감싸는 컨테이너 형태인 Card 컴포넌트에 대한 정의입니다.
+trigger: model_decision
+---
+
 # Card
+
 
 ## Information
 

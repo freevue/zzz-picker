@@ -1,8 +1,9 @@
 ---
-triger: model_decision
-tags: [package, supabase, ai]
-aliases: [supabase-client, gemini-service]
+name: supabase
+description: Supabase 클라이언트 설정 및 AI(Gemini) 모델 연동 로직을 담당합니다.
+trigger: model_decision
 ---
+
 
 # Supabase GUIDE
 

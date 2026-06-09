@@ -1,8 +1,9 @@
 ---
-triger: model_decision
-tags: [hub, components, collection]
-aliases: [app-components, ui-hub]
+name: app-www-components-hub
+description: 어플리케이션 전용 비즈니스 로직이 포함된 UI 컴포넌트들을 모아둔 허브 가이드입니다.
+trigger: model_decision
 ---
+
 
 # Components Hub GUIDE
 

@@ -1,4 +1,11 @@
+---
+name: realtime-pick-component
+description: 실시간 픽 페이즈(Pick Phase)의 UI 컴포넌트 구조와 Props에 대한 정의입니다.
+trigger: model_decision
+---
+
 # Pick Component
+
 
 ## Information
 

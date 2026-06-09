@@ -1,10 +1,12 @@
 ---
+name: game-rule
+description: zzz-picker로 진행되는 경기의 전반적인 구성과 진행 방식에 대한 규칙입니다.
 trigger: model_decision
-description: zzz-picker로 진행되는 Game 구성
 ---
 
 zzz-picker는 젠레스 존 제로의 콘텐츠인 강습전과 관련된 서비스입니다.
 2명의 선수가 각각의 파티를 구성하여 강습전 진행하며, 높은 점수를 가진 사람이 이기는 경기입니다.
+
 
 ## 강습전
 
@@ -98,4 +100,9 @@ zzz-picker는 젠레스 존 제로의 콘텐츠인 강습전과 관련된 서비
 
 ### 최종 계산식
 
-(1라운드 점수 + 2라운드 점수) \* Cost 보너스 배율 + 시간 보너스 = **총점**
+(1라운드 점수 + 2라운드 점수) * Cost 보너스 배율 + 시간 보너스 = **총점**
+
+## 관련 룰
+
+- [밴픽 규칙 (BanPick Rule)](./banpick-rule.md)
+

@@ -1,9 +1,11 @@
 ---
+name: zzz-agent
+description: 젠레스 존 제로 캐릭터(에이전트)의 등급, 돌파, 포지션 등에 대한 정의입니다.
 trigger: model_decision
-description: zzz-picker에서 사용하는 캐릭터 또는 에이전트에 대한 의미
 ---
 
 젠레스 존 제로에는 캐릭터(에이전트)가 존재합니다.
+
 
 ## Rarity
 
@@ -25,3 +27,8 @@ description: zzz-picker에서 사용하는 캐릭터 또는 에이전트에 대�
 
 - **딜러**: `강공`, `이상`, `명파`
 - **서포터**: `지원`, `격파`, `방어`
+
+## 관련 룰
+
+- [엔진(무기) 정의 (Engine Definition)](./zzz-engine.md)
+

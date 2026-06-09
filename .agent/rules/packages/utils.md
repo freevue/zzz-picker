@@ -1,8 +1,9 @@
 ---
-triger: model_decision
-tags: [package, utility, crypto, game-logic]
-aliases: [utils-package]
+name: utils
+description: 어플리케이션 전반에서 사용되는 범용 유틸리티 함수와 게임 핵심 로직을 담당합니다.
+trigger: model_decision
 ---
+
 
 # Utils GUIDE
 

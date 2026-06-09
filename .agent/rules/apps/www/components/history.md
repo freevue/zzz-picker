@@ -1,8 +1,9 @@
 ---
-triger: model_decision
-tags: [component, statistics, history, chart]
-aliases: [history-components, dashboard]
+name: app-www-components-history
+description: 플레이어의 과거 경기 데이터를 시각화하고 통계를 제공하는 History 컴포넌트들에 대한 정의입니다.
+trigger: model_decision
 ---
+
 
 # History GUIDE
 

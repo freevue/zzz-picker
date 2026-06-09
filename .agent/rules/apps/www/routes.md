@@ -1,8 +1,9 @@
 ---
-triger: model_decision
-tags: [route, remix, page]
-aliases: [routes, pages]
+name: app-www-routes
+description: 어플리케이션의 각 페이지(라우트) 정의 및 데이터 로딩/액션을 담당합니다.
+trigger: model_decision
 ---
+
 
 # Routes GUIDE
 

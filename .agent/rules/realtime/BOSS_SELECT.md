@@ -1,17 +1,43 @@
 ---
+name: realtime-boss-select
+description: 실시간 밴픽에서 보스(공용무대) 선택 단계에 대한 상세 진행 방식과 규칙입니다.
 trigger: model_decision
-description: 실시간 밴픽에서 보스를 선택에 대한 Rule입니다.
 ---
 
 # Realtime Boss Select
 
 **보스(공용무대) 선택**은 `정식 로프꾼`, `레전드 로프꾼`경기에서만 사용됩니다.
 
-밴픽에 대한 자세한 설명은 `.agent/rules/banpick-rule.md`를 참고합니다.
+밴픽에 대한 자세한 설명은 [banpick-rule.md](../banpick-rule.md)를 참고합니다.
 
 ## Sequence Diagram
 
-아래의 이미지를 참고하여, Boss 선택에 대한 스텝을 이해하세요.
+아래의 다이어그램을 참고하여, Boss 선택에 대한 스텝을 이해하세요.
+
+```mermaid
+sequenceDiagram
+    participant Host
+    participant Supabase
+    participant ASide as A Side
+    participant BSide as B Side
+
+    Note over Host, BSide: Host, A Side, B Side 접속 확인
+
+    BSide->>Supabase: Boss 선택
+    activate Supabase
+    Supabase-->>Host: 현재 선택된 보스 정보 전파
+    Supabase-->>ASide: 현재 선택된 보스 정보 전파
+    deactivate Supabase
+
+    Note right of BSide: 최종 Boss 결정
+    BSide->>Supabase: Boss 최종 선택
+    activate Supabase
+    Supabase-->>Host: 최종 선택된 보스 전파
+    Supabase-->>ASide: 최종 선택된 보스 전파
+    deactivate Supabase
+
+    Note over Host, BSide: Ban 페이즈로 이동
+```
 
 ![BOSS_SELECT](./BOSS_SELECT.png)
 

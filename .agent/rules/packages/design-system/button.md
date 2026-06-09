@@ -1,4 +1,11 @@
+---
+name: design-system-button
+description: 모든 버튼의 원시(Primitive) 형태를 제공하는 Button 컴포넌트에 대한 정의입니다.
+trigger: model_decision
+---
+
 # Button
+
 
 ## Information
 
