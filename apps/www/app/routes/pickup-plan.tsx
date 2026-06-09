@@ -126,7 +126,7 @@ const PickupPlanPage: React.FC = () => {
 
   return (
     <div className="w-full h-screen bg-[var(--color-base)] text-[var(--color-ink)] p-4 font-sans select-none relative overflow-y-auto scrollbar-hidden">
-      <div className="max-w-[720px] w-full pb-60">
+      <div className="max-w-[720px] w-full pb-40">
         {/* 캐릭터 그리드 영역 */}
         <AgentGrid
           pickupAgents={pickupAgents}
