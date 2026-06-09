@@ -125,9 +125,8 @@ const PickupPlanPage: React.FC = () => {
   }
 
   return (
-    <div className="w-full h-screen bg-[var(--color-base)] text-[var(--color-ink)] p-4 font-sans select-none flex flex-col items-center justify-between relative">
-      <div className="max-w-[720px] w-full flex-1 flex flex-col gap-4 overflow-hidden">
-        
+    <div className="w-full h-screen bg-[var(--color-base)] text-[var(--color-ink)] p-4 font-sans select-none relative overflow-y-auto scrollbar-hidden">
+      <div className="max-w-[720px] w-full pb-20">
         {/* 캐릭터 그리드 영역 */}
         <AgentGrid
           pickupAgents={pickupAgents}
@@ -136,19 +135,17 @@ const PickupPlanPage: React.FC = () => {
         />
 
         {/* 저장 버튼 영역 (하단 고정) */}
-        <div className="w-full py-4 border-t border-[var(--color-netural)]/20 flex justify-end items-center bg-[var(--color-base)]">
+        <div className="p-4 fixed left-0 bottom-0 right-0">
           <button
             onClick={onClickPreview}
             disabled={isCapturing}
-            className={`w-full py-3.5 rounded-lg font-black tracking-wider text-sm transition-all flex items-center justify-center gap-2 shadow-lg ${
-              isCapturing
-                ? 'bg-[var(--color-netural)] text-[var(--color-ink)]/30 cursor-not-allowed'
-                : 'bg-[var(--color-primary)] text-[var(--color-base)] hover:opacity-90 active:scale-95 shadow-[var(--color-primary)]/10'
+            className={`w-full py-3.5 rounded-lg font-black tracking-wider text-sm transition-all flex items-center justify-center gap-2 ${
+              isCapturing ? 'bg-neutral text-ink/30 cursor-not-allowed' : 'bg-primary text-base'
             }`}
           >
             {isCapturing ? (
               <>
-                <span className="w-4 h-4 border-2 border-[var(--color-ink)]/30 border-t-[var(--color-ink)] rounded-full animate-spin" />
+                <span className="w-4 h-4 border-2 border-ink/30 border-t-ink rounded-full animate-spin" />
                 이미지 생성 중...
               </>
             ) : (
@@ -156,7 +153,6 @@ const PickupPlanPage: React.FC = () => {
             )}
           </button>
         </div>
-
       </div>
 
       {/* 미리보기 팝업 모달 */}

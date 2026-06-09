@@ -25,7 +25,8 @@ type Props = {
 const AgentCard: React.FC<Props> = (props) => {
   const isGray = props.state === 0
   const hasWeapon = props.state === 2
-  const exclusiveEngine = props.agent.engine && props.agent.engine.length > 0 ? props.agent.engine[0] : null
+  const exclusiveEngine =
+    props.agent.engine && props.agent.engine.length > 0 ? props.agent.engine[0] : null
 
   const onClickCard = () => {
     props.onClick(props.agent.id)
@@ -45,11 +46,7 @@ const AgentCard: React.FC<Props> = (props) => {
 
         <div
           className={`w-20 h-20 rounded-full overflow-hidden border-2 transition-all duration-300 relative ${
-            isGray
-              ? 'border-[var(--color-netural)]'
-              : props.state === 1
-              ? 'border-[var(--color-primary)] shadow-md shadow-[var(--color-primary)]/10'
-              : 'border-[var(--color-secondary)] shadow-md shadow-[var(--color-secondary)]/10'
+            isGray ? 'border-neutral' : props.state === 1 ? 'border-primary' : 'border-secondary'
           }`}
         >
           <img
@@ -77,8 +74,8 @@ const AgentCard: React.FC<Props> = (props) => {
       </div>
 
       <span
-        className={`text-xs font-black tracking-wide transition-colors duration-300 ${
-          isGray ? 'text-[var(--color-ink)]/35' : 'text-[var(--color-ink)]'
+        className={`text-xs font-black tracking-wide transition-colors duration-300 text-center break-keep ${
+          isGray ? 'text-ink/35' : 'text-ink'
         }`}
       >
         {props.agent.nameKo}
