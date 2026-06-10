@@ -135,7 +135,7 @@ const PickupPlanPage: React.FC = () => {
         />
 
         {/* 저장 버튼 영역 (하단 고정) */}
-        <div className="p-4 fixed left-0 bottom-0 right-0">
+        <div className="p-4 fixed left-0 bottom-0 right-0 z-20">
           <button
             onClick={onClickPreview}
             disabled={isCapturing}
