@@ -5,3 +5,31 @@
 /* v3 앱 소스 + zpds 디자인 시스템 클래스 스캔 보장 (Tailwind v4) */
 @source './';
 @source '../../../packages/zpds/src';
+
+/*
+ * V3 화면 전용 파스텔 테마 오버라이드.
+ * 기존 html.v3(네온) 토큰을 형광 없는 파스텔톤으로 덮어씁니다. (운영 무영향: .v3 한정)
+ */
+html.v3 {
+  --color-base: #13141b;
+  --color-content: #1c1e29; /* surface 1 */
+  --color-netural: #262a3a; /* surface 2 */
+  --color-elevated: #2f3447; /* surface 3 */
+
+  --color-primary: #a8b6f3; /* 파스텔 페리윙클 (A) */
+  --color-secondary: #97dcc8; /* 파스텔 민트 (B) */
+  --color-tertiary: #f2b1c1; /* 파스텔 로즈 (밴/경고) */
+
+  --color-ink: #eceef6;
+  --color-disabled: #3a3f52;
+
+  /* 형광 글로우 제거 */
+  --v3-border-glow: none;
+  --v3-magenta-glow: none;
+
+  /* 파스텔 그라데이션 (면 표현용) */
+  --grad-page: radial-gradient(1200px 600px at 15% 0%, #1b1f33 0%, #13141b 55%);
+  --grad-primary: linear-gradient(135deg, #a8b6f3 0%, #c5b9f0 100%);
+  --grad-secondary: linear-gradient(135deg, #97dcc8 0%, #a9d8ef 100%);
+  --grad-surface: linear-gradient(160deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 60%);
+}

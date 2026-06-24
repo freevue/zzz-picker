@@ -1,4 +1,3 @@
-import { Button } from '@zzz-picker/zpds'
 import { Link } from '@remix-run/react'
 
 const ENTRIES = [
@@ -9,14 +8,24 @@ const ENTRIES = [
 
 export default function Index() {
   return (
-    <div className="w-full h-full bg-[var(--color-base)] text-[var(--color-ink)] flex flex-col items-center justify-center gap-8 p-6">
-      <span className="text-2xl font-black text-[var(--color-primary)] tracking-wide">ZZZ-PICKER v3</span>
-      <div className="flex flex-col sm:flex-row gap-4 w-full max-w-xl">
+    <div className="w-full h-full flex flex-col items-center justify-center gap-10 p-6" style={{ background: 'var(--grad-page)' }}>
+      <span className="text-2xl font-black tracking-wide" style={{ color: 'var(--color-primary)' }}>
+        ZZZ-PICKER v3
+      </span>
+      <div className="flex flex-col sm:flex-row gap-4 w-full max-w-2xl">
         {ENTRIES.map((e) => (
-          <Link key={e.to} to={e.to} className="flex-1">
-            <Button variant="neutral" size="lg" className="w-full">
-              <span style={{ color: e.accent }}>{e.label}</span>
-            </Button>
+          <Link
+            key={e.to}
+            to={e.to}
+            className="flex-1 rounded-[28px] p-1.5"
+            style={{ background: 'var(--color-base)' }}
+          >
+            <div
+              className="rounded-[22px] py-10 flex items-center justify-center text-base font-black transition-all duration-200 hover:brightness-110"
+              style={{ background: `linear-gradient(160deg, ${e.accent}26, var(--color-content))`, color: e.accent }}
+            >
+              {e.label}
+            </div>
           </Link>
         ))}
       </div>

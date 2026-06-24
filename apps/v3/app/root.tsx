@@ -1,4 +1,3 @@
-import { MockStore } from '~/store/MockStore'
 import type { LinksFunction, MetaFunction } from '@remix-run/node'
 import { Links, Meta, Outlet, Scripts } from '@remix-run/react'
 import styles from '~/index.css?url'
@@ -23,9 +22,7 @@ const App: React.FC = () => {
         <Links />
       </head>
       <body>
-        <MockStore>
-          <Outlet />
-        </MockStore>
+        <Outlet />
         <Scripts />
       </body>
     </html>
