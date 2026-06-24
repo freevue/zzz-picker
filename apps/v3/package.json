@@ -1,0 +1,33 @@
+{
+  "name": "@zzz-picker/v3",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "remix vite:dev",
+    "build": "remix vite:build",
+    "start": "remix-serve build/server/index.js"
+  },
+  "dependencies": {
+    "@remix-run/node": "^2.17.2",
+    "@remix-run/react": "^2.17.2",
+    "@remix-run/serve": "^2.17.2",
+    "@zzz-picker/zpds": "workspace:*",
+    "@zzz-picker/provider": "workspace:*",
+    "@zzz-picker/constant": "workspace:*",
+    "@zzz-picker/utils": "workspace:*",
+    "@zzz-picker/tailwind-config": "workspace:*",
+    "@zzz-picker/components": "workspace:*",
+    "react": "catalog:react19",
+    "react-dom": "catalog:react19",
+    "isbot": "^4.4.0",
+    "motion": "^12.23.22"
+  },
+  "devDependencies": {
+    "@remix-run/dev": "^2.17.2",
+    "@types/react": "catalog:react19",
+    "@types/react-dom": "catalog:react19",
+    "@tailwindcss/vite": "^4.1.14",
+    "typescript": "~5.9.3",
+    "vite": "^7.1.7"
+  }
+}
