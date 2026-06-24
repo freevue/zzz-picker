@@ -25,11 +25,37 @@ type Wire =
   | { kind: 'STATE'; state: MatchState }
   | { kind: 'HELLO' }
 
+/** 이전 데이터 모델로 저장된 localStorage가 신규(라운드) 모델과 충돌하지 않도록 형태 검증 */
+const isValidState = (s: unknown): s is MatchState => {
+  if (!s || typeof s !== 'object') return false
+  const v = s as Partial<MatchState>
+  const okParty = (p: unknown) =>
+    !!p && typeof p === 'object' && Array.isArray((p as { picks?: unknown }).picks)
+  const okSideRounds = (r: unknown) =>
+    Array.isArray(r) && r.length === 2 && r.every(okParty)
+  return (
+    typeof v.gameType === 'string' &&
+    Array.isArray(v.ban) &&
+    !!v.rounds &&
+    okSideRounds(v.rounds.A) &&
+    okSideRounds(v.rounds.B) &&
+    !!v.score &&
+    Array.isArray(v.score.A) &&
+    Array.isArray(v.score.B) &&
+    !!v.time &&
+    Array.isArray(v.time.A) &&
+    Array.isArray(v.time.B)
+  )
+}
+
 const loadStored = (): MatchState | null => {
   if (typeof window === 'undefined') return null
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY)
-    return raw ? (JSON.parse(raw) as MatchState) : null
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    // 구버전/손상 데이터는 폐기하고 초기 상태로 시작
+    return isValidState(parsed) ? parsed : null
   } catch {
     return null
   }
@@ -68,8 +94,8 @@ export const useMatchSync = (role: Role): MatchSync => {
     channel.onmessage = (event: MessageEvent<Wire>) => {
       const msg = event.data
       if (msg.kind === 'STATE') {
-        // 더 최신(rev 큰) 상태만 반영하여 충돌/루프 방지
-        if (msg.state.rev >= stateRef.current.rev) {
+        // 더 최신(rev 큰) 유효 상태만 반영하여 충돌/루프 방지
+        if (isValidState(msg.state) && msg.state.rev >= stateRef.current.rev) {
           setState(msg.state)
           persist(msg.state)
         }
