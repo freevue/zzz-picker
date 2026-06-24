@@ -1,11 +1,13 @@
 @import 'tailwindcss';
 @import './fonts.css';
 @import './theme.css';
+@import './theme-v3.css';
 @import './base.css';
 
 @custom-variant dark (&:where(.dark, .dark *));
 @custom-variant alice (&:where(.alice, .alice *));
 @custom-variant v2 (&:where(.v2, .v2 *));
+@custom-variant v3 (&:where(.v3, .v3 *));
 
 .scrollbar-hidden {
   scrollbar-width: none;

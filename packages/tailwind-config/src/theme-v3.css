@@ -1,0 +1,15 @@
+html.v3 {
+  --color-primary: #ff007f;     /* 레이저 펄스 마젠타 핑크 */
+  --color-secondary: #00f0ff;   /* 일렉트릭 아쿠아 블루 */
+  --color-tertiary: #ffaa00;    /* 네온 일루미네이팅 오렌지 */
+  --color-netural: #161b22;     /* 비활성 면 및 경계 영역 */
+
+  --color-base: #06080c;        /* 딥 스페이스 블랙 카본 */
+  --color-content: #0d1117;     /* 하이테크 레이어 차콜 네이비 */
+
+  --color-ink: #f0f3f6;         /* 소프트 화이트 */
+  --color-disabled: #2d3139;    /* 어두운 비활성 요소 처리 */
+  
+  --v3-border-glow: 0 0 8px rgba(0, 240, 255, 0.15);
+  --v3-magenta-glow: 0 0 10px rgba(255, 0, 127, 0.3);
+}

@@ -164,14 +164,47 @@ const Content: React.FC<Props> = (props) => {
   )
 }
 
+let deadlyAssaultPromise: Promise<any[]> | null = null
+let bossPromise: Promise<any[]> | null = null
+let enginePromise: Promise<any[]> | null = null
+let agentPromise: Promise<any[]> | null = null
+
+const getDeadlyAssaultOnce = () => {
+  if (!deadlyAssaultPromise) {
+    deadlyAssaultPromise = DB.getDeadlyAssaultList()
+  }
+  return deadlyAssaultPromise
+}
+
+const getBossOnce = () => {
+  if (!bossPromise) {
+    bossPromise = DB.getBoss()
+  }
+  return bossPromise
+}
+
+const getEngineOnce = () => {
+  if (!enginePromise) {
+    enginePromise = DB.getEngine()
+  }
+  return enginePromise
+}
+
+const getAgentOnce = () => {
+  if (!agentPromise) {
+    agentPromise = DB.getAgent()
+  }
+  return agentPromise
+}
+
 const Provider: React.FC<Pick<Props, 'children'>> = (props) => {
   return (
     <Suspense fallback={null}>
       <Content
-        deadlyAssaultList={DB.getDeadlyAssaultList()}
-        getBoss={DB.getBoss()}
-        getEngine={DB.getEngine()}
-        getAgent={DB.getAgent()}
+        deadlyAssaultList={getDeadlyAssaultOnce()}
+        getBoss={getBossOnce()}
+        getEngine={getEngineOnce()}
+        getAgent={getAgentOnce()}
       >
         {props.children}
       </Content>
