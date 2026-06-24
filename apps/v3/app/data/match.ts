@@ -18,14 +18,6 @@ export type Role = 'admin' | 'A' | 'B'
 
 export type TimeValue = { min: number; sec: number; ms: number }
 
-export type ChatMessage = {
-  id: number
-  sender: string
-  role: Role | 'system'
-  message: string
-  time: string
-}
-
 export type MatchState = {
   gameType: GameType
   nickname: Record<Side, string>
@@ -34,7 +26,6 @@ export type MatchState = {
   score: Record<Side, number>
   time: Record<Side, TimeValue>
   boss: number | null
-  chat: ChatMessage[]
   rev: number
   updatedBy: Role
 }
@@ -65,15 +56,6 @@ export const createInitialState = (): MatchState => ({
   score: { A: 0, B: 0 },
   time: { A: emptyTime(), B: emptyTime() },
   boss: null,
-  chat: [
-    {
-      id: 1,
-      sender: '시스템',
-      role: 'system',
-      message: 'V3 샌드박스 세션이 시작되었습니다. 관리자/A/B 화면이 실시간 동기화됩니다.',
-      time: '00:00',
-    },
-  ],
   rev: 0,
   updatedBy: 'admin',
 })
@@ -87,7 +69,6 @@ export type MatchAction =
   | { type: 'SET_TIME'; side: Side; value: TimeValue; by: Role }
   | { type: 'SET_NICKNAME'; side: Side; value: string; by: Role }
   | { type: 'SET_BOSS'; id: number | null; by: Role }
-  | { type: 'ADD_CHAT'; message: ChatMessage }
   | { type: 'RESET'; by: Role }
 
 const bump = (state: MatchState, by: Role): MatchState => ({
@@ -178,11 +159,6 @@ export const matchReducer = (state: MatchState, action: MatchAction): MatchState
 
     case 'SET_BOSS':
       return bump({ ...state, boss: action.id }, action.by)
-
-    case 'ADD_CHAT': {
-      const by: Role = action.message.role === 'system' ? state.updatedBy : action.message.role
-      return bump({ ...state, chat: [...state.chat, action.message].slice(-50) }, by)
-    }
 
     case 'RESET':
       return { ...createInitialState(), rev: state.rev + 1, updatedBy: action.by }
