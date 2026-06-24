@@ -1,6 +1,6 @@
+import { MockStore } from '~/store/MockStore'
 import type { LinksFunction, MetaFunction } from '@remix-run/node'
 import { Links, Meta, Outlet, Scripts } from '@remix-run/react'
-import { Store } from '@zzz-picker/provider'
 import styles from '~/index.css?url'
 
 export const links: LinksFunction = () => [
@@ -23,9 +23,9 @@ const App: React.FC = () => {
         <Links />
       </head>
       <body>
-        <Store>
+        <MockStore>
           <Outlet />
-        </Store>
+        </MockStore>
         <Scripts />
       </body>
     </html>
