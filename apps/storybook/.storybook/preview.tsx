@@ -1,6 +1,6 @@
 import '../src/index.css'
 import type { Preview } from '@storybook/react'
-import { Store } from '@zzz-picker/provider'
+import { MockStoreProvider } from '../src/decorators/MockProviders'
 import React, { useEffect } from 'react'
 
 const preview: Preview = {
@@ -14,6 +14,7 @@ const preview: Preview = {
         items: [
           { value: '', title: 'Default' },
           { value: 'v2', title: 'V2' },
+          { value: 'v3', title: 'V3' },
           { value: 'alice', title: 'Alice' },
         ],
         showName: true,
@@ -57,18 +58,18 @@ const preview: Preview = {
       useEffect(() => {
         // html 태그에 테마 클래스 적용
         const html = document.documentElement
-        html.classList.remove('v2', 'alice')
+        html.classList.remove('v2', 'v3', 'alice')
         if (theme) {
           html.classList.add(theme)
         }
       }, [theme])
 
       return (
-        <Store>
+        <MockStoreProvider>
           <div className="size-full">
             <Story />
           </div>
-        </Store>
+        </MockStoreProvider>
       )
     },
   ],
