@@ -8,7 +8,7 @@ const preview: Preview = {
     theme: {
       name: 'Theme',
       description: 'Global theme for components',
-      defaultValue: '',
+      defaultValue: 'v3',
       toolbar: {
         icon: 'paintbrush',
         items: [

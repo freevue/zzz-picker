@@ -1,3 +1,28 @@
 @import url('//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css');
 @import '@zzz-picker/tailwind-config';
 @import '@zzz-picker/components/styles';
+
+@source '../../../packages/zpds/src';
+
+/* Storybook V3 파스텔 테마 (apps/v3와 동일) */
+html.v3 {
+  --color-base: #13141b;
+  --color-content: #1c1e29;
+  --color-netural: #262a3a;
+  --color-elevated: #2f3447;
+
+  --color-primary: #a8b6f3;
+  --color-secondary: #97dcc8;
+  --color-tertiary: #f2b1c1;
+
+  --color-ink: #eceef6;
+  --color-disabled: #3a3f52;
+
+  --v3-border-glow: none;
+  --v3-magenta-glow: none;
+
+  --grad-page: radial-gradient(1200px 600px at 15% 0%, #1b1f33 0%, #13141b 55%);
+  --grad-primary: linear-gradient(135deg, #a8b6f3 0%, #c5b9f0 100%);
+  --grad-secondary: linear-gradient(135deg, #97dcc8 0%, #a9d8ef 100%);
+  --grad-surface: linear-gradient(160deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 60%);
+}
