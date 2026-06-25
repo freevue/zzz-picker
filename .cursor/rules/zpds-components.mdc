@@ -1,0 +1,73 @@
+---
+description: ZPDS 디자인 시스템 컴포넌트 개발 규칙 (packages/zpds, apps/storybook)
+globs: packages/zpds/**,apps/storybook/**
+alwaysApply: false
+---
+
+# ZPDS 컴포넌트 개발 가이드
+
+> 원본 디자인 규격: `.agent/rules/DESIGN.md` (V2 다크 테크니컬)
+> V3 파스텔 테마: `apps/v3/app/index.css`의 `html.v3` 오버라이드 참고
+
+## 원칙
+
+1. **기존 컴포넌트 비침범**: `packages/components`(V2), `packages/design-system`(V1)은 수정하지 않습니다.
+2. **순수 UI 계층**: ZPDS는 서비스 로직 없는 Layer 0 컴포넌트입니다. 에이전트 데이터가 필요하면 `useAgent` 훅을 사용하되, props로 직접 전달도 지원합니다.
+3. **CSS 변수 기반**: 하드코딩 색상 대신 `var(--color-*)` 토큰을 사용합니다.
+4. **형광 글로우 금지 (V3)**: `html.v3` 테마에서는 `--v3-border-glow`, `--v3-magenta-glow`가 `none`입니다.
+
+## V3 파스텔 컬러 토큰
+
+| 토큰 | 용도 |
+|------|------|
+| `--color-base` | 페이지 배경 |
+| `--color-content` | 카드 surface 1 |
+| `--color-netural` | surface 2 / 비활성 면 |
+| `--color-elevated` | surface 3 (강조 면) |
+| `--color-primary` | A선수 / 주요 액센트 (페리윙클) |
+| `--color-secondary` | B선수 / 보조 액센트 (민트) |
+| `--color-tertiary` | 밴·경고 (로즈) |
+| `--color-ink` | 본문 텍스트 |
+
+## 컴포넌트 인벤토리
+
+| 컴포넌트 | 경로 | Storybook |
+|----------|------|-----------|
+| Tabs | `Tabs/` | ZPDS/Tabs |
+| Button | `Button/` | ZPDS/Button |
+| Card | `Card/` | ZPDS/Card |
+| AgentProfile | `AgentProfile/` | ZPDS/AgentProfile |
+| AgentCard | `AgentCard/` | ZPDS/AgentCard |
+| AgentGrid | `AgentGrid/` | ZPDS/AgentGrid |
+| Dialog | `Dialog/` | ZPDS/Dialog |
+| Input | `Input/` | ZPDS/Input |
+| TimeInput | `TimeInput/` | ZPDS/TimeInput |
+| NumberInput | `NumberInput/` | ZPDS/NumberInput |
+| ScoreInput | `ScoreInput/` | ZPDS/ScoreInput |
+| NicknameInput | `NicknameInput/` | ZPDS/NicknameInput |
+| Typo.Number | `Typo/Number` | ZPDS/Typo |
+| Typo.AgentName | `Typo/AgentName` | ZPDS/Typo |
+| Typo.Heading / Body | `Typo/` | ZPDS/Typo |
+
+## 파일 구조
+
+```
+packages/zpds/src/
+  <ComponentName>/
+    index.tsx
+```
+
+## Storybook 규칙
+
+- 스토리 경로: `apps/storybook/src/stories/Zpds.<Name>.stories.tsx`
+- title 형식: `ZPDS/<ComponentName>`
+- 기본 테마: `v3` (preview.tsx globals)
+- 에이전트 의존 컴포넌트: `MockStoreProvider` decorator 사용
+- 레이아웃: 방송 화면 기준 `streaming` viewport (1280×720)
+
+## 신규 컴포넌트 체크리스트
+
+- [ ] `packages/zpds/src/index.ts`에 export 추가
+- [ ] Storybook 스토리 작성 (variants, disabled, interactive)
+- [ ] CSS 변수만 사용, 글로우 효과 없음 (V3)
+- [ ] 150줄 이하, 상태 3개 이하

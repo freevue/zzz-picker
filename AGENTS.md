@@ -1,5 +1,13 @@
 # AGENTS.md
 
+## 프로젝트 룰 인덱스
+
+| 대상 | 경로 | 설명 |
+|------|------|------|
+| Gemini (원본) | `.agent/rules/GEMINI.md` | 게임·밴픽·디자인·패키지 전체 룰 (수정 금지) |
+| Cursor / Claude / Codex | `.cursor/rules/zzz-picker.mdc` | 위 룰의 읽기용 인덱스 + 모노레포 구조 |
+| ZPDS UI 개발 | `.cursor/rules/zpds-components.mdc` | 디자인 리뉴얼 컴포넌트·스토리북 규칙 |
+
 ## Cursor Cloud specific instructions
 
 `zzz-picker`는 pnpm 워크스페이스 모노레포입니다. 의존성 설치는 시작 시 `pnpm install`(update script)로 자동 처리됩니다.

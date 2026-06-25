@@ -1,0 +1,67 @@
+---
+description: zzz-picker 프로젝트 진입점 — Gemini 룰 인덱스 및 모노레포 구조 안내
+alwaysApply: true
+---
+
+# zzz-picker 프로젝트 가이드
+
+> Gemini 에이전트용 원본 룰은 `.agent/rules/`에 그대로 유지됩니다. 이 문서는 Cursor·Claude·Codex가 동일한 맥락을 빠르게 파악하기 위한 **읽기용 인덱스**입니다.
+
+## 프로젝트 개요
+
+젠레스 존 제로 강습전 밴픽·경기 운영 사이트. 2명의 선수(A/B)와 1명의 호스트가 참여하며, 라운드별 점수로 승패를 결정합니다.
+
+## 룰 문서 맵
+
+| 구분 | 경로 | 내용 |
+|------|------|------|
+| **진입점 (Gemini)** | `.agent/rules/GEMINI.md` | 전체 룰 목차 |
+| **디자인 (V2)** | `.agent/rules/DESIGN.md` | 다크 테크니컬 테마, 컬러 토큰 |
+| **게임 규칙** | `.agent/rules/game-rule.md` | 라운드·경기 유형·코스트 |
+| **밴픽 규칙** | `.agent/rules/banpick-rule.md` | Ban/Pick 절차 |
+| **에이전트** | `.agent/rules/zzz-agent.md` | 캐릭터 등급·돌파·포지션 |
+| **엔진** | `.agent/rules/zzz-engine.md` | W-엔진 정의 |
+| **코스트** | `.agent/rules/cost-schema.md` | 캐릭터·엔진 코스트 산정 |
+| **DB 스키마** | `.agent/rules/database-schema.md` | Supabase 테이블 |
+| **패키지 개요** | `.agent/rules/packages/overview.md` | 모노레포 패키지 구조 |
+| **V2 컴포넌트** | `.agent/rules/packages/components/v2.md` | 기존 UI 라이브러리 |
+| **ZPDS (신규 UI)** | `.cursor/rules/zpds-components.mdc` | 디자인 리뉴얼용 컴포넌트 |
+
+## 앱 구조
+
+| 앱 | 경로 | 용도 |
+|----|------|------|
+| www | `apps/www` | 메인 서비스 (Remix) |
+| v3 | `apps/v3` | V3 경기판·방송 UI (리뉴얼 대상) |
+| admin | `apps/admin` | R2 파일 관리 |
+| storybook | `apps/storybook` | ZPDS 컴포넌트 카탈로그 |
+
+## 패키지 구조
+
+| 패키지 | 경로 | 역할 |
+|--------|------|------|
+| zpds | `packages/zpds` | **신규** 디자인 시스템 컴포넌트 (리뉴얼) |
+| components | `packages/components` | V2 기존 컴포넌트 (유지) |
+| design-system | `packages/design-system` | V1 원시 컴포넌트 (유지) |
+| provider | `packages/provider` | Store·Socket·에이전트 훅 |
+| constant | `packages/constant` | 타입·상수 |
+| tailwind-config | `packages/tailwind-config` | 테마 CSS (v2/v3) |
+
+## UI 리뉴얼 작업 흐름
+
+1. **ZPDS 컴포넌트**를 `packages/zpds`에 구현 (기존 V2 컴포넌트는 수정하지 않음)
+2. **Storybook** (`pnpm --filter storybook storybook`)에서 V3 테마로 시각 검증
+3. 검증 완료 후 `apps/v3` 화면에 점진 적용
+
+## 실행 명령
+
+```bash
+pnpm install
+pnpm dev:www          # localhost:5173
+pnpm --filter storybook storybook  # localhost:6006
+```
+
+## 환경 변수
+
+- `SUPABASE_URL` / `SUPABASE_ANON_KEY`: 앱 부팅 필수 (플레이스홀더 가능)
+- Storybook은 `MockStoreProvider`로 에이전트 데이터를 목킹하므로 Supabase 불필요
