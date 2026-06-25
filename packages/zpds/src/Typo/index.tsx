@@ -1,5 +1,8 @@
 import React from 'react'
 
+export { Number } from './Number'
+export { AgentName } from './AgentName'
+
 type HeadingProps = {
   level?: 'huge' | '6xl' | '5xl' | '4xl' | '3xl' | '2xl' | 'xl' | 'lg' | 'md'
   className?: string
