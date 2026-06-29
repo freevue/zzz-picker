@@ -2,6 +2,7 @@
   "name": "zzz-picker",
   "private": true,
   "scripts": {
+    "dev:renew": "pnpm --filter @zzz-picker/renew dev",
     "dev:www": "pnpm --filter @zzz-picker/www dev",
     "build:www": "pnpm --filter @zzz-picker/www build",
     "preview:www": "pnpm --filter @zzz-picker/www preview",
