@@ -103,3 +103,16 @@ body {
 .panel__footer p {
   margin: 0;
 }
+
+.status__hint {
+  margin: 8px 0 0;
+  font-size: 0.75rem;
+  color: var(--danger);
+  min-height: 1em;
+}
+
+.panel__note {
+  margin-top: 8px !important;
+  font-size: 0.7rem;
+  color: var(--muted);
+}

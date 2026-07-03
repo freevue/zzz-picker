@@ -6,11 +6,14 @@
 
 ```
 호요랩 (육성가이드)
-       ↓  쿠키·API 수집
+       ↓  [지금 동기화] 버튼 클릭 시 페이지 API 수집
 Chrome Extension  ──→  Supabase DB
                               ↑
                         웹서비스 (읽기 전용 소비)
 ```
+
+- **유저가 버튼을 눌렀을 때만** 닉네임·캐릭터/장비 데이터를 수집합니다.
+- 페이지 same-origin `fetch`로 API를 호출하므로 **`cookies` 권한 불필요** (브라우저가 세션 쿠키를 자동 첨부).
 
 - **웹서비스(`www` 등)와 직접 연동하지 않습니다.** 확장 프로그램은 DB만 씁니다.
 - 웹서비스는 동일 DB를 조회해 데이터를 표시하는 구조입니다.
@@ -55,10 +58,11 @@ Chrome → `chrome://extensions` → 개발자 모드 → `.output/chrome-mv3` �
 src/
   entrypoints/
     background.ts       # 서비스 워커
-    content.hoyolab.ts  # 호요랩 세션 감지
+    content.hoyolab.ts  # 버튼 트리거 시 페이지 컨텍스트 수집
     popup/              # 팝업 UI
   lib/
     messaging.ts
+    page-bridge.ts      # MAIN world 주입·postMessage 브릿지
     storage.ts
     supabase.ts         # DB 클라이언트 (모노레포 packages/supabase 미사용)
   types/
@@ -75,4 +79,4 @@ src/
 
 - [WXT](https://wxt.dev/) — Manifest V3 + TypeScript
 - [@supabase/supabase-js](https://supabase.com/docs/reference/javascript) — DB 직접 연동
-- Chrome Extension APIs: `storage`, `cookies`, content scripts
+- Chrome Extension APIs: `storage`, content scripts ( **`cookies` 미사용** )

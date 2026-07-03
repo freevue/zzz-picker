@@ -1,27 +1,23 @@
-/** 호요랩 계정·세션 상태 */
-export type HoyolabAuthState = {
-  isLoggedIn: boolean;
-  uid?: string;
-  nickname?: string;
-  avatarUrl?: string;
-  cookieToken?: string;
-  lastSyncedAt?: string;
-};
-
-/** 육성가이드에서 가져온 에이전트 스냅샷 (초기 스키마) */
+/** 육성가이드에서 가져온 에이전트 스냅샷 (최소 필드) */
 export type HoyolabAgentSnapshot = {
-  hoyolabId: string;
+  id: string;
   name: string;
   level: number;
   rank: number;
   /** 돌파 단계 */
   promotion: number;
-  /** 코어 스킬 레벨 등 — API 연동 시 확장 */
-  skills?: Record<string, number>;
   syncedAt: string;
 };
 
+/** 동기화 시 수집하는 최소 데이터: 닉네임 + 캐릭터/장비 스냅샷 */
 export type HoyolabSyncPayload = {
-  auth: HoyolabAuthState;
+  nickname: string;
   agents: HoyolabAgentSnapshot[];
+  syncedAt: string;
+};
+
+/** 페이지 컨텍스트 fetch 결과 (쿠키 권한 없이 same-origin 요청) */
+export type HoyolabPageCollectResult = {
+  nickname: string;
+  agents: Omit<HoyolabAgentSnapshot, 'syncedAt'>[];
 };
