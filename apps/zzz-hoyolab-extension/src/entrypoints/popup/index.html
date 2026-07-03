@@ -3,19 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ZZZ 호요랩 연동</title>
+    <title>ZZZ 호요랩 동기화</title>
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
     <main class="panel">
       <header class="panel__header">
-        <h1>ZZZ 호요랩 연동</h1>
-        <p class="panel__subtitle">육성가이드 로그인 및 데이터 동기화</p>
+        <h1>ZZZ 호요랩 동기화</h1>
+        <p class="panel__subtitle">육성가이드 → DB 직접 동기화</p>
       </header>
 
       <section class="panel__status" id="status">
-        <p class="status__label">연결 상태</p>
+        <p class="status__label">호요랩</p>
         <p class="status__value" id="auth-status">확인 중…</p>
+        <p class="status__label" style="margin-top: 12px">DB</p>
+        <p class="status__value" id="db-status">확인 중…</p>
       </section>
 
       <section class="panel__actions">

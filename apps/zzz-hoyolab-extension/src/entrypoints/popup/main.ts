@@ -1,6 +1,8 @@
 import { sendMessage } from '../../lib/messaging';
+import { isSupabaseConfigured } from '../../lib/supabase';
 
 const authStatusEl = document.querySelector<HTMLParagraphElement>('#auth-status')!;
+const dbStatusEl = document.querySelector<HTMLParagraphElement>('#db-status')!;
 const syncInfoEl = document.querySelector<HTMLParagraphElement>('#sync-info')!;
 const openHoyolabBtn = document.querySelector<HTMLButtonElement>('#open-hoyolab')!;
 const refreshBtn = document.querySelector<HTMLButtonElement>('#refresh')!;
@@ -24,6 +26,10 @@ async function render() {
 
   const agentCount = syncRes.ok && syncRes.sync ? syncRes.sync.agents.length : 0;
   syncInfoEl.textContent = `동기화된 에이전트: ${agentCount}`;
+
+  dbStatusEl.textContent = isSupabaseConfigured()
+    ? 'Supabase 설정됨'
+    : '미설정 — .env에 WXT_SUPABASE_* 입력';
 }
 
 openHoyolabBtn.addEventListener('click', () => {
