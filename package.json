@@ -4,6 +4,8 @@
   "scripts": {
     "dev:renew": "pnpm --filter @zzz-picker/renew dev",
     "dev:www": "pnpm --filter @zzz-picker/www dev",
+    "dev:extension": "pnpm --dir apps/zzz-hoyolab-extension --ignore-workspace dev",
+    "build:extension": "pnpm --dir apps/zzz-hoyolab-extension --ignore-workspace build",
     "build:www": "pnpm --filter @zzz-picker/www build",
     "preview:www": "pnpm --filter @zzz-picker/www preview",
     "test": "vitest"

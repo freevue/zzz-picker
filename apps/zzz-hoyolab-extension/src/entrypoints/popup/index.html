@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZZZ 호요랩 연동</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="panel">
+      <header class="panel__header">
+        <h1>ZZZ 호요랩 연동</h1>
+        <p class="panel__subtitle">육성가이드 로그인 및 데이터 동기화</p>
+      </header>
+
+      <section class="panel__status" id="status">
+        <p class="status__label">연결 상태</p>
+        <p class="status__value" id="auth-status">확인 중…</p>
+      </section>
+
+      <section class="panel__actions">
+        <button type="button" id="open-hoyolab" class="btn btn--primary">호요랩 열기</button>
+        <button type="button" id="refresh" class="btn">상태 새로고침</button>
+        <button type="button" id="clear" class="btn btn--danger">세션 초기화</button>
+      </section>
+
+      <footer class="panel__footer">
+        <p id="sync-info">동기화된 에이전트: 0</p>
+      </footer>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "zzz-hoyolab-extension",
+  "version": "0.1.0",
+  "private": true,
+  "description": "젠레스 존 제로 호요랩 육성가이드 로그인 및 데이터 연동 Chrome 확장 프로그램",
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "build": "wxt build",
+    "zip": "wxt zip",
+    "postinstall": "wxt prepare"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3",
+    "wxt": "^0.20.6"
+  }
+}
