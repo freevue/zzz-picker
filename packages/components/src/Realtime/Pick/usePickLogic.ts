@@ -93,10 +93,11 @@ export function usePickLogic(props: Props) {
         sort((prev, curr) => dayjs(curr.open).diff(dayjs(prev.open))),
         find((deadlyAssault) => dayjs(deadlyAssault.open).isBefore(dayjs())),
         throwIf(isUndefined, () => Error('')),
-        ({ boss1, boss2, boss3 }) => [boss1, boss2, boss3] as Pick<Boss, 'id' | 'nameKo'>[]
+        ({ boss1, boss2, boss3 }) =>
+          [boss1, boss2, boss3] as Pick<Boss, 'id' | 'nameKo' | 'images'>[]
       )
     } catch {
-      return [] as Pick<Boss, 'id' | 'nameKo'>[]
+      return [] as Pick<Boss, 'id' | 'nameKo' | 'images'>[]
     }
   }, [deadlyAssaultList])
 
