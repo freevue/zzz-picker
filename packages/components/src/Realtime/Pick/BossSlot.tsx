@@ -42,11 +42,7 @@ const BossSlot: React.FC<Props> = ({ bossId, onClick }) => {
       )}
     >
       {bossData ? (
-        <img
-          className="block w-full"
-          src={`/images/boss/${bossData.id}.webp`}
-          alt={bossData.nameKo}
-        />
+        <img className="block w-full" src={bossData.images.src} alt={bossData.nameKo} />
       ) : (
         <Plus className="size-1/2 stroke-ink group-hover/button:stroke-primary" />
       )}

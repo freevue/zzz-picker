@@ -5,7 +5,7 @@ import type { BossId, Boss } from '@zzz-picker/constant'
 type Props = {
   isOpen: boolean
   onClose: () => void
-  bossList: Pick<Boss, 'id' | 'nameKo'>[]
+  bossList: Pick<Boss, 'id' | 'nameKo' | 'images'>[]
   currentBoss: BossId | null
   selectedBossIds: (BossId | null)[]
   onSelect: (bossId: BossId) => void
@@ -59,7 +59,7 @@ const BossSelectDialog: React.FC<Props> = ({
                     join(' ')
                   )}
                 >
-                  <img className="block w-full" src={`/images/boss/${boss.id}.webp`} alt="" />
+                  <img className="block w-full" src={boss.images.src} alt="" />
                 </div>
                 <span
                   className={pipe(

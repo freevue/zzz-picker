@@ -58,9 +58,7 @@ const BossDialog: React.FC<Props> = (props) => {
                 onClick={props.onClick}
               >
                 <div className={pipe(['w-full', 'card', 'bg-netural'], join(' '))}>
-                  {boss && (
-                    <img className="block w-full" src={`/images/boss/${boss.id}.webp`} alt="" />
-                  )}
+                  {boss && <img className="block w-full" src={boss?.images.src} alt="" />}
                 </div>
                 <span className="text-ink heading-lg mt-4 block w-full text-center group-hover:text-primary break-keep">
                   {boss?.nameKo || '-'}

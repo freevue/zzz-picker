@@ -67,11 +67,7 @@ const BossButton: React.FC<Props> = (props) => {
         onClick={onBossClick}
       >
         {bossData ? (
-          <img
-            className="block w-full"
-            src={`/images/boss/${bossData.id}.webp`}
-            alt={bossData.nameKo}
-          />
+          <img className="block w-full" src={bossData.images.src} alt={bossData.nameKo} />
         ) : (
           <Icons.Plus className="stroke-foreground block size-10 group-hover:stroke-secondary" />
         )}

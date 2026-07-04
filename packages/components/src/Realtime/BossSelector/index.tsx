@@ -4,7 +4,7 @@ import type { Boss } from '@zzz-picker/constant'
 import { motion } from 'motion/react'
 
 type Props = {
-  list: (Pick<Boss, 'id' | 'nameKo'> | null)[]
+  list: (Pick<Boss, 'id' | 'nameKo' | 'images'> | null)[]
   active?: number
   title?: string
   disabled?: boolean
@@ -57,7 +57,7 @@ const BossSelector: React.FC<Props> = (props) => {
                       join(' ')
                     )}
                   >
-                    <img className="block w-full" src={`/images/boss/${boss.id}.webp`} alt="" />
+                    <img className="block w-full" src={boss.images.src} alt="" />
                   </div>
                   <span
                     className={pipe(

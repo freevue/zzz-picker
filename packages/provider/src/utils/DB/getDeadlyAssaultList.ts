@@ -9,15 +9,24 @@ const QUERY = `
   open: open_at,
   boss1: boss!deadly_assault_boss_1_fkey (
     id,
-    nameKo: name_ko
+    nameKo: name_ko,
+    images (
+      src
+    )
   ),
   boss2: boss!deadly_assault_boss_2_fkey (
     id,
-    nameKo: name_ko
+    nameKo: name_ko,
+    images (
+      src
+    )
   ),
   boss3: boss!deadly_assault_boss_3_fkey (
     id,
-    nameKo: name_ko
+    nameKo: name_ko,
+    images (
+      src
+    )
   )
 `
 async function getDeadlyAssaultList(): Promise<Array<DeadlyAssault>> {

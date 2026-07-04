@@ -42,6 +42,9 @@ export type CostTable = {
 export type Boss = {
   id: BossId
   nameKo: string
+  images: {
+    src: string
+  }
   hp: Array<number>
   resistance: Array<Attribute>
   weakness: Array<Attribute>
@@ -50,9 +53,9 @@ export type DeadlyAssault = {
   id: number
   version: number
   open: string
-  boss1: Pick<Boss, 'id' | 'nameKo'>
-  boss2: Pick<Boss, 'id' | 'nameKo'>
-  boss3: Pick<Boss, 'id' | 'nameKo'>
+  boss1: Pick<Boss, 'id' | 'nameKo' | 'images'>
+  boss2: Pick<Boss, 'id' | 'nameKo' | 'images'>
+  boss3: Pick<Boss, 'id' | 'nameKo' | 'images'>
 }
 
 export type CommonRound = {

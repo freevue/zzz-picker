@@ -7,6 +7,9 @@ const QUERY = `
   id,
   hp,
   nameKo: name_ko,
+  images (
+    src
+  ),
   resistance: boss_resistance_attribute_boss_id_fkey (
     ...boss_resistance_attribute_attribute_id_fkey (
       id,
