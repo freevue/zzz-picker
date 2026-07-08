@@ -24,13 +24,47 @@ Supabase 데이터베이스에서 외부 도메인(`images.zzz.freevue.dev`가 �
 2. 반환된 쿼리 결과(JSON 배열 형태)를 프로젝트 루트나 임시 폴더에 `agents-to-migrate.json` 파일로 저장합니다.
 
 ### [2단계] 마이그레이션 스크립트 실행하기
-로컬 프로젝트의 pnpm 컨텍스트 하위(`packages/r2-storage`)에서 이 스킬에 포함된 `scripts/migrate.ts` 스크립트를 `tsx` 및 `.env` 파일과 함께 구동하여 이미지 업로드 및 업데이트용 SQL 문을 생성합니다.
+`packages/r2-storage` 컨텍스트에서 이 스킬의 `scripts/migrate.ts`를 실행해 업로드 + SQL 생성을 진행합니다.
 
-1. 프로젝트 내 `packages/r2-storage` 디렉토리로 이동한 뒤, 아래 명령을 실행합니다. (이때 `.env` 경로와 JSON 파일 경로를 올바르게 맞춰줍니다.)
-   ```bash
-   npx tsx --env-file=../../.env ../../.agent/skills/migrate-agent-profiles/scripts/migrate.ts <path-to-json>/agents-to-migrate.json ./update-profiles.sql
-   ```
-2. R2로의 업로드가 완료되면 최종 데이터베이스 적용을 위한 `./update-profiles.sql` 파일이 생성됩니다.
+> 이 스크립트는 **어느 환경에서나** 동작하도록 설계되어 있습니다.
+> - 환경변수(`R2_*`) 사용
+> - CLI 옵션(`--account-id` 등) 사용
+> - 업로드 없이 SQL만 미리 검증하는 `--dry-run` 지원
+
+1. 프로젝트 내 `packages/r2-storage` 디렉토리에서 아래 중 하나를 실행합니다.
+
+   - **(권장) 환경변수 기반 실행**
+     ```bash
+     npx tsx ../../.agent/skills/migrate-agent-profiles/scripts/migrate.ts \
+       <path-to-json>/agents-to-migrate.json \
+       ./update-profiles.sql
+     ```
+
+   - **CLI 옵션 기반 실행 (.env 없이 가능)**
+     ```bash
+     npx tsx ../../.agent/skills/migrate-agent-profiles/scripts/migrate.ts \
+       <path-to-json>/agents-to-migrate.json \
+       ./update-profiles.sql \
+       --account-id <R2_ACCOUNT_ID> \
+       --access-key-id <R2_ACCESS_KEY_ID> \
+       --secret-access-key <R2_SECRET_ACCESS_KEY> \
+       --bucket zzz-picker \
+       --public-url https://images.zzz.freevue.dev \
+       --path-prefix images/agents
+     ```
+
+   - **검증용 Dry Run (업로드 생략)**
+     ```bash
+     npx tsx ../../.agent/skills/migrate-agent-profiles/scripts/migrate.ts \
+       <path-to-json>/agents-to-migrate.json \
+       ./update-profiles.sql \
+       --dry-run
+     ```
+
+2. 스크립트가 완료되면 데이터베이스 적용용 `./update-profiles.sql`이 생성됩니다.
+3. 선택 옵션
+   - `--default-source-id <number>` (기본값: `5`)
+   - `--path-prefix <prefix>` (기본값: `images/agents`)
 
 ### [3단계] 데이터베이스에 SQL 쿼리 적용하기
 생성된 `update-profiles.sql` 내부의 다중 쿼리문들을 Supabase DB에 실행합니다.
