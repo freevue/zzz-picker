@@ -8,6 +8,13 @@
 | Cursor / Claude / Codex | `.cursor/rules/zzz-picker.mdc` | 위 룰의 읽기용 인덱스 + 모노레포 구조 |
 | ZPDS UI 개발 | `.cursor/rules/zpds-components.mdc` | 디자인 리뉴얼 컴포넌트·스토리북 규칙 |
 
+## 레포 공유 Skills
+
+| Skill | 경로 | 설명 |
+|------|------|------|
+| R2 범용 업로드 | `.agent/skills/r2-upload/` | 매니페스트 JSON 기반 이미지/정적 파일 R2 업로드 (`node` 실행) |
+| 에이전트 프로필 마이그레이션 | `.agent/skills/migrate-agent-profiles/` | 에이전트 프로필 이미지 R2 이관 + SQL 생성 |
+
 ## Cursor Cloud specific instructions
 
 `zzz-picker`는 pnpm 워크스페이스 모노레포입니다. 의존성 설치는 시작 시 `pnpm install`(update script)로 자동 처리됩니다.
