@@ -27,6 +27,15 @@ alwaysApply: true
 | **V2 컴포넌트** | `.agent/rules/packages/components/v2.md` | 기존 UI 라이브러리 |
 | **ZPDS (신규 UI)** | `.cursor/rules/zpds-components.mdc` | 디자인 리뉴얼용 컴포넌트 |
 
+## Skills (에이전트 실행)
+
+| Skill | 경로 | 용도 |
+|------|------|------|
+| **R2 이미지 업로드** | `.cursor/skills/upload-r2-image/SKILL.md` | 이미지/정적 파일 R2 업로드 → 공개 URL 반환 |
+| 에이전트 프로필 마이그레이션 | `.agent/skills/migrate-agent-profiles/SKILL.md` | 프로필 이미지 R2 이관 (레거시) |
+
+이미지 업로드가 필요하면 `upload-r2-image` skill을 읽고 실행한다. 대상 URL·DB 갱신은 에이전트가 처리하고, skill은 업로드만 수행한다.
+
 ## 앱 구조
 
 | 앱 | 경로 | 용도 |

@@ -8,6 +8,27 @@
 | Cursor / Claude / Codex | `.cursor/rules/zzz-picker.mdc` | 위 룰의 읽기용 인덱스 + 모노레포 구조 |
 | ZPDS UI 개발 | `.cursor/rules/zpds-components.mdc` | 디자인 리뉴얼 컴포넌트·스토리북 규칙 |
 
+## 레포 Skills (에이전트 실행 가이드)
+
+이미지·정적 파일을 R2에 올릴 때는 아래 skill 문서를 먼저 읽고 실행한다. 업로드 대상 조사·DB UPDATE는 에이전트가 담당하고, skill은 **업로드 + 공개 URL 반환**만 담당한다.
+
+| Skill | 경로 | 용도 |
+|------|------|------|
+| **R2 이미지 업로드** | `.cursor/skills/upload-r2-image/SKILL.md` | 로컬/웹 URL 이미지를 R2에 단건·다건 업로드 (Cloudflare REST API) |
+| 에이전트 프로필 마이그레이션 | `.agent/skills/migrate-agent-profiles/SKILL.md` | 에이전트 프로필 이미지 R2 이관 + SQL 생성 (레거시) |
+
+### `upload-r2-image` 실행 요약
+
+```bash
+npx tsx .cursor/skills/upload-r2-image/scripts/upload.ts \
+  --url <원본URL> --path <R2경로prefix>
+```
+
+- 자격증명: **Cursor Cloud Secrets** — `CLOUDFLARE_API_TOKEN`, `R2_ACCOUNT_ID`(또는 `CLOUDFLARE_ACCOUNT_ID`)
+- 선택: `R2_BUCKET_NAME`(기본 `zzz-picker`), `R2_PUBLIC_URL`(기본 `https://images.zzz.freevue.dev`)
+- `.env` / S3 Access Key는 사용하지 않음
+- 대량 작업은 manifest 없이 **단건 skill을 반복 실행**
+
 ## Cursor Cloud specific instructions
 
 `zzz-picker`는 pnpm 워크스페이스 모노레포입니다. 의존성 설치는 시작 시 `pnpm install`(update script)로 자동 처리됩니다.
@@ -34,3 +55,4 @@
 - `SUPABASE_URL`/`SUPABASE_ANON_KEY`가 **모듈 로드 시점에** Supabase 클라이언트 생성에 사용되므로, 값이 없으면 앱이 부팅 중 throw 합니다. 따라서 로컬 실행에는 최소한 플레이스홀더 값이라도 필요합니다.
 - 캐릭터·보스·엔진(밴픽에 쓰이는 로스터) 데이터는 Supabase(`agents`/`boss`/`engines`/`deadly_assault` 테이블)에서 옵니다. 실제 자격증명이 없으면 밴픽 그리드가 비어 있습니다. 실제 백엔드 없이 UI를 검증하려면 `SUPABASE_URL`을 PostgREST 호환 로컬 목 서버(`/rest/v1/<table>` 경로에 JSON 배열 반환, CORS 허용)로 가리키면 캐릭터 선택 흐름을 그대로 테스트할 수 있습니다.
 - 기타: `GEMINI_API_KEY`/`GOOGLE_API_KEY`(`/chat` Gemini), `GOOGLE_SHEET_ID`, `ROLE_TOKEN_SECRET`, admin의 `R2_*`(Cloudflare R2)는 해당 기능 사용 시에만 필요합니다.
+- **R2 이미지 업로드 skill** (`.cursor/skills/upload-r2-image`): Cursor Cloud Secrets에 `CLOUDFLARE_API_TOKEN`, `R2_ACCOUNT_ID` 등록. admin 앱용 `R2_ACCESS_KEY_*`와 별개이다.
