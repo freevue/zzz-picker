@@ -1,41 +1,70 @@
-import { Button } from '@/components/ui/button'
 import { map, pipe, toArray, toAsync } from '@fxts/core'
-import { Link } from '@remix-run/react'
+import { useNavigate } from '@remix-run/react'
 import { supabase } from '@zzz-picker/supabase'
-import { useRef } from 'react'
+import { Role } from '~/constant'
+import { TableName } from '~/lib/DB/constant'
 
 export default function Index() {
+  const navigate = useNavigate()
   const onClick = async () => {
     const { id: matchId } = await pipe(
-      supabase.from('match'),
+      supabase.from(TableName.MATCH),
       async (builder) => await builder.insert({}).select().single(),
       ({ data }) => data
     )
-    const [hSide, aSide, bSide] = await pipe(
-      ['H', 'A', 'B'],
+
+    await pipe(
+      [Role.A_SIDE, Role.B_SIDE],
       toAsync,
-      map((role) => supabase.from('play_user').insert({ role, matchId }).select().single()),
-      map(({ data }) => data),
-      toArray
-    )
-    const data = await pipe(
-      [aSide, bSide],
-      toAsync,
-      map(({ id, role }) =>
-        supabase.from('play').insert({ id, role, name: 'Hello' }).select().single()
+      map((role) =>
+        supabase
+          .from(TableName.PLAY)
+          .insert({
+            matchId,
+            role,
+            name: 'Hello',
+            agents: [null, null, null],
+            engines: [null, null, null],
+            boss: [null, null],
+            proposeBan: [null, null],
+            selectBan: [null],
+          })
+          .select()
+          .single()
       ),
       map(({ data }) => data),
       toArray
     )
 
-    console.log(data)
+    navigate(`/${matchId}`)
   }
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-10 p-6">
-      <button onClick={onClick} className="text-2xl" type="button">
-        Hello World
-      </button>
+      <div className="flex gap-20">
+        <button
+          onClick={onClick}
+          className="w-60 card p-3 rounded-3xl cursor-pointer"
+          type="button"
+        >
+          <img
+            className="block w-full rounded-2xl"
+            src="https://images.zzz.freevue.dev/images/logo/ef9ec605-5fe4-4728-901b-af4f8790958b.webp"
+            alt="강습전"
+          />
+        </button>
+        <button
+          onClick={onClick}
+          className="w-60 card p-3 rounded-3xl cursor-pointer"
+          type="button"
+        >
+          <img
+            className="block w-full rounded-2xl"
+            src="https://images.zzz.freevue.dev/images/logo/ef9ec605-5fe4-4728-901b-af4f8790958b.webp"
+            alt="강습전"
+          />
+        </button>
+      </div>
     </div>
   )
 }

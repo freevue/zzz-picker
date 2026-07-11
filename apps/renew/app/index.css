@@ -1,17 +1,86 @@
-@import url('//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css');
 @import 'tailwindcss';
 @import 'tw-animate-css';
-@import 'shadcn/tailwind.css';
-@import 'tw-animate-css';
-@import 'shadcn/tailwind.css';
-@import '@fontsource-variable/geist';
 
 @font-face {
-  font-family: 'Aggravo';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroB.woff')
-    format('woff');
+  font-family: 'Presentation';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-1Thin.woff2')
+    format('woff2');
+  font-weight: 100;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Presentation';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-2ExtraLight.woff2')
+    format('woff2');
+  font-weight: 200;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Presentation';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-3Light.woff2')
+    format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Presentation';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-4Regular.woff2')
+    format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Presentation';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-5Medium.woff2')
+    format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Presentation';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-6SemiBold.woff2')
+    format('woff2');
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Presentation';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-7Bold.woff2')
+    format('woff2');
   font-weight: 700;
   font-display: swap;
+}
+
+@font-face {
+  font-family: 'Presentation';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-8ExtraBold.woff2')
+    format('woff2');
+  font-weight: 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Presentation';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-9Black.woff2')
+    format('woff2');
+  font-weight: 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ria';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2410-1@1.0/RiaSans-ExtraBold.woff2')
+    format('woff2');
+  font-weight: normal;
+  font-display: swap;
+}
+.ft-ria {
+  font-family: 'Ria', sans-serif;
 }
 
 @source './';
@@ -23,15 +92,7 @@
  * bg-background === var(--color-base), bg-primary === var(--color-primary)
  */
 @theme inline {
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
-
-  --font-sans: 'Geist Variable', sans-serif;
+  --font-sans: 'Presentation', sans-serif;
   --font-heading: var(--font-sans);
 
   --color-background: var(--background);
@@ -74,26 +135,37 @@
   --color-tertiary: var(--color-tertiary);
   --color-ink: var(--color-ink);
   --color-disabled: var(--color-disabled);
+
+  --animate-rollingBg: rollingBg 120s linear infinite;
+  --animate-rollingBg-reverse: rollingBg 120s linear infinite reverse;
+
+  @keyframes rollingBg {
+    from {
+      transform: translateX(-150%);
+    }
+    to {
+      transform: translateX(-30%);
+    }
+  }
 }
 
-:root,
-.dark {
+:root {
   --radius: 1.25rem;
 
-  /* ZZZ v3 파스텔 다크 토큰 (DESIGN.md + v3 오버라이드) */
-  --color-base: #13141b;
-  --color-content: #1c1e29;
-  --color-netural: #262a3a;
-  --color-elevated: #2f3447;
-  --color-primary: #a8b6f3;
-  --color-secondary: #97dcc8;
-  --color-tertiary: #f2b1c1;
-  --color-ink: #eceef6;
-  --color-disabled: #3a3f52;
-  --grad-page: radial-gradient(1200px 600px at 15% 0%, #1b1f33 0%, #13141b 55%);
-  --grad-primary: linear-gradient(135deg, #a8b6f3 0%, #c5b9f0 100%);
-  --grad-secondary: linear-gradient(135deg, #97dcc8 0%, #a9d8ef 100%);
-  --grad-surface: linear-gradient(160deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 60%);
+  /* ZZZ v2 테크니컬 다크 토큰 (DESIGN.md 오버라이드) */
+  --color-base: #0c0f12;
+  --color-content: #141920;
+  --color-netural: #1c2331;
+  --color-elevated: #252f42;
+  --color-primary: #ffd215;
+  --color-secondary: #00f0ff;
+  --color-tertiary: #ff4500;
+  --color-ink: #ffffff;
+  --color-disabled: #374151;
+  --grad-page: radial-gradient(1200px 600px at 15% 0%, #172030 0%, #0c0f12 55%);
+  --grad-primary: linear-gradient(135deg, #ffd215 0%, #ff9f00 100%);
+  --grad-secondary: linear-gradient(135deg, #00f0ff 0%, #00a2ff 100%);
+  --grad-surface: linear-gradient(160deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 60%);
 
   /* shadcn 시맨틱 토큰 — ZZZ 토큰과 1:1 대응 */
   --background: var(--color-base);
@@ -156,83 +228,42 @@
   }
 }
 
-/*
- ---break---
- */
-
-:root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+.card {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.01) 100%
+  ) !important;
+  backdrop-filter: blur(8px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(120%) !important;
+  box-shadow:
+    0 4px 20px 0 rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.05) !important;
 }
 
-/*
- ---break---
- */
+.card.active::before {
+  @apply absolute animate-spin -z-1 block left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 scale-150;
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
+  animation-duration: 3s;
 
-.ft-aggravo {
-  font-family: 'Aggravo', sans-serif;
+  content: '';
+  /* background: conic-gradient(
+    transparent 0%,
+    var(--color-primary) 12.5%,
+    transparent 25%,
+    transparent 50%,
+    var(--color-primary) 62.5%,
+    transparent 75%
+  ); */
+
+  background: conic-gradient(
+    var(--color-primary) 0%,
+    var(--color-primary) 25%,
+    transparent 25%,
+    transparent 50%,
+    var(--color-primary) 50%,
+    var(--color-primary) 75%,
+    transparent 75%,
+    transparent 100%
+  );
 }
