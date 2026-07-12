@@ -6,6 +6,7 @@ export type Agent = {
   profile: string
   color: string | null
   isPickup: boolean
+  isAllow: boolean
   attribute: {
     nameKo: string
     src: string

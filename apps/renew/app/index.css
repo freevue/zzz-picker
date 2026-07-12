@@ -242,7 +242,7 @@
 }
 
 .card.active::before {
-  @apply absolute animate-spin -z-1 block left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 scale-150;
+  @apply absolute animate-spin w-full h-full -z-1 block left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 scale-150;
 
   animation-duration: 3s;
 

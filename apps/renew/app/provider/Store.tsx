@@ -1,7 +1,7 @@
 import { selectDeadlyAssault, selectAgent } from '@/lib/DB'
 import { type Boss, type Agent } from '@/type'
 import { map, pipe, toArray } from '@fxts/core'
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useMemo, useState } from 'react'
 
 type Props = {
   children: React.ReactNode
@@ -19,6 +19,10 @@ export const Context = createContext<State>({
 const Store: React.FC<Props> = (props) => {
   const [deadlyAssault, setDeadlyAssault] = useState<Array<Boss>>([])
   const [agents, setAgents] = useState<Map<number, Agent>>(new Map([]))
+  const loading = useMemo(
+    () => agents.size === 0 || deadlyAssault.length === 0,
+    [agents, deadlyAssault]
+  )
 
   useEffect(() => {
     pipe(selectDeadlyAssault(), setDeadlyAssault)
@@ -30,7 +34,11 @@ const Store: React.FC<Props> = (props) => {
     )
   }, [])
 
-  return <Context.Provider value={{ deadlyAssault, agents }}>{props.children}</Context.Provider>
+  return (
+    <Context.Provider value={{ deadlyAssault, agents }}>
+      {loading ? null : props.children}
+    </Context.Provider>
+  )
 }
 
 export default Store

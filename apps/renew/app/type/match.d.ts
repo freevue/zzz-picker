@@ -8,26 +8,33 @@ export type Player = {
   matchId: string
   matchType: MatchType
   name: string
-  proposeBan: Array<null | string>
+  proposeBan: Array<null | number>
+  selectBan: Array<null | number>
   rate: {
     agents: Record<number, number>
-    engines: Record<number, number>
+    engines: Record<string, number>
   }
   role: Role
   score: number
-  selectBan: Array<null | string>
   time: number
-  proposeBan: Array<null | string>
-  selectBan: Array<null | string>
 }
 
 export type BroadcastPayloadMap = {
   [BroadcastEvent.COMMON_BOSS_SELECT]: string
-  [BroadcastEvent.FIRST_BAN_SELECT]: Array<number | null>
   [BroadcastEvent.COMMON_BOSS_CONFIRM]: string
+  [BroadcastEvent.BAN_SELECT]: Array<number | null>
+  [BroadcastEvent.BAN_FIX]: Array<number | null>
   [BroadcastEvent.BOSS_SELECT]: {
     bossId: string
-    side: 'A' | 'B'
+    side: Role.A_SIDE | Role.B_SIDE
+  }
+  [BroadcastEvent.BAN_PROPOSE]: {
+    list: Array<number | null>
+    role: Role.A_SIDE | Role.B_SIDE
+  }
+  [BroadcastEvent.BAN_CONFIRM]: {
+    list: Array<number | null>
+    role: Role.A_SIDE | Role.B_SIDE
   }
 }
 
@@ -37,3 +44,5 @@ export type Match = Record<Role, Player> & {
     matchType: MatchType
   }
 }
+
+export type PlayerRole = Role.A_SIDE | Role.B_SIDE

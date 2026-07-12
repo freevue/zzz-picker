@@ -1,22 +1,26 @@
-import { Player } from '~/type'
 import Ban from './Ban'
 import Boss from './Boss'
-import { filter, map, pipe, sort, toArray } from '@fxts/core'
-import { useMatchState, useStore } from '~/hooks'
-import { MatchType, Phase } from '~/constant'
+import Pick from './Pick'
+import { includes } from '@fxts/core'
+import { Phase } from '~/constant'
+import { useMatchState } from '~/hooks'
 
-type Props = {
-  player: Player
-}
+type Props = {}
 
-const Player: React.FC<Props> = (props) => {
-  const store = useStore()
+const Play: React.FC<Props> = () => {
   const matchState = useMatchState()
 
-  if (matchState.phase === Phase.COMMON_BOSS_SELECT) return <Boss player={props.player} />
-  if (matchState.phase === Phase.BAN) return <Ban player={props.player} />
+  return (
+    <>
+      <h1 className="text-7xl font-bold text-primary ft-ria fixed left-4 top-4 z-1">
+        {matchState.player?.name} {matchState.player?.role}
+      </h1>
 
-  return <>Hello World</>
+      {matchState.phase === Phase.COMMON_BOSS_SELECT && <Boss />}
+      {includes(matchState.phase, [Phase.BAN, Phase.BAN_FIX]) && <Ban />}
+      {matchState.phase === Phase.PICK && <Pick />}
+    </>
+  )
 }
 
-export default Player
+export default Play

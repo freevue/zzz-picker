@@ -1,13 +1,8 @@
 import { BroadcastEvent, Phase, Role } from '@/constant'
 import { useMatchState, useStore } from '@/hooks'
 import { concat, join, map, pipe, toArray, isEmpty, isString, not } from '@fxts/core'
-import { Player } from '~/type'
 
-type Props = {
-  player: Player
-}
-
-const Boss: React.FC<Props> = (props) => {
+const Boss: React.FC = () => {
   const store = useStore()
   const mathState = useMatchState()
 
@@ -35,7 +30,7 @@ const Boss: React.FC<Props> = (props) => {
                 <button
                   value={boss.id}
                   onClick={onBossClick}
-                  disabled={props.player.role !== Role.B_SIDE}
+                  disabled={mathState.player!.role !== Role.B_SIDE}
                   className={pipe(
                     [
                       'block',
@@ -70,7 +65,7 @@ const Boss: React.FC<Props> = (props) => {
           )}
         </ul>
       </div>
-      {props.player.role === Role.B_SIDE && (
+      {mathState.player!.role === Role.B_SIDE && (
         <button
           type="button"
           disabled={not(isString(mathState.select[Phase.COMMON_BOSS_SELECT]))}
