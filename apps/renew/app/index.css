@@ -229,13 +229,13 @@
 }
 
 .card {
+  @apply backdrop-blur-sm backdrop-saturate-100;
+
   background: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.03) 0%,
     rgba(255, 255, 255, 0.01) 100%
   ) !important;
-  backdrop-filter: blur(12px) saturate(120%) !important;
-  -webkit-backdrop-filter: blur(8px) saturate(120%) !important;
   box-shadow:
     0 4px 20px 0 rgba(0, 0, 0, 0.15),
     inset 0 1px 0 0 rgba(255, 255, 255, 0.05) !important;
