@@ -13,6 +13,10 @@ const INITIAL_SELECT_STATE = {
 }
 const INITIAL_MATCH_STATE = {
   matchType: MatchType.ORIGINAL,
+  name: {
+    [Role.A_SIDE]: '',
+    [Role.B_SIDE]: '',
+  },
   boss: {
     [Role.A_SIDE]: [null, null] as [null | string, null | string],
     [Role.B_SIDE]: [null, null] as [null | string, null | string],
@@ -77,8 +81,9 @@ const INITIAL_PICK = {
 type Props = {
   children: React.ReactNode
   role: Role
-  match: Record<Role, Player>
+  match: Record<PlayerRole, Player>
   matchType: MatchType
+  matchId: string
 }
 type State = {
   send: <T extends BroadcastEvent>(event: T, payload: BroadcastPayloadMap[T]) => void
@@ -105,6 +110,10 @@ const MatchState: React.FC<Props> = (props) => {
   const [select, setSelect] = useState(INITIAL_SELECT_STATE)
   const [match, setMatch] = useState<typeof INITIAL_MATCH_STATE>({
     matchType: props.matchType,
+    name: {
+      [Role.A_SIDE]: props.match[Role.A_SIDE].name,
+      [Role.B_SIDE]: props.match[Role.B_SIDE].name,
+    },
     boss: {
       [Role.A_SIDE]: props.match[Role.A_SIDE].boss,
       [Role.B_SIDE]: props.match[Role.B_SIDE].boss,
@@ -130,7 +139,11 @@ const MatchState: React.FC<Props> = (props) => {
       [Role.B_SIDE]: props.match[Role.B_SIDE].rate,
     },
   })
-  const player = useMemo(() => props.match[props.role], [props.role, props.match])
+  const player = useMemo(() => {
+    if (props.role === Role.HOST) return null
+
+    return props.match[props.role]
+  }, [props.role, props.match])
   const pick = useMemo(() => {
     return {
       boss: match.boss[props.role as Role.A_SIDE | Role.B_SIDE],
@@ -192,7 +205,7 @@ const MatchState: React.FC<Props> = (props) => {
 
   useEffect(() => {
     channel.current = supabase
-      .channel(`match:${player.matchId}`, {
+      .channel(`match:${props.matchId}`, {
         config: {
           broadcast: { self: true },
         },
@@ -206,21 +219,21 @@ const MatchState: React.FC<Props> = (props) => {
       .on('broadcast', { event: BroadcastEvent.BOSS_SELECT }, (response) => {
         const payload = response.payload as BroadcastPayloadMap[BroadcastEvent.BOSS_SELECT]
 
-        pipe(
-          match.boss[payload.side],
-          (list) => {
-            list[payload.round] = payload.bossId
+        setMatch((prev) => {
+          return pipe(
+            prev.boss[payload.side],
+            (list) => {
+              list[payload.round] = payload.bossId
 
-            return list
-          },
-          (list) => ({ ...match.boss, [payload.side]: list }),
-          (boss) => {
-            setMatch((prev) => ({ ...prev, boss }))
-          }
-        )
+              return list
+            },
+            (list) => ({ ...prev.boss, [payload.side]: list }),
+            (boss) => ({ ...prev, boss })
+          )
+        })
       })
       .on('broadcast', { event: BroadcastEvent.COMMON_BOSS_CONFIRM }, async (response) => {
-        await updateCommonBoss(player, response.payload)
+        // await updateCommonBoss(player, response.payload)
 
         setMatch((prev) => ({
           ...prev,
@@ -259,73 +272,73 @@ const MatchState: React.FC<Props> = (props) => {
       .on('broadcast', { event: BroadcastEvent.AGENT_PICK }, (response) => {
         const payload = response.payload as BroadcastPayloadMap[BroadcastEvent.AGENT_PICK]
 
-        pipe(
-          match.agent[payload.role][payload.round],
-          (list) => {
-            list[payload.index] = payload.agentId
+        setMatch((prev) => {
+          return pipe(
+            prev.agent[payload.role][payload.round],
+            (list) => {
+              list[payload.index] = payload.agentId
 
-            return { ...match.agent[payload.role], [payload.round]: list }
-          },
-          (agent) => {
-            setMatch((prev) => ({
+              return { ...prev.agent[payload.role], [payload.round]: list }
+            },
+            (agent) => ({
               ...prev,
               agent: { ...prev.agent, [payload.role]: agent },
-            }))
-          }
-        )
+            })
+          )
+        })
       })
       .on('broadcast', { event: BroadcastEvent.AGENT_RATE }, (response) => {
         const payload = response.payload as BroadcastPayloadMap[BroadcastEvent.AGENT_RATE]
 
-        pipe(
-          match.rate[payload.role].agents,
-          (rate) => ({ ...rate, [payload.agentId]: payload.rate }),
-          (agents) => ({ ...match.rate[payload.role], agents }),
-          (rate) => ({ ...match.rate, [payload.role]: rate }),
-          (rate) => {
-            setMatch((prev) => ({ ...prev, rate }))
-          }
-        )
+        setMatch((prev) => {
+          return pipe(
+            prev.rate[payload.role].agents,
+            (rate) => ({ ...rate, [payload.agentId]: payload.rate }),
+            (agents) => ({ ...prev.rate[payload.role], agents }),
+            (rate) => ({ ...prev.rate, [payload.role]: rate }),
+            (rate) => ({ ...prev, rate })
+          )
+        })
       })
       .on('broadcast', { event: BroadcastEvent.ENGINE_PICK }, (response) => {
         const payload = response.payload as BroadcastPayloadMap[BroadcastEvent.ENGINE_PICK]
 
-        pipe(
-          match.engine[payload.role][payload.round],
-          (list) => {
-            list[payload.index] = payload.engineId
+        setMatch((prev) => {
+          return pipe(
+            prev.engine[payload.role][payload.round],
+            (list) => {
+              list[payload.index] = payload.engineId
 
-            return { ...match.engine[payload.role], [payload.round]: list }
-          },
-          (engine) => {
-            setMatch((prev) => ({
+              return { ...prev.engine[payload.role], [payload.round]: list }
+            },
+            (engine) => ({
               ...prev,
               engine: { ...prev.engine, [payload.role]: engine },
-            }))
-          }
-        )
+            })
+          )
+        })
       })
       .on('broadcast', { event: BroadcastEvent.ENGINE_RATE }, (response) => {
         const payload = response.payload as BroadcastPayloadMap[BroadcastEvent.ENGINE_RATE]
 
-        pipe(
-          match.rate[payload.role].engines,
-          (rate) => ({ ...rate, [payload.engineId]: payload.rate }),
-          (engines) => ({ ...match.rate[payload.role], engines }),
-          (rate) => ({ ...match.rate, [payload.role]: rate }),
-          (rate) => {
-            setMatch((prev) => ({ ...prev, rate }))
-          }
-        )
+        setMatch((prev) => {
+          return pipe(
+            prev.rate[payload.role].engines,
+            (rate) => ({ ...rate, [payload.engineId]: payload.rate }),
+            (engines) => ({ ...prev.rate[payload.role], engines }),
+            (rate) => ({ ...prev.rate, [payload.role]: rate }),
+            (rate) => ({ ...prev, rate })
+          )
+        })
       })
       .subscribe()
 
     return () => {
       channel.current !== null && supabase.removeChannel(channel.current)
     }
-  }, [player])
+  }, [props.matchId])
 
-  return isNull(player) ? null : (
+  return (
     <Context.Provider
       value={{
         phase,

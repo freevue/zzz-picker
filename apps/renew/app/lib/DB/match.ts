@@ -2,6 +2,18 @@ import { TableName } from './constant'
 import { type Player } from '@/type'
 import { supabase } from '@zzz-picker/supabase'
 
+export async function selectHostMatch(hostId: string) {
+  const { data } = await supabase
+    .from(TableName.MATCH)
+    .select(
+      `matchId: id,
+      matchType`
+    )
+    .eq('hostId', hostId)
+
+  return data?.[0]
+}
+
 export async function selectMath(matchId: string) {
   const { data } = await supabase
     .from(TableName.PLAY)
