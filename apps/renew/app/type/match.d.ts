@@ -1,9 +1,9 @@
 import { Role, MatchType, BroadcastEvent } from '@/constant'
 
 export type Player = {
-  agents: [null | number, null | number, null | number]
+  agent: Record<number, [null | number, null | number, null | number]>
+  engine: Record<number, [null | string, null | string, null | string]>
   boss: [null | string, null | string]
-  engines: [null | string, null | string, null | string]
   id: string
   matchId: string
   matchType: MatchType
@@ -26,6 +26,7 @@ export type BroadcastPayloadMap = {
   [BroadcastEvent.BAN_FIX]: Array<number | null>
   [BroadcastEvent.BOSS_SELECT]: {
     bossId: string
+    round: number
     side: Role.A_SIDE | Role.B_SIDE
   }
   [BroadcastEvent.BAN_PROPOSE]: {
@@ -35,6 +36,28 @@ export type BroadcastPayloadMap = {
   [BroadcastEvent.BAN_CONFIRM]: {
     list: Array<number | null>
     role: Role.A_SIDE | Role.B_SIDE
+  }
+  [BroadcastEvent.AGENT_PICK]: {
+    index: number
+    round: number
+    role: Role.A_SIDE | Role.B_SIDE
+    agentId: number | null
+  }
+  [BroadcastEvent.AGENT_RATE]: {
+    role: Role.A_SIDE | Role.B_SIDE
+    agentId: number
+    rate: number
+  }
+  [BroadcastEvent.ENGINE_PICK]: {
+    index: number
+    round: number
+    role: Role.A_SIDE | Role.B_SIDE
+    engineId: string | null
+  }
+  [BroadcastEvent.ENGINE_RATE]: {
+    role: Role.A_SIDE | Role.B_SIDE
+    engineId: string
+    rate: number
   }
 }
 

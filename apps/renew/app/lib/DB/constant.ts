@@ -6,4 +6,5 @@ export enum TableName {
   PLAY = 'play',
   MATCH = 'match',
   AGENT = 'agent',
+  ENGINE = 'engine',
 }
