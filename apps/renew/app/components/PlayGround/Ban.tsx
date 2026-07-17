@@ -12,11 +12,14 @@ import {
   isNumber,
   when,
   append,
+  head,
+  isUndefined,
 } from '@fxts/core'
+import { useMemo } from 'react'
 import { BroadcastEvent, Phase, Role, SETTING } from '~/constant'
 import { useMatchState, useStore } from '~/hooks'
 import { updateProposeBan, updateSelectBan } from '~/lib/DB'
-import { opponent } from '~/lib/utils'
+import { opponent, getPosition } from '~/lib/utils'
 
 type BanFixProps = {
   role: PlayerRole
@@ -82,6 +85,13 @@ const BanFix: React.FC<BanFixProps> = (props) => {
 const Ban: React.FC = () => {
   const store = useStore()
   const matchState = useMatchState()
+  const firstBan = useMemo(() => {
+    return pipe(matchState.state.selectBan[Role.B_SIDE], filter(isNumber), head, (agentId) =>
+      store.agents.get(agentId || -1)
+    )
+  }, [matchState, store])
+
+  console.log(firstBan)
 
   const onBanAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -170,6 +180,11 @@ const Ban: React.FC = () => {
             store.agents,
             filter(([, agent]) => agent.isPickup),
             filter(([, agent]) => !agent.isAllow),
+            filter(([, agent]) => {
+              if (isUndefined(firstBan)) return true
+
+              return getPosition(agent.specialty.nameKo) !== getPosition(firstBan.specialty.nameKo)
+            }),
             sort((prev, cur) => prev[1].nameKo.localeCompare(cur[1].nameKo)),
             map(([id, agent]) => (
               <button

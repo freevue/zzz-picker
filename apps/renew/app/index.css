@@ -229,7 +229,7 @@
 }
 
 .card {
-  @apply backdrop-blur-sm backdrop-saturate-100;
+  @apply backdrop-blur-md backdrop-saturate-100;
 
   background: linear-gradient(
     135deg,
@@ -266,4 +266,15 @@
     transparent 75%,
     transparent 100%
   );
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type='number'] {
+  -moz-appearance: textfield; /* Firefox */
 }

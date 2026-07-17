@@ -1,6 +1,9 @@
+import CardTitle from '../CardTitle'
 import Pulse from '../Pulse'
 import AgentList from './AgentList'
 import BossButton from './BossButton'
+import Score from './Score'
+import Timer from './Timer'
 import { concat, isUndefined, join, map, pipe, toArray, zipWithIndex } from '@fxts/core'
 import { useMemo } from 'react'
 import { Phase, Role } from '~/constant'
@@ -28,20 +31,34 @@ const Round: React.FC<Props> = (props) => {
     }
   }, [matchState, props.round, store])
 
-  console.log(roundData)
-
   return (
-    <div className={pipe(['card', 'p-4', 'w-full', 'rounded-3xl', 'relative'], join(' '))}>
+    <div
+      className={pipe(['card', 'p-4', 'w-full', 'rounded-3xl', 'relative', 'flex-1'], join(' '))}
+    >
       {matchState.phase === Phase.PICK && <Pulse />}
-      <h3 className="ft-ria text-primary text-6xl">{props.round + 1} Round</h3>
-      <div className="flex gap-4">
-        <div className="flex-1 flex gap-4 items-center">
-          <AgentList list={roundData[Role.A_SIDE].agent} />
-          <BossButton boss={roundData[Role.A_SIDE].boss} />
+      <CardTitle className="text-center">{props.round + 1} Round</CardTitle>
+      <div className="flex justify-between mt-10">
+        <div className="flex flex-col items-start gap-4">
+          <Timer />
+          <div className="flex-1 flex gap-4 items-end">
+            <AgentList
+              list={roundData[Role.A_SIDE].agent}
+              engines={roundData[Role.A_SIDE].engine}
+            />
+            <BossButton boss={roundData[Role.A_SIDE].boss} />
+          </div>
+          <Score className="ml-auto mr-24" />
         </div>
-        <div className="flex-1 flex gap-4 items-center flex-row-reverse">
-          <AgentList list={roundData[Role.B_SIDE].agent} />
-          <BossButton boss={roundData[Role.B_SIDE].boss} />
+        <div className="flex flex-col items-end gap-4">
+          <Timer />
+          <div className="flex-1 flex gap-4 items-end flex-row-reverse">
+            <AgentList
+              list={roundData[Role.B_SIDE].agent}
+              engines={roundData[Role.B_SIDE].engine}
+            />
+            <BossButton boss={roundData[Role.B_SIDE].boss} />
+          </div>
+          <Score className="mr-auto ml-24" />
         </div>
       </div>
     </div>

@@ -39,3 +39,20 @@ export enum MatchType {
   LEGEND = 'legend',
   UNLIMITED = 'unlimited',
 }
+
+export enum Specialty {
+  SUPPORT = '지원',
+  ATTACK = '강공',
+  RUPTURE = '명파',
+  STUN = '격파',
+  ANOMALY = '이상',
+  DEFENSE = '방어',
+}
+
+export const DEALER = [Specialty.ATTACK, Specialty.RUPTURE, Specialty.ANOMALY]
+export const SUPPORT = [Specialty.SUPPORT, Specialty.STUN, Specialty.DEFENSE]
+
+export enum Position {
+  DEALER = 'dealer',
+  SUPPORT = 'support',
+}

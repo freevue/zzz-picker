@@ -1,5 +1,5 @@
 import { PlayGround, HostDashboard } from '@/components'
-import { selectMath, selectMatchId, selectHostMatch } from '@/lib/DB'
+import { selectMatchPlayer, selectMatchPlayerId, selectHostMatch } from '@/lib/DB'
 import { Store, MatchState } from '@/provider'
 import { PlayerRole, type Player } from '@/type'
 import { find, fromEntries, head, isUndefined, map, peek, pipe, size } from '@fxts/core'
@@ -40,10 +40,10 @@ const RoomIndex = () => {
     pipe(
       params.id,
       selectHostMatch,
-      (data) => [isUndefined(data) ? selectMatchId(params.id!) : data],
+      (data) => [isUndefined(data) ? selectMatchPlayerId(params.id!) : data],
       peek(setMatch),
       head,
-      (data) => selectMath(data!.matchId),
+      (data) => selectMatchPlayer(data!.matchId),
       setData
     )
   }, [params])

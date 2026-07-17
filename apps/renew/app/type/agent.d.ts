@@ -1,3 +1,5 @@
+import { Specialty } from '@/constant'
+
 export type Agent = {
   banner: string
   fullNameKo: string
@@ -13,7 +15,7 @@ export type Agent = {
     src: string
   }
   specialty: {
-    nameKo: string
+    nameKo: (typeof Specialty)[keyof typeof Specialty]
     src: string
   }
 }

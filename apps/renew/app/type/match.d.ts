@@ -21,7 +21,10 @@ export type Player = {
 
 export type BroadcastPayloadMap = {
   [BroadcastEvent.COMMON_BOSS_SELECT]: string
-  [BroadcastEvent.COMMON_BOSS_CONFIRM]: string
+  [BroadcastEvent.COMMON_BOSS_CONFIRM]: {
+    bossId: string
+    playerId: string
+  }
   [BroadcastEvent.BAN_SELECT]: Array<number | null>
   [BroadcastEvent.BAN_FIX]: Array<number | null>
   [BroadcastEvent.BOSS_SELECT]: {

@@ -159,12 +159,12 @@ const MatchState: React.FC<Props> = (props) => {
     if (pipe(match.boss[Role.B_SIDE], nth(1), isNull)) return Phase.COMMON_BOSS_SELECT
     if (
       isBanFix(
-        match.proposeBan[props.role as PlayerRole],
-        match.selectBan[opponent(props.role) as PlayerRole]
+        match.proposeBan[Role.A_SIDE as PlayerRole],
+        match.selectBan[opponent(Role.A_SIDE) as PlayerRole]
       ) ||
       isBanFix(
-        match.proposeBan[opponent(props.role) as PlayerRole],
-        match.selectBan[props.role as PlayerRole]
+        match.proposeBan[Role.B_SIDE as PlayerRole],
+        match.selectBan[opponent(Role.B_SIDE) as PlayerRole]
       )
     )
       return Phase.BAN_FIX
@@ -175,7 +175,7 @@ const MatchState: React.FC<Props> = (props) => {
       return Phase.PICK
 
     return Phase.BAN
-  }, [match, props.role])
+  }, [match])
   const isPicker = useMemo(() => {
     if (props.role === Role.HOST) return true
     if (phase === Phase.COMMON_BOSS_SELECT) return props.role === Role.B_SIDE
@@ -233,7 +233,9 @@ const MatchState: React.FC<Props> = (props) => {
         })
       })
       .on('broadcast', { event: BroadcastEvent.COMMON_BOSS_CONFIRM }, async (response) => {
-        // await updateCommonBoss(player, response.payload)
+        const payload = response.payload as BroadcastPayloadMap[BroadcastEvent.COMMON_BOSS_CONFIRM]
+
+        await updateCommonBoss(props.matchId, payload.bossId)
 
         setMatch((prev) => ({
           ...prev,

@@ -1,5 +1,5 @@
 import { concat, filter, includes, isNull, pipe, size } from '@fxts/core'
-import { Role } from '~/constant'
+import { DEALER, Position, Role, Specialty } from '~/constant'
 
 type OpponentMap = {
   [Role.A_SIDE]: Role.B_SIDE
@@ -24,4 +24,10 @@ export function isBanFix(
   if (includes(null, proposeBan)) return false
 
   return includes(null, selectBan)
+}
+
+export function getPosition(specialty: (typeof Specialty)[keyof typeof Specialty]) {
+  if (includes(specialty, DEALER)) return Position.DEALER
+
+  return Position.SUPPORT
 }

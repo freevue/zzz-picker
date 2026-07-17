@@ -16,7 +16,10 @@ const Boss: React.FC = () => {
 
     if (mathState.select[Phase.COMMON_BOSS_SELECT] === null) return
 
-    mathState.send(BroadcastEvent.COMMON_BOSS_CONFIRM, mathState.select[Phase.COMMON_BOSS_SELECT])
+    mathState.send(BroadcastEvent.COMMON_BOSS_CONFIRM, {
+      playerId: mathState.player!.id,
+      bossId: mathState.select[Phase.COMMON_BOSS_SELECT],
+    })
   }
 
   return (
@@ -25,10 +28,10 @@ const Boss: React.FC = () => {
         <ul className="flex flex-wrap gap-4 items-center justify-center">
           {pipe(
             store.deadlyAssault,
-            map((boss) => (
-              <li key={boss.id}>
+            map(([id, boss]) => (
+              <li key={id}>
                 <button
-                  value={boss.id}
+                  value={id}
                   onClick={onBossClick}
                   disabled={mathState.player!.role !== Role.B_SIDE}
                   className={pipe(
@@ -40,7 +43,7 @@ const Boss: React.FC = () => {
                     ],
                     concat(['disabled:grayscale-100', 'disabled:cursor-not-allowed']),
                     concat(
-                      mathState.select[Phase.COMMON_BOSS_SELECT] === boss.id
+                      mathState.select[Phase.COMMON_BOSS_SELECT] === id
                         ? [
                             'active',
                             'before:h-full',

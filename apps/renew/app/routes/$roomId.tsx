@@ -1,9 +1,8 @@
 import { map, pipe, toArray } from '@fxts/core'
 import { useParams, Link } from '@remix-run/react'
-import { supabase } from '@zzz-picker/supabase'
 import { useEffect, useMemo, useState } from 'react'
 import { Role } from '~/constant'
-import { TableName } from '~/lib/DB/constant'
+import { selectMatchPlayer, selectMatchHost } from '~/lib/DB'
 import { type Player } from '~/type'
 
 const LinkCard: React.FC<{ role: Role; name: string; roomId: string }> = (props) => {
@@ -33,6 +32,7 @@ const LinkCard: React.FC<{ role: Role; name: string; roomId: string }> = (props)
 const RoomIndex = () => {
   const params = useParams()
   const [players, setPlayers] = useState<Array<Player>>([])
+  const [hostId, setHostId] = useState<string>('')
   const loading = useMemo(() => {
     return players.length === 0
   }, [players])
@@ -40,26 +40,14 @@ const RoomIndex = () => {
   useEffect(() => {
     if (!params.roomId) return
 
-    supabase
-      .from(TableName.PLAY)
-      .select<string, Player>(
-        `id,
-        agents,
-        boss,
-        engines,
-        name,
-        proposeBan,
-        rate,
-        role,
-        score,
-        selectBan,
-        time,
-        ...${TableName.MATCH}(matchType)`
-      )
-      .eq('matchId', params.roomId)
-      .then((response) => {
-        setPlayers(response.data!)
-      })
+    pipe(
+      params.roomId,
+      selectMatchHost,
+      (data) => setHostId(data.hostId),
+      () => params.roomId!,
+      selectMatchPlayer,
+      (list) => setPlayers(list)
+    )
   }, [params])
 
   return (
@@ -67,23 +55,16 @@ const RoomIndex = () => {
       {loading ? (
         <>Loading</>
       ) : (
-        <>
-          <div className="flex flex-col gap-4">
-            <LinkCard role={Role.HOST} name="관리자" roomId={players[0].matchId} />
-            {pipe(
-              players,
-              map((player) => (
-                <LinkCard
-                  role={player.role}
-                  name={player.name}
-                  roomId={player.id}
-                  key={player.id}
-                />
-              )),
-              toArray
-            )}
-          </div>
-        </>
+        <div className="flex flex-col gap-4">
+          <LinkCard role={Role.HOST} name="관리자" roomId={hostId} />
+          {pipe(
+            players,
+            map((player) => (
+              <LinkCard role={player.role} name={player.name} roomId={player.id} key={player.id} />
+            )),
+            toArray
+          )}
+        </div>
       )}
     </div>
   )

@@ -14,7 +14,19 @@ export async function selectHostMatch(hostId: string) {
   return data?.[0]
 }
 
-export async function selectMath(matchId: string) {
+export async function selectMatchHost(matchId: string) {
+  const { data } = await supabase
+    .from(TableName.MATCH)
+    .select<string, { hostId: string }>('hostId')
+    .eq('id', matchId)
+    .single()
+
+  if (data === null) throw Error('')
+
+  return data
+}
+
+export async function selectMatchPlayer(matchId: string) {
   const { data } = await supabase
     .from(TableName.PLAY)
     .select<string, Player>(
@@ -39,33 +51,7 @@ export async function selectMath(matchId: string) {
   return data
 }
 
-export async function selectMatchPlayer(id: string) {
-  const { data } = await supabase
-    .from(TableName.PLAY)
-    .select<string, Player>(
-      `id,
-      agent,
-      engine,
-      boss,
-      name,
-      proposeBan,
-      rate,
-      role,
-      score,
-      selectBan,
-      time,
-      matchId,
-      ...${TableName.MATCH}(matchType)`
-    )
-    .eq('id', id)
-    .single()
-
-  if (data === null) throw Error('')
-
-  return data
-}
-
-export async function selectMatchId(playerId: string) {
+export async function selectMatchPlayerId(playerId: string) {
   const { data } = await supabase
     .from(TableName.PLAY)
     .select<string, Player>(
@@ -80,13 +66,13 @@ export async function selectMatchId(playerId: string) {
   return data
 }
 
-export async function updateCommonBoss(player: Player, id: string) {
+export async function updateCommonBoss(matchId: string, id: string) {
   await supabase
     .from(TableName.PLAY)
     .update({
       boss: [null, id],
     })
-    .eq('id', player.id)
+    .eq('matchId', matchId)
 
   return ''
 }

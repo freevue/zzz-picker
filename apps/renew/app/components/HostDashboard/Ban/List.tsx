@@ -9,19 +9,19 @@ const List: React.FC<Props> = ({ list }) => {
   const store = useStore()
 
   return (
-    <ul className="flex gap-4">
+    <ul className="flex gap-2">
       {pipe(
         list,
         map((agentId) => store.agents.get(agentId || 0)),
         zipWithIndex,
         map(([index, agent]) => (
           <li key={index}>
-            <div className="rounded-2xl card p-2">
+            <div className="rounded-2xl card p-2 w-20 aspect-square">
               {isUndefined(agent) ? (
                 <></>
               ) : (
                 <img
-                  className="block w-40 aspect-square rounded-xl"
+                  className="block w-full rounded-xl"
                   style={{ backgroundColor: agent.color || 'transparent' }}
                   src={agent?.profile}
                 />

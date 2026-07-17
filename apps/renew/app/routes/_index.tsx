@@ -1,70 +1,44 @@
-import { map, pipe, toArray, toAsync } from '@fxts/core'
-import { useNavigate } from '@remix-run/react'
-import { supabase } from '@zzz-picker/supabase'
-import { Role } from '~/constant'
-import { TableName } from '~/lib/DB/constant'
+import { CreateRoom } from '@/components'
+import { useState } from 'react'
 
 export default function Index() {
-  const navigate = useNavigate()
+  const [active, setActive] = useState(false)
   const onClick = async () => {
-    const { id: matchId } = await pipe(
-      supabase.from(TableName.MATCH),
-      async (builder) => await builder.insert({}).select().single(),
-      ({ data }) => data
-    )
-
-    await pipe(
-      [Role.A_SIDE, Role.B_SIDE],
-      toAsync,
-      map((role) =>
-        supabase
-          .from(TableName.PLAY)
-          .insert({
-            matchId,
-            role,
-            name: 'Hello',
-            agents: [null, null, null],
-            engines: [null, null, null],
-            boss: [null, null],
-            proposeBan: [null, null],
-            selectBan: [null],
-          })
-          .select()
-          .single()
-      ),
-      map(({ data }) => data),
-      toArray
-    )
-
-    navigate(`/${matchId}`)
+    setActive((prev) => !prev)
   }
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-10 p-6">
-      <div className="flex gap-20">
-        <button
-          onClick={onClick}
-          className="w-60 card p-3 rounded-3xl cursor-pointer"
-          type="button"
-        >
-          <img
+    <>
+      <div className="flex h-full w-full flex-col items-center justify-center gap-10 p-6">
+        <div className="flex gap-20">
+          <button
+            onClick={onClick}
+            className="w-60 card p-3 rounded-3xl cursor-pointer text-2xl ft-ria"
+            type="button"
+          >
+            <img
+              className="block w-full rounded-2xl mb-4"
+              src="https://images.zzz.freevue.dev/images/logo/ef9ec605-5fe4-4728-901b-af4f8790958b.webp"
+              alt="강습전"
+            />
+            <span>강습전</span>
+          </button>
+          <button
+            onClick={onClick}
+            disabled
+            className="w-60 card p-3 rounded-3xl cursor-not-allowed text-4xl ft-ria"
+            type="button"
+          >
+            모의전투
+            {/* <img
             className="block w-full rounded-2xl"
             src="https://images.zzz.freevue.dev/images/logo/ef9ec605-5fe4-4728-901b-af4f8790958b.webp"
             alt="강습전"
-          />
-        </button>
-        <button
-          onClick={onClick}
-          className="w-60 card p-3 rounded-3xl cursor-pointer"
-          type="button"
-        >
-          <img
-            className="block w-full rounded-2xl"
-            src="https://images.zzz.freevue.dev/images/logo/ef9ec605-5fe4-4728-901b-af4f8790958b.webp"
-            alt="강습전"
-          />
-        </button>
+          /> */}
+          </button>
+        </div>
       </div>
-    </div>
+      {active && <CreateRoom acvite={active} />}
+    </>
   )
 }
