@@ -1,4 +1,5 @@
 import { Icon } from '..'
+import AllowAgent from './AllowAgent'
 import Ban from './Ban'
 import CommonBoss from './CommonBoss'
 import MatchType from './MatchType'
@@ -14,6 +15,7 @@ const HostDashboard: React.FC = () => {
       </div>
       <div className="flex-1 flex flex-col gap-4 py-4 max-w-sm min-w-sm overflow-auto scrollbar-hidden">
         <MatchType />
+        <AllowAgent />
         <CommonBoss />
         <Ban />
       </div>

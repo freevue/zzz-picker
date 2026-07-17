@@ -1,3 +1,4 @@
+import { updateBoss } from '@/lib/DB'
 import { concat, filter, includes, isString, join, map, pipe, toArray, uniq } from '@fxts/core'
 import { useMemo } from 'react'
 import { Dialog } from '~/components'
@@ -19,7 +20,7 @@ const BossDialog: React.FC<Props> = (props) => {
     return pipe(matchState.pick.boss, filter(isString), uniq, toArray)
   }, [matchState])
 
-  const onBossClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const onBossClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
     matchState.send(BroadcastEvent.BOSS_SELECT, {
@@ -27,6 +28,17 @@ const BossDialog: React.FC<Props> = (props) => {
       round: props.round,
       side: matchState.player!.role as PlayerRole,
     })
+
+    await pipe(
+      matchState.pick.boss,
+      (list) => {
+        list[props.round] = event.currentTarget.value
+
+        return list
+      },
+      (list) => updateBoss(matchState.player!.id, list)
+    )
+
     props.onClose()
   }
 

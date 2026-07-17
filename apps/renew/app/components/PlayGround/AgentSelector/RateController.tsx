@@ -35,7 +35,7 @@ const RateController: React.FC<Props> = (props) => {
       <button
         type="button"
         onClick={props.onSubmit}
-        className="h-12 ft-ria block text-lg z-20 rounded-full bg-primary text-accent w-full"
+        className="h-12 ft-ria cursor-pointer block text-lg z-20 rounded-full bg-primary text-accent w-full"
       >
         확인
       </button>

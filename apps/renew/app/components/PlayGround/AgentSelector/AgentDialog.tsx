@@ -2,6 +2,7 @@ import RarityTab from './RarityTab'
 import RateController from './RateController'
 import { Dialog } from '@/components'
 import { AgentButton } from '@/components'
+import { updateAgent } from '@/lib/DB'
 import {
   filter,
   includes,
@@ -99,8 +100,12 @@ const AgentSelector: React.FC<Props> = (props) => {
       }
     )
   }
-  const onSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const onSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
+
+    if (isNull(props.index)) return
+
+    await updateAgent(matchState.player!.id, matchState.pick.agent, matchState.pick.rate)
 
     props.onClose()
   }

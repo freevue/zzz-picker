@@ -66,6 +66,38 @@ export async function selectMatchPlayerId(playerId: string) {
   return data
 }
 
+export async function updateBoss(playerId: string, boss: [string | null, string | null]) {
+  await supabase.from(TableName.PLAY).update({ boss }).eq('id', playerId)
+
+  return ''
+}
+
+export async function updateAgent(
+  playerId: string,
+  agent: Record<number, [number | null, number | null, number | null]>,
+  rate: {
+    agents: Record<number, number>
+    engines: Record<string, number>
+  }
+) {
+  await supabase.from(TableName.PLAY).update({ agent, rate }).eq('id', playerId)
+
+  return ''
+}
+
+export async function updateEngine(
+  playerId: string,
+  engine: Record<number, [string | null, string | null, string | null]>,
+  rate: {
+    agents: Record<number, number>
+    engines: Record<string, number>
+  }
+) {
+  await supabase.from(TableName.PLAY).update({ engine, rate }).eq('id', playerId)
+
+  return ''
+}
+
 export async function updateCommonBoss(matchId: string, id: string) {
   await supabase
     .from(TableName.PLAY)

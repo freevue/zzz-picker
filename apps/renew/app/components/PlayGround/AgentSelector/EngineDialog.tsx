@@ -1,10 +1,8 @@
 import RarityTab from './RarityTab'
 import RateController from './RateController'
 import { Dialog } from '@/components'
-import { AgentButton } from '@/components'
 import {
   filter,
-  includes,
   map,
   pipe,
   sort,
@@ -21,6 +19,7 @@ import {
 import { useMemo, useState } from 'react'
 import { BroadcastEvent, Role } from '~/constant'
 import { useStore, useMatchState } from '~/hooks'
+import { updateEngine } from '~/lib/DB'
 
 type Props = {
   index: number | null
@@ -103,8 +102,10 @@ const EngineSelector: React.FC<Props> = (props) => {
       }
     )
   }
-  const onSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const onSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
+
+    await updateEngine(matchState.player!.id, matchState.pick.engine, matchState.pick.rate)
 
     props.onClose()
   }
