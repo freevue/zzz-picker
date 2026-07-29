@@ -8,7 +8,7 @@ type Props = {
 
 const RateController: React.FC<Props> = (props) => {
   return (
-    <div className="sticky bottom-44 left-0 right-0 max-w-lg mx-auto z-10">
+    <div className="fixed bottom-0 left-0 right-0 p-4 max-w-lg mx-auto z-10">
       {isNumber(props.rate) && (
         <div className="flex justify-between mb-4 bg-accent rounded-full">
           <button

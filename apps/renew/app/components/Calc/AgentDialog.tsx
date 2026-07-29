@@ -80,7 +80,7 @@ const AgentDialog: React.FC<Props> = (props) => {
             toArray
           )}
         </ul>
-        <ul className="grid grid-cols-3 gap-4 content-start mb-10">
+        <ul className="grid grid-cols-3 gap-4 content-start mb-44">
           {pipe(
             store.agents,
             filter(([, agent]) => {
