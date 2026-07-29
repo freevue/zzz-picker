@@ -117,7 +117,7 @@ const AgentList: React.FC<Props> = (props) => {
                 onClick={onAgentClick}
                 type="button"
                 value={index}
-                className="block w-full aspect-square bg-content rounded-2xl overflow-hidden"
+                className="block w-full aspect-square bg-content rounded-2xl overflow-hidden cursor-pointer"
               >
                 {isNull(agentId) ? (
                   <Icon.Plus className="scale-75" />
@@ -136,7 +136,7 @@ const AgentList: React.FC<Props> = (props) => {
                   type="button"
                   value={index}
                   onClick={onEngineClick}
-                  className="size-12 block absolute bg-content rounded-2xl -right-2 bottom-0 border border-solid border-accent"
+                  className="size-12 block absolute bg-content rounded-2xl -right-2 bottom-0 border border-solid border-accent cursor-pointer"
                 >
                   {isNull(engineId) ? (
                     <Icon.Plus className="scale-75" />

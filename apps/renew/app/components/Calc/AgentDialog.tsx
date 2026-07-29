@@ -68,7 +68,7 @@ const AgentDialog: React.FC<Props> = (props) => {
                   value={value}
                   type="button"
                   className={pipe(
-                    ['w-full h-full cursor-pointer', 'text-xl', 'ft-ria'],
+                    ['w-full h-full cursor-pointer', 'text-xl', 'ft-ria', 'cursor-pointer'],
                     concat(rarity === value ? ['bg-primary', 'text-content'] : []),
                     join(' ')
                   )}
@@ -80,7 +80,7 @@ const AgentDialog: React.FC<Props> = (props) => {
             toArray
           )}
         </ul>
-        <ul className="grid grid-cols-3 gap-4 content-start mb-44">
+        <ul className="grid grid-cols-3 gap-4 content-start mb-64">
           {pipe(
             store.agents,
             filter(([, agent]) => {
@@ -91,13 +91,18 @@ const AgentDialog: React.FC<Props> = (props) => {
             }),
             sort(([, prev], [, cur]) => prev.nameKo.localeCompare(cur.nameKo)),
             map(([id, agent]) => (
-              <li key={id}>
+              <li key={id} className="aspect-square">
                 <button
                   type="button"
                   value={id}
                   onClick={onAgentClick}
                   className={pipe(
-                    ['aspect-square rounded-2xl overflow-hidden', 'card', 'p-2'],
+                    [
+                      'aspect-square w-full rounded-2xl overflow-hidden',
+                      'card',
+                      'p-2',
+                      'cursor-pointer',
+                    ],
                     concat(id === select ? ['active'] : []),
                     join(' ')
                   )}

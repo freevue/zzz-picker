@@ -47,17 +47,22 @@ const EngineDialog: React.FC<Props> = (props) => {
   return (
     <Dialog active={!!props.active}>
       <div className="max-w-lg mx-auto p-4 w-full h-screen overflow-auto scrollbar-hidden">
-        <ul className="grid grid-cols-3 gap-4 content-start mb-10">
+        <ul className="grid grid-cols-3 gap-4 content-start mb-64">
           {pipe(
             store.engines,
             map(([id, engine]) => (
-              <li key={id}>
+              <li key={id} className="aspect-square">
                 <button
                   type="button"
                   value={id}
                   onClick={onEngineClick}
                   className={pipe(
-                    ['aspect-square rounded-2xl overflow-hidden', 'card', 'p-2'],
+                    [
+                      'aspect-square w-full rounded-2xl overflow-hidden',
+                      'card',
+                      'p-2',
+                      'cursor-pointer',
+                    ],
                     concat(id === select ? ['active'] : []),
                     join(' ')
                   )}

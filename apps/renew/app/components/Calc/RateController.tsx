@@ -1,3 +1,4 @@
+import { Icon } from '@/components'
 import { isNumber } from '@fxts/core'
 
 type Props = {
@@ -15,27 +16,27 @@ const RateController: React.FC<Props> = (props) => {
             type="button"
             value="-1"
             onClick={props.onChange}
-            className="cursor-pointer size-18 bg-primary text-6xl rounded-full"
+            className="cursor-pointer size-14 bg-primary text-6xl rounded-full text-content"
           >
             -
           </button>
-          <p className="text-5xl ft-ria flex items-center justify-center px-4 text-primary">
+          <p className="text-4xl ft-ria flex items-center justify-center px-4 text-primary">
             {props.rate}
           </p>
           <button
             type="button"
             value="1"
             onClick={props.onChange}
-            className="cursor-pointer size-18 bg-primary text-6xl rounded-full"
+            className="cursor-pointer size-14 bg-primary text-6xl rounded-full text-content"
           >
-            +
+            <Icon.Plus className="scale-75" />
           </button>
         </div>
       )}
       <button
         type="button"
         onClick={props.onSubmit}
-        className="h-18 ft-ria cursor-pointer block text-3xl z-20 rounded-full bg-primary text-accent w-full ft-pre font-black"
+        className="h-14 ft-ria cursor-pointer block text-3xl z-20 rounded-full bg-primary text-accent w-full ft-pre font-black"
       >
         확인
       </button>
