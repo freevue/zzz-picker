@@ -7,10 +7,10 @@ type Props = {
 const CommonBoss: React.FC<Props> = (props) => {
   return (
     <>
-      <div className="card disabled:cursor-default focus:outline-0 active:outline-0 rounded-2xl size-48 overflow-hidden p-2 block">
-        <div className="w-full h-full overflow-hidden rounded-xl">
+      <div className="card disabled:cursor-default rounded-2xl size-48 overflow-hidden block">
+        <div className="w-full h-full">
           <img
-            className="block w-full aspect-144/199 bg-ink"
+            className="block w-full aspect-144/199 bg-accent-foreground"
             src={props.boss.src}
             alt={props.boss.nameKo}
           />

@@ -16,12 +16,12 @@ const List: React.FC<Props> = ({ list }) => {
         zipWithIndex,
         map(([index, agent]) => (
           <li key={index}>
-            <div className="rounded-2xl card p-2 w-20 aspect-square">
+            <div className="rounded-2xl bg-accent w-20 aspect-square overflow-hidden">
               {isUndefined(agent) ? (
                 <></>
               ) : (
                 <img
-                  className="block w-full rounded-xl"
+                  className="block w-full"
                   style={{ backgroundColor: agent.color || 'transparent' }}
                   src={agent?.profile}
                 />

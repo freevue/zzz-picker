@@ -12,8 +12,8 @@ const Play: React.FC<Props> = () => {
 
   return (
     <>
-      <h1 className="text-7xl font-bold text-primary ft-ria fixed left-4 top-4 z-1">
-        {matchState.player?.name} {matchState.player?.role}
+      <h1 className="text-4xl font-bold text-primary ft-ria fixed left-4 top-4 z-1">
+        {matchState.player?.name}
       </h1>
 
       {matchState.phase === Phase.COMMON_BOSS_SELECT && <Boss />}

@@ -20,6 +20,9 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(__dirname, './app'),
       },
     },
+    server: {
+      host: true,
+    },
     define: {
       __VERSION__: JSON.stringify(pkg.version),
       'process.env.ROLE_TOKEN_SECRET': JSON.stringify(

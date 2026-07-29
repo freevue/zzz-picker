@@ -20,6 +20,24 @@ const Dialog: React.FC<Props> = (props) => {
   useEffect(() => {
     if (props.active) setOpen(true)
   }, [props.active])
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setOpen(false)
+        props.onClose?.()
+      }
+    }
+
+    if (open) {
+      document.addEventListener('keydown', onKeyDown)
+    } else {
+      document.removeEventListener('keydown', onKeyDown)
+    }
+
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [open, props.onClose])
 
   return createPortal(
     open || props.active ? (

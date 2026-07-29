@@ -26,7 +26,6 @@ const RarityTab: React.FC<Props> = (props) => {
           'rounded-full',
           'ft-ria',
           'overflow-hidden',
-          'card',
           'h-12',
           'text-lg',
           'z-10',
@@ -38,13 +37,12 @@ const RarityTab: React.FC<Props> = (props) => {
       {pipe(
         props.list,
         map((rarity) => (
-          <li className="flex-1" key={rarity.value}>
+          <li className="flex-1 bg-accent" key={rarity.value}>
             <button
               onClick={onClick}
               value={rarity.value}
               className={pipe(
                 ['w-full', 'h-full', 'cursor-pointer'],
-                concat(['active:outline-0', 'focus:outline-0']),
                 concat(props.acitve === rarity.value ? ['bg-primary', 'text-accent'] : []),
                 join(' ')
               )}

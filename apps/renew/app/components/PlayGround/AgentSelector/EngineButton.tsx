@@ -1,4 +1,5 @@
-import { pipe, join, isUndefined } from '@fxts/core'
+import { pipe, join, isUndefined, concat } from '@fxts/core'
+import { Icon } from '~/components'
 import type { Engine } from '~/type'
 
 type Props = {
@@ -16,22 +17,26 @@ const EngineButton: React.FC<Props> = (props) => {
       className={pipe(
         [
           'absolute',
-          '-right-4',
-          '-bottom-4',
-          'size-10',
-          'card',
+          '-right-2',
+          'bottom-0',
+          'size-14',
           'flex',
           'items-center',
           'justify-center',
           'text-5xl',
-          'rounded-lg',
           'cursor-pointer',
           'overflow-hidden',
+          'rounded-full',
         ],
+        concat(isUndefined(props.engine) ? ['bg-accent'] : ['backdrop-blur-2xl']),
         join(' ')
       )}
     >
-      {isUndefined(props.engine) ? '+' : <img className="block w-full" src={props.engine.icon} />}
+      {isUndefined(props.engine) ? (
+        <Icon.Plus className="scale-75" />
+      ) : (
+        <img className="block w-full" src={props.engine.icon} />
+      )}
     </button>
   )
 }

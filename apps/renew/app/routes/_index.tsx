@@ -13,7 +13,7 @@ export default function Index() {
         <div className="flex gap-20">
           <button
             onClick={onClick}
-            className="w-60 card p-3 rounded-3xl cursor-pointer text-2xl ft-ria"
+            className="w-60 card p-3 rounded-3xl cursor-pointer text-3xl ft-ria"
             type="button"
           >
             <img
@@ -38,7 +38,7 @@ export default function Index() {
           </button>
         </div>
       </div>
-      {active && <CreateRoom acvite={active} />}
+      {active && <CreateRoom acvite={active} onClose={() => setActive(false)} />}
     </>
   )
 }

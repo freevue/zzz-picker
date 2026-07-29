@@ -111,6 +111,8 @@ export async function updateCommonBoss(matchId: string, id: string) {
 
 export function updateProposeBan(player: Player) {
   return async (proposeBan: Array<number>) => {
+    console.log({ proposeBan })
+
     await supabase.from(TableName.PLAY).update({ proposeBan }).eq('id', player.id)
   }
 }

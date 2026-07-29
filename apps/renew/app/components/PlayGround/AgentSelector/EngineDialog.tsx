@@ -20,6 +20,7 @@ import { useMemo, useState } from 'react'
 import { BroadcastEvent, Role } from '~/constant'
 import { useStore, useMatchState } from '~/hooks'
 import { updateEngine } from '~/lib/DB'
+import { PlayerRole } from '~/type'
 
 type Props = {
   index: number | null
@@ -72,8 +73,13 @@ const EngineSelector: React.FC<Props> = (props) => {
 
     if (isNull(props.index)) return
 
+    matchState.send(BroadcastEvent.ENGINE_RATE, {
+      role: matchState.player!.role as PlayerRole,
+      rate: 1,
+      engineId: event.currentTarget.value,
+    })
     matchState.send(BroadcastEvent.ENGINE_PICK, {
-      role: matchState.player!.role as Role.A_SIDE | Role.B_SIDE,
+      role: matchState.player!.role as PlayerRole,
       round: props.round,
       index: props.index,
       engineId: event.currentTarget.value,
@@ -87,7 +93,7 @@ const EngineSelector: React.FC<Props> = (props) => {
     pipe(
       Number(event.currentTarget.value),
       (rate) => rate + selectAgentRate,
-      (rate) => [rate, 0],
+      (rate) => [rate, 1],
       max,
       (rate) => [rate, AGENT_MAX_RATE],
       min,
@@ -95,7 +101,7 @@ const EngineSelector: React.FC<Props> = (props) => {
         if (isNull(selectEngineId)) return
 
         matchState.send(BroadcastEvent.ENGINE_RATE, {
-          role: matchState.player!.role as Role.A_SIDE | Role.B_SIDE,
+          role: matchState.player!.role as PlayerRole,
           rate,
           engineId: selectEngineId,
         })
@@ -136,7 +142,7 @@ const EngineSelector: React.FC<Props> = (props) => {
               value={engine.id}
             >
               <img
-                className="block w-full bg-accent rounded-xl"
+                className="block w-full bg-accent rounded-xl relative z-1"
                 src={engine.banner}
                 alt={engine.nameKo}
               />

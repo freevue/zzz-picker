@@ -15,21 +15,18 @@ const CommonBoss: React.FC = () => {
   return (
     <div className="card p-4 rounded-3xl">
       <CardTitle>Match</CardTitle>
-      <ul className="flex flex-col gap-4">
+      <ul className="flex rounded-full overflow-hidden h-12">
         {pipe(
           MATCH_LIST,
           map(({ value, label }) => (
-            <li key={value}>
+            <li key={value} className="bg-accent flex-1">
               <button
                 type="button"
                 value={value}
                 disabled={matchState.state.matchType === value}
                 className={pipe(
-                  ['rounded-full', 'block', 'w-full', 'h-12', 'ft-ria', 'text-lg'],
-                  concat(['focus:outline-0', 'active:outline-0']),
-                  concat(
-                    matchState.state.matchType === value ? ['bg-primary', 'text-accent'] : ['card']
-                  ),
+                  ['block', 'w-full', 'h-full', 'font-bold', 'ft-pre', 'text-xl'],
+                  concat(matchState.state.matchType === value ? ['bg-primary', 'text-accent'] : []),
                   join(' ')
                 )}
               >

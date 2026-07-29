@@ -25,7 +25,6 @@ const AgentButton: React.FC<Props> = (props) => {
           'relative',
           props.className || '',
         ],
-        concat(['active:outline-0', 'focus:outline-0']),
         concat(['disabled:grayscale-100', 'disabled:cursor-not-allowed']),
         concat(props.active ? ['active'] : []),
         join(' ')
@@ -34,7 +33,7 @@ const AgentButton: React.FC<Props> = (props) => {
       onClick={props.onClick}
     >
       <img
-        className="block w-full rounded-xl"
+        className="block w-full rounded-xl relative z-1"
         style={{ backgroundColor: props.color || 'transparent' }}
         src={props.profile}
         alt={props.nameKo}

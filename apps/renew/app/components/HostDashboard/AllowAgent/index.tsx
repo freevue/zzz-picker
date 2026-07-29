@@ -1,19 +1,19 @@
 import CardTitle from '../CardTitle'
-import { pipe, join, concat, map, filter } from '@fxts/core'
+import { pipe, join, concat, map, filter, toArray } from '@fxts/core'
 import { useStore } from '~/hooks'
 
 const AllowAgent: React.FC = () => {
   const store = useStore()
 
   return (
-    <div className="card p-4 rounded-3xl">
+    <div className="">
       <CardTitle>Allow</CardTitle>
       <ul className="flex gap-2">
         {pipe(
           store.agents,
           filter(([, agent]) => agent.isAllow),
-          map(([, agent]) => (
-            <li>
+          map(([id, agent]) => (
+            <li key={id}>
               <div className="size-22 rounded-2xl overflow-hidden">
                 <img
                   className="block w-full"
@@ -23,7 +23,8 @@ const AllowAgent: React.FC = () => {
                 />
               </div>
             </li>
-          ))
+          )),
+          toArray
         )}
       </ul>
     </div>

@@ -7,4 +7,6 @@ export enum TableName {
   MATCH = 'match',
   AGENT = 'agent',
   ENGINE = 'engine',
+  AGENT_COST = 'agentCost',
+  ENGINE_COST = 'engineCost',
 }

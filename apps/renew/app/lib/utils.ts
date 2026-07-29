@@ -1,4 +1,19 @@
-import { concat, filter, includes, isNull, pipe, size } from '@fxts/core'
+import type { Agent, Engine } from '@/type'
+import {
+  entries,
+  filter,
+  find,
+  flat,
+  groupBy,
+  includes,
+  isArray,
+  isObject,
+  map,
+  pipe,
+  sort,
+  sum,
+  toArray,
+} from '@fxts/core'
 import { DEALER, Position, Role, Specialty } from '~/constant'
 
 type OpponentMap = {
@@ -30,4 +45,48 @@ export function getPosition(specialty: (typeof Specialty)[keyof typeof Specialty
   if (includes(specialty, DEALER)) return Position.DEALER
 
   return Position.SUPPORT
+}
+
+export function agentCost(rate: Record<number, number>) {
+  return (agents: Agent[]) => {
+    const costMap = pipe(
+      agents,
+      map((agent) => agent.cost),
+      map(sort((prev, cur) => prev.rate - cur.rate)),
+      flat,
+      groupBy((cost) => cost.agentId)
+    )
+
+    return pipe(
+      rate,
+      entries,
+      filter(([agentId]) => isArray(costMap[agentId])),
+      map(([agentId, value]) => find(({ rate }) => rate === value, costMap[agentId])),
+      filter(isObject),
+      map(({ cost }) => cost),
+      sum
+    )
+  }
+}
+
+export function engineCost(rate: Record<string, number>) {
+  return (engines: Engine[]) => {
+    const costMap = pipe(
+      engines,
+      map((engine) => engine.cost),
+      map(sort((prev, cur) => prev.rate - cur.rate)),
+      flat,
+      groupBy((cost) => cost.engineId)
+    )
+
+    return pipe(
+      rate,
+      entries,
+      filter(([engineId]) => isArray(costMap[engineId])),
+      map(([engineId, value]) => find(({ rate }) => rate === value, costMap[engineId])!),
+      filter(isObject),
+      map(({ cost }) => cost),
+      sum
+    )
+  }
 }

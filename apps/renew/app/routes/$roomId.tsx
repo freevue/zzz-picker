@@ -6,22 +6,29 @@ import { selectMatchPlayer, selectMatchHost } from '~/lib/DB'
 import { type Player } from '~/type'
 
 const LinkCard: React.FC<{ role: Role; name: string; roomId: string }> = (props) => {
+  const onCopyClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+
+    await navigator.clipboard.writeText(`${window.location.origin}/room/${props.roomId}`)
+  }
+
   return (
-    <div className="card flex gap-4 items-center px-8 py-6 rounded-3xl relative overflow-hidden">
-      <span className="absolute -left-2 -top-4 text-primary/70 font-black text-7xl -skew-x-12">
+    <div className="card flex gap-4 items-center px-8 py-6 rounded-3xl relative overflow-hidden w-full">
+      <span className="absolute -left-3 -top-5 text-primary/70 font-black text-7xl -skew-x-12 ft-ria">
         {props.role}
       </span>
-      <p className="text-4xl w-52 font-black truncate">{props.name}</p>
-      <div className="flex flex-col gap-4">
+      <p className="text-4xl font-black truncate ft-pre flex-1">{props.name}</p>
+      <div className="flex flex-col gap-4 ml-auto">
         <Link
-          className="w-56 py-2 text-lg font-bold text-center bg-primary rounded-full text-base"
+          className="w-56 py-2 text-xl font-bold text-center bg-primary rounded-full text-base ft-pre"
           to={`/room/${props.roomId}`}
         >
           접속
         </Link>
         <button
           type="button"
-          className="w-56 py-2 text-lg font-bold text-center bg-secondary rounded-full text-base"
+          className="w-56 py-2 text-xl ft-pre font-bold text-center bg-secondary rounded-full text-base"
+          onClick={onCopyClick}
         >
           복사
         </button>
@@ -55,7 +62,7 @@ const RoomIndex = () => {
       {loading ? (
         <>Loading</>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 w-screen max-w-xl">
           <LinkCard role={Role.HOST} name="관리자" roomId={hostId} />
           {pipe(
             players,

@@ -1,3 +1,9 @@
+export type EngineCost = {
+  engineId: string
+  rate: number
+  cost: number
+}
+
 export type Engine = {
   id: string
   rank: 'B' | 'A' | 'S'
@@ -10,4 +16,5 @@ export type Engine = {
   isTeaser: boolean
   banner: string
   icon: string
+  cost: Array<EngineCost>
 }

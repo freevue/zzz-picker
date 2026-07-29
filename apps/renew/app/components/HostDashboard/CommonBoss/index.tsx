@@ -1,7 +1,7 @@
 import CardTitle from '../CardTitle'
-import Pulse from '../Pulse'
 import { isNull, isUndefined, pipe, when } from '@fxts/core'
 import { useMemo } from 'react'
+import { Icon } from '~/components'
 import { Phase, Role } from '~/constant'
 import { useMatchState, useStore } from '~/hooks'
 
@@ -17,15 +17,18 @@ const CommonBoss: React.FC = () => {
   }, [matchState])
 
   return (
-    <div className="card p-4 rounded-3xl relative">
-      {matchState.phase === Phase.COMMON_BOSS_SELECT && <Pulse />}
-      <CardTitle>Boss</CardTitle>
-      <button className="size-44 card p-2 rounded-2xl text-8xl">
+    <div className="">
+      <CardTitle active={matchState.phase === Phase.COMMON_BOSS_SELECT}>Boss</CardTitle>
+      <button className="size-44 bg-accent rounded-2xl overflow-hidden relative">
         {isUndefined(bossData) ? (
-          '+'
+          <Icon.Plus className="size-32 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
         ) : (
-          <div className="rounded-xl overflow-hidden w-full h-full">
-            <img className="block w-full bg-ink" src={bossData.src} alt={bossData.nameKo} />
+          <div className="w-full h-full">
+            <img
+              className="block w-full bg-accent-foreground"
+              src={bossData.src}
+              alt={bossData.nameKo}
+            />
           </div>
         )}
       </button>

@@ -7,6 +7,7 @@ import { TableName } from '~/lib/DB/constant'
 
 type Props = {
   acvite: boolean
+  onClose: () => void
 }
 
 const MATCH = [
@@ -62,16 +63,24 @@ const CreateRoom: React.FC<Props> = (props) => {
   }
 
   return (
-    <Dialog active={props.acvite} className="flex items-center justify-center">
-      <form className="card rounded-2xl p-4 flex flex-col gap-4" onSubmit={onSubmit}>
-        <ul className="flex rounded-full overflow-hidden h-10">
+    <Dialog
+      active={props.acvite}
+      className="flex items-center justify-center"
+      onClose={props.onClose}
+    >
+      <form
+        className="card rounded-2xl p-8 flex flex-col gap-4 w-screen max-w-xl"
+        onSubmit={onSubmit}
+      >
+        <ul className="flex rounded-full overflow-hidden h-12 w-full mb-4">
           {pipe(
             MATCH,
             map(({ value, label }) => (
-              <li key={value}>
+              <li className="flex-1" key={value}>
                 <label
                   className={pipe(
                     [
+                      'bg-accent',
                       'flex',
                       'items-center',
                       'justify-center',
@@ -80,14 +89,13 @@ const CreateRoom: React.FC<Props> = (props) => {
                       'px-4',
                       'cursor-pointer',
                       'h-full',
-                      'card',
                     ],
                     concat(['active:outline-0', 'focus:outline-0']),
                     concat(['has-checked:bg-primary!', 'has-checked:text-accent!']),
                     join(' ')
                   )}
                 >
-                  <p>{label}</p>
+                  <p className="ft-pre font-bold text-2xl">{label}</p>
                   <input
                     className="appearance-none"
                     defaultChecked={MatchType.ORIGINAL === value}
@@ -101,37 +109,42 @@ const CreateRoom: React.FC<Props> = (props) => {
             toArray
           )}
         </ul>
-        <div className="bg-accent/80 h-12 rounded-xl">
+        <div className="bg-accent/80 h-14 rounded-xl">
           <input
             type="text"
             className={pipe(
-              ['h-10', 'text-xl', 'ft-ria', 'px-4', 'block', 'w-full', 'h-full'],
+              ['h-full', 'text-2xl', 'ft-pre', 'font-black', 'px-4', 'block', 'w-full', 'h-full'],
               concat(['active:outline-0', 'focus:outline-0']),
               join(' ')
             )}
             name={Role.A_SIDE}
             placeholder="A 참가자 이름"
+            autoComplete="off"
+            required
           />
         </div>
-        <div className="bg-accent/80 h-12 rounded-xl">
+        <div className="bg-accent h-14 rounded-xl">
           <input
             type="text"
             name={Role.B_SIDE}
             className={pipe(
-              ['h-10', 'text-xl', 'ft-ria', 'px-4', 'block', 'w-full', 'h-full'],
+              ['h-full', 'text-2xl', 'ft-pre', 'font-black', 'px-4', 'block', 'w-full', 'h-full'],
               concat(['active:outline-0', 'focus:outline-0']),
               join(' ')
             )}
             placeholder="B 참가자 이름"
+            autoComplete="off"
+            required
           />
         </div>
         <button
           type="submit"
           className={pipe(
             [
-              'h-10',
-              'text-xl',
-              'ft-ria',
+              'h-14',
+              'ft-pre',
+              'font-black',
+              'text-2xl',
               'px-4',
               'cursor-pointer',
               'bg-primary',
@@ -139,7 +152,6 @@ const CreateRoom: React.FC<Props> = (props) => {
               'rounded-full',
               'mt-6',
             ],
-            concat(['active:outline-0', 'focus:outline-0']),
             join(' ')
           )}
         >

@@ -1,19 +1,7 @@
 import CardTitle from '../CardTitle'
-import Pulse from '../Pulse'
 import List from './List'
 import { Icon } from '@/components'
-import {
-  filter,
-  isNumber,
-  map,
-  pipe,
-  toArray,
-  transpose,
-  flatMap,
-  head,
-  includes,
-  last,
-} from '@fxts/core'
+import { map, pipe, toArray, transpose, includes, last } from '@fxts/core'
 import { useMemo } from 'react'
 import { Phase, Role } from '~/constant'
 import { useMatchState } from '~/hooks'
@@ -72,17 +60,18 @@ const Ban: React.FC = () => {
   }, [matchState])
 
   return (
-    <div className="card p-4 rounded-3xl">
-      {(matchState.phase === Phase.BAN || matchState.phase === Phase.BAN_FIX) && <Pulse />}
-      <CardTitle>Ban</CardTitle>
+    <div className="">
+      <CardTitle active={matchState.phase === Phase.BAN || matchState.phase === Phase.BAN_FIX}>
+        Ban
+      </CardTitle>
       <div className="flex justify-between">
         <List list={selectAsideBan} />
-        <Icon.Arrow className="rotate-180 block w-20" />
+        <Icon.Arrow className="rotate-180 block w-20 scale-75" />
         <List list={selectBsideBanFix} />
       </div>
       <div className="flex mt-4 justify-between">
         <List list={selectBsideBan} />
-        <Icon.Arrow className="rotate-180 block w-20" />
+        <Icon.Arrow className="rotate-180 block w-20 scale-75" />
         <List list={selectAsideBanFix} />
       </div>
     </div>

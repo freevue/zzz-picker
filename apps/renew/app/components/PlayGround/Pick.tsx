@@ -1,5 +1,6 @@
 import AgentSelector from './AgentSelector'
 import BossSelector from './BossSelector'
+import Cost from './Cost'
 import RoundTab from './RoundTab'
 import { useState } from 'react'
 
@@ -11,6 +12,7 @@ const Pick: React.FC = () => {
       <RoundTab list={[0, 1]} onChange={setRound} acitve={round} />
       <BossSelector round={round} />
       <AgentSelector round={round} />
+      <Cost />
     </div>
   )
 }

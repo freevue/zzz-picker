@@ -1,4 +1,5 @@
 import { pipe, join, isUndefined } from '@fxts/core'
+import { Icon } from '~/components'
 import { Agent } from '~/type'
 
 type Props = {
@@ -14,7 +15,7 @@ const AgentButton: React.FC<Props> = (props) => {
       onClick={props.onClick}
       className={pipe(
         [
-          'card',
+          'bg-accent',
           'block',
           'w-full',
           'aspect-square',
@@ -28,7 +29,7 @@ const AgentButton: React.FC<Props> = (props) => {
       value={props.value}
     >
       {isUndefined(props.agent) ? (
-        '+'
+        <Icon.Plus className="scale-75" />
       ) : (
         <img
           style={{ backgroundColor: props.agent.color || 'transparent' }}

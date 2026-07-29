@@ -2,10 +2,11 @@ import AgentButton from './AgentButton'
 import AgentDialog from './AgentDialog'
 import EngineButton from './EngineButton'
 import EngineDialog from './EngineDialog'
-import { concat, filter, isNumber, map, pipe, toArray, zipWithIndex } from '@fxts/core'
+import { concat, filter, isNumber, isString, map, pipe, toArray, zipWithIndex } from '@fxts/core'
 import { useMemo, useState } from 'react'
 import { Role } from '~/constant'
 import { useMatchState, useStore } from '~/hooks'
+import { PlayerRole } from '~/type'
 
 type Props = {
   round: number
@@ -26,6 +27,9 @@ const AgentSelector: React.FC<Props> = (props) => {
       toArray
     )
   }, [matchState, props.round])
+  const rateData = useMemo(() => {
+    return matchState.state.rate[matchState.player!.role as PlayerRole]
+  }, [matchState])
 
   const onDialogClose = () => {
     setSelectAgentIndex(null)
@@ -61,6 +65,11 @@ const AgentSelector: React.FC<Props> = (props) => {
                     value={index}
                     engine={store.engines.get(engineId || '')}
                   />
+                )}
+                {agentId && (
+                  <p className="ft-ria text-lg">
+                    {rateData.agents[agentId]}/{isString(engineId) ? rateData.engines[engineId] : 0}
+                  </p>
                 )}
               </li>
             )),

@@ -1,6 +1,6 @@
 import { BroadcastEvent, Phase, Role } from '@/constant'
 import { useMatchState, useStore } from '@/hooks'
-import { concat, join, map, pipe, toArray, isEmpty, isString, not } from '@fxts/core'
+import { concat, join, map, pipe, toArray, isString, not } from '@fxts/core'
 
 const Boss: React.FC = () => {
   const store = useStore()
@@ -35,21 +35,11 @@ const Boss: React.FC = () => {
                   onClick={onBossClick}
                   disabled={mathState.player!.role !== Role.B_SIDE}
                   className={pipe(
-                    [
-                      'block',
-                      'w-40 card p-2 rounded-2xl overflow-hidden',
-                      'active:outline-0',
-                      'focus:outline-0',
-                    ],
+                    ['block', 'aspect-144/199', 'w-40', 'card', 'p-2 rounded-2xl'],
                     concat(['disabled:grayscale-100', 'disabled:cursor-not-allowed']),
                     concat(
                       mathState.select[Phase.COMMON_BOSS_SELECT] === id
-                        ? [
-                            'active',
-                            'before:h-full',
-                            'before:aspect-square',
-                            'disabled:grayscale-0!',
-                          ]
+                        ? ['active', 'disabled:grayscale-0!']
                         : []
                     ),
                     join(' ')
@@ -58,7 +48,7 @@ const Boss: React.FC = () => {
                 >
                   <img
                     src={boss.src}
-                    className="block w-full rounded-xl aspect-144/199 bg-ink"
+                    className="block w-full h-full rounded-xl bg-accent-foreground"
                     alt={boss.nameKo}
                   />
                 </button>

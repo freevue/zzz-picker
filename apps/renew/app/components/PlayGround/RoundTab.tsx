@@ -14,7 +14,7 @@ const RoundTab: React.FC<Props> = (props) => {
   }
 
   return (
-    <ul className="flex max-w-lg mx-auto rounded-full ft-ria overflow-hidden card h-12 text-lg">
+    <ul className="flex max-w-lg mx-auto rounded-full ft-ria overflow-hidden bg-accent h-12 text-lg">
       {pipe(
         props.list,
         map((round) => (
@@ -22,7 +22,6 @@ const RoundTab: React.FC<Props> = (props) => {
             <button
               className={pipe(
                 ['w-full', 'h-full', 'cursor-pointer'],
-                concat(['active:outline-0', 'focus:outline-0']),
                 concat(props.acitve === round ? ['bg-primary', 'text-accent'] : []),
                 join(' ')
               )}

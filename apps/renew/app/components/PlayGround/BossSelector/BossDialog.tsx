@@ -56,13 +56,12 @@ const BossDialog: React.FC<Props> = (props) => {
                 className={pipe(
                   ['card', 'rounded-2xl', 'p-2', 'cursor-pointer', 'overflow-hidden'],
                   concat(id === props.bossId ? ['active'] : []),
-                  concat(['active:outline-0', 'focus:outline-0']),
                   concat(['disabled:grayscale-100', 'disabled:cursor-not-allowed']),
                   join(' ')
                 )}
                 disabled={id !== props.bossId && includes(id, selectBoss)}
               >
-                <img className="bg-ink block w-full rounded-xl" src={boss.src} />
+                <img className="bg-ink block w-full rounded-xl relative z-1" src={boss.src} />
               </button>
             </li>
           )),

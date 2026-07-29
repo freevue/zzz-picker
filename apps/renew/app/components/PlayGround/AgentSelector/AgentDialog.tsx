@@ -72,6 +72,11 @@ const AgentSelector: React.FC<Props> = (props) => {
 
     if (isNull(props.index)) return
 
+    matchState.send(BroadcastEvent.AGENT_RATE, {
+      role: matchState.player!.role as Role.A_SIDE | Role.B_SIDE,
+      rate: 0,
+      agentId: Number(event.currentTarget.value),
+    })
     matchState.send(BroadcastEvent.AGENT_PICK, {
       role: matchState.player!.role as Role.A_SIDE | Role.B_SIDE,
       round: props.round,

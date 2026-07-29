@@ -1,7 +1,8 @@
 import BossDialog from './BossDialog'
 import CommonBoss from './CommonBoss'
-import { isNull, pipe, find, not, isUndefined } from '@fxts/core'
+import { pipe, isUndefined } from '@fxts/core'
 import { useMemo, useState } from 'react'
+import { Icon } from '~/components'
 import { MatchType } from '~/constant'
 import { useStore, useMatchState } from '~/hooks'
 import type { PlayerRole } from '~/type'
@@ -43,14 +44,14 @@ const BossSelector: React.FC<Props> = (props) => {
         {isUndefined(commonBossData) ? (
           <button
             onClick={onEmptyBossClick}
-            className="cursor-pointer focus:outline-0 active:outline-0 text-8xl card size-48 flex items-center justify-center rounded-2xl overflow-hidden p-2"
+            className="cursor-pointer text-8xl card size-48 flex items-center justify-center rounded-2xl overflow-hidden"
           >
             {isUndefined(bossData) ? (
-              '+'
+              <Icon.Plus className="scale-75" />
             ) : (
-              <div className="w-full h-full overflow-hidden rounded-xl">
+              <div className="w-full h-full">
                 <img
-                  className="block w-full aspect-144/199 bg-ink"
+                  className="block w-full aspect-144/199 bg-accent-foreground"
                   src={bossData.src}
                   alt={bossData.nameKo}
                 />

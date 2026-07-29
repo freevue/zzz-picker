@@ -1,77 +1,8 @@
+@import url('https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.1/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css');
+
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-@font-face {
-  font-family: 'Presentation';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-1Thin.woff2')
-    format('woff2');
-  font-weight: 100;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Presentation';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-2ExtraLight.woff2')
-    format('woff2');
-  font-weight: 200;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Presentation';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-3Light.woff2')
-    format('woff2');
-  font-weight: 300;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Presentation';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-4Regular.woff2')
-    format('woff2');
-  font-weight: 400;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Presentation';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-5Medium.woff2')
-    format('woff2');
-  font-weight: 500;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Presentation';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-6SemiBold.woff2')
-    format('woff2');
-  font-weight: 600;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Presentation';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-7Bold.woff2')
-    format('woff2');
-  font-weight: 700;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Presentation';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-8ExtraBold.woff2')
-    format('woff2');
-  font-weight: 800;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Presentation';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2404@1.0/Freesentation-9Black.woff2')
-    format('woff2');
-  font-weight: 900;
-  font-display: swap;
-}
 @font-face {
   font-family: 'Ria';
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2410-1@1.0/RiaSans-ExtraBold.woff2')
@@ -81,6 +12,9 @@
 }
 .ft-ria {
   font-family: 'Ria', sans-serif;
+}
+.ft-pre {
+  font-family: 'Wanted Sans Variable', sans-serif;
 }
 
 @source './';
@@ -218,6 +152,13 @@
     overflow: hidden;
     background-image: var(--grad-page);
   }
+
+  button {
+    &:active,
+    &:focus {
+      @apply outline-0 border-0;
+    }
+  }
 }
 
 @utility scrollbar-hidden {
@@ -229,6 +170,11 @@
 }
 
 .card {
+  @apply bg-content;
+  /* background: linear-gradient(135deg, var(--color-accent-foreground) 0%, var(--color-accent) 100%); */
+}
+
+.card.glas {
   @apply backdrop-blur-md backdrop-saturate-100;
 
   background: linear-gradient(
@@ -241,8 +187,11 @@
     inset 0 1px 0 0 rgba(255, 255, 255, 0.05) !important;
 }
 
+.card.active {
+  @apply relative overflow-hidden;
+}
 .card.active::before {
-  @apply absolute animate-spin w-full h-full -z-1 block left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 scale-150;
+  @apply absolute animate-spin w-full h-full block left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 scale-200;
 
   animation-duration: 3s;
 

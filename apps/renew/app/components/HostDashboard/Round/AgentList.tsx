@@ -1,13 +1,17 @@
-import { pipe, map, zipWithIndex, toArray, isUndefined } from '@fxts/core'
-import { useStore } from '~/hooks'
+import { pipe, map, zipWithIndex, toArray, isUndefined, join, concat } from '@fxts/core'
+import { Icon } from '~/components'
+import { useMatchState, useStore } from '~/hooks'
+import { type PlayerRole } from '~/type'
 
 type Props = {
   list: Array<number | null>
   engines: Array<string | null>
+  role: PlayerRole
 }
 
 const AgentList: React.FC<Props> = (props) => {
   const store = useStore()
+  const matchState = useMatchState()
 
   return (
     <ul className="flex gap-2">
@@ -23,9 +27,12 @@ const AgentList: React.FC<Props> = (props) => {
         map(({ index, agent, engine }) => (
           <li key={index}>
             <div className="relative">
-              <button type="button" className="size-22 text-4xl card rounded-2xl overflow-hidden">
+              <button
+                type="button"
+                className="size-22 text-4xl bg-accent rounded-2xl overflow-hidden"
+              >
                 {isUndefined(agent) ? (
-                  '+'
+                  <Icon.Plus className="scale-75" />
                 ) : (
                   <img
                     className="block w-full"
@@ -35,11 +42,32 @@ const AgentList: React.FC<Props> = (props) => {
                   />
                 )}
               </button>
-              <button className="absolute -bottom-2 -right-2 size-10 card rounded-xl">
-                {isUndefined(engine) ? '+' : <img src={engine.icon} alt={engine.nameKo} />}
+              <button
+                className={pipe(
+                  ['absolute -bottom-2 -right-2 size-10 rounded-xl'],
+                  concat(
+                    isUndefined(engine)
+                      ? ['bg-accent', 'border-2 border-solid border-content']
+                      : ['backdrop-blur-lg']
+                  ),
+                  join(' ')
+                )}
+              >
+                {isUndefined(engine) ? (
+                  <Icon.Plus className="scale-75" />
+                ) : (
+                  <img src={engine.icon} alt={engine.nameKo} />
+                )}
               </button>
             </div>
-            <div className="text-center ft-ria text-lg mt-2">2 / 2</div>
+            <div className="text-center ft-ria text-lg mt-2 h-7">
+              {!isUndefined(agent) && (
+                <>
+                  {matchState.state.rate[props.role].agents[agent.id] || 0} /{' '}
+                  {matchState.state.rate[props.role].engines[engine?.id || 0] || 0}
+                </>
+              )}
+            </div>
           </li>
         )),
         toArray

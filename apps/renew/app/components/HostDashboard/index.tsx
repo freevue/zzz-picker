@@ -15,9 +15,11 @@ const HostDashboard: React.FC = () => {
       </div>
       <div className="flex-1 flex flex-col gap-4 py-4 max-w-sm min-w-sm overflow-auto scrollbar-hidden">
         <MatchType />
-        <AllowAgent />
-        <CommonBoss />
-        <Ban />
+        <div className="card p-4 gap-8 rounded-3xl flex-1 flex flex-col">
+          <CommonBoss />
+          <AllowAgent />
+          <Ban />
+        </div>
       </div>
       <div className="flex-1 flex flex-col gap-4 min-w-xl py-4">
         <PlayerName />

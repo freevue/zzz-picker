@@ -14,13 +14,14 @@ const SpecialRule: React.FC = () => {
               'block',
               'h-30',
               'rounded-2xl',
-              'text-3xl',
+              'text-2xl',
               'font-bold',
               'p-4',
               'resize-none',
               'scrollbar-hidden',
+              'bg-accent',
+              'ft-pre',
             ],
-            concat(['border-2', 'border-solid', 'border-primary']),
             concat(['active:outline-0', 'focus:outline-0']),
             join(' ')
           )}

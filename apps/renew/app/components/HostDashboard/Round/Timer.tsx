@@ -50,9 +50,9 @@ const Timer: React.FC = () => {
   }
 
   return (
-    <div className="flex border-2 h-12 items-center border-solid border-primary rounded-2xl w-46">
+    <div className="flex bg-accent h-14 items-center border-solid border-primary rounded-2xl w-46">
       <Input min={0} max={3} onChange={onChange} name="minute" />
-      <p className="text-4xl font-bold">:</p>
+      <p className="text-4xl font-bold ft-ria">:</p>
       <Input min={0} max={59} onChange={onChange} name="second" />
     </div>
   )

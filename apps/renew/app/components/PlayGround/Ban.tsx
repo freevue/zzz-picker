@@ -63,13 +63,12 @@ const BanFix: React.FC<BanFixProps> = (props) => {
                 ],
                 concat(includes(agent.id, props.active) ? ['active'] : []),
                 concat(['disabled:grayscale-100', 'disabled:cursor-not-allowed']),
-                concat(['active:outline-0', 'focus:outline-0']),
                 join(' ')
               )}
               key={agent.id}
             >
               <div
-                className="w-full aspect-square overflow-hidden rounded-xl"
+                className="w-full aspect-square overflow-hidden rounded-xl z-1 relative"
                 style={{ backgroundColor: agent.color || 'transparent' }}
               >
                 <img className="w-full block" src={agent.profile} alt={agent.nameKo} />
@@ -90,8 +89,6 @@ const Ban: React.FC = () => {
       store.agents.get(agentId || -1)
     )
   }, [matchState, store])
-
-  console.log(firstBan)
 
   const onBanAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -204,8 +201,6 @@ const Ban: React.FC = () => {
                     'block',
                     'p-2',
                     'rounded-2xl',
-                    'active:outline-0',
-                    'focus:outline-0',
                     'relative',
                     'overflow-hidden',
                   ],
@@ -220,7 +215,7 @@ const Ban: React.FC = () => {
                 key={id}
               >
                 <div
-                  className="w-full aspect-square overflow-hidden rounded-xl"
+                  className="w-full aspect-square overflow-hidden rounded-xl relative z-1"
                   style={{ backgroundColor: agent.color || 'transparent' }}
                 >
                   <img className="w-full block" src={agent.profile} alt={agent.nameKo} />

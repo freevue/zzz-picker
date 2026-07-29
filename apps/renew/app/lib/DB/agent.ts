@@ -1,8 +1,23 @@
 import { TableName } from './constant'
-import { type Agent } from '@/type'
+import { type Agent, type AgentCost } from '@/type'
+import { map, pipe, toArray, groupBy } from '@fxts/core'
 import { supabase } from '@zzz-picker/supabase'
 
+async function selectAgentCost() {
+  const { data } = await supabase
+    .from(TableName.AGENT_COST)
+    .select<string, AgentCost>(`agentId, rate, cost`)
+
+  if (data === null) throw Error('')
+
+  return data
+}
+
 export async function selectAgent(): Promise<Array<Agent>> {
+  const costMap = await pipe(
+    selectAgentCost(),
+    groupBy(({ agentId }) => agentId)
+  )
   const { data } = await supabase.from(TableName.AGENT).select<string, Agent>(
     `id,
     nameKo,
@@ -25,5 +40,9 @@ export async function selectAgent(): Promise<Array<Agent>> {
 
   if (data === null) throw Error('')
 
-  return data
+  return pipe(
+    data,
+    map((agent) => ({ ...agent, cost: costMap[agent.id] ?? [] })),
+    toArray
+  )
 }
