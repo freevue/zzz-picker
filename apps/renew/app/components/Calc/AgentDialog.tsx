@@ -57,7 +57,7 @@ const AgentDialog: React.FC<Props> = (props) => {
 
   return (
     <Dialog active={!!props.active}>
-      <div className="max-w-lg mx-auto p-4 w-full h-screen overflow-auto scrollbar-hidden">
+      <div className="max-w-lg mx-auto p-4 w-full h-dvh overflow-auto scrollbar-hidden">
         <ul className="sticky top-2 z-10 flex rounded-full mb-8 h-14 overflow-hidden">
           {pipe(
             RARITY_LIST,
@@ -80,7 +80,7 @@ const AgentDialog: React.FC<Props> = (props) => {
             toArray
           )}
         </ul>
-        <ul className="grid grid-cols-3 gap-4 content-start mb-64">
+        <ul className="grid grid-cols-3 gap-4 content-start mb-36">
           {pipe(
             store.agents,
             filter(([, agent]) => {
