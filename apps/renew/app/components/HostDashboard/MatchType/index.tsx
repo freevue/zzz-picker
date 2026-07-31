@@ -35,7 +35,7 @@ const CommonBoss: React.FC = () => {
                 disabled={match.matchType === value}
                 onClick={onMatchTypeClick}
                 className={pipe(
-                  ['block', 'w-full', 'h-full', 'font-bold', 'ft-pre', 'text-xl'],
+                  ['block', 'w-full', 'h-full', 'font-bold', 'ft-pre', 'text-xl', 'cursor-pointer'],
                   concat(match.matchType === value ? ['bg-primary', 'text-accent'] : []),
                   join(' ')
                 )}
