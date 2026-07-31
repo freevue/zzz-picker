@@ -75,6 +75,7 @@ const Result: React.FC = () => {
 
         return value + timeBounse[index]
       }),
+      map((value) => Number(value.toFixed(2))),
       toArray
     ) as [number, number]
   }, [totalRoundScore, costBonuse, timeBounse, match])
