@@ -1,4 +1,4 @@
-import type { PlayerRole } from '@/type'
+import type { Player, PlayerRole } from '@/type'
 import {
   filter,
   map,
@@ -14,17 +14,23 @@ import {
   append,
   head,
   isUndefined,
+  every,
+  isNull,
+  some,
+  fromEntries,
+  flat,
+  isObject,
+  entries,
+  flatMap,
 } from '@fxts/core'
 import { useMemo } from 'react'
 import { BroadcastEvent, Phase, Role, SETTING } from '~/constant'
-import { useMatchState, useStore } from '~/hooks'
-import { updateProposeBan, updateSelectBan } from '~/lib/DB'
+import { useMatch, useMatchState, useStore } from '~/hooks'
+import { updateMatchPhase, updateProposeBan, updateSelectBan } from '~/lib/DB'
 import { opponent, getPosition } from '~/lib/utils'
 
 type BanFixProps = {
-  role: PlayerRole
-  isPicker: boolean
-  proposeBan: Record<Role.A_SIDE | Role.B_SIDE, Array<number | null>>
+  proposeBan: Array<number | null>
   active: Array<number | null>
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
@@ -33,12 +39,10 @@ const BanFix: React.FC<BanFixProps> = (props) => {
   const store = useStore()
 
   return (
-    <div className="fixed inset-0 backdrop-blur-xl">
+    <div className="fixed inset-0 backdrop-blur-xl z-20">
       <div className="w-full h-full flex items-center justify-around max-w-lg mx-auto p-4">
         {pipe(
-          props.role,
-          when(() => props.isPicker, opponent),
-          (role) => props.proposeBan[role],
+          props.proposeBan,
           map((agentId) => store.agents.get(agentId as number)!),
           map((agent) => (
             <button
@@ -81,107 +85,163 @@ const BanFix: React.FC<BanFixProps> = (props) => {
     </div>
   )
 }
-const Ban: React.FC = () => {
+
+type Props = {
+  role: PlayerRole
+}
+
+const Ban: React.FC<Props> = (props) => {
   const store = useStore()
-  const matchState = useMatchState()
-  const firstBan = useMemo(() => {
-    return pipe(matchState.state.selectBan[Role.B_SIDE], filter(isNumber), head, (agentId) =>
-      store.agents.get(agentId || -1)
+  const { match, select, play, send, currentPlay } = useMatch()
+  const isPicker = useMemo(() => {
+    if (props.role === Role.A_SIDE) {
+      if (some(isNull, play[Role.A_SIDE].proposeBan)) return true
+      if (
+        every(isNumber, play[Role.A_SIDE].proposeBan) &&
+        every(isNumber, play[Role.B_SIDE].selectBan) &&
+        every(isNumber, play[Role.B_SIDE].proposeBan) &&
+        some(isNull, play[Role.A_SIDE].selectBan)
+      )
+        return true
+    }
+    if (props.role === Role.B_SIDE) {
+      if (
+        every(isNumber, play[Role.A_SIDE].proposeBan) &&
+        some(isNull, play[Role.B_SIDE].selectBan)
+      )
+        return true
+      if (
+        every(isNumber, play[Role.A_SIDE].proposeBan) &&
+        every(isNumber, play[Role.B_SIDE].selectBan) &&
+        some(isNull, play[Role.B_SIDE].proposeBan)
+      )
+        return true
+    }
+
+    return false
+  }, [play, props.role])
+  const isBanFix = useMemo(() => {
+    if (every(isNumber, play[Role.A_SIDE].proposeBan) && some(isNull, play[Role.B_SIDE].selectBan))
+      return true
+    if (every(isNumber, play[Role.B_SIDE].proposeBan) && some(isNull, play[Role.A_SIDE].selectBan))
+      return true
+
+    return false
+  }, [play, props.role])
+  const currentProposeBan = useMemo(() => {
+    return every(isNumber, play[Role.B_SIDE].selectBan)
+      ? play[Role.B_SIDE].proposeBan
+      : play[Role.A_SIDE].proposeBan
+  }, [play])
+  const isDisabled = useMemo(() => {
+    if (isBanFix) return select[Phase.BAN_FIX].length !== SETTING.MAX_PLAYER_BAN_FIX
+    if (match.phase === Phase.BAN)
+      return select[Phase.BAN].length !== SETTING.MAX_PLAYER_BAN_PROPOSE
+
+    return true
+  }, [match, select, isBanFix])
+  const isBanList = useMemo(() => {
+    return pipe(
+      [play[Role.A_SIDE].selectBan, play[Role.B_SIDE].selectBan],
+      flat,
+      filter(isNumber),
+      map((agentId) => store.agents.get(agentId)),
+      filter(isObject),
+      map((agent) => agent.specialty.nameKo),
+      map(getPosition),
+      uniq,
+      toArray
     )
-  }, [matchState, store])
+  }, [play, store])
 
   const onBanAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    if (!matchState.isPicker) return
-
-    if (includes(Number(event.currentTarget.value), matchState.select[Phase.BAN])) {
+    if (!isPicker) return
+    if (includes(Number(event.currentTarget.value), select[Phase.BAN])) {
       pipe(
-        matchState.select[Phase.BAN],
+        select[Phase.BAN],
         filter((id) => id !== Number(event.currentTarget.value)),
         toArray,
         (list) => {
-          matchState.send(BroadcastEvent.BAN_SELECT, list)
+          send(BroadcastEvent.BAN_SELECT, list)
         }
       )
 
       return
     }
 
-    pipe(
-      [...matchState.select[Phase.BAN], Number(event.currentTarget.value)],
-      uniq,
-      toArray,
-      (list) => {
-        matchState.send(BroadcastEvent.BAN_SELECT, list)
-      }
-    )
+    pipe([...select[Phase.BAN], Number(event.currentTarget.value)], uniq, toArray, (list) => {
+      send(BroadcastEvent.BAN_SELECT, list)
+    })
   }
   const onBanConfirm = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    if (matchState.player!.role === Role.HOST) return
-    if (matchState.phase === Phase.BAN) {
-      await pipe(
-        matchState.select[Phase.BAN],
+    if (isUndefined(currentPlay)) return
+    if (currentPlay.role === Role.HOST) return
+
+    if (isBanFix) {
+      const player = await pipe(
+        select[Phase.BAN_FIX],
         filter(isNumber),
         toArray,
-        updateProposeBan(matchState.player!)
+        updateSelectBan(currentPlay.id),
+        map((play) => [play.role, play] as [PlayerRole, Player]),
+        fromEntries
+      )
+      const isAllSelect = pipe(
+        { ...play, ...player },
+        entries,
+        flatMap(([, play]) => play.selectBan),
+        every(isNumber)
       )
 
-      matchState.send(BroadcastEvent.BAN_PROPOSE, {
-        list: matchState.select[Phase.BAN],
-        role: matchState.isPicker
-          ? matchState.player!.role
-          : (opponent(matchState.player!.role) as Role.A_SIDE | Role.B_SIDE),
-      })
+      if (isAllSelect) await pipe(Phase.PICK, updateMatchPhase(match.matchId))
+
+      send(BroadcastEvent.BAN_CONFIRM, player)
+
+      return
     }
-    if (matchState.phase === Phase.BAN_FIX) {
+
+    send(
+      BroadcastEvent.BAN_PROPOSE,
       await pipe(
-        matchState.select[Phase.BAN_FIX],
+        select[Phase.BAN],
         filter(isNumber),
         toArray,
-        updateSelectBan(matchState.player!)
+        updateProposeBan(currentPlay.id),
+        map((play) => [play.role, play] as [PlayerRole, Player]),
+        fromEntries
       )
-
-      matchState.send(BroadcastEvent.BAN_CONFIRM, {
-        list: matchState.select[Phase.BAN_FIX],
-        role: matchState.isPicker
-          ? matchState.player!.role
-          : (opponent(matchState.player!.role) as Role.A_SIDE | Role.B_SIDE),
-      })
-    }
+    )
   }
   const onBanFixClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    if (!matchState.isPicker) return
+    if (!isPicker) return
 
     pipe(
       Number(event.currentTarget.value),
       (id) =>
-        includes(id, matchState.select[Phase.BAN_FIX])
-          ? filter((selectId) => selectId !== id, matchState.select[Phase.BAN_FIX])
-          : append(id, matchState.select[Phase.BAN_FIX]),
+        includes(id, select[Phase.BAN_FIX])
+          ? filter((selectId) => selectId !== id, select[Phase.BAN_FIX])
+          : append(id, select[Phase.BAN_FIX]),
       uniq,
       toArray,
-      (list) => matchState.send(BroadcastEvent.BAN_FIX, list)
+      (list) => send(BroadcastEvent.BAN_FIX, list)
     )
   }
 
   return (
     <>
-      <div className="w-full h-full overflow-y-scroll pt-28 pb-14">
+      <div className="w-full h-dvh overflow-y-scroll pt-16 pb-14">
         <div className="w-full grid grid-cols-3 gap-4 p-4 max-w-xl mx-auto content-start">
           {pipe(
             store.agents,
             filter(([, agent]) => agent.isPickup),
             filter(([, agent]) => !agent.isAllow),
-            filter(([, agent]) => {
-              if (isUndefined(firstBan)) return true
-
-              return getPosition(agent.specialty.nameKo) !== getPosition(firstBan.specialty.nameKo)
-            }),
+            filter(([, agent]) => !includes(getPosition(agent.specialty.nameKo), isBanList)),
             sort((prev, cur) => prev[1].nameKo.localeCompare(cur[1].nameKo)),
             map(([id, agent]) => (
               <button
@@ -189,10 +249,10 @@ const Ban: React.FC = () => {
                 value={id}
                 type="button"
                 disabled={
-                  !includes(id, matchState.select[Phase.BAN]) &&
-                  (matchState.select[Phase.BAN].length >= SETTING.MAX_PLAYER_BAN_PROPOSE ||
-                    !matchState.isPicker ||
-                    matchState.phase !== Phase.BAN)
+                  !includes(id, select[Phase.BAN]) &&
+                  (select[Phase.BAN].length >= SETTING.MAX_PLAYER_BAN_PROPOSE ||
+                    !isPicker ||
+                    match.phase !== Phase.BAN)
                 }
                 className={pipe(
                   [
@@ -206,7 +266,7 @@ const Ban: React.FC = () => {
                   ],
                   concat(['disabled:grayscale-100', 'cursor-not-allowed']),
                   concat(
-                    includes(id, matchState.select[Phase.BAN])
+                    includes(id, select[Phase.BAN])
                       ? ['active', 'grayscale-0!', 'before:h-full', 'before:aspect-square']
                       : []
                   ),
@@ -227,25 +287,18 @@ const Ban: React.FC = () => {
         </div>
       </div>
 
-      {matchState.phase === Phase.BAN_FIX && (
+      {isBanFix && (
         <BanFix
           onClick={onBanFixClick}
-          active={matchState.select[Phase.BAN_FIX]}
-          role={matchState.player!.role as PlayerRole}
-          proposeBan={matchState.state.proposeBan}
-          isPicker={matchState.isPicker}
+          active={select[Phase.BAN_FIX]}
+          proposeBan={currentProposeBan}
         />
       )}
 
-      {matchState.isPicker && (
+      {isPicker && (
         <button
           type="button"
-          disabled={
-            (matchState.phase === Phase.BAN &&
-              matchState.select[Phase.BAN].length < SETTING.MAX_PLAYER_BAN_PROPOSE) ||
-            (matchState.phase === Phase.BAN_FIX &&
-              matchState.select[Phase.BAN_FIX].length < SETTING.MAX_PLAYER_BAN_FIX)
-          }
+          disabled={isDisabled}
           onClick={onBanConfirm}
           className={pipe(
             [
@@ -266,6 +319,7 @@ const Ban: React.FC = () => {
               'text-2xl',
               'py-2',
               'cursor-pointer',
+              'z-21',
             ],
             concat([
               'disabled:cursor-not-allowed',

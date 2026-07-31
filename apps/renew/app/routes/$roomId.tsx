@@ -1,3 +1,4 @@
+import { Loading } from '@/components'
 import { map, pipe, toArray } from '@fxts/core'
 import { useParams, Link } from '@remix-run/react'
 import { useEffect, useMemo, useState } from 'react'
@@ -14,7 +15,7 @@ const LinkCard: React.FC<{ role: Role; name: string; roomId: string }> = (props)
 
   return (
     <div className="card flex gap-4 items-center px-8 py-6 rounded-3xl relative overflow-hidden w-full">
-      <span className="absolute -left-3 -top-5 text-primary/70 font-black text-7xl -skew-x-12 ft-ria">
+      <span className="absolute -left-3 -top-2 text-primary/70 font-black text-7xl -skew-x-12 ft-ria">
         {props.role}
       </span>
       <p className="text-4xl font-black truncate ft-pre flex-1">{props.name}</p>
@@ -60,7 +61,7 @@ const RoomIndex = () => {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
       {loading ? (
-        <>Loading</>
+        <Loading />
       ) : (
         <div className="flex flex-col gap-4 w-screen max-w-xl">
           <LinkCard role={Role.HOST} name="관리자" roomId={hostId} />

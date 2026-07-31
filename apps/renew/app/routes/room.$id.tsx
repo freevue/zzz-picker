@@ -1,50 +1,38 @@
-import { PlayGround, HostDashboard } from '@/components'
+import { PlayGround, HostDashboard, Loading } from '@/components'
 import { selectMatchPlayer, selectMatchPlayerId, selectHostMatch } from '@/lib/DB'
-import { Store, Score, MatchState } from '@/provider'
-import { PlayerRole, type Player } from '@/type'
-import { find, fromEntries, head, isUndefined, map, peek, pipe, size } from '@fxts/core'
+import { hook } from '@/lib/utils'
+import { Store, Score, Match } from '@/provider'
+import type { Match as MatchStateType, PlayerRole, Player } from '@/type'
+import { find, fromEntries, head, isNull, isUndefined, map, peek, pipe, size } from '@fxts/core'
 import { useParams } from '@remix-run/react'
 import { useEffect, useMemo, useState } from 'react'
-import { MatchType, Role } from '~/constant'
-
-type Match = {
-  matchType: MatchType
-  matchId: string
-}
+import { MatchType, Phase, Role } from '~/constant'
 
 const RoomIndex = () => {
   const params = useParams()
-  const [data, setData] = useState<Array<Player>>([])
-  const [match, setMatch] = useState<Match>({ matchType: MatchType.ORIGINAL, matchId: '' })
-  const matchState = useMemo(() => {
-    return pipe(
-      data,
-      map((player) => [player.role, player] as [PlayerRole, Player]),
-      fromEntries
-    )
-  }, [data])
+  const [match, setMatch] = useState<MatchStateType | null>(null)
+  const [play, setPlay] = useState<Array<Player>>([])
   const role = useMemo(() => {
-    if (!params.id) return
+    if (isUndefined(params.id)) return
 
     return pipe(
-      data,
+      play,
       find((player) => player.id === params.id),
       (data) => data?.role ?? Role.HOST
     )
-  }, [data, params.id])
-  const loading = useMemo(() => isUndefined(role) && size(data) === 0, [data, role])
+  }, [play, params.id])
+  const loading = useMemo(() => isUndefined(role) && size(play) === 0, [play, role])
 
   useEffect(() => {
-    if (!params.id) return
+    if (isUndefined(params.id)) return
 
     pipe(
       params.id,
       selectHostMatch,
-      (data) => [isUndefined(data) ? selectMatchPlayerId(params.id!) : data],
-      peek(setMatch),
-      head,
+      (data) => (isUndefined(data) ? selectMatchPlayerId(params.id!) : data),
+      hook(setMatch),
       (data) => selectMatchPlayer(data!.matchId),
-      setData
+      setPlay
     )
   }, [params])
 
@@ -52,13 +40,17 @@ const RoomIndex = () => {
     <Store>
       <div className="h-screen w-screen">
         {loading ? (
-          <>Loading</>
+          <Loading />
         ) : (
-          <MatchState match={matchState!} role={role!} {...match}>
-            <Score match={matchState!}>
-              {role === Role.HOST ? <HostDashboard /> : <PlayGround />}
-            </Score>
-          </MatchState>
+          <Match match={match!} role={role!} play={play}>
+            {/* <Score>{role === Role.HOST ? <HostDashboard /> : <PlayGround />}</Score> */}
+            {role === Role.HOST ? <HostDashboard /> : <PlayGround role={role! as PlayerRole} />}
+          </Match>
+          // <MatchState match={matchState!} role={role!} {...match}>
+          //   <Score match={matchState!}>
+          //     {role === Role.HOST ? <HostDashboard /> : <PlayGround />}
+          //   </Score>
+          // </MatchState>
         )}
       </div>
     </Store>

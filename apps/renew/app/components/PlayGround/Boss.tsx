@@ -1,25 +1,36 @@
 import { BroadcastEvent, Phase, Role } from '@/constant'
-import { useMatchState, useStore } from '@/hooks'
-import { concat, join, map, pipe, toArray, isString, not } from '@fxts/core'
+import { useMatch, useStore } from '@/hooks'
+import { updateCommonBoss } from '@/lib/DB'
+import { concat, join, map, pipe, toArray, isString, not, fromEntries } from '@fxts/core'
+import type { Player, PlayerRole } from '~/type'
 
-const Boss: React.FC = () => {
+type Props = {
+  role: PlayerRole
+}
+
+const Boss: React.FC<Props> = (props) => {
   const store = useStore()
-  const mathState = useMatchState()
+  const { select, send, match } = useMatch()
 
   const onBossClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    mathState.send(BroadcastEvent.COMMON_BOSS_SELECT, event.currentTarget.value)
+    send(BroadcastEvent.COMMON_BOSS_SELECT, event.currentTarget.value)
   }
-  const onConfirmClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const onConfirmClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    if (mathState.select[Phase.COMMON_BOSS_SELECT] === null) return
+    if (select[Phase.COMMON_BOSS_SELECT] === null) return
 
-    mathState.send(BroadcastEvent.COMMON_BOSS_CONFIRM, {
-      playerId: mathState.player!.id,
-      bossId: mathState.select[Phase.COMMON_BOSS_SELECT],
-    })
+    send(
+      BroadcastEvent.COMMON_BOSS_CONFIRM,
+      await pipe(
+        select[Phase.COMMON_BOSS_SELECT],
+        updateCommonBoss(match.matchId),
+        map((play) => [play.role, play] as [PlayerRole, Player]),
+        fromEntries
+      )
+    )
   }
 
   return (
@@ -33,12 +44,12 @@ const Boss: React.FC = () => {
                 <button
                   value={id}
                   onClick={onBossClick}
-                  disabled={mathState.player!.role !== Role.B_SIDE}
+                  disabled={props.role !== Role.B_SIDE}
                   className={pipe(
                     ['block', 'aspect-144/199', 'w-40', 'card', 'p-2 rounded-2xl'],
                     concat(['disabled:grayscale-100', 'disabled:cursor-not-allowed']),
                     concat(
-                      mathState.select[Phase.COMMON_BOSS_SELECT] === id
+                      select[Phase.COMMON_BOSS_SELECT] === id
                         ? ['active', 'disabled:grayscale-0!']
                         : []
                     ),
@@ -48,7 +59,7 @@ const Boss: React.FC = () => {
                 >
                   <img
                     src={boss.src}
-                    className="block w-full h-full rounded-xl bg-accent-foreground"
+                    className="block w-full h-full rounded-xl bg-accent-foreground relative z-1"
                     alt={boss.nameKo}
                   />
                 </button>
@@ -58,10 +69,10 @@ const Boss: React.FC = () => {
           )}
         </ul>
       </div>
-      {mathState.player!.role === Role.B_SIDE && (
+      {props.role === Role.B_SIDE && (
         <button
           type="button"
-          disabled={not(isString(mathState.select[Phase.COMMON_BOSS_SELECT]))}
+          disabled={not(isString(select[Phase.COMMON_BOSS_SELECT]))}
           onClick={onConfirmClick}
           className={pipe(
             [
@@ -69,8 +80,6 @@ const Boss: React.FC = () => {
               'mx-auto',
               'block',
               'bg-primary',
-              'active:outline-0',
-              'focus:outline-0',
               'fixed',
               'bottom-4',
               'left-4',

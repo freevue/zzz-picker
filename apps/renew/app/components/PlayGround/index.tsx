@@ -3,22 +3,24 @@ import Boss from './Boss'
 import Pick from './Pick'
 import { includes } from '@fxts/core'
 import { Phase } from '~/constant'
-import { useMatchState } from '~/hooks'
+import { useMatch } from '~/hooks'
+import { PlayerRole } from '~/type'
 
-type Props = {}
+type Props = {
+  role: PlayerRole
+}
 
-const Play: React.FC<Props> = () => {
-  const matchState = useMatchState()
+const Play: React.FC<Props> = (props) => {
+  const { currentPlay, match } = useMatch()
 
   return (
     <>
-      <h1 className="text-4xl font-bold text-primary ft-ria fixed left-4 top-4 z-1">
-        {matchState.player?.name}
+      <h1 className="text-4xl font-bold text-primary ft-ria fixed left-4 top-4 z-10">
+        {currentPlay!.name}
       </h1>
-
-      {matchState.phase === Phase.COMMON_BOSS_SELECT && <Boss />}
-      {includes(matchState.phase, [Phase.BAN, Phase.BAN_FIX]) && <Ban />}
-      {matchState.phase === Phase.PICK && <Pick />}
+      {match.phase === Phase.COMMON_BOSS_SELECT && <Boss role={props.role} />}
+      {includes(match.phase, [Phase.BAN, Phase.BAN_FIX]) && <Ban role={props.role} />}
+      {match.phase === Phase.PICK && <Pick role={props.role} />}
     </>
   )
 }

@@ -13,7 +13,6 @@ import {
   pipe,
   sort,
   sum,
-  toArray,
 } from '@fxts/core'
 import { DEALER, Position, Role, Specialty } from '~/constant'
 
@@ -21,6 +20,14 @@ type OpponentMap = {
   [Role.A_SIDE]: Role.B_SIDE
   [Role.B_SIDE]: Role.A_SIDE
   [Role.HOST]: Role.HOST
+}
+
+export function hook(callback: (state: never) => void) {
+  return <T>(state: T): T => {
+    callback(state as never)
+
+    return state
+  }
 }
 
 export function opponent<T extends Role>(role: T): OpponentMap[T] {

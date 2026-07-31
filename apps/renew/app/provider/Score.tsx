@@ -16,7 +16,6 @@ const INITIAL_STATE = {
 
 type Props = {
   children: React.ReactNode
-  match: Record<PlayerRole, Player>
 }
 
 type State = {

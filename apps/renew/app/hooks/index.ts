@@ -2,7 +2,7 @@ import { filter, isNumber, isObject, isString, map, pipe, toArray } from '@fxts/
 import { useContext, useMemo } from 'react'
 import { Role } from '~/constant'
 import { agentCost, engineCost } from '~/lib/utils'
-import { StoreContext, MatchStateContext, ScoreContext } from '~/provider'
+import { StoreContext, MatchStateContext, ScoreContext, MatchContext } from '~/provider'
 
 export const useStore = () => {
   return useContext(StoreContext)
@@ -14,6 +14,10 @@ export const useMatchState = () => {
 
 export const useScore = () => {
   return useContext(ScoreContext)
+}
+
+export const useMatch = () => {
+  return useContext(MatchContext)
 }
 
 export const useCost = (round: number) => {

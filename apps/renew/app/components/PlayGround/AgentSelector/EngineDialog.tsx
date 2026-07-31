@@ -11,25 +11,27 @@ import {
   max,
   min,
   isNull,
-  values,
-  flat,
   concat,
   join,
+  isUndefined,
+  find,
+  fromEntries,
 } from '@fxts/core'
 import { useMemo, useState } from 'react'
-import { BroadcastEvent, Role } from '~/constant'
-import { useStore, useMatchState } from '~/hooks'
+import { BroadcastEvent } from '~/constant'
+import { useStore, useMatch } from '~/hooks'
 import { updateEngine } from '~/lib/DB'
-import { PlayerRole } from '~/type'
+import type { Player, PlayerRole } from '~/type'
 
 type Props = {
   index: number | null
   round: number
+  role: PlayerRole
   disabledList: Array<number>
   onClose: () => void
 }
 
-const AGENT_MAX_RATE = 6
+const ENGINE_MAX_RATE = 5
 const RARITY_LIST = [
   { label: 'S 픽업', value: 'S_PICK' },
   { label: 'S 상시', value: 'S' },
@@ -37,73 +39,91 @@ const RARITY_LIST = [
   { label: 'B', value: 'B' },
 ]
 const EngineSelector: React.FC<Props> = (props) => {
-  const matchState = useMatchState()
+  const { currentPlay, send, play } = useMatch()
   const [rarity, setRarity] = useState<string>('S_PICK')
   const active = useMemo(() => isNumber(props.index), [props.index])
-  const disabled = useMemo(() => {
-    return pipe(
-      matchState.state.agent,
-      (list) => {
-        if (matchState.player!.role === Role.HOST) return []
+  const selectAgentId = useMemo(() => {
+    if (isNull(props.index)) return null
+    if (isUndefined(currentPlay)) return null
 
-        return list[matchState.player!.role]
-      },
-      values,
-      flat,
-      concat(props.disabledList),
-      filter(isNumber),
-      toArray
-    )
-  }, [matchState, props.disabledList])
+    return currentPlay.agentSlot[props.round][props.index].id
+  }, [props.index, props.round, currentPlay])
   const selectEngineId = useMemo(() => {
     if (isNull(props.index)) return null
+    if (isUndefined(currentPlay)) return null
 
-    return matchState.pick.engine[props.round][props.index]
-  }, [props.index, props.round, matchState])
+    return currentPlay.engineSlot[props.round][props.index].id
+  }, [props.index, props.round, currentPlay])
   const selectAgentRate = useMemo(() => {
-    if (matchState.player!.role === Role.HOST) return 1
     if (isNull(selectEngineId)) return null
+    if (isUndefined(currentPlay)) return null
 
-    return matchState.state.rate[matchState.player!.role].engines[selectEngineId] || 1
-  }, [selectEngineId, matchState])
+    return pipe(
+      currentPlay.engineSlot[props.round],
+      find((engine) => engine.id === selectEngineId),
+      (data) => (isUndefined(data) ? null : data.rate)
+    )
+  }, [selectEngineId, currentPlay, props.round])
   const store = useStore()
 
   const onEngineClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    if (isNull(props.index)) return
+    if (isUndefined(currentPlay)) return
 
-    matchState.send(BroadcastEvent.ENGINE_RATE, {
-      role: matchState.player!.role as PlayerRole,
-      rate: 1,
-      engineId: event.currentTarget.value,
-    })
-    matchState.send(BroadcastEvent.ENGINE_PICK, {
-      role: matchState.player!.role as PlayerRole,
-      round: props.round,
-      index: props.index,
-      engineId: event.currentTarget.value,
-    })
+    pipe(
+      currentPlay.engineSlot,
+      (slots) => {
+        if (isNull(props.index)) return slots
+
+        slots[props.round][props.index] = {
+          id: event.currentTarget.value,
+          rate: 1,
+        }
+
+        return slots
+      },
+      (engineSlot) => {
+        send(BroadcastEvent.ENGINE_PICK, {
+          ...play,
+          [props.role]: { ...currentPlay, engineSlot },
+        })
+      }
+    )
   }
   const onRateChange = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
     if (isNull(selectAgentRate)) return
 
-    pipe(
+    const rate = pipe(
       Number(event.currentTarget.value),
       (rate) => rate + selectAgentRate,
       (rate) => [rate, 1],
       max,
-      (rate) => [rate, AGENT_MAX_RATE],
-      min,
-      (rate) => {
-        if (isNull(selectEngineId)) return
+      (rate) => [rate, ENGINE_MAX_RATE],
+      min
+    )
 
-        matchState.send(BroadcastEvent.ENGINE_RATE, {
-          role: matchState.player!.role as PlayerRole,
+    if (isNull(selectEngineId)) return
+    if (isUndefined(currentPlay)) return
+
+    pipe(
+      currentPlay.engineSlot,
+      (slots) => {
+        if (isNull(props.index)) return slots
+
+        slots[props.round][props.index] = {
+          ...slots[props.round][props.index],
           rate,
-          engineId: selectEngineId,
+        }
+
+        return slots
+      },
+      (engineSlot) => {
+        send(BroadcastEvent.ENGINE_PICK, {
+          ...play,
+          [props.role]: { ...currentPlay, engineSlot },
         })
       }
     )
@@ -111,7 +131,17 @@ const EngineSelector: React.FC<Props> = (props) => {
   const onSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    await updateEngine(matchState.player!.id, matchState.pick.engine, matchState.pick.rate)
+    if (isUndefined(currentPlay)) return
+
+    send(
+      BroadcastEvent.ENGINE_PICK,
+      await pipe(
+        currentPlay.engineSlot,
+        updateEngine(currentPlay.id),
+        map((play) => [play.role, play] as [PlayerRole, Player]),
+        fromEntries
+      )
+    )
 
     props.onClose()
   }
@@ -130,6 +160,7 @@ const EngineSelector: React.FC<Props> = (props) => {
             return engine.rank === 'S' && engine.isPickup
           }),
           sort(([, prev], [, cur]) => prev.nameKo.localeCompare(cur.nameKo)),
+          sort(([, prev]) => (prev.exclusiveAgentId === selectAgentId ? -999 : 1)),
           map(([, engine]) => (
             <button
               className={pipe(

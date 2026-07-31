@@ -14,19 +14,21 @@ import {
   max,
   min,
   isNull,
-  values,
-  flat,
-  concat,
+  isUndefined,
+  find,
+  fromEntries,
 } from '@fxts/core'
 import { useMemo, useState } from 'react'
-import { BroadcastEvent, Role } from '~/constant'
-import { useStore, useMatchState } from '~/hooks'
+import { BroadcastEvent } from '~/constant'
+import { useStore, useMatch } from '~/hooks'
+import type { Player, PlayerRole } from '~/type'
 
 type Props = {
   index: number | null
   round: number
   disabledList: Array<number>
   onClose: () => void
+  role: PlayerRole
 }
 
 const AGENT_MAX_RATE = 6
@@ -36,71 +38,86 @@ const RARITY_LIST = [
   { label: 'A', value: 'A' },
 ]
 const AgentSelector: React.FC<Props> = (props) => {
-  const matchState = useMatchState()
+  const { currentPlay, send, play } = useMatch()
   const [rarity, setRarity] = useState<string>('S_PICK')
   const active = useMemo(() => isNumber(props.index), [props.index])
   const disabled = useMemo(() => {
-    return pipe(
-      matchState.state.agent,
-      (list) => {
-        if (matchState.player!.role === Role.HOST) return []
-
-        return list[matchState.player!.role]
-      },
-      values,
-      flat,
-      concat(props.disabledList),
-      filter(isNumber),
-      toArray
-    )
-  }, [matchState, props.disabledList])
+    return props.disabledList
+  }, [currentPlay, props.disabledList])
   const selectAgentId = useMemo(() => {
     if (isNull(props.index)) return null
+    if (isUndefined(currentPlay)) return null
 
-    return matchState.pick.agent[props.round][props.index]
-  }, [props.index, props.round, matchState])
+    return currentPlay.agentSlot[props.round][props.index].id
+  }, [props.index, props.round, currentPlay])
   const selectAgentRate = useMemo(() => {
-    if (matchState.player!.role === Role.HOST) return 0
     if (isNull(selectAgentId)) return 0
+    if (isUndefined(currentPlay)) return 0
 
-    return matchState.state.rate[matchState.player!.role].agents[selectAgentId] || 0
-  }, [selectAgentId, matchState])
+    return pipe(
+      currentPlay.agentSlot[props.round],
+      find((agent) => agent.id === selectAgentId),
+      (agent) => agent?.rate || 0
+    )
+  }, [selectAgentId, currentPlay, props.round])
   const store = useStore()
 
   const onAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    if (isNull(props.index)) return
+    if (isUndefined(currentPlay)) return
 
-    matchState.send(BroadcastEvent.AGENT_RATE, {
-      role: matchState.player!.role as Role.A_SIDE | Role.B_SIDE,
-      rate: 0,
-      agentId: Number(event.currentTarget.value),
-    })
-    matchState.send(BroadcastEvent.AGENT_PICK, {
-      role: matchState.player!.role as Role.A_SIDE | Role.B_SIDE,
-      round: props.round,
-      index: props.index,
-      agentId: Number(event.currentTarget.value),
-    })
+    pipe(
+      currentPlay.agentSlot,
+      (slots) => {
+        if (isNull(props.index)) return slots
+
+        slots[props.round][props.index] = {
+          id: Number(event.currentTarget.value),
+          rate: 0,
+        }
+
+        return slots
+      },
+      (agentSlot) => {
+        send(BroadcastEvent.AGENT_PICK, {
+          ...play,
+          [props.role]: { ...currentPlay, agentSlot },
+        })
+      }
+    )
   }
   const onRateChange = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    pipe(
+    const rate = pipe(
       Number(event.currentTarget.value),
       (rate) => rate + selectAgentRate,
       (rate) => [rate, 0],
       max,
       (rate) => [rate, AGENT_MAX_RATE],
-      min,
-      (rate) => {
-        if (isNull(selectAgentId)) return
+      min
+    )
 
-        matchState.send(BroadcastEvent.AGENT_RATE, {
-          role: matchState.player!.role as Role.A_SIDE | Role.B_SIDE,
+    if (isNull(selectAgentId)) return
+    if (isUndefined(currentPlay)) return
+
+    pipe(
+      currentPlay.agentSlot,
+      (slots) => {
+        if (isNull(props.index)) return slots
+
+        slots[props.round][props.index] = {
+          ...slots[props.round][props.index],
           rate,
-          agentId: selectAgentId,
+        }
+
+        return slots
+      },
+      (agentSlot) => {
+        send(BroadcastEvent.AGENT_PICK, {
+          ...play,
+          [props.role]: { ...currentPlay, agentSlot },
         })
       }
     )
@@ -108,9 +125,17 @@ const AgentSelector: React.FC<Props> = (props) => {
   const onSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    if (isNull(props.index)) return
+    if (isUndefined(currentPlay)) return
 
-    await updateAgent(matchState.player!.id, matchState.pick.agent, matchState.pick.rate)
+    send(
+      BroadcastEvent.AGENT_PICK,
+      await pipe(
+        currentPlay.agentSlot,
+        updateAgent(currentPlay.id),
+        map((play) => [play.role, play] as [PlayerRole, Player]),
+        fromEntries
+      )
+    )
 
     props.onClose()
   }

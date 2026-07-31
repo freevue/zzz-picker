@@ -1,5 +1,6 @@
 import { Dialog } from '..'
-import { concat, join, map, pipe, toAsync, toArray } from '@fxts/core'
+import { insertMatch, insertPlayer } from '@/lib/DB'
+import { concat, join, map, pipe, toAsync, toArray, peek } from '@fxts/core'
 import { useNavigate } from '@remix-run/react'
 import { supabase } from '@zzz-picker/supabase'
 import { MatchType, Role } from '~/constant'
@@ -21,42 +22,13 @@ const CreateRoom: React.FC<Props> = (props) => {
     event.preventDefault()
 
     const formData = new FormData(event.currentTarget)
-    const { id: matchId } = await pipe(
-      supabase.from(TableName.MATCH),
-      async (builder) =>
-        await builder
-          .insert({ matchType: formData.get('match') })
-          .select()
-          .single(),
-      ({ data }) => data
-    )
+
+    const { id: matchId } = await insertMatch(formData.get('match') as MatchType)
     await pipe(
       [Role.A_SIDE, Role.B_SIDE],
-      map((role) => ({ role, name: formData.get(role) })),
+      map((role) => ({ role, name: formData.get(role) as string })),
       toAsync,
-      map(({ role, name }) =>
-        supabase
-          .from(TableName.PLAY)
-          .insert({
-            matchId,
-            role,
-            name,
-            agent: {
-              0: [null, null, null],
-              1: [null, null, null],
-            },
-            engine: {
-              0: [null, null, null],
-              1: [null, null, null],
-            },
-            boss: [null, null],
-            proposeBan: [null, null],
-            selectBan: [null],
-          })
-          .select()
-          .single()
-      ),
-      map(({ data }) => data),
+      peek(insertPlayer(matchId)),
       toArray
     )
     navigate(`/${matchId}`)

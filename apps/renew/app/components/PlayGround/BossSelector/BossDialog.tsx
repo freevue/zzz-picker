@@ -1,42 +1,56 @@
 import { updateBoss } from '@/lib/DB'
-import { concat, filter, includes, isString, join, map, pipe, toArray, uniq } from '@fxts/core'
+import {
+  concat,
+  filter,
+  fromEntries,
+  includes,
+  isString,
+  isUndefined,
+  join,
+  map,
+  pipe,
+  toArray,
+  uniq,
+} from '@fxts/core'
 import { useMemo } from 'react'
 import { Dialog } from '~/components'
 import { BroadcastEvent } from '~/constant'
-import { useMatchState, useStore } from '~/hooks'
-import type { PlayerRole } from '~/type'
+import { useMatch, useStore } from '~/hooks'
+import type { Player, PlayerRole } from '~/type'
 
 type Props = {
   round: number
   active: boolean
   bossId?: string
+  role: PlayerRole
   onClose: () => void
 }
 
 const BossDialog: React.FC<Props> = (props) => {
   const store = useStore()
-  const matchState = useMatchState()
+  const { currentPlay, send } = useMatch()
   const selectBoss = useMemo(() => {
-    return pipe(matchState.pick.boss, filter(isString), uniq, toArray)
-  }, [matchState])
+    return pipe(currentPlay!.boss, filter(isString), uniq, toArray)
+  }, [currentPlay])
 
   const onBossClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    matchState.send(BroadcastEvent.BOSS_SELECT, {
-      bossId: event.currentTarget.value,
-      round: props.round,
-      side: matchState.player!.role as PlayerRole,
-    })
+    if (isUndefined(currentPlay)) return
 
-    await pipe(
-      matchState.pick.boss,
-      (list) => {
-        list[props.round] = event.currentTarget.value
+    send(
+      BroadcastEvent.BOSS_SELECT,
+      await pipe(
+        currentPlay.boss,
+        (list) => {
+          list[props.round] = event.currentTarget.value
 
-        return list
-      },
-      (list) => updateBoss(matchState.player!.id, list)
+          return list
+        },
+        updateBoss(currentPlay.id),
+        map((play) => [play.role, play] as [PlayerRole, Player]),
+        fromEntries
+      )
     )
 
     props.onClose()

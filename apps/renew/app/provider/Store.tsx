@@ -2,6 +2,7 @@ import { selectDeadlyAssault, selectAgent, selectEngine } from '@/lib/DB'
 import { type Boss, type Agent, type Engine } from '@/type'
 import { map, pipe, toArray } from '@fxts/core'
 import { createContext, useEffect, useMemo, useState } from 'react'
+import { Loading } from '~/components'
 
 type Props = {
   children: React.ReactNode
@@ -46,7 +47,7 @@ const Store: React.FC<Props> = (props) => {
 
   return (
     <Context.Provider value={{ deadlyAssault, agents, engines }}>
-      {loading ? <>Loading</> : props.children}
+      {loading ? <Loading /> : props.children}
     </Context.Provider>
   )
 }

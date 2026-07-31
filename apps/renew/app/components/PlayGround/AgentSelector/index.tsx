@@ -2,34 +2,64 @@ import AgentButton from './AgentButton'
 import AgentDialog from './AgentDialog'
 import EngineButton from './EngineButton'
 import EngineDialog from './EngineDialog'
-import { concat, filter, isNumber, isString, map, pipe, toArray, zipWithIndex } from '@fxts/core'
+import {
+  concat,
+  entries,
+  filter,
+  flat,
+  flatMap,
+  isNumber,
+  isString,
+  isUndefined,
+  map,
+  pipe,
+  toArray,
+  zipWithIndex,
+} from '@fxts/core'
 import { useMemo, useState } from 'react'
-import { Role } from '~/constant'
-import { useMatchState, useStore } from '~/hooks'
+import { useMatch, useStore } from '~/hooks'
 import { PlayerRole } from '~/type'
 
 type Props = {
   round: number
+  role: PlayerRole
 }
 
 const AgentSelector: React.FC<Props> = (props) => {
-  const matchState = useMatchState()
+  const { currentPlay, play } = useMatch()
   const store = useStore()
   const [selectAgentIndex, setSelectAgentIndex] = useState<number | null>(null)
   const [selectEngineindex, setSelectEngineIndex] = useState<number | null>(null)
   const roundData = useMemo(() => {
-    const engineList = matchState.pick.engine[props.round]
+    if (isUndefined(currentPlay)) return []
+
+    const engineList = currentPlay.engineSlot[props.round]
 
     return pipe(
-      matchState.pick.agent[props.round],
+      currentPlay.agentSlot[props.round],
       zipWithIndex,
-      map(([index, agentId]) => ({ index, agentId, engineId: engineList[index] })),
+      map(([index, agent]) => ({ index, agent, engine: engineList[index] })),
       toArray
     )
-  }, [matchState, props.round])
-  const rateData = useMemo(() => {
-    return matchState.state.rate[matchState.player!.role as PlayerRole]
-  }, [matchState])
+  }, [currentPlay, props.round])
+  const selectBan = useMemo(() => {
+    return pipe(
+      play,
+      entries,
+      flatMap(([, play]) => play.selectBan),
+      toArray
+    )
+  }, [play])
+  const selectAgent = useMemo(() => {
+    if (isUndefined(currentPlay)) return []
+
+    return pipe(
+      currentPlay.agentSlot,
+      flat,
+      map((agent) => agent.id),
+      toArray
+    )
+  }, [currentPlay])
 
   const onDialogClose = () => {
     setSelectAgentIndex(null)
@@ -52,23 +82,23 @@ const AgentSelector: React.FC<Props> = (props) => {
         <ul className="flex gap-4 w-full">
           {pipe(
             roundData,
-            map(({ agentId, index, engineId }) => (
+            map(({ agent, index, engine }) => (
               <li className="flex-1 relative" key={index}>
                 <AgentButton
                   onClick={onAgentSelectorClick}
                   value={index}
-                  agent={store.agents.get(agentId || -1)}
+                  agent={store.agents.get(agent.id || -1)}
                 />
-                {isNumber(agentId) && (
+                {isNumber(agent.id) && (
                   <EngineButton
                     onClick={onEngineSelector}
                     value={index}
-                    engine={store.engines.get(engineId || '')}
+                    engine={store.engines.get(engine.id || '')}
                   />
                 )}
-                {agentId && (
+                {isNumber(agent.id) && (
                   <p className="ft-ria text-lg">
-                    {rateData.agents[agentId]}/{isString(engineId) ? rateData.engines[engineId] : 0}
+                    {agent.rate}/{isString(engine.id) ? engine.rate : 0}
                   </p>
                 )}
               </li>
@@ -78,19 +108,14 @@ const AgentSelector: React.FC<Props> = (props) => {
         </ul>
       </div>
       <AgentDialog
-        disabledList={pipe(
-          matchState.state.selectBan[Role.A_SIDE],
-          concat(matchState.state.selectBan[Role.B_SIDE]),
-          concat(matchState.state.agent[Role.A_SIDE][0]),
-          concat(matchState.state.agent[Role.B_SIDE][1]),
-          filter(isNumber),
-          toArray
-        )}
+        role={props.role}
+        disabledList={pipe(selectBan, concat(selectAgent), filter(isNumber), toArray)}
         onClose={onDialogClose}
         index={selectAgentIndex}
         round={props.round}
       />
       <EngineDialog
+        role={props.role}
         index={selectEngineindex}
         round={props.round}
         disabledList={[]}

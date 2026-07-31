@@ -1,19 +1,28 @@
 import { Role, MatchType, BroadcastEvent } from '@/constant'
 
+export type AgentSlot = {
+  id: number
+  rate: number
+}
+export type EngineSlot = {
+  id: string
+  rate: number
+}
+
+export type Match = {
+  matchType: MatchType
+  matchId: string
+  phase: Phase
+}
+
 export type Player = {
-  agent: Record<number, [null | number, null | number, null | number]>
-  engine: Record<number, [null | string, null | string, null | string]>
+  agentSlot: Array<Array<AgentSlot>>
+  engineSlot: Array<Array<EngineSlot>>
   boss: [null | string, null | string]
   id: string
-  matchId: string
-  matchType: MatchType
   name: string
   proposeBan: Array<null | number>
   selectBan: Array<null | number>
-  rate: {
-    agents: Record<number, number>
-    engines: Record<string, number>
-  }
   role: Role
   score: Array<number>
   time: Array<number>
@@ -21,41 +30,19 @@ export type Player = {
 
 export type BroadcastPayloadMap = {
   [BroadcastEvent.COMMON_BOSS_SELECT]: string
-  [BroadcastEvent.COMMON_BOSS_CONFIRM]: {
-    bossId: string
-    playerId: string
-  }
+  [BroadcastEvent.COMMON_BOSS_CONFIRM]: Record<PlayerRole, Player>
   [BroadcastEvent.BAN_SELECT]: Array<number | null>
+  [BroadcastEvent.BAN_PROPOSE]: Record<PlayerRole, Player>
   [BroadcastEvent.BAN_FIX]: Array<number | null>
-  [BroadcastEvent.BOSS_SELECT]: {
-    bossId: string
-    round: number
-    side: Role.A_SIDE | Role.B_SIDE
-  }
-  [BroadcastEvent.BAN_PROPOSE]: {
-    list: Array<number | null>
-    role: Role.A_SIDE | Role.B_SIDE
-  }
-  [BroadcastEvent.BAN_CONFIRM]: {
-    list: Array<number | null>
-    role: Role.A_SIDE | Role.B_SIDE
-  }
-  [BroadcastEvent.AGENT_PICK]: {
-    index: number
-    round: number
-    role: Role.A_SIDE | Role.B_SIDE
-    agentId: number | null
-  }
+  [BroadcastEvent.BAN_CONFIRM]: Record<PlayerRole, Player>
+  [BroadcastEvent.BOSS_SELECT]: Record<PlayerRole, Player>
+  [BroadcastEvent.AGENT_PICK]: Record<PlayerRole, Player>
+  [BroadcastEvent.ENGINE_PICK]: Record<PlayerRole, Player>
+  
   [BroadcastEvent.AGENT_RATE]: {
     role: Role.A_SIDE | Role.B_SIDE
     agentId: number
     rate: number
-  }
-  [BroadcastEvent.ENGINE_PICK]: {
-    index: number
-    round: number
-    role: Role.A_SIDE | Role.B_SIDE
-    engineId: string | null
   }
   [BroadcastEvent.ENGINE_RATE]: {
     role: Role.A_SIDE | Role.B_SIDE

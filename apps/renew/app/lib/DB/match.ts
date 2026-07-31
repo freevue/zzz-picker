@@ -1,14 +1,13 @@
 import { TableName } from './constant'
-import { PlayerRole, type Player } from '@/type'
+import type { Match, PlayerRole, Player, AgentSlot, EngineSlot } from '@/type'
+import { every, flatMap, isNumber, pipe } from '@fxts/core'
 import { supabase } from '@zzz-picker/supabase'
+import { MatchType, Phase, Role } from '~/constant'
 
 export async function selectHostMatch(hostId: string) {
   const { data } = await supabase
     .from(TableName.MATCH)
-    .select(
-      `matchId: id,
-      matchType`
-    )
+    .select<string, Match>(`matchId: id, matchType, phase`)
     .eq('hostId', hostId)
 
   return data?.[0]
@@ -29,21 +28,7 @@ export async function selectMatchHost(matchId: string) {
 export async function selectMatchPlayer(matchId: string) {
   const { data } = await supabase
     .from(TableName.PLAY)
-    .select<string, Player>(
-      `id,
-      agent,
-      engine,
-      boss,
-      name,
-      proposeBan,
-      rate,
-      role,
-      score,
-      selectBan,
-      time,
-      matchId,
-      ...${TableName.MATCH}(matchType)`
-    )
+    .select<string, Player>('*')
     .eq('matchId', matchId)
 
   if (data === null) throw Error('')
@@ -54,72 +39,112 @@ export async function selectMatchPlayer(matchId: string) {
 export async function selectMatchPlayerId(playerId: string) {
   const { data } = await supabase
     .from(TableName.PLAY)
-    .select<string, Player>(
-      `matchId,
-      ...${TableName.MATCH}(matchType)`
-    )
+    .select<string, Match>(`matchId, ...${TableName.MATCH}(matchType, phase)`)
     .eq('id', playerId)
-    .single()
 
   if (data === null) throw Error('')
 
-  return data
+  return data?.[0]
 }
 
-export async function updateBoss(playerId: string, boss: [string | null, string | null]) {
-  await supabase.from(TableName.PLAY).update({ boss }).eq('id', playerId)
+export function updateBoss(playerId: string) {
+  return async (boss: [string | null, string | null]) => {
+    const { data } = await supabase
+      .from(TableName.PLAY)
+      .update({ boss })
+      .eq('id', playerId)
+      .select<string, Player>('*')
 
-  return ''
-}
+    if (data === null) throw Error('')
 
-export async function updateAgent(
-  playerId: string,
-  agent: Record<number, [number | null, number | null, number | null]>,
-  rate: {
-    agents: Record<number, number>
-    engines: Record<string, number>
+    return data
   }
-) {
-  await supabase.from(TableName.PLAY).update({ agent, rate }).eq('id', playerId)
-
-  return ''
 }
 
-export async function updateEngine(
-  playerId: string,
-  engine: Record<number, [string | null, string | null, string | null]>,
-  rate: {
-    agents: Record<number, number>
-    engines: Record<string, number>
+export function updateAgent(id: string) {
+  return async (agentSlot: Array<Array<AgentSlot>>) => {
+    const { data } = await supabase
+      .from(TableName.PLAY)
+      .update({ agentSlot })
+      .eq('id', id)
+      .select<string, Player>('*')
+
+    if (data === null) throw Error('')
+
+    return data
   }
-) {
-  await supabase.from(TableName.PLAY).update({ engine, rate }).eq('id', playerId)
-
-  return ''
 }
 
-export async function updateCommonBoss(matchId: string, id: string) {
-  await supabase
-    .from(TableName.PLAY)
-    .update({
-      boss: [null, id],
-    })
-    .eq('matchId', matchId)
+export function updateEngine(id: string) {
+  return async (engineSlot: Array<Array<EngineSlot>>) => {
+    const { data } = await supabase
+      .from(TableName.PLAY)
+      .update({ engineSlot })
+      .eq('id', id)
+      .select<string, Player>('*')
 
-  return ''
+    if (data === null) throw Error('')
+
+    return data
+  }
 }
 
-export function updateProposeBan(player: Player) {
+export function updateCommonBoss(matchId: string) {
+  return async (id: string) => {
+    const { data } = await supabase
+      .from(TableName.PLAY)
+      .update({ boss: [null, id] })
+      .eq('matchId', matchId)
+      .select<string, Player>('*')
+
+    if (data === null) throw Error('')
+
+    await pipe(Phase.BAN, updateMatchPhase(matchId))
+
+    return data
+  }
+}
+
+export function updateProposeBan(id: string) {
   return async (proposeBan: Array<number>) => {
-    console.log({ proposeBan })
+    const { data } = await supabase
+      .from(TableName.PLAY)
+      .update({ proposeBan })
+      .eq('id', id)
+      .select<string, Player>('*')
 
-    await supabase.from(TableName.PLAY).update({ proposeBan }).eq('id', player.id)
+    if (data === null) throw Error('')
+
+    return data
   }
 }
 
-export function updateSelectBan(player: Player) {
+export function updateSelectBan(id: string) {
   return async (selectBan: Array<number>) => {
-    await supabase.from(TableName.PLAY).update({ selectBan }).eq('id', player.id)
+    const { data } = await supabase
+      .from(TableName.PLAY)
+      .update({ selectBan })
+      .eq('id', id)
+      .select<string, Player>('*')
+
+    if (data === null) throw Error('')
+
+    return data
+  }
+}
+
+export function updateMatchPhase(id: string) {
+  return async (phase: Phase) => {
+    const { data } = await supabase
+      .from(TableName.MATCH)
+      .update({ phase })
+      .eq('id', id)
+      .select<string, Match>('*')
+      .single()
+
+    if (data === null) throw Error('')
+
+    return data
   }
 }
 
@@ -133,5 +158,30 @@ export function updateScore(id: string, role: PlayerRole) {
       .select()
 
     console.log(data)
+  }
+}
+
+export async function insertMatch(matchType: MatchType) {
+  const { data } = await supabase
+    .from(TableName.MATCH)
+    .insert({
+      matchType,
+      phase: matchType === MatchType.UNLIMITED ? Phase.PICK : Phase.COMMON_BOSS_SELECT,
+    })
+    .select()
+    .single()
+
+  return data
+}
+
+export function insertPlayer(matchId: string) {
+  return async ({ role, name }: { role: Role; name: string }) => {
+    const { data } = await supabase
+      .from(TableName.PLAY)
+      .insert({ matchId, role, name })
+      .select()
+      .single()
+
+    return data
   }
 }
