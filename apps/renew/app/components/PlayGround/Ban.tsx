@@ -10,9 +10,7 @@ import {
   includes,
   uniq,
   isNumber,
-  when,
   append,
-  head,
   isUndefined,
   every,
   isNull,
@@ -22,12 +20,18 @@ import {
   isObject,
   entries,
   flatMap,
+  size,
+  when,
+  max,
+  range,
+  findIndex,
+  slice,
 } from '@fxts/core'
 import { useMemo } from 'react'
 import { BroadcastEvent, Phase, Role, SETTING } from '~/constant'
-import { useMatch, useMatchState, useStore } from '~/hooks'
+import { useMatch, useStore } from '~/hooks'
 import { updateMatchPhase, updateProposeBan, updateSelectBan } from '~/lib/DB'
-import { opponent, getPosition } from '~/lib/utils'
+import { getPosition } from '~/lib/utils'
 
 type BanFixProps = {
   proposeBan: Array<number | null>
@@ -51,7 +55,7 @@ const BanFix: React.FC<BanFixProps> = (props) => {
               type="button"
               disabled={
                 !includes(agent.id, props.active) &&
-                props.active.length >= SETTING.MAX_PLAYER_BAN_FIX
+                size(filter(isNumber, props.active)) >= SETTING.MAX_PLAYER_BAN_FIX
               }
               className={pipe(
                 [
@@ -157,12 +161,19 @@ const Ban: React.FC<Props> = (props) => {
   const onBanAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
+    console.log(isPicker)
+
     if (!isPicker) return
     if (includes(Number(event.currentTarget.value), select[Phase.BAN])) {
+      const index = findIndex((id) => id === Number(event.currentTarget.value), select[Phase.BAN])
+
       pipe(
         select[Phase.BAN],
-        filter((id) => id !== Number(event.currentTarget.value)),
-        toArray,
+        (list) => {
+          list[index] = null
+
+          return list
+        },
         (list) => {
           send(BroadcastEvent.BAN_SELECT, list)
         }
@@ -171,9 +182,19 @@ const Ban: React.FC<Props> = (props) => {
       return
     }
 
-    pipe([...select[Phase.BAN], Number(event.currentTarget.value)], uniq, toArray, (list) => {
-      send(BroadcastEvent.BAN_SELECT, list)
-    })
+    const index = findIndex(isNull, select[Phase.BAN])
+
+    pipe(
+      select[Phase.BAN],
+      (list) => {
+        list[index] = Number(event.currentTarget.value)
+
+        return list
+      },
+      (list) => {
+        send(BroadcastEvent.BAN_SELECT, list)
+      }
+    )
   }
   const onBanConfirm = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -220,14 +241,36 @@ const Ban: React.FC<Props> = (props) => {
     event.preventDefault()
 
     if (!isPicker) return
+    if (includes(Number(event.currentTarget.value), select[Phase.BAN_FIX])) {
+      const index = findIndex(
+        (id) => id === Number(event.currentTarget.value),
+        select[Phase.BAN_FIX]
+      )
+
+      pipe(
+        select[Phase.BAN_FIX],
+        (list) => {
+          list[index] = null
+
+          return list
+        },
+        (list) => {
+          send(BroadcastEvent.BAN_FIX, list)
+        }
+      )
+
+      return
+    }
+
+    const index = findIndex(isNull, select[Phase.BAN_FIX])
 
     pipe(
-      Number(event.currentTarget.value),
-      (id) =>
-        includes(id, select[Phase.BAN_FIX])
-          ? filter((selectId) => selectId !== id, select[Phase.BAN_FIX])
-          : append(id, select[Phase.BAN_FIX]),
-      uniq,
+      select[Phase.BAN_FIX],
+      (list) => {
+        list[index] = Number(event.currentTarget.value)
+
+        return list
+      },
       toArray,
       (list) => send(BroadcastEvent.BAN_FIX, list)
     )
@@ -250,7 +293,7 @@ const Ban: React.FC<Props> = (props) => {
                 type="button"
                 disabled={
                   !includes(id, select[Phase.BAN]) &&
-                  (select[Phase.BAN].length >= SETTING.MAX_PLAYER_BAN_PROPOSE ||
+                  (size(filter(isNumber, select[Phase.BAN])) >= SETTING.MAX_PLAYER_BAN_PROPOSE ||
                     !isPicker ||
                     match.phase !== Phase.BAN)
                 }

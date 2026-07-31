@@ -5,6 +5,7 @@ type Props = {
   value: [number, number]
   primary?: boolean
   append?: React.ReactNode
+  error?: (value: number) => boolean
 }
 
 const Row: React.FC<Props> = (props) => {
@@ -14,6 +15,7 @@ const Row: React.FC<Props> = (props) => {
         className={pipe(
           ['flex-1', 'text-right', 'ft-ria'],
           concat(props.primary ? ['text-2xl', 'text-primary'] : ['text-xl']),
+          concat(props.error?.(props.value[0]) ? ['text-tertiary'] : []),
           join(' ')
         )}
       >
@@ -32,6 +34,7 @@ const Row: React.FC<Props> = (props) => {
         className={pipe(
           ['flex-1', 'text-left', 'ft-ria'],
           concat(props.primary ? ['text-2xl', 'text-primary'] : ['text-xl']),
+          concat(props.error?.(props.value[1]) ? ['text-tertiary'] : []),
           join(' ')
         )}
       >

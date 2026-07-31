@@ -25,6 +25,7 @@ export enum BroadcastEvent {
   ENGINE_PICK = 'enginePick',
   SCORE = 'score',
   TIME = 'time',
+  MATCH_TYPE = 'matchType',
 }
 
 export enum Phase {

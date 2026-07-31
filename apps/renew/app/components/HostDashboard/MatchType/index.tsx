@@ -1,6 +1,7 @@
 import CardTitle from '../CardTitle'
+import { updateMatchType } from '@/lib/DB'
 import { concat, join, map, pipe, toArray } from '@fxts/core'
-import { MatchType } from '~/constant'
+import { BroadcastEvent, MatchType } from '~/constant'
 import { useMatch } from '~/hooks'
 
 const MATCH_LIST = [
@@ -9,7 +10,16 @@ const MATCH_LIST = [
   { label: '공허사냥꾼', value: MatchType.UNLIMITED },
 ]
 const CommonBoss: React.FC = () => {
-  const { match } = useMatch()
+  const { match, send } = useMatch()
+
+  const onMatchTypeClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+
+    send(
+      BroadcastEvent.MATCH_TYPE,
+      await pipe(event.currentTarget.value as MatchType, updateMatchType(match.matchId))
+    )
+  }
 
   return (
     <div className="card p-4 rounded-3xl">
@@ -23,6 +33,7 @@ const CommonBoss: React.FC = () => {
                 type="button"
                 value={value}
                 disabled={match.matchType === value}
+                onClick={onMatchTypeClick}
                 className={pipe(
                   ['block', 'w-full', 'h-full', 'font-bold', 'ft-pre', 'text-xl'],
                   concat(match.matchType === value ? ['bg-primary', 'text-accent'] : []),

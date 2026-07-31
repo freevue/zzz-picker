@@ -148,6 +148,21 @@ export function updateMatchPhase(id: string) {
   }
 }
 
+export function updateMatchType(id: string) {
+  return async (matchType: MatchType) => {
+    const { data } = await supabase
+      .from(TableName.MATCH)
+      .update({ matchType })
+      .eq('id', id)
+      .select<string, Match>('*')
+      .single()
+
+    if (data === null) throw Error('')
+
+    return data
+  }
+}
+
 export function updateScore(id: string) {
   return async (score: Array<number>) => {
     const { data } = await supabase

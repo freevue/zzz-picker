@@ -33,7 +33,7 @@ const AgentButton: React.FC<Props> = (props) => {
       onClick={props.onClick}
     >
       <img
-        className="block w-full rounded-xl relative z-1"
+        className="block w-full rounded-xl relative z-1 aspect-square"
         style={{ backgroundColor: props.color || 'transparent' }}
         src={props.profile}
         alt={props.nameKo}

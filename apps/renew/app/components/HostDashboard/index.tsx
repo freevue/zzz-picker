@@ -7,10 +7,13 @@ import PlayerName from './PlayerName'
 import Result from './Result'
 import Round from './Round'
 import SpecialRule from './SpecialRule'
+import { MatchType as MatchTypeEnum } from '@/constant'
 import { concat, pipe, join } from '@fxts/core'
 import { useState } from 'react'
+import { useMatch } from '~/hooks'
 
 const HostDashboard: React.FC = () => {
+  const { match } = useMatch()
   const [isResult, setIsResult] = useState<boolean>(false)
 
   const onResultClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -26,10 +29,21 @@ const HostDashboard: React.FC = () => {
       </div>
       <div className="flex-1 flex flex-col gap-4 py-4 max-w-sm min-w-sm overflow-auto scrollbar-hidden">
         <MatchType />
-        <div className="card p-4 gap-8 rounded-3xl flex-1 flex flex-col">
+        <div className="card p-4 gap-8 rounded-3xl flex-1 flex flex-col relative overflow-hidden">
           <CommonBoss />
           <AllowAgent />
           <Ban />
+          {match.matchType === MatchTypeEnum.UNLIMITED && (
+            <div
+              className={pipe(
+                ['absolute', 'inset-0', 'transition-opacity', 'card'],
+                concat(
+                  match.matchType !== MatchTypeEnum.UNLIMITED ? ['opacity-0'] : ['opacity-100']
+                ),
+                join(' ')
+              )}
+            ></div>
+          )}
         </div>
       </div>
       <div className="flex-1 flex flex-col gap-4 min-w-xl py-4">

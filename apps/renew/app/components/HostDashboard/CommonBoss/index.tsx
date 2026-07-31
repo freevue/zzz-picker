@@ -14,7 +14,7 @@ const CommonBoss: React.FC = () => {
       when(isNull, () => play[Role.B_SIDE].boss[1]),
       (bossId) => store.deadlyAssault.get(bossId || '')
     )
-  }, [play])
+  }, [play, select])
 
   return (
     <div className="">

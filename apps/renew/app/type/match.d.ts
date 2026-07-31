@@ -40,6 +40,7 @@ export type BroadcastPayloadMap = {
   [BroadcastEvent.ENGINE_PICK]: Record<PlayerRole, Player>
   [BroadcastEvent.SCORE]: Record<PlayerRole, Player>
   [BroadcastEvent.TIME]: Record<PlayerRole, Player>
+  [BroadcastEvent.MATCH_TYPE]: Match
 }
 
 export type Match = Record<Role, Player> & {

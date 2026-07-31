@@ -1,7 +1,17 @@
-import { entries, every, flatMap, fromEntries, isNumber, map, pipe } from '@fxts/core'
+import {
+  entries,
+  every,
+  flatMap,
+  fromEntries,
+  isNumber,
+  map,
+  pipe,
+  range,
+  toArray,
+} from '@fxts/core'
 import { supabase, type RealtimeChannel } from '@zzz-picker/supabase'
 import { createContext, useEffect, useMemo, useRef, useState } from 'react'
-import { MatchType, Phase, Role, BroadcastEvent } from '~/constant'
+import { MatchType, Phase, Role, BroadcastEvent, SETTING } from '~/constant'
 import type { Match, Player, BroadcastPayloadMap, PlayerRole } from '~/type'
 
 const INITIAL_PLAY = {
@@ -18,8 +28,13 @@ const INITIAL_PLAY = {
 } as Player
 const INITIAL_SELECT_STATE = {
   [Phase.COMMON_BOSS_SELECT]: null as string | null,
-  [Phase.BAN]: [] as Array<number | null>,
-  [Phase.BAN_FIX]: [] as Array<number | null>,
+  [Phase.BAN]: pipe(
+    SETTING.MAX_PLAYER_BAN_PROPOSE,
+    range,
+    map(() => null),
+    toArray
+  ) as Array<number | null>,
+  [Phase.BAN_FIX]: [null] as Array<number | null>,
 }
 
 type Props = {
@@ -88,7 +103,7 @@ const MatchState: React.FC<Props> = (props) => {
           ...prev,
           ...(response.payload as BroadcastPayloadMap[BroadcastEvent.BAN_PROPOSE]),
         }))
-        setSelect((prev) => ({ ...prev, [Phase.BAN]: [] }))
+        setSelect((prev) => ({ ...prev, [Phase.BAN]: [null, null] }))
       })
       .on('broadcast', { event: BroadcastEvent.BAN_FIX }, (response) => {
         setSelect((prev) => ({ ...prev, [Phase.BAN_FIX]: response.payload }))
@@ -140,6 +155,12 @@ const MatchState: React.FC<Props> = (props) => {
         setPlay((prev) => ({
           ...prev,
           ...(response.payload as BroadcastPayloadMap[BroadcastEvent.TIME]),
+        }))
+      })
+      .on('broadcast', { event: BroadcastEvent.MATCH_TYPE }, (response) => {
+        setMatch((prev) => ({
+          ...prev,
+          ...(response.payload as BroadcastPayloadMap[BroadcastEvent.MATCH_TYPE]),
         }))
       })
       .subscribe()

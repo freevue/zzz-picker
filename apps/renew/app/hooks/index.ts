@@ -1,7 +1,7 @@
 import { filter, find, isObject, isUndefined, map, pipe, sum } from '@fxts/core'
 import { useContext, useMemo } from 'react'
 import { Role } from '~/constant'
-import { StoreContext, MatchStateContext, ScoreContext, MatchContext } from '~/provider'
+import { StoreContext, MatchContext } from '~/provider'
 
 export const useStore = () => {
   return useContext(StoreContext)

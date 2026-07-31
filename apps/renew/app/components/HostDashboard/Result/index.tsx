@@ -2,7 +2,7 @@ import Row from './Row'
 import { calcTimeScore, calcCostBonuse } from '@/lib/utils'
 import { map, pipe, toArray, zipWithIndex } from '@fxts/core'
 import { useMemo } from 'react'
-import { Role } from '~/constant'
+import { MatchType, Role } from '~/constant'
 import { useCost, useMatch } from '~/hooks'
 
 const Round: React.FC<{ round: number }> = (props) => {
@@ -34,7 +34,7 @@ const Round: React.FC<{ round: number }> = (props) => {
   )
 }
 const Result: React.FC = () => {
-  const { play } = useMatch()
+  const { play, match } = useMatch()
   const round1Cost = useCost(0)
   const round2Cost = useCost(1)
 
@@ -69,10 +69,15 @@ const Result: React.FC = () => {
     return pipe(
       totalRoundScore,
       zipWithIndex,
-      map(([index, value]) => value + value * costBonuse[index] + timeBounse[index]),
+      map(([index, value]) => {
+        if (match.matchType === MatchType.ORIGINAL)
+          return value + value * costBonuse[index] + timeBounse[index]
+
+        return value + timeBounse[index]
+      }),
       toArray
     ) as [number, number]
-  }, [totalRoundScore, costBonuse, timeBounse])
+  }, [totalRoundScore, costBonuse, timeBounse, match])
 
   return (
     <div className="card rounded-3xl w-full h-full relative flex flex-col gap-4">
@@ -82,17 +87,27 @@ const Result: React.FC = () => {
       </div>
       <div className="flex flex-col flex-1 p-4">
         <h2 className="text-center text-primary ft-ria text-3xl mb-4">결과</h2>
-        <Row title="총 사용 Cost" value={totalCost} />
         <Row
-          title="Cost 보너스 배율(%)"
-          value={
-            pipe(
-              costBonuse,
-              map((value) => value * 100),
-              toArray
-            ) as [number, number]
-          }
+          title="총 사용 Cost"
+          value={totalCost}
+          error={(value) => {
+            if (match.matchType === MatchType.ORIGINAL) return value > 24
+
+            return false
+          }}
         />
+        {match.matchType === MatchType.ORIGINAL && (
+          <Row
+            title="Cost 보너스 배율(%)"
+            value={
+              pipe(
+                costBonuse,
+                map((value) => value * 100),
+                toArray
+              ) as [number, number]
+            }
+          />
+        )}
         <Row title="총 시간 보너스" value={timeBounse} />
         <Row title="총 Round 점수" value={totalRoundScore} />
         <Row
