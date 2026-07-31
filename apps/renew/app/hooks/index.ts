@@ -1,19 +1,10 @@
-import { filter, isNumber, isObject, isString, map, pipe, toArray } from '@fxts/core'
+import { filter, find, isObject, isUndefined, map, pipe, sum } from '@fxts/core'
 import { useContext, useMemo } from 'react'
 import { Role } from '~/constant'
-import { agentCost, engineCost } from '~/lib/utils'
 import { StoreContext, MatchStateContext, ScoreContext, MatchContext } from '~/provider'
 
 export const useStore = () => {
   return useContext(StoreContext)
-}
-
-export const useMatchState = () => {
-  return useContext(MatchStateContext)
-}
-
-export const useScore = () => {
-  return useContext(ScoreContext)
 }
 
 export const useMatch = () => {
@@ -21,47 +12,51 @@ export const useMatch = () => {
 }
 
 export const useCost = (round: number) => {
-  const matchState = useContext(MatchStateContext)
+  const { play } = useContext(MatchContext)
   const store = useContext(StoreContext)
 
   return useMemo(() => {
     return {
       [Role.A_SIDE]: {
         agentCost: pipe(
-          matchState.state.agent[Role.A_SIDE][round],
-          filter(isNumber),
-          map((agentId) => store.agents.get(agentId!)),
+          play[Role.A_SIDE].agentSlot[round],
+          map(({ id, rate }) => ({ agent: store.agents.get(id), rate })),
+          filter(({ agent }) => !isUndefined(agent)),
+          map(({ rate, agent }) => find((cost) => cost.rate === rate, agent!.cost)),
           filter(isObject),
-          toArray,
-          agentCost(matchState.state.rate[Role.A_SIDE].agents)
+          map(({ cost }) => cost),
+          sum
         ),
         engineCost: pipe(
-          matchState.state.engine[Role.A_SIDE][round],
-          filter(isString),
-          map((engineId) => store.engines.get(engineId!)),
+          play[Role.A_SIDE].engineSlot[round],
+          map(({ id, rate }) => ({ engine: store.engines.get(id), rate })),
+          filter(({ engine }) => !isUndefined(engine)),
+          map(({ rate, engine }) => find((cost) => cost.rate === rate, engine!.cost)),
           filter(isObject),
-          toArray,
-          engineCost(matchState.state.rate[Role.A_SIDE].engines)
+          map(({ cost }) => cost),
+          sum
         ),
       },
       [Role.B_SIDE]: {
         agentCost: pipe(
-          matchState.state.agent[Role.B_SIDE][round],
-          filter(isNumber),
-          map((agentId) => store.agents.get(agentId!)),
+          play[Role.B_SIDE].agentSlot[round],
+          map(({ id, rate }) => ({ agent: store.agents.get(id), rate })),
+          filter(({ agent }) => !isUndefined(agent)),
+          map(({ rate, agent }) => find((cost) => cost.rate === rate, agent!.cost)),
           filter(isObject),
-          toArray,
-          agentCost(matchState.state.rate[Role.B_SIDE].agents)
+          map(({ cost }) => cost),
+          sum
         ),
         engineCost: pipe(
-          matchState.state.engine[Role.B_SIDE][round],
-          filter(isString),
-          map((engineId) => store.engines.get(engineId!)),
+          play[Role.B_SIDE].engineSlot[round],
+          map(({ id, rate }) => ({ engine: store.engines.get(id), rate })),
+          filter(({ engine }) => !isUndefined(engine)),
+          map(({ rate, engine }) => find((cost) => cost.rate === rate, engine!.cost)),
           filter(isObject),
-          toArray,
-          engineCost(matchState.state.rate[Role.B_SIDE].engines)
+          map(({ cost }) => cost),
+          sum
         ),
       },
     }
-  }, [matchState, store])
+  }, [play, store])
 }

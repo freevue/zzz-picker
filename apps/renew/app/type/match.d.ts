@@ -38,17 +38,8 @@ export type BroadcastPayloadMap = {
   [BroadcastEvent.BOSS_SELECT]: Record<PlayerRole, Player>
   [BroadcastEvent.AGENT_PICK]: Record<PlayerRole, Player>
   [BroadcastEvent.ENGINE_PICK]: Record<PlayerRole, Player>
-  
-  [BroadcastEvent.AGENT_RATE]: {
-    role: Role.A_SIDE | Role.B_SIDE
-    agentId: number
-    rate: number
-  }
-  [BroadcastEvent.ENGINE_RATE]: {
-    role: Role.A_SIDE | Role.B_SIDE
-    engineId: string
-    rate: number
-  }
+  [BroadcastEvent.SCORE]: Record<PlayerRole, Player>
+  [BroadcastEvent.TIME]: Record<PlayerRole, Player>
 }
 
 export type Match = Record<Role, Player> & {

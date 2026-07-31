@@ -1,30 +1,31 @@
 import { pipe, map, zipWithIndex, toArray, isUndefined, join, concat } from '@fxts/core'
 import { Icon } from '~/components'
-import { useMatchState, useStore } from '~/hooks'
-import { type PlayerRole } from '~/type'
+import { useStore } from '~/hooks'
+import type { AgentSlot, EngineSlot, PlayerRole } from '~/type'
 
 type Props = {
-  list: Array<number | null>
-  engines: Array<string | null>
+  list: Array<AgentSlot>
+  engines: Array<EngineSlot>
   role: PlayerRole
 }
 
 const AgentList: React.FC<Props> = (props) => {
   const store = useStore()
-  const matchState = useMatchState()
 
   return (
     <ul className="flex gap-4">
       {pipe(
         props.list,
-        map((agentId) => store.agents.get(agentId || -1)),
+        map((agent) => store.agents.get(agent.id || -1)),
         zipWithIndex,
         map(([index, agent]) => ({
           index,
           agent,
-          engine: store.engines.get(props.engines[index] || ''),
+          agentRate: props.list[index].rate,
+          engine: store.engines.get(props.engines[index].id || ''),
+          engineRate: props.engines[index].rate,
         })),
-        map(({ index, agent, engine }) => (
+        map(({ index, agent, engine, agentRate, engineRate }) => (
           <li key={index}>
             <div className="relative">
               <button
@@ -63,16 +64,12 @@ const AgentList: React.FC<Props> = (props) => {
               {!isUndefined(agent) && (
                 <>
                   <p className="ft-pre">
-                    <span className="ft-ria text-xl">
-                      {matchState.state.rate[props.role].agents[agent.id] || 0}
-                    </span>
+                    <span className="ft-ria text-xl">{agentRate || 0}</span>
                     <span className="ml-1 text-lg">Lv</span>
                   </p>
                   <span className="ft-pre text-md mx-1 opacity-70">/</span>
                   <p className="ft-pre">
-                    <span className="ft-ria text-xl">
-                      {matchState.state.rate[props.role].engines[engine?.id || 0] || 0}
-                    </span>
+                    <span className="ft-ria text-xl">{engineRate || 0}</span>
                     <span className="ml-1 text-lg">Lv</span>
                   </p>
                 </>

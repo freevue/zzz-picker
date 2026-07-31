@@ -22,9 +22,9 @@ export enum BroadcastEvent {
   BAN_FIX = 'banFix',
   BAN_CONFIRM = 'banConfirm',
   AGENT_PICK = 'agentPick',
-  AGENT_RATE = 'agentRate',
   ENGINE_PICK = 'enginePick',
-  ENGINE_RATE = 'engineRate',
+  SCORE = 'score',
+  TIME = 'time',
 }
 
 export enum Phase {

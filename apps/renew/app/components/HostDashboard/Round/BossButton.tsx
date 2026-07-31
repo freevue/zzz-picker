@@ -1,18 +1,24 @@
-import { concat, isUndefined, join, pipe } from '@fxts/core'
-import { Boss } from '~/type'
+import { isUndefined, join, pipe } from '@fxts/core'
+import { useMemo } from 'react'
+import { useStore } from '~/hooks'
 
 type Props = {
-  boss?: Boss
+  bossId: string | null
 }
 
 const BossButton: React.FC<Props> = (props) => {
+  const store = useStore()
+  const boss = useMemo(() => {
+    return store.deadlyAssault.get(props.bossId || '')
+  }, [store, props.bossId])
+
   return (
     <button type="button" className={pipe(['rounded-2xl', 'size-20', 'bg-accent'], join(' '))}>
-      {isUndefined(props.boss) ? (
+      {isUndefined(boss) ? (
         <></>
       ) : (
         <div className="rounded-xl w-full h-full overflow-hidden">
-          <img className="w-full block bg-ink" src={props.boss.src} />
+          <img className="w-full block bg-ink" src={boss.src} />
         </div>
       )}
     </button>

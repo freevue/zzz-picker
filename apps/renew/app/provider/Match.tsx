@@ -130,20 +130,13 @@ const MatchState: React.FC<Props> = (props) => {
           ...(response.payload as BroadcastPayloadMap[BroadcastEvent.ENGINE_PICK]),
         }))
       })
-
-      .on('broadcast', { event: BroadcastEvent.AGENT_RATE }, (response) => {
-        // const payload = response.payload as BroadcastPayloadMap[BroadcastEvent.AGENT_RATE]
-        // setMatch((prev) => {
-        //   return pipe(
-        //     prev.rate[payload.role].agents,
-        //     (rate) => ({ ...rate, [payload.agentId]: payload.rate }),
-        //     (agents) => ({ ...prev.rate[payload.role], agents }),
-        //     (rate) => ({ ...prev.rate, [payload.role]: rate }),
-        //     (rate) => ({ ...prev, rate })
-        //   )
-        // })
+      .on('broadcast', { event: BroadcastEvent.SCORE }, (response) => {
+        setPlay((prev) => ({
+          ...prev,
+          ...(response.payload as BroadcastPayloadMap[BroadcastEvent.SCORE]),
+        }))
       })
-      .on('broadcast', { event: BroadcastEvent.ENGINE_RATE }, (response) => {
+      .on('broadcast', { event: BroadcastEvent.TIME }, (response) => {
         // const payload = response.payload as BroadcastPayloadMap[BroadcastEvent.ENGINE_RATE]
         // setMatch((prev) => {
         //   return pipe(

@@ -1,5 +1,5 @@
 import CardTitle from '../CardTitle'
-import { pipe, join, concat, map, filter, toArray } from '@fxts/core'
+import { pipe, map, filter, toArray } from '@fxts/core'
 import { useStore } from '~/hooks'
 
 const AllowAgent: React.FC = () => {

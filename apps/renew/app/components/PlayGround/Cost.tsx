@@ -1,31 +1,10 @@
-import {
-  filter,
-  find,
-  flat,
-  flatMap,
-  groupBy,
-  isNumber,
-  isObject,
-  isString,
-  isUndefined,
-  map,
-  pipe,
-  sort,
-  sum,
-  toArray,
-  values,
-} from '@fxts/core'
+import { filter, find, flat, isObject, isUndefined, map, pipe, sum } from '@fxts/core'
 import { useMemo } from 'react'
 import { useMatch, useStore } from '~/hooks'
-import { agentCost, engineCost } from '~/lib/utils'
-import { PlayerRole } from '~/type'
 
 const Cost: React.FC = () => {
   const { currentPlay } = useMatch()
   const store = useStore()
-  // const rateDate = useMemo(() => {
-  //   return matchState.state.rate[matchState.player!.role as PlayerRole]
-  // }, [matchState])
   const totalAgentCost = useMemo(() => {
     if (isUndefined(currentPlay)) return 0
 
@@ -62,7 +41,7 @@ const Cost: React.FC = () => {
         <span className="ft-ria text-primary text-3xl mx-2">
           {totalAgentCost + totalEngineCost}
         </span>
-        <span>Ct</span>
+        <span>Co</span>
       </p>
     </div>
   )

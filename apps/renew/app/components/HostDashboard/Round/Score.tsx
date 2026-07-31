@@ -1,8 +1,9 @@
-import { pipe, concat, join, max, min, map, toArray } from '@fxts/core'
+import { pipe, concat, join, max, min, map, fromEntries } from '@fxts/core'
 import { useRef } from 'react'
-import { useScore } from '~/hooks'
+import { BroadcastEvent } from '~/constant'
+import { useMatch } from '~/hooks'
 import { updateScore } from '~/lib/DB'
-import type { PlayerRole } from '~/type'
+import type { Player, PlayerRole } from '~/type'
 
 type Props = {
   role: PlayerRole
@@ -12,33 +13,38 @@ type Props = {
 
 const Score: React.FC<Props> = (props) => {
   const debounce = useRef<NodeJS.Timeout | null>(null)
-  const { score, setState } = useScore()
+  const { play, send } = useMatch()
 
   const onScoreChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     debounce.current && clearTimeout(debounce.current)
 
-    pipe(
-      [0, Number(event.currentTarget.value)],
-      max,
-      (value) => [value, 65_000],
-      min,
-      (value) => {
-        setState((prev) => {
-          prev.score[props.round][props.role] = Number(value)
+    const value = pipe([0, Number(event.currentTarget.value)], max, (value) => [value, 65_000], min)
+    const score = pipe(
+      play[props.role].score,
+      (list) => {
+        list[props.round] = value
 
-          return { ...prev }
+        return list
+      },
+      (score) => {
+        send(BroadcastEvent.SCORE, {
+          ...play,
+          [props.role]: { ...play[props.role], score },
         })
 
-        return value
+        return score
       }
     )
 
     debounce.current = setTimeout(async () => {
-      await pipe(
-        score,
-        map((data) => data[props.role]),
-        toArray,
-        updateScore(props.id as string, props.role)
+      send(
+        BroadcastEvent.SCORE,
+        await pipe(
+          score,
+          updateScore(play[props.role].id),
+          map((play) => [play.role, play] as [PlayerRole, Player]),
+          fromEntries
+        )
       )
 
       debounce.current = null
@@ -57,7 +63,7 @@ const Score: React.FC<Props> = (props) => {
         type="number"
         max={65000}
         min={0}
-        value={Number(score[props.round][props.role])}
+        value={Number(play[props.role].score[props.round])}
         onFocus={(event) => event.target.select()}
         onChange={onScoreChange}
         className={pipe(

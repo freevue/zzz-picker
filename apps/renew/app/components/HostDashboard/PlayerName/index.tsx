@@ -1,18 +1,14 @@
 import { Role } from '~/constant'
-import { useMatchState } from '~/hooks'
+import { useMatch } from '~/hooks'
 
 const PlayerName: React.FC = () => {
-  const matchState = useMatchState()
+  const { play } = useMatch()
 
   return (
     <div className="card p-4 flex w-full justify-between items-end rounded-3xl">
-      <h3 className="ft-ria text-primary text-4xl flex-1 text-center">
-        {matchState.state.name[Role.A_SIDE]}
-      </h3>
+      <h3 className="ft-ria text-primary text-4xl flex-1 text-center">{play[Role.A_SIDE].name}</h3>
       <span className="text-ink text-4xl ft-ria">VS</span>
-      <h3 className="ft-ria text-primary text-4xl flex-1 text-center">
-        {matchState.state.name[Role.B_SIDE]}
-      </h3>
+      <h3 className="ft-ria text-primary text-4xl flex-1 text-center">{play[Role.B_SIDE].name}</h3>
     </div>
   )
 }

@@ -2,6 +2,7 @@ import { Role } from '@/constant'
 import type { Player, PlayerRole } from '@/type'
 import { pipe, zip, map, toArray } from '@fxts/core'
 import { createContext, useState } from 'react'
+import { useMatch } from '~/hooks'
 
 const INITIAL_STATE = {
   score: [
@@ -27,6 +28,7 @@ type State = {
 export const Context = createContext<State>({ ...INITIAL_STATE, setState: () => {} })
 
 const ScoreState: React.FC<Props> = (props) => {
+  const { play } = useMatch()
   const [state, setState] = useState<typeof INITIAL_STATE>({
     score: pipe(
       props.match.B.score,

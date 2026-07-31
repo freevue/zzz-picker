@@ -3,91 +3,88 @@ import AgentList from './AgentList'
 import BossButton from './BossButton'
 import Score from './Score'
 import Timer from './Timer'
-import { filter, isNumber, isObject, isString, join, map, pipe, toArray } from '@fxts/core'
+import { filter, find, isObject, isUndefined, join, map, pipe, sum } from '@fxts/core'
 import { useMemo } from 'react'
 import { Phase, Role } from '~/constant'
-import { useMatchState, useStore } from '~/hooks'
-import { agentCost, engineCost } from '~/lib/utils'
+import { useMatch, useStore } from '~/hooks'
 
 type Props = {
   round: number
 }
 
 const Round: React.FC<Props> = (props) => {
-  const matchState = useMatchState()
+  const { play, match } = useMatch()
   const store = useStore()
-  const roundData = useMemo(() => {
+  const roundCost = useMemo(() => {
     return {
       [Role.A_SIDE]: {
-        agent: matchState.state.agent[Role.A_SIDE][props.round],
-        engine: matchState.state.engine[Role.A_SIDE][props.round],
-        boss: store.deadlyAssault.get(matchState.state.boss[Role.A_SIDE][props.round] || ''),
         agentCost: pipe(
-          matchState.state.agent[Role.A_SIDE][props.round],
-          filter(isNumber),
-          map((agentId) => store.agents.get(agentId!)),
+          play[Role.A_SIDE].agentSlot[props.round],
+          map(({ id, rate }) => ({ agent: store.agents.get(id), rate })),
+          filter(({ agent }) => !isUndefined(agent)),
+          map(({ rate, agent }) => find((cost) => cost.rate === rate, agent!.cost)),
           filter(isObject),
-          toArray,
-          agentCost(matchState.state.rate[Role.A_SIDE].agents)
+          map(({ cost }) => cost),
+          sum
         ),
         engineCost: pipe(
-          matchState.state.engine[Role.A_SIDE][props.round],
-          filter(isString),
-          map((engineId) => store.engines.get(engineId!)),
+          play[Role.A_SIDE].engineSlot[props.round],
+          map(({ id, rate }) => ({ engine: store.engines.get(id), rate })),
+          filter(({ engine }) => !isUndefined(engine)),
+          map(({ rate, engine }) => find((cost) => cost.rate === rate, engine!.cost)),
           filter(isObject),
-          toArray,
-          engineCost(matchState.state.rate[Role.A_SIDE].engines)
+          map(({ cost }) => cost),
+          sum
         ),
       },
       [Role.B_SIDE]: {
-        agent: matchState.state.agent[Role.B_SIDE][props.round],
-        engine: matchState.state.engine[Role.B_SIDE][props.round],
-        boss: store.deadlyAssault.get(matchState.state.boss[Role.B_SIDE][props.round] || ''),
         agentCost: pipe(
-          matchState.state.agent[Role.B_SIDE][props.round],
-          filter(isNumber),
-          map((agentId) => store.agents.get(agentId!)),
+          play[Role.B_SIDE].agentSlot[props.round],
+          map(({ id, rate }) => ({ agent: store.agents.get(id), rate })),
+          filter(({ agent }) => !isUndefined(agent)),
+          map(({ rate, agent }) => find((cost) => cost.rate === rate, agent!.cost)),
           filter(isObject),
-          toArray,
-          agentCost(matchState.state.rate[Role.B_SIDE].agents)
+          map(({ cost }) => cost),
+          sum
         ),
         engineCost: pipe(
-          matchState.state.engine[Role.B_SIDE][props.round],
-          filter(isString),
-          map((engineId) => store.engines.get(engineId!)),
+          play[Role.B_SIDE].engineSlot[props.round],
+          map(({ id, rate }) => ({ engine: store.engines.get(id), rate })),
+          filter(({ engine }) => !isUndefined(engine)),
+          map(({ rate, engine }) => find((cost) => cost.rate === rate, engine!.cost)),
           filter(isObject),
-          toArray,
-          engineCost(matchState.state.rate[Role.B_SIDE].engines)
+          map(({ cost }) => cost),
+          sum
         ),
       },
     }
-  }, [matchState, props.round, store])
+  }, [play, props.round, store])
 
   return (
     <div
       className={pipe(['card', 'p-4', 'w-full', 'rounded-3xl', 'relative', 'flex-1'], join(' '))}
     >
-      <CardTitle className="text-center" active={matchState.phase === Phase.PICK}>
+      <CardTitle className="text-center" active={match.phase === Phase.PICK}>
         {props.round + 1} Round
       </CardTitle>
       <div className="flex justify-between mt-10">
         <div className="flex items-center gap-8">
           <div className="flex flex-col items-start gap-4">
             <div className="flex gap-2">
-              <Timer round={props.round} role={Role.A_SIDE} id={matchState.matchId} />
-              <Score round={props.round} role={Role.A_SIDE} id={matchState.matchId} />
+              <Timer round={props.round} role={Role.A_SIDE} id={match.matchId} />
+              <Score round={props.round} role={Role.A_SIDE} id={match.matchId} />
             </div>
             <div className="flex-1 flex gap-4 items-start">
               <AgentList
-                list={roundData[Role.A_SIDE].agent}
-                engines={roundData[Role.A_SIDE].engine}
+                list={play[Role.A_SIDE].agentSlot[props.round]}
+                engines={play[Role.A_SIDE].engineSlot[props.round]}
                 role={Role.A_SIDE}
               />
               <div className="mt-auto ml-4">
-                <BossButton boss={roundData[Role.A_SIDE].boss} />
+                <BossButton bossId={play[Role.A_SIDE].boss[props.round]} />
                 <p className="ft-pre text-lg mt-4 text-center">
                   <span className="ft-ria text-2xl text-primary">
-                    {roundData[Role.A_SIDE].agentCost + roundData[Role.A_SIDE].engineCost}
+                    {roundCost[Role.A_SIDE].agentCost + roundCost[Role.A_SIDE].engineCost}
                   </span>
                   <span className="ml-1 font-bold">Co</span>
                 </p>
@@ -98,20 +95,20 @@ const Round: React.FC<Props> = (props) => {
         <div className="flex items-center gap-8 flex-row-reverse">
           <div className="flex flex-col items-end gap-4">
             <div className="flex gap-2">
-              <Score round={props.round} role={Role.B_SIDE} id={matchState.matchId} />
-              <Timer round={props.round} role={Role.B_SIDE} id={matchState.matchId} />
+              <Score round={props.round} role={Role.B_SIDE} id={match.matchId} />
+              <Timer round={props.round} role={Role.B_SIDE} id={match.matchId} />
             </div>
             <div className="flex-1 flex gap-4 items-start flex-row-reverse">
               <AgentList
-                list={roundData[Role.B_SIDE].agent}
-                engines={roundData[Role.B_SIDE].engine}
+                list={play[Role.B_SIDE].agentSlot[props.round]}
+                engines={play[Role.B_SIDE].engineSlot[props.round]}
                 role={Role.B_SIDE}
               />
               <div className="mt-auto mr-4">
-                <BossButton boss={roundData[Role.B_SIDE].boss} />
+                <BossButton bossId={play[Role.B_SIDE].boss[props.round]} />
                 <p className="ft-pre text-lg mt-4 text-center">
                   <span className="ft-ria text-2xl text-primary">
-                    {roundData[Role.B_SIDE].agentCost + roundData[Role.B_SIDE].engineCost}
+                    {roundCost[Role.B_SIDE].agentCost + roundCost[Role.B_SIDE].engineCost}
                   </span>
                   <span className="ml-1 font-bold">Co</span>
                 </p>

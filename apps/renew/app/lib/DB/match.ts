@@ -148,16 +148,17 @@ export function updateMatchPhase(id: string) {
   }
 }
 
-export function updateScore(id: string, role: PlayerRole) {
+export function updateScore(id: string) {
   return async (score: Array<number>) => {
-    const data = await supabase
+    const { data } = await supabase
       .from(TableName.PLAY)
       .update({ score })
-      .eq('matchId', id)
-      .eq('role', role)
-      .select()
+      .eq('id', id)
+      .select<string, Player>('*')
 
-    console.log(data)
+    if (data === null) throw Error('')
+
+    return data
   }
 }
 

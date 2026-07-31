@@ -1,8 +1,7 @@
 import CardTitle from '../CardTitle'
-import { concat, entries, isUndefined, join, map, pipe, toArray } from '@fxts/core'
-import { useMemo } from 'react'
-import { MatchType, Role } from '~/constant'
-import { useMatchState, useStore } from '~/hooks'
+import { concat, join, map, pipe, toArray } from '@fxts/core'
+import { MatchType } from '~/constant'
+import { useMatch } from '~/hooks'
 
 const MATCH_LIST = [
   { label: '정식 로프꾼', value: MatchType.ORIGINAL },
@@ -10,7 +9,7 @@ const MATCH_LIST = [
   { label: '공허사냥꾼', value: MatchType.UNLIMITED },
 ]
 const CommonBoss: React.FC = () => {
-  const matchState = useMatchState()
+  const { match } = useMatch()
 
   return (
     <div className="card p-4 rounded-3xl">
@@ -23,10 +22,10 @@ const CommonBoss: React.FC = () => {
               <button
                 type="button"
                 value={value}
-                disabled={matchState.state.matchType === value}
+                disabled={match.matchType === value}
                 className={pipe(
                   ['block', 'w-full', 'h-full', 'font-bold', 'ft-pre', 'text-xl'],
-                  concat(matchState.state.matchType === value ? ['bg-primary', 'text-accent'] : []),
+                  concat(match.matchType === value ? ['bg-primary', 'text-accent'] : []),
                   join(' ')
                 )}
               >

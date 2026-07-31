@@ -3,10 +3,10 @@ import { selectMatchPlayer, selectMatchPlayerId, selectHostMatch } from '@/lib/D
 import { hook } from '@/lib/utils'
 import { Store, Score, Match } from '@/provider'
 import type { Match as MatchStateType, PlayerRole, Player } from '@/type'
-import { find, fromEntries, head, isNull, isUndefined, map, peek, pipe, size } from '@fxts/core'
+import { find, isUndefined, pipe, size } from '@fxts/core'
 import { useParams } from '@remix-run/react'
 import { useEffect, useMemo, useState } from 'react'
-import { MatchType, Phase, Role } from '~/constant'
+import { Role } from '~/constant'
 
 const RoomIndex = () => {
   const params = useParams()
@@ -43,14 +43,8 @@ const RoomIndex = () => {
           <Loading />
         ) : (
           <Match match={match!} role={role!} play={play}>
-            {/* <Score>{role === Role.HOST ? <HostDashboard /> : <PlayGround />}</Score> */}
             {role === Role.HOST ? <HostDashboard /> : <PlayGround role={role! as PlayerRole} />}
           </Match>
-          // <MatchState match={matchState!} role={role!} {...match}>
-          //   <Score match={matchState!}>
-          //     {role === Role.HOST ? <HostDashboard /> : <PlayGround />}
-          //   </Score>
-          // </MatchState>
         )}
       </div>
     </Store>

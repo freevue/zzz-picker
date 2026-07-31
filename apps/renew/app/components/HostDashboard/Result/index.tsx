@@ -3,11 +3,10 @@ import { calcTimeScore, calcCostBonuse } from '@/lib/utils'
 import { map, pipe, toArray, zipWithIndex } from '@fxts/core'
 import { useMemo } from 'react'
 import { Role } from '~/constant'
-import { useScore, useCost } from '~/hooks'
-import type { PlayerRole } from '~/type'
+import { useCost, useMatch } from '~/hooks'
 
 const Round: React.FC<{ round: number }> = (props) => {
-  const { time, score } = useScore()
+  const { play } = useMatch()
   const cost = useCost(props.round)
 
   return (
@@ -23,19 +22,19 @@ const Round: React.FC<{ round: number }> = (props) => {
       <Row
         title="시간 보너스"
         value={[
-          calcTimeScore(time[props.round][Role.A_SIDE]),
-          calcTimeScore(time[props.round][Role.B_SIDE]),
+          calcTimeScore(play[Role.A_SIDE].time[props.round]),
+          calcTimeScore(play[Role.B_SIDE].time[props.round]),
         ]}
       />
       <Row
         title="Round 점수"
-        value={[score[props.round][Role.A_SIDE], score[props.round][Role.B_SIDE]]}
+        value={[play[Role.A_SIDE].score[props.round], play[Role.B_SIDE].score[props.round]]}
       />
     </div>
   )
 }
 const Result: React.FC = () => {
-  const { time, score } = useScore()
+  const { play } = useMatch()
   const round1Cost = useCost(0)
   const round2Cost = useCost(1)
 
@@ -56,16 +55,16 @@ const Result: React.FC = () => {
   }, [totalCost])
   const timeBounse = useMemo(() => {
     return [
-      calcTimeScore(time[0][Role.A_SIDE]) + calcTimeScore(time[1][Role.A_SIDE]),
-      calcTimeScore(time[0][Role.B_SIDE]) + calcTimeScore(time[1][Role.B_SIDE]),
+      calcTimeScore(play[Role.A_SIDE].time[0]) + calcTimeScore(play[Role.A_SIDE].time[1]),
+      calcTimeScore(play[Role.B_SIDE].time[0]) + calcTimeScore(play[Role.B_SIDE].time[1]),
     ] as [number, number]
-  }, [time])
+  }, [play])
   const totalRoundScore = useMemo(() => {
     return [
-      score[0][Role.A_SIDE] + score[1][Role.A_SIDE],
-      score[0][Role.B_SIDE] + score[1][Role.B_SIDE],
+      play[Role.A_SIDE].score[0] + play[Role.A_SIDE].score[1],
+      play[Role.B_SIDE].score[0] + play[Role.B_SIDE].score[1],
     ] as [number, number]
-  }, [time])
+  }, [play])
   const totalScore = useMemo(() => {
     return pipe(
       totalRoundScore,

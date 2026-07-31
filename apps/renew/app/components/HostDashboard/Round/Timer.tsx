@@ -1,6 +1,6 @@
 import { pipe, join, concat, max, min, filter, isNumber, when } from '@fxts/core'
 import { useMemo, useRef, useState } from 'react'
-import { useScore } from '~/hooks'
+import { useMatch } from '~/hooks'
 import { PlayerRole } from '~/type'
 
 const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = (props) => {
@@ -47,13 +47,13 @@ type Props = {
 
 const Timer: React.FC<Props> = (props) => {
   const debounce = useRef<NodeJS.Timeout | null>(null)
-  const { time, setState } = useScore()
-  const minute = useMemo(() => {
-    return Math.floor(time[props.round][props.role] / 60)
-  }, [time, props.role, props.round])
-  const second = useMemo(() => {
-    return Math.floor(time[props.round][props.role] % 60)
-  }, [time, props.role, props.round])
+  const { play } = useMatch()
+  // const minute = useMemo(() => {
+  //   return Math.floor(time[props.round][props.role] / 60)
+  // }, [time, props.role, props.round])
+  // const second = useMemo(() => {
+  //   return Math.floor(time[props.round][props.role] % 60)
+  // }, [time, props.role, props.round])
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     pipe(
@@ -64,21 +64,15 @@ const Timer: React.FC<Props> = (props) => {
       ),
       (value) => {
         console.log(value)
-
-        setState((prev) => {
-          prev.time[props.round][props.role] = Number(value)
-
-          return { ...prev }
-        })
       }
     )
   }
 
   return (
     <div className="flex bg-accent h-14 items-center border-solid border-primary rounded-2xl w-48">
-      <Input value={minute} min={0} max={3} onChange={onChange} name="minute" />
+      <Input value={0} min={0} max={3} onChange={onChange} name="minute" />
       <p className="text-4xl font-bold ft-ria">:</p>
-      <Input value={second} min={0} max={59} onChange={onChange} name="second" />
+      <Input value={0} min={0} max={59} onChange={onChange} name="second" />
     </div>
   )
 }
