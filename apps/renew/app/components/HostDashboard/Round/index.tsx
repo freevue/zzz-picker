@@ -1,22 +1,9 @@
 import CardTitle from '../CardTitle'
-import Pulse from '../Pulse'
 import AgentList from './AgentList'
 import BossButton from './BossButton'
 import Score from './Score'
 import Timer from './Timer'
-import {
-  filter,
-  flatMap,
-  isNumber,
-  isObject,
-  isUndefined,
-  isString,
-  join,
-  map,
-  pipe,
-  sum,
-  toArray,
-} from '@fxts/core'
+import { filter, isNumber, isObject, isString, join, map, pipe, toArray } from '@fxts/core'
 import { useMemo } from 'react'
 import { Phase, Role } from '~/constant'
 import { useMatchState, useStore } from '~/hooks'
@@ -77,44 +64,60 @@ const Round: React.FC<Props> = (props) => {
   }, [matchState, props.round, store])
 
   return (
-    <div className={pipe(['card', 'p-4', 'w-full', 'rounded-3xl', 'relative'], join(' '))}>
+    <div
+      className={pipe(['card', 'p-4', 'w-full', 'rounded-3xl', 'relative', 'flex-1'], join(' '))}
+    >
       <CardTitle className="text-center" active={matchState.phase === Phase.PICK}>
         {props.round + 1} Round
       </CardTitle>
       <div className="flex justify-between mt-10">
         <div className="flex items-center gap-8">
           <div className="flex flex-col items-start gap-4">
-            <Timer />
+            <div className="flex gap-2">
+              <Timer round={props.round} role={Role.A_SIDE} id={matchState.matchId} />
+              <Score round={props.round} role={Role.A_SIDE} id={matchState.matchId} />
+            </div>
             <div className="flex-1 flex gap-4 items-start">
               <AgentList
                 list={roundData[Role.A_SIDE].agent}
                 engines={roundData[Role.A_SIDE].engine}
                 role={Role.A_SIDE}
               />
-              <BossButton boss={roundData[Role.A_SIDE].boss} />
+              <div className="mt-auto ml-4">
+                <BossButton boss={roundData[Role.A_SIDE].boss} />
+                <p className="ft-pre text-lg mt-4 text-center">
+                  <span className="ft-ria text-2xl text-primary">
+                    {roundData[Role.A_SIDE].agentCost + roundData[Role.A_SIDE].engineCost}
+                  </span>
+                  <span className="ml-1 font-bold">Co</span>
+                </p>
+              </div>
             </div>
-            <Score className="ml-auto mr-24" />
           </div>
-          <p className="ft-ria text-2xl">
-            {roundData[Role.A_SIDE].agentCost + roundData[Role.A_SIDE].engineCost}
-          </p>
         </div>
         <div className="flex items-center gap-8 flex-row-reverse">
           <div className="flex flex-col items-end gap-4">
-            <Timer />
+            <div className="flex gap-2">
+              <Score round={props.round} role={Role.B_SIDE} id={matchState.matchId} />
+              <Timer round={props.round} role={Role.B_SIDE} id={matchState.matchId} />
+            </div>
             <div className="flex-1 flex gap-4 items-start flex-row-reverse">
               <AgentList
                 list={roundData[Role.B_SIDE].agent}
                 engines={roundData[Role.B_SIDE].engine}
                 role={Role.B_SIDE}
               />
-              <BossButton boss={roundData[Role.B_SIDE].boss} />
+              <div className="mt-auto mr-4">
+                <BossButton boss={roundData[Role.B_SIDE].boss} />
+                <p className="ft-pre text-lg mt-4 text-center">
+                  <span className="ft-ria text-2xl text-primary">
+                    {roundData[Role.B_SIDE].agentCost + roundData[Role.B_SIDE].engineCost}
+                  </span>
+                  <span className="ml-1 font-bold">Co</span>
+                </p>
+              </div>
             </div>
-            <Score className="mr-auto ml-24" />
           </div>
-          <p className="ft-ria text-2xl">
-            {roundData[Role.B_SIDE].agentCost + roundData[Role.B_SIDE].engineCost}
-          </p>
         </div>
       </div>
     </div>

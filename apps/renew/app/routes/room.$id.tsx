@@ -1,6 +1,6 @@
 import { PlayGround, HostDashboard } from '@/components'
 import { selectMatchPlayer, selectMatchPlayerId, selectHostMatch } from '@/lib/DB'
-import { Store, MatchState } from '@/provider'
+import { Store, Score, MatchState } from '@/provider'
 import { PlayerRole, type Player } from '@/type'
 import { find, fromEntries, head, isUndefined, map, peek, pipe, size } from '@fxts/core'
 import { useParams } from '@remix-run/react'
@@ -55,7 +55,9 @@ const RoomIndex = () => {
           <>Loading</>
         ) : (
           <MatchState match={matchState!} role={role!} {...match}>
-            {role === Role.HOST ? <HostDashboard /> : <PlayGround />}
+            <Score match={matchState!}>
+              {role === Role.HOST ? <HostDashboard /> : <PlayGround />}
+            </Score>
           </MatchState>
         )}
       </div>

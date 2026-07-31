@@ -4,10 +4,21 @@ import Ban from './Ban'
 import CommonBoss from './CommonBoss'
 import MatchType from './MatchType'
 import PlayerName from './PlayerName'
+import Result from './Result'
 import Round from './Round'
 import SpecialRule from './SpecialRule'
+import { concat, pipe, join } from '@fxts/core'
+import { useState } from 'react'
 
 const HostDashboard: React.FC = () => {
+  const [isResult, setIsResult] = useState<boolean>(false)
+
+  const onResultClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+
+    setIsResult((prev) => !prev)
+  }
+
   return (
     <div className="flex w-full h-full gap-4 px-4">
       <div className="flex-1 max-w-sm min-w-sm py-4">
@@ -23,13 +34,76 @@ const HostDashboard: React.FC = () => {
       </div>
       <div className="flex-1 flex flex-col gap-4 min-w-xl py-4">
         <PlayerName />
-        <div className="flex flex-1 flex-col gap-4">
-          <Round round={0} />
-          <Round round={1} />
+        <div className="flex flex-1 relative @container">
+          <div
+            className={pipe(
+              ['flex flex-1 flex-col gap-4', 'transition-opacity'],
+              concat(isResult ? ['opacity-0'] : ['opacity-100']),
+              join(' ')
+            )}
+          >
+            <Round round={0} />
+            <Round round={1} />
+          </div>
+          <div
+            className={pipe(
+              ['absolute inset-0 -z-1', 'transition-opacity'],
+              concat(isResult ? ['opacity-100'] : ['opacity-0']),
+              join(' ')
+            )}
+          >
+            <Result />
+          </div>
+          <button
+            type="button"
+            className={pipe(
+              [
+                'cursor-pointer',
+                'bg-primary',
+                'absolute',
+                'top-1/2',
+                'left-0',
+                '-translate-y-1/2',
+                'rounded-2xl',
+                'transition-transform',
+                'duration-300',
+                'overflow-hidden',
+              ],
+              concat(isResult ? ['translate-x-4'] : ['translate-x-[calc(100cqw-100%-1rem)]']),
+              join(' ')
+            )}
+            onClick={onResultClick}
+          >
+            <div
+              className={pipe(
+                [
+                  'flex',
+                  'text-2xl',
+                  'ft-pre',
+                  'font-black',
+                  'px-4',
+                  'py-2',
+                  'text-accent',
+                  'items-center',
+                  'transition-transform',
+                ],
+                concat(isResult ? ['rotate-0'] : ['rotate-180']),
+                join(' ')
+              )}
+            >
+              <span
+                className={pipe(
+                  ['transition-transform'],
+                  concat(isResult ? ['rotate-0'] : ['rotate-180']),
+                  join(' ')
+                )}
+              >
+                {isResult ? '파티보기' : '결산하기'}
+              </span>
+              <Icon.Arrow className="-rotate-180 size-8" />
+            </div>
+          </button>
         </div>
-        <button className="mx-auto size-14 rounded-full bg-primary flex items-center justify-center">
-          <Icon.Arrow className="-rotate-90 size-10" />
-        </button>
       </div>
     </div>
   )

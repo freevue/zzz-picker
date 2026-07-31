@@ -1,5 +1,7 @@
 import { pipe, join, concat, max, min, filter, isNumber, when } from '@fxts/core'
-import { useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
+import { useScore } from '~/hooks'
+import { PlayerRole } from '~/type'
 
 const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = (props) => {
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,6 +25,7 @@ const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = (props) => 
     <input
       {...props}
       onChange={onInputChange}
+      onFocus={(event) => event.currentTarget.select()}
       type="number"
       name={props.name}
       step={1}
@@ -35,7 +38,23 @@ const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = (props) => 
     />
   )
 }
-const Timer: React.FC = () => {
+
+type Props = {
+  role: PlayerRole
+  round: number
+  id: string
+}
+
+const Timer: React.FC<Props> = (props) => {
+  const debounce = useRef<NodeJS.Timeout | null>(null)
+  const { time, setState } = useScore()
+  const minute = useMemo(() => {
+    return Math.floor(time[props.round][props.role] / 60)
+  }, [time, props.role, props.round])
+  const second = useMemo(() => {
+    return Math.floor(time[props.round][props.role] % 60)
+  }, [time, props.role, props.round])
+
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     pipe(
       Number(event.currentTarget.value),
@@ -45,15 +64,21 @@ const Timer: React.FC = () => {
       ),
       (value) => {
         console.log(value)
+
+        setState((prev) => {
+          prev.time[props.round][props.role] = Number(value)
+
+          return { ...prev }
+        })
       }
     )
   }
 
   return (
-    <div className="flex bg-accent h-14 items-center border-solid border-primary rounded-2xl w-46">
-      <Input min={0} max={3} onChange={onChange} name="minute" />
+    <div className="flex bg-accent h-14 items-center border-solid border-primary rounded-2xl w-48">
+      <Input value={minute} min={0} max={3} onChange={onChange} name="minute" />
       <p className="text-4xl font-bold ft-ria">:</p>
-      <Input min={0} max={59} onChange={onChange} name="second" />
+      <Input value={second} min={0} max={59} onChange={onChange} name="second" />
     </div>
   )
 }

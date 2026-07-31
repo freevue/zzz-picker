@@ -93,10 +93,12 @@ type State = {
   player: Player | null
   state: typeof INITIAL_MATCH_STATE
   pick: typeof INITIAL_PICK
+  matchId: string
 }
 
 export const Context = createContext<State>({
   send: () => {},
+  matchId: '',
   phase: Phase.COMMON_BOSS_SELECT,
   select: INITIAL_SELECT_STATE,
   isPicker: false,
@@ -343,6 +345,7 @@ const MatchState: React.FC<Props> = (props) => {
   return (
     <Context.Provider
       value={{
+        matchId: props.matchId,
         phase,
         select,
         isPicker,

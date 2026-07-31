@@ -15,8 +15,8 @@ export type Player = {
     engines: Record<string, number>
   }
   role: Role
-  score: number
-  time: number
+  score: Array<number>
+  time: Array<number>
 }
 
 export type BroadcastPayloadMap = {

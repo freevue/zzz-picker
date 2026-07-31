@@ -1,5 +1,5 @@
 import { TableName } from './constant'
-import { type Player } from '@/type'
+import { PlayerRole, type Player } from '@/type'
 import { supabase } from '@zzz-picker/supabase'
 
 export async function selectHostMatch(hostId: string) {
@@ -120,5 +120,18 @@ export function updateProposeBan(player: Player) {
 export function updateSelectBan(player: Player) {
   return async (selectBan: Array<number>) => {
     await supabase.from(TableName.PLAY).update({ selectBan }).eq('id', player.id)
+  }
+}
+
+export function updateScore(id: string, role: PlayerRole) {
+  return async (score: Array<number>) => {
+    const data = await supabase
+      .from(TableName.PLAY)
+      .update({ score })
+      .eq('matchId', id)
+      .eq('role', role)
+      .select()
+
+    console.log(data)
   }
 }

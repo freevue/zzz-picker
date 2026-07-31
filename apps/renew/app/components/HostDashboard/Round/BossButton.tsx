@@ -7,14 +7,7 @@ type Props = {
 
 const BossButton: React.FC<Props> = (props) => {
   return (
-    <button
-      type="button"
-      className={pipe(
-        ['card', 'rounded-2xl', 'p-2', 'size-20'],
-        concat(['active:outline-0', 'focus:outline-0']),
-        join(' ')
-      )}
-    >
+    <button type="button" className={pipe(['rounded-2xl', 'size-20', 'bg-accent'], join(' '))}>
       {isUndefined(props.boss) ? (
         <></>
       ) : (

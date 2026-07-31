@@ -9,6 +9,7 @@ import {
   isArray,
   isObject,
   map,
+  max,
   pipe,
   sort,
   sum,
@@ -89,4 +90,15 @@ export function engineCost(rate: Record<string, number>) {
       sum
     )
   }
+}
+
+export function calcTimeScore(time: number) {
+  const MAX_TIME = 180
+  const BONUSE_SCORE = 333
+
+  return pipe([MAX_TIME - time, 0], max, (value) => value * BONUSE_SCORE)
+}
+
+export function calcCostBonuse(cost: number, MAX_COST: number = 24) {
+  return (MAX_COST - cost) * 0.05
 }

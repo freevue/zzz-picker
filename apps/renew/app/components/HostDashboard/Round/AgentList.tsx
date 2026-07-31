@@ -14,7 +14,7 @@ const AgentList: React.FC<Props> = (props) => {
   const matchState = useMatchState()
 
   return (
-    <ul className="flex gap-2">
+    <ul className="flex gap-4">
       {pipe(
         props.list,
         map((agentId) => store.agents.get(agentId || -1)),
@@ -29,7 +29,7 @@ const AgentList: React.FC<Props> = (props) => {
             <div className="relative">
               <button
                 type="button"
-                className="size-22 text-4xl bg-accent rounded-2xl overflow-hidden"
+                className="size-30 text-4xl bg-accent rounded-2xl overflow-hidden"
               >
                 {isUndefined(agent) ? (
                   <Icon.Plus className="scale-75" />
@@ -44,12 +44,11 @@ const AgentList: React.FC<Props> = (props) => {
               </button>
               <button
                 className={pipe(
-                  ['absolute -bottom-2 -right-2 size-10 rounded-xl'],
-                  concat(
-                    isUndefined(engine)
-                      ? ['bg-accent', 'border-2 border-solid border-content']
-                      : ['backdrop-blur-lg']
-                  ),
+                  [
+                    'absolute -bottom-3 -right-3 size-12 rounded-full',
+                    'border-2 border-solid border-content',
+                  ],
+                  concat(isUndefined(engine) ? ['bg-accent'] : ['backdrop-blur-lg']),
                   join(' ')
                 )}
               >
@@ -60,11 +59,22 @@ const AgentList: React.FC<Props> = (props) => {
                 )}
               </button>
             </div>
-            <div className="text-center ft-ria text-lg mt-2 h-7">
+            <div className="mt-2 h-7 flex gap-1 font-bold items-center justify-center">
               {!isUndefined(agent) && (
                 <>
-                  {matchState.state.rate[props.role].agents[agent.id] || 0} /{' '}
-                  {matchState.state.rate[props.role].engines[engine?.id || 0] || 0}
+                  <p className="ft-pre">
+                    <span className="ft-ria text-xl">
+                      {matchState.state.rate[props.role].agents[agent.id] || 0}
+                    </span>
+                    <span className="ml-1 text-lg">Lv</span>
+                  </p>
+                  <span className="ft-pre text-md mx-1 opacity-70">/</span>
+                  <p className="ft-pre">
+                    <span className="ft-ria text-xl">
+                      {matchState.state.rate[props.role].engines[engine?.id || 0] || 0}
+                    </span>
+                    <span className="ml-1 text-lg">Lv</span>
+                  </p>
                 </>
               )}
             </div>
