@@ -137,16 +137,10 @@ const MatchState: React.FC<Props> = (props) => {
         }))
       })
       .on('broadcast', { event: BroadcastEvent.TIME }, (response) => {
-        // const payload = response.payload as BroadcastPayloadMap[BroadcastEvent.ENGINE_RATE]
-        // setMatch((prev) => {
-        //   return pipe(
-        //     prev.rate[payload.role].engines,
-        //     (rate) => ({ ...rate, [payload.engineId]: payload.rate }),
-        //     (engines) => ({ ...prev.rate[payload.role], engines }),
-        //     (rate) => ({ ...prev.rate, [payload.role]: rate }),
-        //     (rate) => ({ ...prev, rate })
-        //   )
-        // })
+        setPlay((prev) => ({
+          ...prev,
+          ...(response.payload as BroadcastPayloadMap[BroadcastEvent.TIME]),
+        }))
       })
       .subscribe()
 

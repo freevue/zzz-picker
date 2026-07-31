@@ -162,6 +162,20 @@ export function updateScore(id: string) {
   }
 }
 
+export function updateTime(id: string) {
+  return async (time: Array<number>) => {
+    const { data } = await supabase
+      .from(TableName.PLAY)
+      .update({ time })
+      .eq('id', id)
+      .select<string, Player>('*')
+
+    if (data === null) throw Error('')
+
+    return data
+  }
+}
+
 export async function insertMatch(matchType: MatchType) {
   const { data } = await supabase
     .from(TableName.MATCH)
