@@ -31,7 +31,7 @@ const UList: React.FC<{ list: Array<React.ReactNode> }> = (props) => {
 }
 const Rule: React.FC<Props> = (props) => {
   return (
-    <Dialog active={props.active} onClose={props.onClose}>
+    <Dialog active={props.active} onClose={props.onClose} bgClose>
       <div className="card max-w-xl mx-auto mt-40 p-8 rounded-3xl">
         <h1 className="ft-ria text-4xl text-primary mb-8">Rule</h1>
         <div className="mb-6">
