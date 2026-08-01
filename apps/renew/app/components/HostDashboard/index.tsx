@@ -9,6 +9,7 @@ import Round from './Round'
 import SpecialRule from './SpecialRule'
 import { MatchType as MatchTypeEnum } from '@/constant'
 import { concat, pipe, join } from '@fxts/core'
+import { Link } from '@remix-run/react'
 import { useState } from 'react'
 import { useMatch } from '~/hooks'
 
@@ -25,6 +26,18 @@ const HostDashboard: React.FC = () => {
   return (
     <div className="flex w-full h-full gap-4 px-4">
       <div className="flex-1 max-w-sm min-w-sm py-4">
+        <ul className="flex mb-4 gap-4">
+          <li>
+            <Link to="/" className="size-10 rounded-full block bg-primary text-accent">
+              <Icon.Arrow className="w-full scale-75" />
+            </Link>
+          </li>
+          <li>
+            <button type="button" className="size-10 rounded-full block bg-primary text-accent">
+              <Icon.Info className="w-full scale-75" />
+            </button>
+          </li>
+        </ul>
         <SpecialRule />
       </div>
       <div className="flex-1 flex flex-col gap-4 py-4 max-w-sm min-w-sm overflow-auto scrollbar-hidden">

@@ -3,6 +3,7 @@ export { default as PlayGround } from './PlayGround'
 export { default as HostDashboard } from './HostDashboard'
 export { default as CreateRoom } from './CreateRoom'
 export { default as CalcBoard } from './Calc'
+export { default as Rule } from './Rule'
 
 export { default as Loading } from './Loading'
 export { default as Dialog } from './Dialog'

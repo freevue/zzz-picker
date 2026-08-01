@@ -39,6 +39,7 @@ const CreateRoom: React.FC<Props> = (props) => {
       active={props.acvite}
       className="flex items-center justify-center"
       onClose={props.onClose}
+      bgClose
     >
       <form
         className="card rounded-2xl p-8 flex flex-col gap-4 w-screen max-w-xl"

@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom'
 type Props = {
   children: React.ReactNode
   active: boolean
+  bgClose?: boolean
   className?: string
   onClose?: () => void
   onOpen?: () => void
@@ -15,6 +16,13 @@ const Dialog: React.FC<Props> = (props) => {
 
   const onTransitionEnd = () => {
     if (!props.active) setOpen(false)
+    if (!open) props.onClose?.()
+  }
+  const onBackgroundClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (props.bgClose) setOpen(false)
+  }
+  const onContentClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation()
   }
 
   useEffect(() => {
@@ -22,10 +30,7 @@ const Dialog: React.FC<Props> = (props) => {
   }, [props.active])
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setOpen(false)
-        props.onClose?.()
-      }
+      if (event.key === 'Escape') setOpen(false)
     }
 
     if (open) {
@@ -42,6 +47,7 @@ const Dialog: React.FC<Props> = (props) => {
   return createPortal(
     open || props.active ? (
       <div
+        onClick={onBackgroundClick}
         onTransitionEnd={onTransitionEnd}
         className={pipe(
           [
@@ -57,7 +63,9 @@ const Dialog: React.FC<Props> = (props) => {
           join(' ')
         )}
       >
-        <div role="dialog">{props.children}</div>
+        <div role="dialog" onClick={onContentClick}>
+          {props.children}
+        </div>
       </div>
     ) : null,
     document.body
