@@ -62,12 +62,25 @@ const Round: React.FC<Props> = (props) => {
 
   return (
     <div
-      className={pipe(['card', 'p-4', 'w-full', 'rounded-3xl', 'relative', 'flex-1'], join(' '))}
+      className={pipe(
+        [
+          'card',
+          'p-4',
+          'w-full',
+          'rounded-3xl',
+          'relative',
+          'flex-1',
+          'flex',
+          'flex-col',
+          'justify-around',
+        ],
+        join(' ')
+      )}
     >
       <CardTitle className="text-center" active={match.phase === Phase.PICK}>
         {props.round + 1} Round
       </CardTitle>
-      <div className="flex justify-between mt-10">
+      <div className="flex justify-between">
         <div className="flex items-center gap-8">
           <div className="flex flex-col items-start gap-4">
             <div className="flex gap-2">
