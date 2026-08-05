@@ -191,24 +191,28 @@ export function updateTime(id: string) {
   }
 }
 
-export async function insertMatch(matchType: MatchType) {
-  const { data } = await supabase
-    .from(TableName.MATCH)
-    .insert({
-      matchType,
-      phase: matchType === MatchType.UNLIMITED ? Phase.PICK : Phase.COMMON_BOSS_SELECT,
-    })
-    .select()
-    .single()
+type InserMatchParams = {
+  matchType: MatchType
+  phase: Phase
+}
+
+export async function insertMatch(params: InserMatchParams) {
+  const { data } = await supabase.from(TableName.MATCH).insert(params).select().single()
 
   return data
 }
 
+type InsertPlayerParams = {
+  role: Role
+  name: string
+  boss?: Array<string | null>
+}
+
 export function insertPlayer(matchId: string) {
-  return async ({ role, name }: { role: Role; name: string }) => {
+  return async (params: InsertPlayerParams) => {
     const { data } = await supabase
       .from(TableName.PLAY)
-      .insert({ matchId, role, name })
+      .insert({ ...params, matchId })
       .select()
       .single()
 

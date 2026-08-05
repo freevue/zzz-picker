@@ -11,6 +11,7 @@ import {
 } from '@fxts/core'
 import { supabase, type RealtimeChannel } from '@zzz-picker/supabase'
 import { createContext, useEffect, useMemo, useRef, useState } from 'react'
+import { Loading } from '~/components'
 import { MatchType, Phase, Role, BroadcastEvent, SETTING } from '~/constant'
 import type { Match, Player, BroadcastPayloadMap, PlayerRole } from '~/type'
 
@@ -63,7 +64,9 @@ export const Context = createContext<State>({
 })
 
 const MatchState: React.FC<Props> = (props) => {
+  const timeOut = useRef<NodeJS.Timeout | null>(null)
   const channel = useRef<null | RealtimeChannel>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [match, setMatch] = useState<Match>(props.match)
   const [select, setSelect] = useState<typeof INITIAL_SELECT_STATE>(INITIAL_SELECT_STATE)
   const [play, setPlay] = useState<Record<PlayerRole, Player>>(
@@ -78,6 +81,16 @@ const MatchState: React.FC<Props> = (props) => {
     [props.role, play]
   )
 
+  useEffect(() => {
+    timeOut.current = setTimeout(() => {
+      timeOut.current = null
+      setIsLoading(false)
+    }, 2000)
+
+    return () => {
+      timeOut.current && clearTimeout(timeOut.current)
+    }
+  }, [])
   useEffect(() => {
     channel.current = supabase
       .channel(`match:${props.match.matchId}`, {
@@ -184,7 +197,7 @@ const MatchState: React.FC<Props> = (props) => {
         },
       }}
     >
-      {props.children}
+      {isLoading ? <Loading /> : props.children}
     </Context.Provider>
   )
 }

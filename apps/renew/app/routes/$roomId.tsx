@@ -1,5 +1,5 @@
 import { Loading } from '@/components'
-import { map, pipe, toArray } from '@fxts/core'
+import { map, pipe, sort, toArray } from '@fxts/core'
 import { useParams, Link } from '@remix-run/react'
 import { useEffect, useMemo, useState } from 'react'
 import { Role } from '~/constant'
@@ -67,6 +67,7 @@ const RoomIndex = () => {
           <LinkCard role={Role.HOST} name="관리자" roomId={hostId} />
           {pipe(
             players,
+            sort((player) => (player.role === Role.A_SIDE ? -1 : 1)),
             map((player) => (
               <LinkCard role={player.role} name={player.name} roomId={player.id} key={player.id} />
             )),

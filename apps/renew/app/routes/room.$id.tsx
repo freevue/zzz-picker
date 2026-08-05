@@ -1,7 +1,7 @@
 import { PlayGround, HostDashboard, Loading } from '@/components'
 import { selectMatchPlayer, selectMatchPlayerId, selectHostMatch } from '@/lib/DB'
 import { hook } from '@/lib/utils'
-import { Store, Score, Match } from '@/provider'
+import { Store, Match } from '@/provider'
 import type { Match as MatchStateType, PlayerRole, Player } from '@/type'
 import { find, isUndefined, pipe, size } from '@fxts/core'
 import { useParams } from '@remix-run/react'

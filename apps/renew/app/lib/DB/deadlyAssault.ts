@@ -1,6 +1,7 @@
 import { TableName } from './constant'
-import { ErrorMessage } from '@/constant'
+import { BossType, ErrorMessage } from '@/constant'
 import { type Boss } from '@/type'
+import { filter, find, isUndefined, pipe } from '@fxts/core'
 import { supabase } from '@zzz-picker/supabase'
 
 export async function selectDeadlyAssault(): Promise<Array<Boss>> {
@@ -24,6 +25,17 @@ export async function selectDeadlyAssault(): Promise<Array<Boss>> {
   if (data === null) throw Error(ErrorMessage.SELECT_DEADLY_ASSAULT_ERROR)
 
   return data.list
+}
+
+export async function selectAdversityBoss(): Promise<Boss> {
+  const data = await pipe(
+    selectDeadlyAssault(),
+    find((boss) => boss.type === BossType.ADVERSITY)
+  )
+
+  if (isUndefined(data)) throw Error(ErrorMessage.SELECT_DEADLY_ASSAULT_ERROR)
+
+  return data
 }
 
 // null, "f7102ee9-0b5e-4140-808d-0614cb8d4103"
