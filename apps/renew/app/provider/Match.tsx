@@ -138,7 +138,7 @@ const MatchState: React.FC<Props> = (props) => {
 
           return newState
         })
-        setSelect((prev) => ({ ...prev, [Phase.BAN_FIX]: [] }))
+        setSelect((prev) => ({ ...prev, [Phase.BAN_FIX]: [null] }))
       })
       .on('broadcast', { event: BroadcastEvent.BOSS_SELECT }, (response) => {
         setPlay((prev) => ({

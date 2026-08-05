@@ -161,8 +161,6 @@ const Ban: React.FC<Props> = (props) => {
   const onBanAgentClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    console.log(isPicker)
-
     if (!isPicker) return
     if (includes(Number(event.currentTarget.value), select[Phase.BAN])) {
       const index = findIndex((id) => id === Number(event.currentTarget.value), select[Phase.BAN])
