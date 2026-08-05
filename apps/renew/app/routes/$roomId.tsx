@@ -28,7 +28,7 @@ const LinkCard: React.FC<{ role: Role; name: string; roomId: string }> = (props)
         </Link>
         <button
           type="button"
-          className="w-56 py-2 text-xl ft-pre font-bold text-center bg-secondary rounded-full text-base"
+          className="w-56 cursor-pointer py-2 text-xl ft-pre font-bold text-center bg-secondary rounded-full text-base"
           onClick={onCopyClick}
         >
           복사
