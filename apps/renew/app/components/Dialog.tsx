@@ -19,6 +19,8 @@ const Dialog: React.FC<Props> = (props) => {
     if (!open) props.onClose?.()
   }
   const onBackgroundClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    console.log(event)
+
     if (props.bgClose) setOpen(false)
   }
   const onContentClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -63,7 +65,7 @@ const Dialog: React.FC<Props> = (props) => {
           join(' ')
         )}
       >
-        <div role="dialog" onClick={onContentClick}>
+        <div role="dialog" className="w-fit mx-auto" onClick={onContentClick}>
           {props.children}
         </div>
       </div>

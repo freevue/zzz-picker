@@ -15,6 +15,7 @@ export type Agent = {
   color: string | null
   isPickup: boolean
   isAllow: boolean
+  isTeaser: boolean
   rarity: 'A' | 'S'
   attribute: {
     nameKo: string

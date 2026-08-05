@@ -25,6 +25,7 @@ export async function selectAgent(): Promise<Array<Agent>> {
     color,
     isPickup,
     isAllow,
+    isTeaser,
     rarity,
     ...bannerImageId(banner: src),
     ...profileImageId(profile: src),

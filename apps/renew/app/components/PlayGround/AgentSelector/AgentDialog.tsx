@@ -146,6 +146,7 @@ const AgentSelector: React.FC<Props> = (props) => {
       <div className="grid grid-cols-3 gap-4 max-w-lg mx-auto content-start my-10">
         {pipe(
           store.agents,
+          filter(([, agent]) => !agent.isTeaser),
           filter(([, agent]) => {
             if (rarity === 'A') return agent.rarity === 'A'
             if (rarity === 'S') return agent.rarity === 'S' && !agent.isPickup

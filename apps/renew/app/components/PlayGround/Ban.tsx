@@ -283,6 +283,7 @@ const Ban: React.FC<Props> = (props) => {
           {pipe(
             store.agents,
             filter(([, agent]) => agent.isPickup),
+            filter(([, agent]) => !agent.isTeaser),
             filter(([, agent]) => !agent.isAllow),
             filter(([, agent]) => !includes(getPosition(agent.specialty.nameKo), isBanList)),
             sort((prev, cur) => prev[1].nameKo.localeCompare(cur[1].nameKo)),

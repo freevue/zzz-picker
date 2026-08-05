@@ -24,12 +24,12 @@ const Typo: React.FC<{ children: React.ReactNode; className?: string }> = (props
 const Rule: React.FC<Props> = (props) => {
   return (
     <Dialog
+      className="overflow-scroll scrollbar-hidden"
       active={props.active}
       onClose={props.onClose}
       bgClose
-      className="overflow-scroll scrollbar-hidden"
     >
-      <div className="card max-w-xl mx-auto my-40 p-8 rounded-3xl">
+      <div className="card max-w-2xl w-screen mx-auto my-40 p-8 rounded-3xl">
         <h1 className="ft-ria text-4xl text-primary mb-8">Rule</h1>
         <div className="mb-6">
           <Title>엔강대 경기 종류</Title>
