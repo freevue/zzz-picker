@@ -93,7 +93,7 @@ const Round: React.FC<Props> = (props) => {
                 engines={play[Role.A_SIDE].engineSlot[props.round]}
                 role={Role.A_SIDE}
               />
-              <div className="mt-auto ml-4">
+              <div className="mt-auto ml-2 w-24 flex flex-col items-center">
                 <BossButton bossId={play[Role.A_SIDE].boss[props.round]} />
                 <p className="ft-pre text-lg mt-4 text-center">
                   <span className="ft-ria text-2xl text-primary">
@@ -117,7 +117,7 @@ const Round: React.FC<Props> = (props) => {
                 engines={play[Role.B_SIDE].engineSlot[props.round]}
                 role={Role.B_SIDE}
               />
-              <div className="mt-auto mr-4">
+              <div className="mt-auto mr-2 w-24 flex flex-col items-center">
                 <BossButton bossId={play[Role.B_SIDE].boss[props.round]} />
                 <p className="ft-pre text-lg mt-4 text-center">
                   <span className="ft-ria text-2xl text-primary">

@@ -48,7 +48,7 @@ const Score: React.FC<Props> = (props) => {
       )
 
       debounce.current = null
-    }, 1000)
+    }, 500)
   }
 
   return (
