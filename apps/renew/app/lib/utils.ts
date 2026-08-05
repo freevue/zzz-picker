@@ -14,7 +14,7 @@ import {
   sort,
   sum,
 } from '@fxts/core'
-import { DEALER, Position, Role, Specialty } from '~/constant'
+import { DEALER, Position, Role, Specialty, SETTING } from '~/constant'
 
 type OpponentMap = {
   [Role.A_SIDE]: Role.B_SIDE
@@ -106,7 +106,7 @@ export function calcTimeScore(time: number) {
   return pipe([MAX_TIME - time, 0], max, (value) => value * BONUSE_SCORE)
 }
 
-export function calcCostBonuse(MAX_COST: number = 24, minusRate: number = 0.02) {
+export function calcCostBonuse(MAX_COST: number = 24, minusRate: number = SETTING.MINUS_RATE) {
   return (cost: number) => {
     if (cost > MAX_COST) return (MAX_COST - cost) * minusRate
 

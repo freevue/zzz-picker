@@ -3,7 +3,7 @@ import { calcTimeScore, calcCostBonuse } from '@/lib/utils'
 import { map, pipe, toArray, zipWithIndex } from '@fxts/core'
 import { useSearchParams } from '@remix-run/react'
 import { useMemo } from 'react'
-import { MatchType, Role } from '~/constant'
+import { MatchType, Role, SETTING } from '~/constant'
 import { useCost, useMatch } from '~/hooks'
 
 const Round: React.FC<{ round: number }> = (props) => {
@@ -56,7 +56,7 @@ const Result: React.FC = () => {
   const costBonuse = useMemo(() => {
     return pipe(
       totalCost,
-      map(calcCostBonuse(24, Number(searchParams.get('minus')) || 0.05)),
+      map(calcCostBonuse(24, Number(searchParams.get('minus')) || SETTING.MINUS_RATE)),
       toArray
     ) as [number, number]
   }, [totalCost, searchParams])

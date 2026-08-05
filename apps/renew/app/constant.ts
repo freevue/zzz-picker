@@ -1,6 +1,7 @@
 export const SETTING = {
   MAX_PLAYER_BAN_PROPOSE: 2,
   MAX_PLAYER_BAN_FIX: 1,
+  MINUS_RATE: 0.015,
 }
 
 export enum BossType {
