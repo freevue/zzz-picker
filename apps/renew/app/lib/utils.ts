@@ -106,6 +106,10 @@ export function calcTimeScore(time: number) {
   return pipe([MAX_TIME - time, 0], max, (value) => value * BONUSE_SCORE)
 }
 
-export function calcCostBonuse(cost: number, MAX_COST: number = 24) {
-  return (MAX_COST - cost) * 0.05
+export function calcCostBonuse(MAX_COST: number = 24, minusRate: number = 0.05) {
+  return (cost: number) => {
+    if (cost > MAX_COST) return (MAX_COST - cost) * minusRate
+
+    return (MAX_COST - cost) * 0.05
+  }
 }

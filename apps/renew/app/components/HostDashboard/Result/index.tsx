@@ -1,6 +1,7 @@
 import Row from './Row'
 import { calcTimeScore, calcCostBonuse } from '@/lib/utils'
 import { map, pipe, toArray, zipWithIndex } from '@fxts/core'
+import { useSearchParams } from '@remix-run/react'
 import { useMemo } from 'react'
 import { MatchType, Role } from '~/constant'
 import { useCost, useMatch } from '~/hooks'
@@ -34,6 +35,8 @@ const Round: React.FC<{ round: number }> = (props) => {
   )
 }
 const Result: React.FC = () => {
+  const [searchParams] = useSearchParams()
+
   const { play, match } = useMatch()
   const round1Cost = useCost(0)
   const round2Cost = useCost(1)
@@ -51,8 +54,12 @@ const Result: React.FC = () => {
     ] as [number, number]
   }, [round1Cost, round2Cost])
   const costBonuse = useMemo(() => {
-    return pipe(totalCost, map(calcCostBonuse), toArray) as [number, number]
-  }, [totalCost])
+    return pipe(
+      totalCost,
+      map(calcCostBonuse(24, Number(searchParams.get('minus')) || 0.05)),
+      toArray
+    ) as [number, number]
+  }, [totalCost, searchParams])
   const timeBounse = useMemo(() => {
     return [
       calcTimeScore(play[Role.A_SIDE].time[0]) + calcTimeScore(play[Role.A_SIDE].time[1]),
