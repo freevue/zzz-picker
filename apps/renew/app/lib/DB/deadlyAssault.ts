@@ -8,6 +8,7 @@ export async function selectDeadlyAssault(): Promise<Array<Boss>> {
     .from(TableName.DEADLY_ASSAULT)
     .select(
       `list: ${TableName.DEADLY_BOSS}(
+        type,
         ...${TableName.BOSS}(
           id,
           nameKo,

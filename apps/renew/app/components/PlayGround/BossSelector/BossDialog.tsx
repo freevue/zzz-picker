@@ -14,7 +14,7 @@ import {
 } from '@fxts/core'
 import { useMemo } from 'react'
 import { Dialog } from '~/components'
-import { BroadcastEvent } from '~/constant'
+import { BroadcastEvent, BossType } from '~/constant'
 import { useMatch, useStore } from '~/hooks'
 import type { Player, PlayerRole } from '~/type'
 
@@ -61,6 +61,7 @@ const BossDialog: React.FC<Props> = (props) => {
       <ul className="flex h-screen items-center gap-2 px-4 max-w-lg mx-auto">
         {pipe(
           store.deadlyAssault,
+          filter(([, { type }]) => type === BossType.TRIAL),
           map(([id, boss]) => (
             <li className="flex-1" key={id}>
               <button

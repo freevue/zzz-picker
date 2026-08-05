@@ -1,7 +1,7 @@
-import { BroadcastEvent, Phase, Role } from '@/constant'
+import { BroadcastEvent, BossType, Phase, Role } from '@/constant'
 import { useMatch, useStore } from '@/hooks'
 import { updateCommonBoss } from '@/lib/DB'
-import { concat, join, map, pipe, toArray, isString, not, fromEntries } from '@fxts/core'
+import { concat, join, map, pipe, toArray, isString, not, fromEntries, filter } from '@fxts/core'
 import type { Player, PlayerRole } from '~/type'
 
 type Props = {
@@ -39,6 +39,7 @@ const Boss: React.FC<Props> = (props) => {
         <ul className="flex flex-wrap gap-4 items-center justify-center">
           {pipe(
             store.deadlyAssault,
+            filter(([, { type }]) => type === BossType.TRIAL),
             map(([id, boss]) => (
               <li key={id}>
                 <button

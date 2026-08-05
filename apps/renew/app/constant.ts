@@ -3,6 +3,11 @@ export const SETTING = {
   MAX_PLAYER_BAN_FIX: 1,
 }
 
+export enum BossType {
+  TRIAL = 'trial',
+  ADVERSITY = 'adversity',
+}
+
 export enum ErrorMessage {
   SELECT_DEADLY_ASSAULT_ERROR = '강습전 데이터를 불러오는 과정에 에러가 발생했습니다.',
 }
