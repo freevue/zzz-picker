@@ -1,4 +1,3 @@
-import { Icon } from '..'
 import AllowAgent from './AllowAgent'
 import Ban from './Ban'
 import CommonBoss from './CommonBoss'
@@ -7,9 +6,11 @@ import PlayerName from './PlayerName'
 import Result from './Result'
 import Round from './Round'
 import SpecialRule from './SpecialRule'
+import UnlimitedCard from './UnlimitedCard'
 import { MatchType as MatchTypeEnum } from '@/constant'
 import { concat, pipe, join } from '@fxts/core'
 import { Link } from '@remix-run/react'
+import { ArrowLeft, Info, ChevronsRight } from 'lucide-react'
 import { useState } from 'react'
 import { useMatch } from '~/hooks'
 
@@ -28,13 +29,16 @@ const HostDashboard: React.FC = () => {
       <div className="flex-1 max-w-sm min-w-sm py-4">
         <ul className="flex mb-4 gap-4">
           <li>
-            <Link to="/" className="size-10 rounded-full block bg-primary text-accent">
-              <Icon.Arrow className="w-full scale-75" />
+            <Link to="/" className="size-10 rounded-full flex-center bg-primary text-accent">
+              <ArrowLeft />
             </Link>
           </li>
           <li>
-            <button type="button" className="size-10 rounded-full block bg-primary text-accent">
-              <Icon.Info className="w-full scale-75" />
+            <button
+              type="button"
+              className="size-10 rounded-full flex-center bg-primary text-accent"
+            >
+              <Info />
             </button>
           </li>
         </ul>
@@ -46,17 +50,7 @@ const HostDashboard: React.FC = () => {
           <CommonBoss />
           <AllowAgent />
           <Ban />
-          {match.matchType === MatchTypeEnum.UNLIMITED && (
-            <div
-              className={pipe(
-                ['absolute', 'inset-0', 'transition-opacity', 'card'],
-                concat(
-                  match.matchType !== MatchTypeEnum.UNLIMITED ? ['opacity-0'] : ['opacity-100']
-                ),
-                join(' ')
-              )}
-            ></div>
-          )}
+          {match.matchType === MatchTypeEnum.UNLIMITED && <UnlimitedCard />}
         </div>
       </div>
       <div className="flex-1 flex flex-col gap-4 min-w-xl py-4">
@@ -127,7 +121,7 @@ const HostDashboard: React.FC = () => {
               >
                 {isResult ? '파티보기' : '결산하기'}
               </span>
-              <Icon.Arrow className="-rotate-180 size-8" />
+              <ChevronsRight className="size-8" />
             </div>
           </button>
         </div>

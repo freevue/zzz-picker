@@ -15,6 +15,7 @@
     "@zzz-picker/supabase": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "isbot": "^5.1.28",
+    "lucide-react": "^1.30.0",
     "react": "catalog:react19",
     "react-dom": "catalog:react19"
   },

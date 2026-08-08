@@ -1,18 +1,7 @@
 import CardTitle from '../CardTitle'
 import List from './List'
-import { Icon } from '@/components'
-import {
-  map,
-  pipe,
-  toArray,
-  transpose,
-  includes,
-  last,
-  some,
-  isNull,
-  every,
-  isNumber,
-} from '@fxts/core'
+import { some, isNull, every, isNumber } from '@fxts/core'
+import { ChevronsRight } from 'lucide-react'
 import { useMemo } from 'react'
 import { Phase, Role } from '~/constant'
 import { useMatch } from '~/hooks'
@@ -55,14 +44,14 @@ const Ban: React.FC = () => {
   return (
     <div className="">
       <CardTitle active={match.phase === Phase.BAN}>Ban</CardTitle>
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         <List list={proposeAsideBan} />
-        <Icon.Arrow className="rotate-180 block w-20 scale-75" />
+        <ChevronsRight className="size-10" />
         <List list={selectBsideBanFix} />
       </div>
-      <div className="flex mt-4 justify-between">
+      <div className="flex mt-4 justify-between items-center">
         <List list={proposeBsideBan} />
-        <Icon.Arrow className="rotate-180 block w-20 scale-75" />
+        <ChevronsRight className="size-10" />
         <List list={selectAsideBanFix} />
       </div>
     </div>

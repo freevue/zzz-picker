@@ -54,11 +54,7 @@ const Result: React.FC = () => {
     ] as [number, number]
   }, [round1Cost, round2Cost])
   const costBonuse = useMemo(() => {
-    return pipe(
-      totalCost,
-      map(calcCostBonuse(24, Number(searchParams.get('minus')) || SETTING.MINUS_RATE)),
-      toArray
-    ) as [number, number]
+    return pipe(totalCost, map(calcCostBonuse(24)), toArray) as [number, number]
   }, [totalCost, searchParams])
   const timeBounse = useMemo(() => {
     return [
@@ -77,10 +73,9 @@ const Result: React.FC = () => {
       totalRoundScore,
       zipWithIndex,
       map(([index, value]) => {
-        if (match.matchType === MatchType.ORIGINAL)
-          return value + value * costBonuse[index] + timeBounse[index]
+        if (match.matchType === MatchType.UNLIMITED) return value + timeBounse[index]
 
-        return value + timeBounse[index]
+        return value + value * costBonuse[index] + timeBounse[index]
       }),
       map((value) => Number(value.toFixed(2))),
       toArray
@@ -104,7 +99,7 @@ const Result: React.FC = () => {
             return false
           }}
         />
-        {match.matchType === MatchType.ORIGINAL && (
+        {match.matchType !== MatchType.UNLIMITED && (
           <Row
             title="Cost 보너스 배율(%)"
             value={
