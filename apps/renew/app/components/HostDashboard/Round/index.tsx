@@ -4,6 +4,7 @@ import BossButton from './BossButton'
 import Score from './Score'
 import Timer from './Timer'
 import { filter, find, isObject, isUndefined, join, map, pipe, sum } from '@fxts/core'
+import { Coins, CircleDollarSign } from 'lucide-react'
 import { useMemo } from 'react'
 import { Phase, Role } from '~/constant'
 import { useMatch, useStore } from '~/hooks'
@@ -93,13 +94,13 @@ const Round: React.FC<Props> = (props) => {
                 engines={play[Role.A_SIDE].engineSlot[props.round]}
                 role={Role.A_SIDE}
               />
-              <div className="mt-auto ml-2 w-24 flex flex-col items-center">
+              <div className="mt-auto ml-1 w-28 flex flex-col items-center">
                 <BossButton bossId={play[Role.A_SIDE].boss[props.round]} />
-                <p className="ft-pre text-lg mt-4 text-center">
-                  <span className="ft-ria text-2xl text-primary">
+                <p className="ft-pre text-lg mt-4 text-center flex items-end gap-1">
+                  <span className="ft-ria text-2xl text-primary leading-tight tabular-nums">
                     {roundCost[Role.A_SIDE].agentCost + roundCost[Role.A_SIDE].engineCost}
                   </span>
-                  <span className="ml-1 font-bold">Co</span>
+                  <span className="ml-1 text-lg leading-tight font-black">Co.</span>
                 </p>
               </div>
             </div>
@@ -117,13 +118,13 @@ const Round: React.FC<Props> = (props) => {
                 engines={play[Role.B_SIDE].engineSlot[props.round]}
                 role={Role.B_SIDE}
               />
-              <div className="mt-auto mr-2 w-24 flex flex-col items-center">
+              <div className="mt-auto mr-1 w-24 flex flex-col items-center">
                 <BossButton bossId={play[Role.B_SIDE].boss[props.round]} />
-                <p className="ft-pre text-lg mt-4 text-center">
-                  <span className="ft-ria text-2xl text-primary">
+                <p className="ft-pre text-lg mt-4 text-center flex items-end gap-1">
+                  <span className="ft-ria text-2xl text-primary leading-tight tabular-nums">
                     {roundCost[Role.B_SIDE].agentCost + roundCost[Role.B_SIDE].engineCost}
                   </span>
-                  <span className="ml-1 font-bold">Co</span>
+                  <span className="ml-1 text-lg leading-tight font-black">Co.</span>
                 </p>
               </div>
             </div>
@@ -135,3 +136,6 @@ const Round: React.FC<Props> = (props) => {
 }
 
 export default Round
+
+// https://images.zzz.freevue.dev/images/alice/654a1009-322b-4d4f-89c2-5706f58dabc4.jpg
+// https://images.zzz.freevue.dev/images/agents/156728/3edd3a9c-8886-4147-89b5-f2e3c01d7be7.webp

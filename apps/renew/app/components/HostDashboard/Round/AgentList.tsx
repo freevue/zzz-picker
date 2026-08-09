@@ -63,14 +63,14 @@ const AgentList: React.FC<Props> = (props) => {
             <div className="mt-2 h-7 flex gap-1 font-bold items-center justify-center">
               {!isUndefined(agent) && (
                 <>
-                  <p className="ft-pre">
+                  <p className="ft-pre flex items-end gap-1">
+                    <span className="ml-1 text-lg leading-tight">M.</span>
                     <span className="ft-ria text-xl">{agentRate || 0}</span>
-                    <span className="ml-1 text-lg">Lv</span>
                   </p>
                   <span className="ft-pre text-md mx-1 opacity-70">/</span>
-                  <p className="ft-pre">
+                  <p className="ft-pre flex items-end gap-1">
+                    <span className="ml-1 text-lg leading-tight">W.</span>
                     <span className="ft-ria text-xl">{engineRate || 0}</span>
-                    <span className="ml-1 text-lg">Lv</span>
                   </p>
                 </>
               )}

@@ -50,7 +50,15 @@ const HostDashboard: React.FC = () => {
           <CommonBoss />
           <AllowAgent />
           <Ban />
-          {match.matchType === MatchTypeEnum.UNLIMITED && <UnlimitedCard />}
+          {match.matchType === MatchTypeEnum.UNLIMITED ? (
+            <UnlimitedCard />
+          ) : (
+            <img
+              className="absolute top-[75%] left-1/2 -translate-x-1/2 scale-200 origin-top"
+              src="https://images.zzz.freevue.dev/images/agents/156728/3edd3a9c-8886-4147-89b5-f2e3c01d7be7.webp"
+              alt=""
+            />
+          )}
         </div>
       </div>
       <div className="flex-1 flex flex-col gap-4 min-w-xl py-4">
