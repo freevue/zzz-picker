@@ -154,9 +154,24 @@
   }
 
   button {
+    @apply cursor-pointer;
+
     &:active,
     &:focus {
       @apply outline-0 border-0;
+    }
+    &:disabled {
+      @apply cursor-not-allowed;
+    }
+
+    &.agent {
+      @apply relative overflow-hidden;
+
+      &.active {
+        &::after {
+          @apply absolute inset-0 block border-2 border-solid border-primary;
+        }
+      }
     }
   }
 }
