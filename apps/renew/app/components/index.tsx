@@ -4,6 +4,7 @@ export { default as HostDashboard } from './HostDashboard'
 export { default as CreateRoom } from './CreateRoom'
 export { default as CalcBoard } from './Calc'
 export { default as Rule } from './Rule'
+export { default as CostDashboard } from './CostDashboard'
 
 export { default as Loading } from './Loading'
 export { default as Dialog } from './Dialog'

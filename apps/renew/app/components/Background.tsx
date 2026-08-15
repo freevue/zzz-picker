@@ -9,14 +9,14 @@ const Background: React.FC = () => {
       {pipe(
         15,
         range,
-        map((index) => (
+        map((lineIndex) => (
           <div
-            key={index}
+            key={lineIndex}
             className={pipe(
               [
                 'min-w-fit',
                 'flex',
-                index % 2 === 0 ? 'animate-rollingBg-reverse' : 'animate-rollingBg',
+                lineIndex % 2 === 0 ? 'animate-rollingBg-reverse' : 'animate-rollingBg',
                 'gap-10',
                 '-rotate-40',
                 'first:-mt-400',
@@ -27,10 +27,14 @@ const Background: React.FC = () => {
             {pipe(
               10,
               range,
-              map((index) => (
-                <React.Fragment key={index}>
-                  <p className="ft-ria text-9xl text-primary/5 min-w-fit">엔코르</p>
-                  <p className="ft-ria text-9xl text-primary/5 min-w-fit">엔강대</p>
+              map((wordIndex) => (
+                <React.Fragment key={wordIndex}>
+                  <p className="ft-ria text-9xl text-primary/5 min-w-fit">
+                    {lineIndex === 5 ? '앨리스' : '엔코르'}
+                  </p>
+                  <p className="ft-ria text-9xl text-primary/5 min-w-fit">
+                    {lineIndex === 5 ? '타임필드' : '엔강대'}
+                  </p>
                 </React.Fragment>
               )),
               toArray
