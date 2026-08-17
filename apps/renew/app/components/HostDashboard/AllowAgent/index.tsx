@@ -8,7 +8,7 @@ const AllowAgent: React.FC = () => {
   return (
     <div className="">
       <CardTitle>Allow</CardTitle>
-      <ul className="flex gap-2">
+      <ul className="flex gap-2 flex-wrap">
         {pipe(
           store.agents,
           filter(([, agent]) => agent.isAllow),
