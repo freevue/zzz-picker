@@ -13,7 +13,6 @@ import {
   filter,
   isNull,
 } from '@fxts/core'
-import { CircleCheck } from 'lucide-react'
 import type { Player, PlayerRole } from '~/type'
 
 type Props = {
