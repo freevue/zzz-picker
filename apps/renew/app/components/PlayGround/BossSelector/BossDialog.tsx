@@ -56,22 +56,26 @@ const BossDialog: React.FC<Props> = (props) => {
     props.onClose()
   }
 
+  /**
+   * TODO: 사용이 불가능한 보스에 대해 Ban 아이콘 추가할 것
+   */
+
   return (
-    <Dialog active={props.active}>
+    <Dialog active={props.active} bgClose onClose={props.onClose}>
       <ul className="flex h-screen items-center gap-2 px-4 max-w-lg mx-auto">
         {pipe(
           store.deadlyAssault,
           filter(([, { type }]) => type === BossType.TRIAL),
           map(([id, boss]) => (
-            <li className="flex-1" key={id}>
+            <li className="flex-1 aspect-square" key={id}>
               <button
                 onClick={onBossClick}
                 type="button"
                 value={id}
                 className={pipe(
-                  ['card', 'rounded-2xl', 'p-2', 'cursor-pointer', 'overflow-hidden'],
-                  concat(id === props.bossId ? ['active'] : []),
+                  ['rounded-2xl', 'w-full', 'h-full', 'overflow-hidden'],
                   concat(['disabled:grayscale-100', 'disabled:cursor-not-allowed']),
+                  concat(id === props.bossId ? [] : []),
                   join(' ')
                 )}
                 disabled={id !== props.bossId && includes(id, selectBoss)}

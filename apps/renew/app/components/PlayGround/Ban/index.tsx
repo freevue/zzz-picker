@@ -215,8 +215,8 @@ const Ban: React.FC<Props> = (props) => {
 
   return (
     <>
-      <div className="w-full h-dvh overflow-y-scroll pt-16 pb-14">
-        <div className="w-full grid grid-cols-3 gap-4 p-4 max-w-xl mx-auto content-start">
+      <div className="w-full h-dvh overflow-y-scroll pt-16 pb-28 scrollbar-hidden">
+        <div className="w-full max-w-lg grid grid-cols-3 gap-4 px-4 mx-auto content-start">
           {pipe(
             store.agents,
             filter(([, agent]) => agent.isPickup),
@@ -236,16 +236,8 @@ const Ban: React.FC<Props> = (props) => {
                     match.phase !== Phase.BAN)
                 }
                 className={pipe(
-                  [
-                    'cursor-pointer',
-                    'card',
-                    'block',
-                    'p-2',
-                    'rounded-2xl',
-                    'relative',
-                    'overflow-hidden',
-                  ],
-                  concat(['disabled:grayscale-100', 'cursor-not-allowed']),
+                  ['card', 'block', 'p-2', 'rounded-2xl', 'relative', 'overflow-hidden'],
+                  concat(['disabled:grayscale-100', 'disabled:cursor-not-allowed']),
                   concat(
                     includes(id, select[Phase.BAN])
                       ? ['active', 'grayscale-0!', 'before:h-full', 'before:aspect-square']
@@ -277,41 +269,48 @@ const Ban: React.FC<Props> = (props) => {
       )}
 
       {isPicker && (
-        <button
-          type="button"
-          disabled={isDisabled}
-          onClick={onBanConfirm}
+        <div
           className={pipe(
-            [
-              'max-w-lg',
-              'mx-auto',
-              'block',
-              'bg-primary',
-              'active:outline-0',
-              'focus:outline-0',
-              'fixed',
-              'bottom-4',
-              'left-4',
-              'right-4',
-              'rounded-full',
-              'font-bold',
-              'ft-ria',
-              'text-base',
-              'text-2xl',
-              'py-2',
-              'cursor-pointer',
-              'z-21',
-            ],
-            concat([
-              'disabled:cursor-not-allowed',
-              'disabled:grayscale-100',
-              'disabled:opacity-30',
-            ]),
+            ['fixed', 'bottom-0', 'left-0', 'right-0', 'z-21'],
+            concat(isBanFix ? [] : ['backdrop-blur-sm', 'bg-accent/10']),
             join(' ')
           )}
         >
-          선택
-        </button>
+          <div className="px-4 pb-4 pt-2 w-full max-w-lg mx-auto">
+            {isPicker && (
+              <p className="mb-2 ft-pre text-xl font-bold text-ink">
+                {isBanFix ? '밴 하실 캐릭터를 선택해주세요.' : '밴을 권유할 캐릭터를 클릭해주세요.'}
+              </p>
+            )}
+            <button
+              type="button"
+              disabled={isDisabled}
+              onClick={onBanConfirm}
+              className={pipe(
+                [
+                  'block',
+                  'w-full',
+                  'bg-primary',
+                  'rounded-full',
+                  'font-bold',
+                  'ft-ria',
+                  'text-base',
+                  'text-2xl',
+                  'py-2',
+                  'cursor-pointer',
+                ],
+                concat([
+                  'disabled:cursor-not-allowed',
+                  'disabled:grayscale-100',
+                  'disabled:opacity-30',
+                ]),
+                join(' ')
+              )}
+            >
+              선택
+            </button>
+          </div>
+        </div>
       )}
     </>
   )

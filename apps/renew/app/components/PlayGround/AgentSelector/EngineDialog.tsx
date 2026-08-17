@@ -164,7 +164,7 @@ const EngineSelector: React.FC<Props> = (props) => {
           map(([, engine]) => (
             <button
               className={pipe(
-                ['card', 'aspect-square', 'p-2', 'rounded-2xl', 'overflow-hidden'],
+                ['card', 'aspect-square', 'size-40', 'p-2', 'rounded-2xl', 'overflow-hidden'],
                 concat(selectEngineId === engine.id ? ['active'] : []),
                 join(' ')
               )}
