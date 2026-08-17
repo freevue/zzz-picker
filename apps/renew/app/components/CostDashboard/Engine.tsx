@@ -18,7 +18,7 @@ const EngineCostTable = () => {
           <label className="group h-full flex-center has-checked:bg-primary cursor-pointer">
             <input
               type="radio"
-              name="agent"
+              name="engine"
               defaultChecked
               className="appearance-none"
               onChange={onTabChange}
@@ -33,7 +33,7 @@ const EngineCostTable = () => {
           <label className="group h-full flex-center has-checked:bg-primary cursor-pointer">
             <input
               type="radio"
-              name="agent"
+              name="engine"
               className="appearance-none"
               onChange={onTabChange}
               value="S"
@@ -47,7 +47,7 @@ const EngineCostTable = () => {
           <label className="group h-full flex-center has-checked:bg-primary cursor-pointer">
             <input
               type="radio"
-              name="agent"
+              name="engine"
               className="appearance-none"
               onChange={onTabChange}
               value="A"
@@ -61,7 +61,7 @@ const EngineCostTable = () => {
           <label className="group h-full flex-center has-checked:bg-primary cursor-pointer">
             <input
               type="radio"
-              name="agent"
+              name="engine"
               className="appearance-none"
               onChange={onTabChange}
               value="A"
