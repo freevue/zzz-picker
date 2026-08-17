@@ -79,7 +79,7 @@ const Ban: React.FC<Props> = (props) => {
   const isDisabled = useMemo(() => {
     if (isBanFix) return select[Phase.BAN_FIX].length !== SETTING.MAX_PLAYER_BAN_FIX
     if (match.phase === Phase.BAN)
-      return select[Phase.BAN].length !== SETTING.MAX_PLAYER_BAN_PROPOSE
+      return pipe(select[Phase.BAN], filter(isNumber), size) !== SETTING.MAX_PLAYER_BAN_PROPOSE
 
     return true
   }, [match, select, isBanFix])
