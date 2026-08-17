@@ -1,7 +1,19 @@
 import { BroadcastEvent, BossType, Phase, Role } from '@/constant'
 import { useMatch, useStore } from '@/hooks'
 import { updateCommonBoss } from '@/lib/DB'
-import { concat, join, map, pipe, toArray, isString, not, fromEntries, filter } from '@fxts/core'
+import {
+  concat,
+  join,
+  map,
+  pipe,
+  toArray,
+  isString,
+  not,
+  fromEntries,
+  filter,
+  isNull,
+} from '@fxts/core'
+import { CircleCheck } from 'lucide-react'
 import type { Player, PlayerRole } from '~/type'
 
 type Props = {
@@ -35,24 +47,38 @@ const Boss: React.FC<Props> = (props) => {
 
   return (
     <>
-      <div className="flex h-full w-full items-center justify-center">
-        <ul className="flex flex-wrap gap-4 items-center justify-center">
+      <div className="flex-center h-full w-full px-4 max-w-lg mx-auto overflow-hidden flex-col">
+        <p className="mb-8 ft-pre text-xl font-bold text-ink">
+          {props.role === Role.A_SIDE && 'B 선수의 선택을 기다리고 있습니다.'}
+          {props.role === Role.B_SIDE && '공용무대 보스를 선택해주세요.'}
+        </p>
+        <ul className="flex items-start justify-between gap-4 w-full">
           {pipe(
             store.deadlyAssault,
             filter(([, { type }]) => type === BossType.TRIAL),
             map(([id, boss]) => (
-              <li key={id}>
+              <li key={id} className="aspect-square flex-1 text-center">
                 <button
                   value={id}
                   onClick={onBossClick}
                   disabled={props.role !== Role.B_SIDE}
                   className={pipe(
-                    ['block', 'aspect-144/199', 'w-40', 'card', 'p-2 rounded-2xl'],
+                    [
+                      'block',
+                      'overflow-hidden',
+                      'w-full',
+                      'h-full',
+                      'rounded-2xl',
+                      'transition-transform',
+                      'relative',
+                    ],
                     concat(['disabled:grayscale-100', 'disabled:cursor-not-allowed']),
                     concat(
-                      select[Phase.COMMON_BOSS_SELECT] === id
-                        ? ['active', 'disabled:grayscale-0!']
-                        : []
+                      isNull(select[Phase.COMMON_BOSS_SELECT])
+                        ? []
+                        : select[Phase.COMMON_BOSS_SELECT] === id
+                          ? ['disabled:grayscale-0!']
+                          : ['grayscale-100']
                     ),
                     join(' ')
                   )}
@@ -60,10 +86,26 @@ const Boss: React.FC<Props> = (props) => {
                 >
                   <img
                     src={boss.src}
-                    className="block w-full h-full rounded-xl bg-accent-foreground relative z-1"
+                    className="block w-full bg-accent-foreground"
                     alt={boss.nameKo}
                   />
                 </button>
+                <p
+                  className={pipe(
+                    [
+                      'opacity-0',
+                      'transition-opacity',
+                      'text-primary',
+                      'text-xl',
+                      'ft-pre',
+                      'font-black',
+                    ],
+                    concat(select[Phase.COMMON_BOSS_SELECT] === id ? ['opacity-100'] : []),
+                    join(' ')
+                  )}
+                >
+                  선택
+                </p>
               </li>
             )),
             toArray
@@ -71,38 +113,37 @@ const Boss: React.FC<Props> = (props) => {
         </ul>
       </div>
       {props.role === Role.B_SIDE && (
-        <button
-          type="button"
-          disabled={not(isString(select[Phase.COMMON_BOSS_SELECT]))}
-          onClick={onConfirmClick}
-          className={pipe(
-            [
-              'max-w-lg',
-              'mx-auto',
-              'block',
-              'bg-primary',
-              'fixed',
-              'bottom-4',
-              'left-4',
-              'right-4',
-              'rounded-full',
-              'font-bold',
-              'ft-ria',
-              'text-base',
-              'text-2xl',
-              'py-2',
-              'cursor-pointer',
-            ],
-            concat([
-              'disabled:cursor-not-allowed',
-              'disabled:grayscale-100',
-              'disabled:opacity-30',
-            ]),
-            join(' ')
-          )}
-        >
-          선택
-        </button>
+        <div className={pipe(['fixed', 'bottom-0', 'left-0', 'right-0'], join(' '))}>
+          <div className="px-4 pb-4 w-full max-w-lg mx-auto">
+            <button
+              type="button"
+              disabled={not(isString(select[Phase.COMMON_BOSS_SELECT]))}
+              onClick={onConfirmClick}
+              className={pipe(
+                [
+                  'w-full',
+                  'block',
+                  'bg-primary',
+                  'rounded-full',
+                  'font-bold',
+                  'ft-ria',
+                  'text-base',
+                  'text-2xl',
+                  'py-2',
+                  'cursor-pointer',
+                ],
+                concat([
+                  'disabled:cursor-not-allowed',
+                  'disabled:grayscale-100',
+                  'disabled:opacity-30',
+                ]),
+                join(' ')
+              )}
+            >
+              선택
+            </button>
+          </div>
+        </div>
       )}
     </>
   )
