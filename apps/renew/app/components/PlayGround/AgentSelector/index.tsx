@@ -6,11 +6,9 @@ import {
   concat,
   entries,
   filter,
-  find,
   flat,
   flatMap,
   isNumber,
-  isObject,
   isString,
   isUndefined,
   join,
@@ -18,10 +16,11 @@ import {
   pipe,
   sum,
   toArray,
+  values,
   zipWithIndex,
 } from '@fxts/core'
 import { useMemo, useState } from 'react'
-import { useMatch, useStore } from '~/hooks'
+import { useMatch, useStore, useCost } from '~/hooks'
 import { PlayerRole } from '~/type'
 
 type Props = {
@@ -34,6 +33,12 @@ const AgentSelector: React.FC<Props> = (props) => {
   const store = useStore()
   const [selectAgentIndex, setSelectAgentIndex] = useState<number | null>(null)
   const [selectEngineindex, setSelectEngineIndex] = useState<number | null>(null)
+  const cost = useCost(props.round)
+  const totalCost = useMemo(() => {
+    if (isUndefined(currentPlay)) return 0
+
+    return pipe(cost[currentPlay.role as PlayerRole], values, sum)
+  }, [cost, currentPlay])
   const roundData = useMemo(() => {
     if (isUndefined(currentPlay)) return []
 
@@ -64,32 +69,6 @@ const AgentSelector: React.FC<Props> = (props) => {
       toArray
     )
   }, [currentPlay])
-  const roundAgentCost = useMemo(() => {
-    if (isUndefined(currentPlay)) return 0
-
-    return pipe(
-      currentPlay.engineSlot[props.round],
-      map(({ id, rate }) => ({ engine: store.engines.get(id), rate })),
-      filter(({ engine }) => !isUndefined(engine)),
-      map(({ rate, engine }) => find((cost) => cost.rate === rate, engine!.cost)),
-      filter(isObject),
-      map(({ cost }) => cost),
-      sum
-    )
-  }, [store, currentPlay, props.round])
-  const roundEngineCost = useMemo(() => {
-    if (isUndefined(currentPlay)) return 0
-
-    return pipe(
-      currentPlay.agentSlot[props.round],
-      map(({ id, rate }) => ({ agent: store.agents.get(id), rate })),
-      filter(({ agent }) => !isUndefined(agent)),
-      map(({ rate, agent }) => find((cost) => cost.rate === rate, agent!.cost)),
-      filter(isObject),
-      map(({ cost }) => cost),
-      sum
-    )
-  }, [store, currentPlay, props.round])
 
   const onDialogClose = () => {
     setSelectAgentIndex(null)
@@ -111,7 +90,7 @@ const AgentSelector: React.FC<Props> = (props) => {
       <div className="max-w-lg mx-auto mt-4 flex flex-col gap-4 card rounded-3xl p-4 pb-8">
         <h2 className="text-2xl font-bold text-primary ft-ria flex items-end">
           <span>Party</span>
-          <span className="ml-auto text-lg text-ink">{roundAgentCost + roundEngineCost} Co.</span>
+          <span className="ml-auto text-lg text-ink">{totalCost} Co.</span>
         </h2>
         <ul className="flex gap-4 w-full">
           {pipe(

@@ -1,4 +1,15 @@
-import { filter, find, isObject, isUndefined, map, pipe, sum } from '@fxts/core'
+import {
+  filter,
+  find,
+  flat,
+  isNumber,
+  isObject,
+  isUndefined,
+  map,
+  pipe,
+  sum,
+  when,
+} from '@fxts/core'
 import { useContext, useMemo } from 'react'
 import { Role } from '~/constant'
 import { StoreContext, MatchContext } from '~/provider'
@@ -11,7 +22,7 @@ export const useMatch = () => {
   return useContext(MatchContext)
 }
 
-export const useCost = (round: number) => {
+export const useCost = (round?: number) => {
   const { play } = useContext(MatchContext)
   const store = useContext(StoreContext)
 
@@ -19,7 +30,12 @@ export const useCost = (round: number) => {
     return {
       [Role.A_SIDE]: {
         agentCost: pipe(
-          play[Role.A_SIDE].agentSlot[round],
+          play[Role.A_SIDE].agentSlot,
+          when(
+            () => isNumber(round),
+            (list) => list[round!]
+          ),
+          flat,
           map(({ id, rate }) => ({ agent: store.agents.get(id), rate })),
           filter(({ agent }) => !isUndefined(agent)),
           map(({ rate, agent }) => find((cost) => cost.rate === rate, agent!.cost)),
@@ -28,7 +44,12 @@ export const useCost = (round: number) => {
           sum
         ),
         engineCost: pipe(
-          play[Role.A_SIDE].engineSlot[round],
+          play[Role.A_SIDE].engineSlot,
+          when(
+            () => isNumber(round),
+            (list) => list[round!]
+          ),
+          flat,
           map(({ id, rate }) => ({ engine: store.engines.get(id), rate })),
           filter(({ engine }) => !isUndefined(engine)),
           map(({ rate, engine }) => find((cost) => cost.rate === rate, engine!.cost)),
@@ -39,7 +60,12 @@ export const useCost = (round: number) => {
       },
       [Role.B_SIDE]: {
         agentCost: pipe(
-          play[Role.B_SIDE].agentSlot[round],
+          play[Role.B_SIDE].agentSlot,
+          when(
+            () => isNumber(round),
+            (list) => list[round!]
+          ),
+          flat,
           map(({ id, rate }) => ({ agent: store.agents.get(id), rate })),
           filter(({ agent }) => !isUndefined(agent)),
           map(({ rate, agent }) => find((cost) => cost.rate === rate, agent!.cost)),
@@ -48,7 +74,12 @@ export const useCost = (round: number) => {
           sum
         ),
         engineCost: pipe(
-          play[Role.B_SIDE].engineSlot[round],
+          play[Role.B_SIDE].engineSlot,
+          when(
+            () => isNumber(round),
+            (list) => list[round!]
+          ),
+          flat,
           map(({ id, rate }) => ({ engine: store.engines.get(id), rate })),
           filter(({ engine }) => !isUndefined(engine)),
           map(({ rate, engine }) => find((cost) => cost.rate === rate, engine!.cost)),
@@ -58,5 +89,5 @@ export const useCost = (round: number) => {
         ),
       },
     }
-  }, [play, store])
+  }, [play, store, round])
 }
