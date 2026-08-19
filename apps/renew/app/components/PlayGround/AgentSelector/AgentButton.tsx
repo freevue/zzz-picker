@@ -1,5 +1,5 @@
 import { pipe, join, isUndefined } from '@fxts/core'
-import { Icon } from '~/components'
+import { Plus } from 'lucide-react'
 import { Agent } from '~/type'
 
 type Props = {
@@ -29,7 +29,7 @@ const AgentButton: React.FC<Props> = (props) => {
       value={props.value}
     >
       {isUndefined(props.agent) ? (
-        <Icon.Plus className="scale-75" />
+        <Plus className="size-18 mx-auto" strokeWidth={3} />
       ) : (
         <img
           style={{ backgroundColor: props.agent.color || 'transparent' }}

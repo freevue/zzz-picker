@@ -1,8 +1,8 @@
 import BossDialog from './BossDialog'
 import CommonBoss from './CommonBoss'
 import { pipe, isUndefined } from '@fxts/core'
+import { Plus } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { Icon } from '~/components'
 import { BossType, MatchType } from '~/constant'
 import { useStore, useMatch } from '~/hooks'
 import type { PlayerRole } from '~/type'
@@ -59,7 +59,7 @@ const BossSelector: React.FC<Props> = (props) => {
             className="cursor-pointer text-8xl bg-accent size-48 flex items-center justify-center rounded-2xl overflow-hidden"
           >
             {isUndefined(bossData) ? (
-              <Icon.Plus className="scale-75" />
+              <Plus className="size-24 mx-auto" strokeWidth={3} />
             ) : (
               <div className="w-full h-full">
                 <img

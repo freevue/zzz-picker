@@ -1,5 +1,5 @@
 import { pipe, join, isUndefined, concat } from '@fxts/core'
-import { Icon } from '~/components'
+import { Plus } from 'lucide-react'
 import type { Engine } from '~/type'
 
 type Props = {
@@ -36,7 +36,7 @@ const EngineButton: React.FC<Props> = (props) => {
       )}
     >
       {isUndefined(props.engine) ? (
-        <Icon.Plus className="scale-75" />
+        <Plus className="size-8" strokeWidth={3} />
       ) : (
         <img className="block w-full" src={props.engine.icon} />
       )}
