@@ -36,23 +36,14 @@ const Round: React.FC<{ round: number }> = (props) => {
 }
 const Result: React.FC = () => {
   const [searchParams] = useSearchParams()
-
   const { play, match } = useMatch()
-  const round1Cost = useCost(0)
-  const round2Cost = useCost(1)
-
+  const cost = useCost()
   const totalCost = useMemo(() => {
     return [
-      round1Cost[Role.A_SIDE].agentCost +
-        round1Cost[Role.A_SIDE].engineCost +
-        round2Cost[Role.A_SIDE].agentCost +
-        round2Cost[Role.A_SIDE].engineCost,
-      round1Cost[Role.B_SIDE].agentCost +
-        round1Cost[Role.B_SIDE].engineCost +
-        round2Cost[Role.B_SIDE].agentCost +
-        round2Cost[Role.B_SIDE].engineCost,
+      cost[Role.A_SIDE].agentCost + cost[Role.A_SIDE].engineCost,
+      cost[Role.B_SIDE].agentCost + cost[Role.B_SIDE].engineCost,
     ] as [number, number]
-  }, [round1Cost, round2Cost])
+  }, [cost])
   const costBonuse = useMemo(() => {
     return pipe(totalCost, map(calcCostBonuse(24)), toArray) as [number, number]
   }, [totalCost, searchParams])

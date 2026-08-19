@@ -54,7 +54,7 @@ const HostDashboard: React.FC = () => {
             <UnlimitedCard />
           ) : (
             <img
-              className="absolute top-[75%] left-1/2 -translate-x-1/2 scale-200 origin-top"
+              className="absolute top-[78%] left-1/2 -translate-x-1/2 scale-200 origin-top"
               src="https://images.zzz.freevue.dev/images/agents/156728/3edd3a9c-8886-4147-89b5-f2e3c01d7be7.webp"
               alt=""
             />

@@ -100,6 +100,8 @@ export function engineCost(rate: Record<string, number>) {
 }
 
 export function calcTimeScore(time: number) {
+  if (time === 0) return 0
+
   const MAX_TIME = 180
   const BONUSE_SCORE = 333
 
