@@ -17,8 +17,8 @@ const EngineButton: React.FC<Props> = (props) => {
       className={pipe(
         [
           'absolute',
-          '-right-2',
-          'bottom-0',
+          '-right-3',
+          '-bottom-6',
           'size-14',
           'flex',
           'items-center',
@@ -27,8 +27,11 @@ const EngineButton: React.FC<Props> = (props) => {
           'cursor-pointer',
           'overflow-hidden',
           'rounded-full',
+          'border-2',
+          'border-solid',
+          'border-content',
         ],
-        concat(isUndefined(props.engine) ? ['bg-accent'] : ['backdrop-blur-2xl']),
+        concat(isUndefined(props.engine) ? ['bg-accent'] : ['backdrop-blur-lg']),
         join(' ')
       )}
     >

@@ -36,12 +36,11 @@ const Cost: React.FC = () => {
 
   return (
     <div className="fixed bottom-0 right-0 left-0 p-4">
-      <p className="ft-pre text-ink text-xl font-black rounded-full bg-accent h-14 w-full mx-auto max-w-lg text-center leading-14">
-        <span>총</span>
+      <p className="ft-pre text-ink text-xl font-black rounded-full bg-accent h-14 w-full mx-auto max-w-lg text-center leading-15">
         <span className="ft-ria text-primary text-3xl mx-2">
           {totalAgentCost + totalEngineCost}
         </span>
-        <span>Co</span>
+        <span>Co.</span>
       </p>
     </div>
   )

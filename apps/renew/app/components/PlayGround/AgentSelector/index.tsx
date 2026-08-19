@@ -6,13 +6,17 @@ import {
   concat,
   entries,
   filter,
+  find,
   flat,
   flatMap,
   isNumber,
+  isObject,
   isString,
   isUndefined,
+  join,
   map,
   pipe,
+  sum,
   toArray,
   zipWithIndex,
 } from '@fxts/core'
@@ -60,6 +64,32 @@ const AgentSelector: React.FC<Props> = (props) => {
       toArray
     )
   }, [currentPlay])
+  const roundAgentCost = useMemo(() => {
+    if (isUndefined(currentPlay)) return 0
+
+    return pipe(
+      currentPlay.engineSlot[props.round],
+      map(({ id, rate }) => ({ engine: store.engines.get(id), rate })),
+      filter(({ engine }) => !isUndefined(engine)),
+      map(({ rate, engine }) => find((cost) => cost.rate === rate, engine!.cost)),
+      filter(isObject),
+      map(({ cost }) => cost),
+      sum
+    )
+  }, [store, currentPlay, props.round])
+  const roundEngineCost = useMemo(() => {
+    if (isUndefined(currentPlay)) return 0
+
+    return pipe(
+      currentPlay.agentSlot[props.round],
+      map(({ id, rate }) => ({ agent: store.agents.get(id), rate })),
+      filter(({ agent }) => !isUndefined(agent)),
+      map(({ rate, agent }) => find((cost) => cost.rate === rate, agent!.cost)),
+      filter(isObject),
+      map(({ cost }) => cost),
+      sum
+    )
+  }, [store, currentPlay, props.round])
 
   const onDialogClose = () => {
     setSelectAgentIndex(null)
@@ -78,29 +108,41 @@ const AgentSelector: React.FC<Props> = (props) => {
 
   return (
     <>
-      <div className="max-w-lg mx-auto mt-4 flex gap-4">
+      <div className="max-w-lg mx-auto mt-4 flex flex-col gap-4 card rounded-3xl p-4 pb-8">
+        <h2 className="text-2xl font-bold text-primary ft-ria flex items-end">
+          <span>Party</span>
+          <span className="ml-auto text-lg text-ink">{roundAgentCost + roundEngineCost} Co.</span>
+        </h2>
         <ul className="flex gap-4 w-full">
           {pipe(
             roundData,
             map(({ agent, index, engine }) => (
-              <li className="flex-1 relative" key={index}>
-                <AgentButton
-                  onClick={onAgentSelectorClick}
-                  value={index}
-                  agent={store.agents.get(agent.id || -1)}
-                />
-                {isNumber(agent.id) && (
+              <li className="flex-1" key={index}>
+                <p
+                  className={pipe(
+                    ['ft-ria', 'text-lg', 'text-center', 'tabular-nums'],
+                    concat(isNumber(agent.id) ? ['opacity-100'] : ['opacity-0']),
+                    join(' ')
+                  )}
+                >
+                  <span className="text-xs">M.</span>
+                  <span className="text-primary">{agent.rate}</span>
+                  <span className="mx-1">/</span>
+                  <span className="text-xs">W.</span>
+                  <span className="text-primary">{isString(engine.id) ? engine.rate : 0}</span>
+                </p>
+                <div className="relative w-full aspect-square">
+                  <AgentButton
+                    onClick={onAgentSelectorClick}
+                    value={index}
+                    agent={store.agents.get(agent.id || -1)}
+                  />
                   <EngineButton
                     onClick={onEngineSelector}
                     value={index}
                     engine={store.engines.get(engine.id || '')}
                   />
-                )}
-                {isNumber(agent.id) && (
-                  <p className="ft-ria text-lg">
-                    {agent.rate}/{isString(engine.id) ? engine.rate : 0}
-                  </p>
-                )}
+                </div>
               </li>
             )),
             toArray

@@ -29,6 +29,7 @@ const RarityTab: React.FC<Props> = (props) => {
           'h-12',
           'text-lg',
           'z-10',
+          'w-full',
         ],
         concat(['sticky', 'top-4']),
         join(' ')

@@ -3,7 +3,7 @@ import CommonBoss from './CommonBoss'
 import { pipe, isUndefined } from '@fxts/core'
 import { useMemo, useState } from 'react'
 import { Icon } from '~/components'
-import { MatchType } from '~/constant'
+import { BossType, MatchType } from '~/constant'
 import { useStore, useMatch } from '~/hooks'
 import type { PlayerRole } from '~/type'
 
@@ -17,9 +17,18 @@ const BossSelector: React.FC<Props> = (props) => {
   const { match, currentPlay } = useMatch()
   const [open, setOpen] = useState<boolean>(false)
   const commonBossData = useMemo(() => {
+    if (isUndefined(currentPlay)) return undefined
+
+    const bossData = pipe(
+      currentPlay.boss,
+      (boss) => boss[props.round],
+      (bossId) => store.deadlyAssault.get(bossId || '')!
+    )
+
+    if (isUndefined(bossData)) return undefined
+    if (bossData.type === BossType.ADVERSITY) return bossData
     if (match.matchType === MatchType.UNLIMITED) return undefined
     if (props.round === 0) return undefined
-    if (isUndefined(currentPlay)) return undefined
 
     return pipe(
       currentPlay.boss,
@@ -42,7 +51,8 @@ const BossSelector: React.FC<Props> = (props) => {
 
   return (
     <>
-      <div className="max-w-lg mx-auto mt-4 flex gap-4">
+      <div className="max-w-lg mt-4 mx-auto card p-4 rounded-3xl">
+        <h2 className="text-2xl font-bold text-primary ft-ria mb-4">Boss</h2>
         {isUndefined(commonBossData) ? (
           <button
             onClick={onEmptyBossClick}

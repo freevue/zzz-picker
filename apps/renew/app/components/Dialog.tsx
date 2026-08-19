@@ -19,8 +19,6 @@ const Dialog: React.FC<Props> = (props) => {
     if (!open) props.onClose?.()
   }
   const onBackgroundClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    console.log(event)
-
     if (props.bgClose) setOpen(false)
   }
   const onContentClick = (event: React.MouseEvent<HTMLDivElement>) => {

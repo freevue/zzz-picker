@@ -55,15 +55,14 @@ const EngineSelector: React.FC<Props> = (props) => {
     return currentPlay.engineSlot[props.round][props.index].id
   }, [props.index, props.round, currentPlay])
   const selectAgentRate = useMemo(() => {
-    if (isNull(selectEngineId)) return null
     if (isUndefined(currentPlay)) return null
 
     return pipe(
       currentPlay.engineSlot[props.round],
-      find((engine) => engine.id === selectEngineId),
+      (list) => list[props.index || -1],
       (data) => (isUndefined(data) ? null : data.rate)
     )
-  }, [selectEngineId, currentPlay, props.round])
+  }, [currentPlay, props.round, props.index])
   const store = useStore()
 
   const onEngineClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -147,42 +146,52 @@ const EngineSelector: React.FC<Props> = (props) => {
   }
 
   return (
-    <Dialog active={active} className="w-full h-full overflow-auto px-4 scrollbar-hidden">
-      <RarityTab list={RARITY_LIST} acitve={rarity} onChange={setRarity} />
-      <div className="grid grid-cols-3 gap-4 max-w-lg mx-auto content-start my-10">
-        {pipe(
-          store.engines,
-          filter(([, engine]) => {
-            if (rarity === 'B') return engine.rank === 'B'
-            if (rarity === 'A') return engine.rank === 'A'
-            if (rarity === 'S') return engine.rank === 'S' && !engine.isPickup
+    <Dialog active={active} className="w-full h-full overflow-auto scrollbar-hidden">
+      <div className="px-4 w-dvw max-w-lg mx-auto">
+        <RarityTab list={RARITY_LIST} acitve={rarity} onChange={setRarity} />
+        <div className="grid grid-cols-3 gap-4 content-start my-10">
+          {pipe(
+            store.engines,
+            filter(([, engine]) => {
+              if (rarity === 'B') return engine.rank === 'B'
+              if (rarity === 'A') return engine.rank === 'A'
+              if (rarity === 'S') return engine.rank === 'S' && !engine.isPickup
 
-            return engine.rank === 'S' && engine.isPickup
-          }),
-          sort(([, prev], [, cur]) => prev.nameKo.localeCompare(cur.nameKo)),
-          sort(([, prev]) => (prev.exclusiveAgentId === selectAgentId ? -999 : 1)),
-          map(([, engine]) => (
-            <button
-              className={pipe(
-                ['card', 'aspect-square', 'size-40', 'p-2', 'rounded-2xl', 'overflow-hidden'],
-                concat(selectEngineId === engine.id ? ['active'] : []),
-                join(' ')
-              )}
-              onClick={onEngineClick}
-              key={engine.id}
-              value={engine.id}
-            >
-              <img
-                className="block w-full bg-accent rounded-xl relative z-1"
-                src={engine.banner}
-                alt={engine.nameKo}
-              />
-            </button>
-          )),
-          toArray
-        )}
+              return engine.rank === 'S' && engine.isPickup
+            }),
+            sort(([, prev], [, cur]) => prev.nameKo.localeCompare(cur.nameKo)),
+            sort(([, prev]) => (prev.exclusiveAgentId === selectAgentId ? -999 : 1)),
+            map(([, engine]) => (
+              <button
+                className={pipe(
+                  [
+                    'card',
+                    'block',
+                    'aspect-square',
+                    'w-full',
+                    'p-2',
+                    'rounded-2xl',
+                    'overflow-hidden',
+                  ],
+                  concat(selectEngineId === engine.id ? ['active'] : []),
+                  join(' ')
+                )}
+                onClick={onEngineClick}
+                key={engine.id}
+                value={engine.id}
+              >
+                <img
+                  className="block w-full bg-accent aspect-square rounded-xl relative z-1"
+                  src={engine.banner}
+                  alt={engine.nameKo}
+                />
+              </button>
+            )),
+            toArray
+          )}
+        </div>
+        <RateController rate={selectAgentRate} onSubmit={onSubmit} onChange={onRateChange} />
       </div>
-      <RateController rate={selectAgentRate} onSubmit={onSubmit} onChange={onRateChange} />
     </Dialog>
   )
 }
