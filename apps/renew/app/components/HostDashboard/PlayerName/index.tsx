@@ -8,7 +8,10 @@ const PlayerName: React.FC = () => {
   const { play } = useMatch()
   const totalCost = useCost()
 
-  console.log(totalCost)
+  /**
+   * TODO: Cost 부분이 동적으로 바뀌면서, 가로 사이즈가 변동이 생김 (Cost 증감에 따라)
+   * 해당 부분 리플로우 방지를 위해 가로 사이즈를 고정해야할듯?
+   */
 
   return (
     <div className="card p-4 flex w-full justify-between items-center rounded-3xl">
