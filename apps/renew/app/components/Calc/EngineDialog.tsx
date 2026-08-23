@@ -1,5 +1,4 @@
-import { Dialog } from '..'
-import EngineButton from './EngineButton'
+import { EngineButton, Dialog } from '..'
 import RateController from './RateController'
 import { concat, filter, isNull, join, map, max, min, pipe, sort, toArray } from '@fxts/core'
 import { useState } from 'react'
@@ -98,7 +97,7 @@ const EngineDialog: React.FC<Props> = (props) => {
             sort(([, prev], [, cur]) => prev.nameKo.localeCompare(cur.nameKo)),
             map(([id, engine]) => (
               <li key={id} className="aspect-square w-full">
-                <EngineButton engine={engine} active={id === select} onClick={onEngineClick} />
+                <EngineButton {...engine} active={id === select} onClick={onEngineClick} />
               </li>
             )),
             toArray

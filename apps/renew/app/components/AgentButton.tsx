@@ -1,5 +1,5 @@
-import { concat, join, pipe } from '@fxts/core'
-import type { Agent } from '~/type'
+import { Agent } from '@/type'
+import { pipe, join, concat } from '@fxts/core'
 
 type Props = {
   className?: string
@@ -11,32 +11,31 @@ type Props = {
 const AgentButton: React.FC<Props> = (props) => {
   return (
     <button
-      disabled={props.disabled}
+      type="button"
+      onClick={props.onClick}
       className={pipe(
         [
-          'w-full',
+          'bg-accent',
           'block',
-          'cursor-pointer',
+          'w-full',
           'aspect-square',
-          'overflow-hidden',
+          'text-7xl',
           'rounded-2xl',
-          'p-2',
-          'card',
-          'relative',
+          'cursor-pointer',
+          'overflow-hidden',
           props.className || '',
         ],
         concat(['disabled:grayscale-100', 'disabled:cursor-not-allowed']),
-        concat(props.active ? ['active'] : []),
+        concat(props.active ? ['shadow-active'] : []),
         join(' ')
       )}
+      disabled={props.disabled}
       value={props.id}
-      onClick={props.onClick}
     >
       <img
-        className="block w-full rounded-xl relative z-1 aspect-square"
         style={{ backgroundColor: props.color || 'transparent' }}
+        className="block w-full"
         src={props.profile}
-        alt={props.nameKo}
       />
     </button>
   )

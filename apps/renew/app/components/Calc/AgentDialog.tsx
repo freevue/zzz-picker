@@ -1,5 +1,4 @@
-import { Dialog } from '..'
-import AgentButton from './AgentButton'
+import { Dialog, AgentButton } from '..'
 import RateController from './RateController'
 import { concat, filter, isNull, join, map, max, min, pipe, sort, toArray } from '@fxts/core'
 import { useState } from 'react'
@@ -97,7 +96,7 @@ const AgentDialog: React.FC<Props> = (props) => {
             sort(([, prev], [, cur]) => prev.nameKo.localeCompare(cur.nameKo)),
             map(([id, agent]) => (
               <li key={id} className="aspect-square">
-                <AgentButton agent={agent} onClick={onAgentClick} active={select === agent.id} />
+                <AgentButton {...agent} onClick={onAgentClick} active={select === agent.id} />
               </li>
             )),
             toArray
