@@ -2,11 +2,13 @@ import { Icon } from '..'
 import AgentDialog from './AgentDialog'
 import EngineDialog from './EngineDialog'
 import {
+  concat,
   filter,
   isNull,
   isNumber,
   isObject,
   isString,
+  join,
   map,
   pipe,
   toArray,
@@ -18,6 +20,7 @@ import { agentCost, engineCost } from '~/lib/utils'
 
 type Props = {
   onChange: (cost: number) => void
+  key: string
 }
 
 const AgentList: React.FC<Props> = (props) => {
@@ -106,58 +109,90 @@ const AgentList: React.FC<Props> = (props) => {
 
   return (
     <>
-      <ul className="flex w-full flex-wrap gap-4">
-        {pipe(
-          state.agent,
-          zipWithIndex,
-          map(([index, agentId]) => ({ index, agentId, engineId: state.engine[index] })),
-          map(({ index, agentId, engineId }) => (
-            <li className="flex-1 relative" key={index}>
-              <button
-                onClick={onAgentClick}
-                type="button"
-                value={index}
-                className="block w-full aspect-square bg-content rounded-2xl overflow-hidden cursor-pointer"
-              >
-                {isNull(agentId) ? (
-                  <Icon.Plus className="scale-75" />
-                ) : (
-                  <img
-                    style={{
-                      backgroundColor: store.agents.get(agentId)!.color || 'transparent',
-                    }}
-                    src={store.agents.get(agentId)!.profile}
-                    alt={store.agents.get(agentId)!.nameKo}
-                  />
-                )}
-              </button>
-              {agentId && (
+      <div className="max-w-lg mx-auto flex flex-col gap-4 card rounded-3xl p-4 pb-8 w-full">
+        <ul className="flex w-full flex-wrap gap-4">
+          {pipe(
+            state.agent,
+            zipWithIndex,
+            map(([index, agentId]) => ({ index, agentId, engineId: state.engine[index] })),
+            map(({ index, agentId, engineId }) => (
+              <li className="flex-1 relative" key={index}>
+                <p
+                  className={pipe(
+                    ['ft-ria', 'text-lg', 'text-center', 'tabular-nums'],
+                    // concat(isNumber(agentId) ? ['opacity-100'] : ['opacity-0']),
+                    join(' ')
+                  )}
+                >
+                  <span className="text-xs">M.</span>
+                  <span className="text-primary">
+                    {(isNumber(agentId) && state.rate[agentId]) || 0}
+                  </span>
+                  <span className="mx-1">/</span>
+                  <span className="text-xs">W.</span>
+                  <span className="text-primary">
+                    {(isString(engineId) && state.rate[engineId]) || 0}
+                  </span>
+                </p>
+                <button
+                  onClick={onAgentClick}
+                  type="button"
+                  value={index}
+                  className="block w-full aspect-square bg-accent rounded-2xl overflow-hidden cursor-pointer"
+                >
+                  {isNull(agentId) ? (
+                    <Icon.Plus className="scale-75" />
+                  ) : (
+                    <img
+                      style={{
+                        backgroundColor: store.agents.get(agentId)!.color || 'transparent',
+                      }}
+                      src={store.agents.get(agentId)!.profile}
+                      alt={store.agents.get(agentId)!.nameKo}
+                    />
+                  )}
+                </button>
                 <button
                   type="button"
                   value={index}
                   onClick={onEngineClick}
-                  className="size-12 block absolute bg-content rounded-2xl -right-2 bottom-0 border border-solid border-accent cursor-pointer"
+                  className={pipe(
+                    [
+                      'absolute',
+                      '-right-3',
+                      '-bottom-6',
+                      'size-14',
+                      'flex',
+                      'items-center',
+                      'justify-center',
+                      'text-5xl',
+                      'cursor-pointer',
+                      'overflow-hidden',
+                      'rounded-full',
+                      'border-2',
+                      'border-solid',
+                      'border-content',
+                    ],
+                    concat(isNull(engineId) ? ['bg-accent'] : ['backdrop-blur-lg']),
+                    join(' ')
+                  )}
                 >
                   {isNull(engineId) ? (
                     <Icon.Plus className="scale-75" />
                   ) : (
                     <img
-                      className="relative z-1 rounded-xl block w-full bg-accent"
+                      className="relative z-1 rounded-xl block w-full"
                       src={store.engines.get(engineId)!.banner}
                       alt={store.engines.get(engineId)!.nameKo}
                     />
                   )}
                 </button>
-              )}
-              <p className="ft-ria text-lg mt-1">
-                {(isNumber(agentId) && state.rate[agentId]) || 0}/
-                {(isString(engineId) && state.rate[engineId]) || 0}
-              </p>
-            </li>
-          )),
-          toArray
-        )}
-      </ul>
+              </li>
+            )),
+            toArray
+          )}
+        </ul>
+      </div>
       {isNumber(activeAgentIndex) && (
         <AgentDialog
           agentId={selectAgent.agentId}

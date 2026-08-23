@@ -1,5 +1,5 @@
-import { Icon } from '@/components'
 import { isNumber } from '@fxts/core'
+import { Plus, Minus } from 'lucide-react'
 
 type Props = {
   rate: number | null
@@ -18,7 +18,7 @@ const RateController: React.FC<Props> = (props) => {
             onClick={props.onChange}
             className="cursor-pointer size-14 bg-primary text-6xl rounded-full text-content"
           >
-            -
+            <Minus className="mx-auto size-10" strokeWidth={3} />
           </button>
           <p className="text-4xl ft-ria flex items-center justify-center px-4 text-primary">
             {props.rate}
@@ -29,7 +29,7 @@ const RateController: React.FC<Props> = (props) => {
             onClick={props.onChange}
             className="cursor-pointer size-14 bg-primary text-6xl rounded-full text-content"
           >
-            <Icon.Plus className="scale-75" />
+            <Plus className="mx-auto size-10" strokeWidth={3} />
           </button>
         </div>
       )}

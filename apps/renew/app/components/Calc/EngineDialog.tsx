@@ -1,7 +1,8 @@
 import { Dialog } from '..'
+import EngineButton from './EngineButton'
 import RateController from './RateController'
 import { concat, filter, isNull, join, map, max, min, pipe, sort, toArray } from '@fxts/core'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useStore } from '~/hooks'
 
 type Props = {
@@ -57,8 +58,12 @@ const EngineDialog: React.FC<Props> = (props) => {
   }
 
   return (
-    <Dialog active={!!props.active}>
-      <div className="max-w-lg mx-auto p-4 w-full h-dvh overflow-auto scrollbar-hidden">
+    <Dialog
+      active={!!props.active}
+      className="w-full h-full overflow-auto scrollbar-hidden"
+      onClose={onEngineSubmit}
+    >
+      <div className="max-w-lg mx-auto p-4 w-dvw h-dvh overflow-auto scrollbar-hidden">
         <ul className="sticky top-2 z-10 flex rounded-full mb-8 h-14 overflow-hidden">
           {pipe(
             RARITY_LIST,
@@ -92,28 +97,12 @@ const EngineDialog: React.FC<Props> = (props) => {
             }),
             sort(([, prev], [, cur]) => prev.nameKo.localeCompare(cur.nameKo)),
             map(([id, engine]) => (
-              <li key={id} className="aspect-square">
-                <button
-                  type="button"
-                  value={id}
+              <li key={id} className="aspect-square w-full">
+                <EngineButton
+                  engine={engine}
+                  active={id === select || id === props.engineId}
                   onClick={onEngineClick}
-                  className={pipe(
-                    [
-                      'aspect-square w-full rounded-2xl overflow-hidden',
-                      'card',
-                      'p-2',
-                      'cursor-pointer',
-                    ],
-                    concat(id === select ? ['active'] : []),
-                    join(' ')
-                  )}
-                >
-                  <img
-                    className="relative z-1 rounded-xl block w-full bg-accent"
-                    src={engine.banner}
-                    alt={engine.nameKo}
-                  />
-                </button>
+                />
               </li>
             )),
             toArray
