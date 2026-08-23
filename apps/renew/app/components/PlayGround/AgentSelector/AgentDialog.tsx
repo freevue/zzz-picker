@@ -141,32 +141,39 @@ const AgentSelector: React.FC<Props> = (props) => {
   }
 
   return (
-    <Dialog active={active} className="w-full h-full overflow-auto px-4 scrollbar-hidden">
-      <RarityTab list={RARITY_LIST} acitve={rarity} onChange={setRarity} />
-      <div className="grid grid-cols-3 gap-4 max-w-lg mx-auto content-start my-10">
-        {pipe(
-          store.agents,
-          filter(([, agent]) => !agent.isTeaser),
-          filter(([, agent]) => {
-            if (rarity === 'A') return agent.rarity === 'A'
-            if (rarity === 'S') return agent.rarity === 'S' && !agent.isPickup
+    <Dialog
+      active={active}
+      className="w-full h-full overflow-auto px-4 scrollbar-hidden"
+      onClose={props.onClose}
+      bgClose
+    >
+      <div className="px-4 w-dvw max-w-lg mx-auto">
+        <RarityTab list={RARITY_LIST} acitve={rarity} onChange={setRarity} />
+        <div className="grid grid-cols-3 gap-4 max-w-lg mx-auto content-start my-10">
+          {pipe(
+            store.agents,
+            filter(([, agent]) => !agent.isTeaser),
+            filter(([, agent]) => {
+              if (rarity === 'A') return agent.rarity === 'A'
+              if (rarity === 'S') return agent.rarity === 'S' && !agent.isPickup
 
-            return agent.rarity === 'S' && agent.isPickup
-          }),
-          sort(([, prev], [, cur]) => prev.nameKo.localeCompare(cur.nameKo)),
-          map(([, agent]) => (
-            <AgentButton
-              active={agent.id === selectAgentId}
-              onClick={onAgentClick}
-              key={agent.id}
-              disabled={agent.id !== selectAgentId && includes(agent.id, disabled)}
-              {...agent}
-            />
-          )),
-          toArray
-        )}
+              return agent.rarity === 'S' && agent.isPickup
+            }),
+            sort(([, prev], [, cur]) => prev.nameKo.localeCompare(cur.nameKo)),
+            map(([, agent]) => (
+              <AgentButton
+                active={agent.id === selectAgentId}
+                onClick={onAgentClick}
+                key={agent.id}
+                disabled={agent.id !== selectAgentId && includes(agent.id, disabled)}
+                {...agent}
+              />
+            )),
+            toArray
+          )}
+        </div>
+        <RateController rate={selectAgentRate} onSubmit={onSubmit} onChange={onRateChange} />
       </div>
-      <RateController rate={selectAgentRate} onSubmit={onSubmit} onChange={onRateChange} />
     </Dialog>
   )
 }

@@ -1,6 +1,6 @@
 import RarityTab from './RarityTab'
 import RateController from './RateController'
-import { Dialog } from '@/components'
+import { Dialog, EngineButton } from '@/components'
 import {
   filter,
   map,
@@ -11,8 +11,6 @@ import {
   max,
   min,
   isNull,
-  concat,
-  join,
   isUndefined,
   fromEntries,
 } from '@fxts/core'
@@ -145,7 +143,12 @@ const EngineSelector: React.FC<Props> = (props) => {
   }
 
   return (
-    <Dialog active={active} className="w-full h-full overflow-auto scrollbar-hidden">
+    <Dialog
+      active={active}
+      className="w-full h-full overflow-auto scrollbar-hidden"
+      onClose={props.onClose}
+      bgClose
+    >
       <div className="px-4 w-dvw max-w-lg mx-auto">
         <RarityTab list={RARITY_LIST} acitve={rarity} onChange={setRarity} />
         <div className="grid grid-cols-3 gap-4 content-start my-10">
@@ -161,30 +164,11 @@ const EngineSelector: React.FC<Props> = (props) => {
             sort(([, prev], [, cur]) => prev.nameKo.localeCompare(cur.nameKo)),
             sort(([, prev]) => (prev.exclusiveAgentId === selectAgentId ? -999 : 1)),
             map(([, engine]) => (
-              <button
-                className={pipe(
-                  [
-                    'card',
-                    'block',
-                    'aspect-square',
-                    'w-full',
-                    'p-2',
-                    'rounded-2xl',
-                    'overflow-hidden',
-                  ],
-                  concat(selectEngineId === engine.id ? ['active'] : []),
-                  join(' ')
-                )}
+              <EngineButton
+                {...engine}
+                active={engine.id === selectEngineId}
                 onClick={onEngineClick}
-                key={engine.id}
-                value={engine.id}
-              >
-                <img
-                  className="block w-full bg-accent aspect-square rounded-xl relative z-1"
-                  src={engine.banner}
-                  alt={engine.nameKo}
-                />
-              </button>
+              />
             )),
             toArray
           )}
