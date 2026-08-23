@@ -40,9 +40,22 @@ export default function Index() {
           /> */}
           </button>
         </div>
-        <ul className="absolute right-4 bottom-4 flex gap-4 text-ink/70 ft-pre text-lg font-medium">
+        <ul className="absolute left-1/2 -translate-x-1/2 top-4 flex gap-4 text-ink/70 ft-pre text-xl font-medium ft-pre">
           <li className="">
-            <button type="button" onClick={() => setRuleAvtive(true)}>
+            <button
+              type="button"
+              onClick={() => alert('준비중입니다.')}
+              className="hover:text-primary"
+            >
+              명예의 전당
+            </button>
+          </li>
+          <li className="">
+            <button
+              type="button"
+              onClick={() => setRuleAvtive(true)}
+              className="hover:text-primary"
+            >
               경기 룰
             </button>
           </li>

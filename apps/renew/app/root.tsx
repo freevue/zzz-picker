@@ -63,6 +63,9 @@ const App: React.FC = () => {
         <Background />
         <Outlet />
         <Scripts />
+        <p className="fixed right-4 bottom-0.5 text-xs text-ink/30 ft-pre">
+          Copyright © 2026. Freevue. All rights reserved.
+        </p>
       </body>
     </html>
   )
