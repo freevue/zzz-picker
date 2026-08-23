@@ -14,7 +14,6 @@ import {
   concat,
   join,
   isUndefined,
-  find,
   fromEntries,
 } from '@fxts/core'
 import { useMemo, useState } from 'react'
@@ -54,12 +53,12 @@ const EngineSelector: React.FC<Props> = (props) => {
 
     return currentPlay.engineSlot[props.round][props.index].id
   }, [props.index, props.round, currentPlay])
-  const selectAgentRate = useMemo(() => {
+  const selectEngineRate = useMemo(() => {
     if (isUndefined(currentPlay)) return null
 
     return pipe(
       currentPlay.engineSlot[props.round],
-      (list) => list[props.index || -1],
+      (list) => list[isNull(props.index) ? -1 : props.index],
       (data) => (isUndefined(data) ? null : data.rate)
     )
   }, [currentPlay, props.round, props.index])
@@ -93,11 +92,11 @@ const EngineSelector: React.FC<Props> = (props) => {
   const onRateChange = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    if (isNull(selectAgentRate)) return
+    if (isNull(selectEngineRate)) return
 
     const rate = pipe(
       Number(event.currentTarget.value),
-      (rate) => rate + selectAgentRate,
+      (rate) => rate + selectEngineRate,
       (rate) => [rate, 1],
       max,
       (rate) => [rate, ENGINE_MAX_RATE],
@@ -190,7 +189,7 @@ const EngineSelector: React.FC<Props> = (props) => {
             toArray
           )}
         </div>
-        <RateController rate={selectAgentRate} onSubmit={onSubmit} onChange={onRateChange} />
+        <RateController rate={selectEngineRate} onSubmit={onSubmit} onChange={onRateChange} />
       </div>
     </Dialog>
   )
