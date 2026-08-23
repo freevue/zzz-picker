@@ -13,7 +13,7 @@ const AgentCostTable = () => {
 
   return (
     <>
-      <ul className="flex h-8 rounded-3xl overflow-hidden ml-auto -mt-10 bg-accent">
+      <ul className="flex h-8 rounded-3xl overflow-hidden ml-auto bg-accent">
         <li className="h-full">
           <label className="group h-full flex-center has-checked:bg-primary cursor-pointer">
             <input
