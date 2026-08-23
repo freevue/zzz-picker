@@ -98,11 +98,7 @@ const EngineDialog: React.FC<Props> = (props) => {
             sort(([, prev], [, cur]) => prev.nameKo.localeCompare(cur.nameKo)),
             map(([id, engine]) => (
               <li key={id} className="aspect-square w-full">
-                <EngineButton
-                  engine={engine}
-                  active={id === select || id === props.engineId}
-                  onClick={onEngineClick}
-                />
+                <EngineButton engine={engine} active={id === select} onClick={onEngineClick} />
               </li>
             )),
             toArray

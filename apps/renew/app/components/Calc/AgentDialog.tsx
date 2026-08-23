@@ -97,11 +97,7 @@ const AgentDialog: React.FC<Props> = (props) => {
             sort(([, prev], [, cur]) => prev.nameKo.localeCompare(cur.nameKo)),
             map(([id, agent]) => (
               <li key={id} className="aspect-square">
-                <AgentButton
-                  agent={agent}
-                  onClick={onAgentClick}
-                  active={agent.id === props.agentId || select === agent.id}
-                />
+                <AgentButton agent={agent} onClick={onAgentClick} active={select === agent.id} />
               </li>
             )),
             toArray
