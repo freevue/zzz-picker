@@ -1,6 +1,6 @@
 import { TableName } from './constant'
-import type { Match, PlayerRole, Player, AgentSlot, EngineSlot } from '@/type'
-import { every, flatMap, isNumber, pipe } from '@fxts/core'
+import type { Match, Player, AgentSlot, EngineSlot } from '@/type'
+import { pipe } from '@fxts/core'
 import { supabase } from '@zzz-picker/supabase'
 import { MatchType, Phase, Role } from '~/constant'
 
