@@ -48,19 +48,20 @@ const AgentList: React.FC<Props> = (props) => {
                   [
                     'absolute -bottom-3 -right-3 size-12 rounded-full',
                     'border-2 border-solid border-content',
+                    'overflow-hidden',
                   ],
-                  concat(isUndefined(engine) ? ['bg-accent'] : ['backdrop-blur-lg']),
+                  concat(isUndefined(engine) ? ['bg-accent'] : []),
                   join(' ')
                 )}
               >
                 {isUndefined(engine) ? (
                   <Icon.Plus className="scale-75" />
                 ) : (
-                  <img src={engine.icon} alt={engine.nameKo} />
+                  <img src={engine.icon} alt={engine.nameKo} className="backdrop-blur-lg" />
                 )}
               </button>
             </div>
-            <div className="mt-2 h-7 flex gap-1 font-bold items-center justify-center">
+            <div className="mt-2 h-7 flex gap-1 font-bold items-center justify-center text-ink">
               {!isUndefined(agent) && (
                 <>
                   <p className="ft-pre flex items-end gap-1">
