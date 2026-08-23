@@ -182,7 +182,7 @@ const AgentList: React.FC<Props> = (props) => {
                   ) : (
                     <img
                       className="relative z-1 rounded-xl block w-full"
-                      src={store.engines.get(engineId)!.banner}
+                      src={store.engines.get(engineId)!.icon}
                       alt={store.engines.get(engineId)!.nameKo}
                     />
                   )}

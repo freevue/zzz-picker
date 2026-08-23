@@ -28,7 +28,7 @@ const EngineButton: React.FC<Props> = (props) => {
       )}
       value={props.engine.id}
     >
-      <img className="block w-full" src={props.engine.banner} />
+      <img className="block w-full" src={props.engine.banner} alt={props.engine.nameKo} />
     </button>
   )
 }
