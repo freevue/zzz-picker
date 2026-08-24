@@ -7,13 +7,14 @@ type Props = {
   list: Array<AgentSlot>
   engines: Array<EngineSlot>
   role: PlayerRole
+  ref?: React.RefObject<HTMLUListElement | null>
 }
 
 const AgentList: React.FC<Props> = (props) => {
   const store = useStore()
 
   return (
-    <ul className="flex gap-4">
+    <ul className="flex gap-4" ref={props.ref}>
       {pipe(
         props.list,
         map((agent) => store.agents.get(agent.id || -1)),

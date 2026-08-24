@@ -169,29 +169,38 @@ export async function deepCloneElement<T extends HTMLElement>(element: T) {
 }
 
 export function elementToImage(gap: number = 0) {
-  return async <T extends HTMLElement>(element: T) => {
-    const parser = new DOMParser()
-    const { outerHTML } = await deepCloneElement(element)
+  return async <T extends HTMLElement>(element: T): Promise<string> => {
+    return await pipe(
+      element,
+      deepCloneElement,
+      (deepCloneNode) => {
+        const svg = document.createElement('svg')
+        const foreignObject = document.createElementNS(
+          'http://www.w3.org/2000/svg',
+          'foreignObject'
+        )
 
-    return pipe(
-      parser.parseFromString(outerHTML, 'text/html'),
-      ({ body }) => new XMLSerializer().serializeToString(body.firstChild!),
-      (xhtmlString) => `
-      <svg xmlns="http://www.w3.org/2000/svg" width="${element.offsetWidth + gap * 2}" height="${element.offsetHeight + gap * 2}">
-        <foreignObject width="100%" height="100%">
-          <div style="padding: ${gap}; background-color: #141920;" xmlns="http://www.w3.org/1999/xhtml">
-            <style>
-              /*<![CDATA[*/
-              ${getStyleText()}
-              /*]]>*/
-            </style>
-            ${xhtmlString}
-          </div>
-        </foreignObject>
-      </svg>
-    `,
-      (svgText) => new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' }),
-      (blob) => URL.createObjectURL(blob)
+        svg.setAttribute('width', '100%')
+        svg.setAttribute('height', '100%')
+        svg.setAttribute(
+          'viewBox',
+          `0 0 ${element.offsetWidth + gap * 2} ${element.offsetHeight + gap * 2}`
+        )
+
+        foreignObject.setAttribute('width', '100%')
+        foreignObject.setAttribute('height', '100%')
+        foreignObject.setAttribute('x', '0')
+        foreignObject.setAttribute('y', '0')
+        foreignObject.setAttribute('externalResourceRequired', 'true')
+
+        svg.append(foreignObject)
+        foreignObject.append(deepCloneNode)
+
+        return svg
+      },
+      (svgElement) => new XMLSerializer().serializeToString(svgElement),
+      (data) => encodeURIComponent(data),
+      (html) => `data:image/svg+xml;base64,${html}`
     )
   }
 }

@@ -3,16 +3,18 @@ import AgentList from './AgentList'
 import BossButton from './BossButton'
 import Score from './Score'
 import Timer from './Timer'
-import { filter, find, isObject, isUndefined, join, map, pipe, sum } from '@fxts/core'
-import { useMemo } from 'react'
+import { filter, find, isObject, isUndefined, join, map, max, pipe, sum } from '@fxts/core'
+import { useMemo, useRef } from 'react'
 import { Phase, Role } from '~/constant'
 import { useMatch, useStore } from '~/hooks'
+import { elementToImage } from '~/lib/utils'
 
 type Props = {
   round: number
 }
 
 const Round: React.FC<Props> = (props) => {
+  const round1Ref = useRef<HTMLUListElement>(null)
   const { play, match } = useMatch()
   const store = useStore()
   const roundCost = useMemo(() => {
@@ -61,59 +63,56 @@ const Round: React.FC<Props> = (props) => {
   }, [play, props.round, store])
   /**
    * TODO: 특정 라운드의 특정 참가자의 파티 및 cost 구성을 pip로 올리려는 시도.
-   * 현재 해당하는 element를 바로 svg로 만들어 구성하려고 했으나, element를 object로 구성하는 단계에 보안 문제가 발생
-   * 해당 canvas는 그릴 수 있으나, canvas를 캡처하여 활용하는 것은 불가능함 (video에 보낼 stream을 구성하지 못하는 이슈 발생)
-   *
-   * 직접 svg에 해당하는 요소들을 받아와 svg를 구성하는 시도가 필요할수도..
-   * (애초에 pip가 필요할지 먼제 확인을 해야할 수도?)
+   * SVG를 문자열로 넣은 경우 동작을 잘 안한다. 해당 부분을 개선하기 위해 SVG를 base64로 변환해서 사용을 해보는 중인데, 약간 에러가 발생한다.
    */
-  // const onPipOpen = async (event: React.MouseEvent<HTMLButtonElement>) => {
-  //   event.preventDefault()
+  const onPipOpen = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
 
-  //   await pipe(
-  //     event.currentTarget.parentElement!,
-  //     (element) => element.querySelector<HTMLUListElement>('ul[role="agent-list"]')!,
-  //     elementToImage(12),
-  //     (url) => {
-  //       const image = new Image()
+    await pipe(round1Ref.current as HTMLUListElement, elementToImage(12), (url) => {
+      console.log(url)
 
-  //       image.onload = async () => {
-  //         const dpr = max([window.devicePixelRatio || 1, 2])
-  //         const canvas = document.querySelector<HTMLCanvasElement>('#canvas')!
+      const image = new Image()
 
-  //         canvas.width = image.naturalWidth * dpr
-  //         canvas.height = image.naturalHeight * dpr
-  //         canvas.style.width = `${image.naturalWidth * dpr}px`
-  //         canvas.style.height = `${image.naturalHeight * dpr}px`
+      image.onload = async () => {
+        image.decode().then(async () => {
+          console.log({ image })
 
-  //         const context = canvas!.getContext('2d')
+          // const dpr = max([window.devicePixelRatio || 1, 2])
+          // const canvas = document.createElement('canvas')
 
-  //         if (context) {
-  //           context.imageSmoothingEnabled = true
-  //           context.imageSmoothingQuality = 'high'
+          // canvas.width = image.naturalWidth * dpr
+          // canvas.height = image.naturalHeight * dpr
+          // canvas.style.width = `${image.naturalWidth * dpr}px`
+          // canvas.style.height = `${image.naturalHeight * dpr}px`
 
-  //           context.clearRect(0, 0, canvas.width, canvas.height)
-  //           context.drawImage(image, 12, 12, canvas.width, canvas.height)
+          // const context = canvas!.getContext('2d')
 
-  //           await pipe(canvas.captureStream(30), async (stream) => {
-  //             const video = document.createElement('video')
+          // if (context) {
+          //   context.imageSmoothingEnabled = true
+          //   context.imageSmoothingQuality = 'high'
 
-  //             video.muted = true
-  //             video.autoplay = true
-  //             video.srcObject = stream
+          //   context.clearRect(0, 0, canvas.width, canvas.height)
+          //   context.drawImage(image, 12, 12, canvas.width, canvas.height)
 
-  //             await video.play()
-  //             await video.requestPictureInPicture()
-  //           })
-  //         }
+          //   await pipe(canvas.captureStream(30), async (stream) => {
+          //     const video = document.createElement('video')
 
-  //         URL.revokeObjectURL(url)
-  //       }
+          //     video.muted = true
+          //     video.autoplay = true
+          //     video.srcObject = stream
 
-  //       image.src = url
-  //     }
-  //   )
-  // }
+          //     await video.play()
+          //     await video.requestPictureInPicture()
+          //   })
+          // }
+        })
+      }
+
+      image.decoding = 'async'
+      image.crossOrigin = 'anonymous'
+      image.src = url
+    })
+  }
 
   return (
     <div
