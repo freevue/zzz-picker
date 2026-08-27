@@ -1,7 +1,8 @@
 import { Dialog } from '..'
-import { insertMatch, insertPlayer, selectAdversityBoss } from '@/lib/DB'
+import { insertMatch, insertPlayer, selectAdversityBoss, selectValidAuthKey } from '@/lib/DB'
 import { concat, join, map, pipe, toAsync, toArray, peek } from '@fxts/core'
 import { useNavigate } from '@remix-run/react'
+import { useEffect } from 'react'
 import { BossType, MatchType, Phase, Role } from '~/constant'
 
 type Props = {
@@ -18,6 +19,7 @@ const ROUNDS = [
   { value: BossType.TRIAL, label: '일반 모드' },
   { value: BossType.ADVERSITY, label: '절망 모드' },
 ]
+const LOCAL_STORAGE_KEY = 'zzz-picker-auth'
 const CreateRoom: React.FC<Props> = (props) => {
   const navigate = useNavigate()
   const onSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
@@ -25,6 +27,10 @@ const CreateRoom: React.FC<Props> = (props) => {
 
     const formData = new FormData(event.currentTarget)
     const round = formData.get('round') as BossType
+    const { isApproval: isTest } = await pipe(
+      window.localStorage.getItem(LOCAL_STORAGE_KEY) || '',
+      selectValidAuthKey
+    )
 
     const { id: matchId } = await pipe(
       formData.get('match') as MatchType,
@@ -49,7 +55,7 @@ const CreateRoom: React.FC<Props> = (props) => {
         boss: round === BossType.ADVERSITY ? [null, bossId] : [null, null],
       })),
       toAsync,
-      peek(insertPlayer(matchId)),
+      peek(insertPlayer(matchId, !isTest)),
       toArray
     )
     navigate(`/${matchId}`)
