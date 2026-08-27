@@ -22,8 +22,16 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       host: true,
+      proxy: {
+        '/r2-proxy': {
+          target: 'https://images.zzz.freevue.dev',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/r2-proxy/, ''),
+        },
+      },
     },
     define: {
+      __AUTH_KEY__: JSON.stringify(env.AUTH_KEY),
       __VERSION__: JSON.stringify(pkg.version),
       'process.env.ROLE_TOKEN_SECRET': JSON.stringify(
         env.ROLE_TOKEN_SECRET || 'zzz-picker-secret-key'

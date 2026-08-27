@@ -146,7 +146,6 @@ export function getStyleText() {
 
 export async function deepCloneElement<T extends HTMLElement>(element: T) {
   const changeUrl = (src: string) => {
-    // @ts-ignore
     if (import.meta.env.DEV) {
       const url = new URL(src)
 
