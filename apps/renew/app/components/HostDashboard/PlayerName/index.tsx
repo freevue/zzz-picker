@@ -1,6 +1,6 @@
 import { pipe, sum, values } from '@fxts/core'
 import { Link } from '@remix-run/react'
-import { ExternalLink } from 'lucide-react'
+import { SquareArrowOutUpRight } from 'lucide-react'
 import { Role } from '~/constant'
 import { useMatch, useCost } from '~/hooks'
 
@@ -11,13 +11,13 @@ const PlayerName: React.FC = () => {
   return (
     <div className="card p-4 flex w-full justify-between items-center rounded-3xl gap-4">
       <div className="flex flex-col flex-1 items-end">
-        <div className="flex-center gap-2">
+        <div className="flex-center gap-4">
           <Link
             to={`/room/${play[Role.A_SIDE].id}`}
             target="_blank"
             className="my-auto hover:text-primary"
           >
-            <ExternalLink className="size-8" />
+            <SquareArrowOutUpRight className="size-8" />
           </Link>
           <h3 className="ft-ria text-primary text-4xl">{play[Role.A_SIDE].name}</h3>
         </div>
@@ -30,14 +30,14 @@ const PlayerName: React.FC = () => {
       </div>
       <span className="text-ink text-4xl ft-ria mx-2">VS</span>
       <div className="flex flex-col flex-1 items-start">
-        <div className="flex-center flex-1 gap-2">
+        <div className="flex-center flex-1 gap-4">
           <h3 className="ft-ria text-primary text-4xl">{play[Role.B_SIDE].name}</h3>
           <Link
             to={`/room/${play[Role.B_SIDE].id}`}
             target="_blank"
             className="my-auto hover:text-primary"
           >
-            <ExternalLink className="size-8" />
+            <SquareArrowOutUpRight className="size-8" />
           </Link>
         </div>
         {pipe(totalCost[Role.B_SIDE], values, sum, (cost) => (
