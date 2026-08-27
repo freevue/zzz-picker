@@ -208,11 +208,11 @@ type InsertPlayerParams = {
   boss?: Array<string | null>
 }
 
-export function insertPlayer(matchId: string) {
+export function insertPlayer(matchId: string, isTest: boolean = true) {
   return async (params: InsertPlayerParams) => {
     const { data } = await supabase
       .from(TableName.PLAY)
-      .insert({ ...params, matchId })
+      .insert({ ...params, matchId, isTest })
       .select()
       .single()
 

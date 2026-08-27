@@ -9,4 +9,5 @@ export enum TableName {
   ENGINE = 'engine',
   AGENT_COST = 'agentCost',
   ENGINE_COST = 'engineCost',
+  AUTH_KEY = 'auth_key',
 }
