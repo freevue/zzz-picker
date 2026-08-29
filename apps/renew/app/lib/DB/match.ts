@@ -212,7 +212,7 @@ export function insertPlayer(matchId: string, isTest: boolean = true) {
   return async (params: InsertPlayerParams) => {
     const { data } = await supabase
       .from(TableName.PLAY)
-      .insert({ ...params, matchId, isTest })
+      .insert({ ...params, matchId })
       .select()
       .single()
 
