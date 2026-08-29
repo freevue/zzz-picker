@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZZZ 호요랩 동기화</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="panel">
+      <header class="panel__header">
+        <h1>ZZZ 호요랩 동기화</h1>
+        <p class="panel__subtitle">버튼 클릭 시 닉네임·캐릭터 데이터만 수집</p>
+      </header>
+
+      <section class="panel__status">
+        <p class="status__label">닉네임</p>
+        <p class="status__value" id="nickname">—</p>
+        <p class="status__label" style="margin-top: 12px">DB</p>
+        <p class="status__value" id="db-status">확인 중…</p>
+        <p class="status__hint" id="sync-status"></p>
+      </section>
+
+      <section class="panel__actions">
+        <button type="button" id="sync" class="btn btn--primary">지금 동기화</button>
+        <button type="button" id="open-hoyolab" class="btn">호요랩 열기</button>
+        <button type="button" id="clear" class="btn btn--danger">저장 데이터 삭제</button>
+      </section>
+
+      <footer class="panel__footer">
+        <p id="sync-info">아직 동기화된 데이터가 없습니다</p>
+        <p class="panel__note">호요랩 육성가이드 페이지에서 [지금 동기화]를 눌러주세요.</p>
+      </footer>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
