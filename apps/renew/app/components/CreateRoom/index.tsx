@@ -27,10 +27,10 @@ const CreateRoom: React.FC<Props> = (props) => {
 
     const formData = new FormData(event.currentTarget)
     const round = formData.get('round') as BossType
-    const { isApproval: isTest } = await pipe(
-      window.localStorage.getItem(LOCAL_STORAGE_KEY) || '',
-      selectValidAuthKey
-    )
+    // const { isApproval: isTest } = await pipe(
+    //   window.localStorage.getItem(LOCAL_STORAGE_KEY) || '',
+    //   selectValidAuthKey
+    // )
 
     const { id: matchId } = await pipe(
       formData.get('match') as MatchType,
@@ -55,7 +55,7 @@ const CreateRoom: React.FC<Props> = (props) => {
         boss: round === BossType.ADVERSITY ? [null, bossId] : [null, null],
       })),
       toAsync,
-      peek(insertPlayer(matchId, !isTest)),
+      peek(insertPlayer(matchId)),
       toArray
     )
     navigate(`/${matchId}`)

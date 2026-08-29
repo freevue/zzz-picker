@@ -3,11 +3,13 @@ import AgentList from './AgentList'
 import BossButton from './BossButton'
 import Score from './Score'
 import Timer from './Timer'
-import { filter, find, isObject, isUndefined, join, map, max, pipe, sum } from '@fxts/core'
+import { filter, find, isObject, isUndefined, join, map, pipe, sum } from '@fxts/core'
+import { SquareArrowOutUpRight } from 'lucide-react'
 import { useMemo, useRef } from 'react'
 import { Phase, Role } from '~/constant'
 import { useMatch, useStore } from '~/hooks'
 import { elementToImage } from '~/lib/utils'
+import { PlayerRole } from '~/type'
 
 type Props = {
   round: number
@@ -61,6 +63,26 @@ const Round: React.FC<Props> = (props) => {
       },
     }
   }, [play, props.round, store])
+
+  const onPopupOpen = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+
+    const url = await pipe(round1Ref.current as HTMLUListElement, elementToImage(12))
+    const image = new Image()
+
+    image.onload = async () => {
+      image.decode().then(async () => {
+        console.log({ image })
+      })
+    }
+
+    document.body.innerHTML = `<img src="${url}" />`
+
+    image.decoding = 'async'
+    image.crossOrigin = 'anonymous'
+    image.src = url
+  }
+
   /**
    * TODO: 특정 라운드의 특정 참가자의 파티 및 cost 구성을 pip로 올리려는 시도.
    * SVG를 문자열로 넣은 경우 동작을 잘 안한다. 해당 부분을 개선하기 위해 SVG를 base64로 변환해서 사용을 해보는 중인데, 약간 에러가 발생한다.
@@ -141,9 +163,13 @@ const Round: React.FC<Props> = (props) => {
             <div className="flex gap-2">
               <Timer round={props.round} role={Role.A_SIDE} id={match.matchId} />
               <Score round={props.round} role={Role.A_SIDE} id={match.matchId} />
+              <button className="ml-2" type="button" onClick={onPopupOpen} value={Role.A_SIDE}>
+                <SquareArrowOutUpRight className="size-8" />
+              </button>
             </div>
             <div className="flex-1 flex gap-4 items-start">
               <AgentList
+                ref={round1Ref}
                 list={play[Role.A_SIDE].agentSlot[props.round]}
                 engines={play[Role.A_SIDE].engineSlot[props.round]}
                 role={Role.A_SIDE}
@@ -163,6 +189,9 @@ const Round: React.FC<Props> = (props) => {
         <div className="flex items-center gap-8 flex-row-reverse">
           <div className="flex flex-col items-end gap-4">
             <div className="flex gap-2">
+              <button className="mr-2" type="button" onClick={onPopupOpen} value={Role.B_SIDE}>
+                <SquareArrowOutUpRight className="size-8" />
+              </button>
               <Score round={props.round} role={Role.B_SIDE} id={match.matchId} />
               <Timer round={props.round} role={Role.B_SIDE} id={match.matchId} />
             </div>
