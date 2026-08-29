@@ -1,4 +1,5 @@
 export { createR2Client, type R2Config } from './client'
+export { PutObjectCommand } from '@aws-sdk/client-s3'
 export {
   generatePresignedUrl,
   generateFileKey,
