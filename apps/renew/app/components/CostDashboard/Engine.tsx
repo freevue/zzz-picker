@@ -119,7 +119,7 @@ const EngineCostTable = () => {
                 </td>
                 {pipe(
                   engine.cost,
-                  sort((prev, cur) => prev.rate > cur.rate),
+                  sort((prev, cur) => (prev.rate > cur.rate ? 1 : -1)),
                   zipWithIndex,
                   map(([index, { cost }]) => (
                     <td className="ft-ria text-center" key={index}>

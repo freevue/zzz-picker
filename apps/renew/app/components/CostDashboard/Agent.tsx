@@ -1,5 +1,5 @@
 import Table from './Table'
-import { filter, map, pipe, sort, toArray, values, zipWithIndex } from '@fxts/core'
+import { filter, find, map, pipe, sort, toArray, values, zipWithIndex } from '@fxts/core'
 import { useState } from 'react'
 import { useStore } from '~/hooks'
 
@@ -109,7 +109,7 @@ const AgentCostTable = () => {
                 </td>
                 {pipe(
                   agent.cost,
-                  sort((prev, cur) => prev.rate > cur.rate),
+                  sort((prev, cur) => (prev.rate > cur.rate ? 1 : -1)),
                   zipWithIndex,
                   map(([index, { cost }]) => (
                     <td className="ft-ria text-center" key={index}>
