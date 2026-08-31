@@ -96,7 +96,25 @@ const MatchState: React.FC<Props> = (props) => {
       .channel(`match:${props.match.matchId}`, {
         config: {
           broadcast: { self: true },
+          presence: {
+            key: props.role,
+          },
         },
+      })
+      .on('presence', { event: 'join' }, (data) => {
+        // 다른 참가자가 들어왔을 때
+
+        console.log('join', data)
+      })
+      .on('presence', { event: 'leave' }, (data) => {
+        // 다른 참가자가 나갔거나 연결이 끊겼을 때
+
+        console.log('leave', data)
+      })
+      .on('presence', { event: 'sync' }, () => {
+        const state = channel.current?.presenceState()
+
+        console.log(state)
       })
       .on('broadcast', { event: BroadcastEvent.COMMON_BOSS_SELECT }, (response) => {
         setSelect((prev) => ({
@@ -176,7 +194,14 @@ const MatchState: React.FC<Props> = (props) => {
           ...(response.payload as BroadcastPayloadMap[BroadcastEvent.MATCH_TYPE]),
         }))
       })
-      .subscribe()
+      .subscribe(async (status, error) => {
+        if (status === 'SUBSCRIBED') {
+          await channel.current?.track({
+            role: props.role,
+            onlineAt: new Date().toISOString(),
+          })
+        }
+      })
 
     return () => {
       channel.current !== null && supabase.removeChannel(channel.current)
