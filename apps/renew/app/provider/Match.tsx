@@ -64,6 +64,13 @@ export const Context = createContext<State>({
   send: () => {},
 })
 
+/**
+ * TODO: 각 유저들에 대한 접속 상태 공유 기능 추가. 서로 접속이 안되어 있다면, 상태에 따라 버튼들을 비활성화 / 활성화 진행
+ * 기존의 버그 중 입장이 마무리 안된 상태에서 선택을 할 경우 데이터가 공유 안되는 버그가 있음
+ *
+ * 데이터 무결성 검사를 진행하기는 하겠지만, 당장은 방어 로직 추가가 우선
+ */
+
 const MatchState: React.FC<Props> = (props) => {
   const timeOut = useRef<NodeJS.Timeout | null>(null)
   const channel = useRef<null | RealtimeChannel>(null)

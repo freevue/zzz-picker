@@ -86,6 +86,9 @@ const Round: React.FC<Props> = (props) => {
   /**
    * TODO: 특정 라운드의 특정 참가자의 파티 및 cost 구성을 pip로 올리려는 시도.
    * SVG를 문자열로 넣은 경우 동작을 잘 안한다. 해당 부분을 개선하기 위해 SVG를 base64로 변환해서 사용을 해보는 중인데, 약간 에러가 발생한다.
+   *
+   * 일단 이 부분은 팝업으로 진행해볼 것. PIP의 경우 지원하는 범위와 방식에 대해 문제가 심함 (크롬 보안문제)
+   * 팝업으로 작은 새창으로 현재 선택한 파티의 상태정도만 공유되어도 되보임
    */
   const onPipOpen = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
