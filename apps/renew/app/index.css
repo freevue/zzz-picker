@@ -69,6 +69,7 @@
   --color-tertiary: var(--color-tertiary);
   --color-ink: var(--color-ink);
   --color-disabled: var(--color-disabled);
+  --color-chip: var(--color-chip);
 
   --animate-rollingBg: rollingBg 120s linear infinite;
   --animate-rollingBg-reverse: rollingBg 120s linear infinite reverse;
@@ -96,6 +97,7 @@
   --color-tertiary: #ff4500;
   --color-ink: #ffffff;
   --color-disabled: #374151;
+  --color-chip: #a855f7;
   --grad-page: radial-gradient(1200px 600px at 15% 0%, #172030 0%, #0c0f12 55%);
   --grad-primary: linear-gradient(135deg, #ffd215 0%, #ff9f00 100%);
   --grad-secondary: linear-gradient(135deg, #00f0ff 0%, #00a2ff 100%);
@@ -109,6 +111,7 @@
   --popover: var(--color-elevated);
   --popover-foreground: var(--color-ink);
   --primary: var(--color-primary);
+  --chip: var(--color-chip);
   --primary-foreground: #16181f;
   --secondary: var(--color-secondary);
   --secondary-foreground: #16181f;
