@@ -26,6 +26,7 @@ const INITIAL_PLAY = {
   role: Role.A_SIDE,
   score: [0, 0],
   time: [0, 0],
+  isConnected: false,
 } as Player
 const INITIAL_SELECT_STATE = {
   [Phase.COMMON_BOSS_SELECT]: null as string | null,
@@ -102,20 +103,28 @@ const MatchState: React.FC<Props> = (props) => {
         },
       })
       .on('presence', { event: 'join' }, (data) => {
-        // 다른 참가자가 들어왔을 때
+        setPlay((prev) => {
+          if (data.key === Role.HOST) return prev
 
-        console.log('join', data)
+          return pipe({ ...prev }, (payload) => {
+            payload[data.key as PlayerRole].isConnected = true
+
+            return payload
+          })
+        })
       })
       .on('presence', { event: 'leave' }, (data) => {
-        // 다른 참가자가 나갔거나 연결이 끊겼을 때
+        setPlay((prev) => {
+          if (data.key === Role.HOST) return prev
 
-        console.log('leave', data)
-      })
-      .on('presence', { event: 'sync' }, () => {
-        const state = channel.current?.presenceState()
+          return pipe({ ...prev }, (payload) => {
+            payload[data.key as PlayerRole].isConnected = true
 
-        console.log(state)
+            return payload
+          })
+        })
       })
+      // .on('presence', { event: 'sync' }, () => {})
       .on('broadcast', { event: BroadcastEvent.COMMON_BOSS_SELECT }, (response) => {
         setSelect((prev) => ({
           ...prev,

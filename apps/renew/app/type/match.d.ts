@@ -26,6 +26,7 @@ export type Player = {
   role: Role
   score: Array<number>
   time: Array<number>
+  isConnected: boolean
 }
 
 export type BroadcastPayloadMap = {
