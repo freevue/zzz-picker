@@ -1,9 +1,11 @@
 import {
+  each,
   entries,
   every,
   flatMap,
   fromEntries,
   isNumber,
+  isUndefined,
   map,
   pipe,
   range,
@@ -80,7 +82,7 @@ const MatchState: React.FC<Props> = (props) => {
   const [play, setPlay] = useState<Record<PlayerRole, Player>>(
     pipe(
       props.play,
-      map((play) => [play.role, play] as [PlayerRole, Player]),
+      map((play) => [play.role, { ...INITIAL_PLAY, ...play }] as [PlayerRole, Player]),
       fromEntries
     )
   )
@@ -125,13 +127,30 @@ const MatchState: React.FC<Props> = (props) => {
           if (data.key === Role.HOST) return prev
 
           return pipe({ ...prev }, (payload) => {
-            payload[data.key as PlayerRole].isConnected = true
+            payload[data.key as PlayerRole].isConnected = false
 
             return payload
           })
         })
       })
-      // .on('presence', { event: 'sync' }, () => {})
+      .on('presence', { event: 'sync' }, () => {
+        const state = channel.current?.presenceState()
+
+        if (isUndefined(state)) return
+
+        pipe(
+          [Role.A_SIDE, Role.B_SIDE] as Array<PlayerRole>,
+          each((role) => {
+            setPlay((prev) => {
+              return pipe({ ...prev }, (payload) => {
+                payload[role].isConnected = !!state[role]
+
+                return payload
+              })
+            })
+          })
+        )
+      })
       .on('broadcast', { event: BroadcastEvent.COMMON_BOSS_SELECT }, (response) => {
         setSelect((prev) => ({
           ...prev,
