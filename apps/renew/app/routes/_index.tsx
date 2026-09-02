@@ -1,4 +1,5 @@
 import { CreateRoom, Rule } from '@/components'
+import { Link } from '@remix-run/react'
 import { useState } from 'react'
 
 export default function Index() {
@@ -41,7 +42,7 @@ export default function Index() {
           </button>
         </div>
         <ul className="absolute left-1/2 -translate-x-1/2 top-4 flex gap-4 text-ink/70 ft-pre text-xl font-medium ft-pre">
-          <li className="">
+          <li className="border-r border-r-solid border-ink/70 pr-4">
             <button
               type="button"
               onClick={() => alert('준비중입니다.')}
@@ -50,7 +51,7 @@ export default function Index() {
               명예의 전당
             </button>
           </li>
-          <li className="">
+          <li className="border-r border-r-solid border-ink/70 pr-4">
             <button
               type="button"
               onClick={() => setRuleAvtive(true)}
@@ -58,6 +59,11 @@ export default function Index() {
             >
               경기 룰
             </button>
+          </li>
+          <li className="">
+            <Link to="/wallpaper" className="hover:text-primary">
+              월페이퍼
+            </Link>
           </li>
         </ul>
       </div>
