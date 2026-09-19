@@ -1,10 +1,4 @@
-import {
-  getAccountId,
-  getApiToken,
-  parseArgs,
-  uploadOne,
-  type UploadResult,
-} from './lib'
+import { hasR2Credentials, parseArgs, uploadOne, type UploadResult } from './lib'
 
 const main = async (): Promise<void> => {
   const items = parseArgs(process.argv.slice(2))
@@ -16,9 +10,9 @@ const main = async (): Promise<void> => {
     process.exit(1)
   }
 
-  if (!getAccountId() || !getApiToken()) {
+  if (!hasR2Credentials()) {
     console.error(
-      'Error: CLOUDFLARE_API_TOKEN 과 R2_ACCOUNT_ID(또는 CLOUDFLARE_ACCOUNT_ID)가 필요합니다. Cursor Cloud Secrets에 등록하세요.',
+      'Error: R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY가 필요합니다. Cursor Cloud Secrets에 등록하세요.',
     )
     process.exit(1)
   }

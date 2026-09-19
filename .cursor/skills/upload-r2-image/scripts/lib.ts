@@ -1,5 +1,9 @@
-import { dirname, extname } from 'node:path'
 import { randomUUID } from 'node:crypto'
+import { dirname, extname } from 'node:path'
+import {
+  createR2Client,
+  PutObjectCommand,
+} from '../../../../packages/r2-storage/src/index.ts'
 import { loadSource } from './source'
 
 export type UploadItem = {
@@ -16,18 +20,18 @@ export type UploadResult = {
   error?: string
 }
 
-type CloudflareUploadResponse = {
-  success: boolean
-  errors?: Array<{ message: string }>
-}
-
 const DEFAULT_BUCKET = 'zzz-picker'
 const DEFAULT_PUBLIC_URL = 'https://images.zzz.freevue.dev'
 
 export const getAccountId = (): string =>
   process.env.R2_ACCOUNT_ID ?? process.env.CLOUDFLARE_ACCOUNT_ID ?? ''
 
-export const getApiToken = (): string => process.env.CLOUDFLARE_API_TOKEN ?? ''
+export const getAccessKeyId = (): string => process.env.R2_ACCESS_KEY_ID ?? ''
+
+export const getSecretAccessKey = (): string => process.env.R2_SECRET_ACCESS_KEY ?? ''
+
+export const hasR2Credentials = (): boolean =>
+  Boolean(getAccountId() && getAccessKeyId() && getSecretAccessKey())
 
 export const getBucketName = (): string =>
   process.env.R2_BUCKET_NAME ?? DEFAULT_BUCKET
@@ -49,10 +53,6 @@ export const buildObjectKey = (pathPrefix: string, extension: string): string =>
   const fileName = `${randomUUID()}${extension}`
   return pathPrefix ? `${pathPrefix}/${fileName}` : fileName
 }
-
-/** `/`는 그대로 두고 세그먼트만 encodeURIComponent */
-export const encodeObjectKey = (objectKey: string): string =>
-  objectKey.split('/').map(encodeURIComponent).join('/')
 
 export const parseArgs = (argv: string[]): UploadItem[] => {
   const items: UploadItem[] = []
@@ -101,26 +101,23 @@ export const uploadOne = async (item: UploadItem): Promise<UploadResult> => {
   }
 
   const objectKey = buildObjectKey(pathPrefix, extension)
-  const encodedKey = encodeObjectKey(objectKey)
-  const endpoint =
-    `https://api.cloudflare.com/client/v4/accounts/${getAccountId()}` +
-    `/r2/buckets/${getBucketName()}/objects/${encodedKey}`
-
-  const response = await fetch(endpoint, {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${getApiToken()}`,
-      'Content-Type': contentType,
-    },
-    body,
+  const client = createR2Client({
+    accountId: getAccountId(),
+    accessKeyId: getAccessKeyId(),
+    secretAccessKey: getSecretAccessKey(),
   })
 
-  const payload = (await response.json()) as CloudflareUploadResponse
-
-  if (!response.ok || !payload.success) {
-    const message =
-      payload.errors?.map((error) => error.message).join('; ') ||
-      `HTTP ${response.status}`
+  try {
+    await client.send(
+      new PutObjectCommand({
+        Bucket: getBucketName(),
+        Key: objectKey,
+        Body: body,
+        ContentType: contentType,
+      }),
+    )
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error)
 
     return {
       ok: false,
