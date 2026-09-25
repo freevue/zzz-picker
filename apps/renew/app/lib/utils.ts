@@ -36,10 +36,12 @@ export function hook(callback: (state: never) => void) {
 
 export function replaceAt(index: number, value: unknown) {
   return function* <T>(iterable: Iterable<T>): Generator {
-    for (const item of iterable) {
-      yield index === 0 ? value : item
+    let currentIndex = 0
 
-      index--
+    for (const item of iterable) {
+      yield currentIndex === index ? value : item
+
+      currentIndex++
     }
   }
 }
