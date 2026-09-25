@@ -1,78 +1,86 @@
 ---
 name: cost-schema
-description: 캐릭터 및 무기의 돌파 등급에 따른 Cost 계산 방식과 데이터 구조에 대한 정의입니다.
-trigger: always_on
+description: 캐릭터(에이전트) 및 W-엔진의 등급과 돌파에 따른 코스트 산정 기준 및 런타임 데이터 구조입니다.
+trigger: model_decision
 ---
 
-# 캐릭터의 Cost에 대한 설명
+# 캐릭터 및 엔진 코스트 설정 (Cost Schema)
 
+경기를 진행함에 있어 캐릭터와 무기의 등급 및 돌파(성급) 설정에 따라 고유의 **Cost**가 책정됩니다.
+`정식 로프꾼` 경기에서는 총 24 Cost 제한이 주어지며, 이를 바탕으로 전략적인 덱 빌딩을 수행합니다.
 
-경기를 진행함에 있어 캐릭터의 경우 고유의 설정(돌파)이 존재합니다. 해당 설정에 따라 Cost가 정해집니다.
+---
 
-캐릭터 및 무기 돌파에 대한 설명은 [`game-rule.md`](./game-rule.md), [`zzz-agent.md`](./zzz-agent.md), [`zzz-engine.md`](./zzz-engine.md) Rule을 참고하면 됩니다.
+## 1. 코스트 산정 원칙 (개별 코스트 책정제)
 
-## 관리 위치
+> [!IMPORTANT]
+> **개별 코스트 단일 진실 공급원 (SSOT)**:  
+> zzz-picker 시스템은 등급에 따른 기계적 고정 수식을 사용하지 않으며, **모든 캐릭터(`agentCost`)와 W-엔진(`engineCost`)마다 개별 밸런스에 맞춰 돌파 단계별 코스트를 직접 책정**합니다.  
+> 클라이언트(`apps/renew`)의 [`useCost`](file:///Users/freevue/Desktop/Project/zzz-picker/apps/renew/app/hooks/index.ts#L41) 훅은 DB에 저장된 각 대상의 `rate`별 `cost` 값을 직접 조회하여 실시간 합산합니다.
 
-Cost에 대한 데이터 저장은 2곳에서 관리 됩니다.
+---
 
-- window localStorage: 화면을 새로고침하였을때 데이터를 보존하기 위한 용도
-- `packages/provider/src/Play.tsx`: 실제 데이터를 화면에 표시하기 위한 전역 상태 관리
+### 1) 에이전트 코스트 표준 프리셋 (참고용 기본값)
 
-## Schema
+신규 에이전트 등록 시 별도의 개별 코스트 지정이 없을 경우, 캐릭터의 실제 성능에 맞춰 아래 5대 표준 프리셋을 적용합니다:
 
-기본적으로 Cost의 타입은 아래와 같이 정의됩니다.
+| 프리셋 명칭 | 0돌 ~ 6돌 코스트 배열 | 적용 기준 및 대표 캐릭터 |
+| :--- | :--- | :--- |
+| **Preset 1 (0.5 단위 픽업)** | `[0, 0.5, 1, 1.5, 2, 2.5, 3]` | 0돌 무료, 돌파당 +0.5코스트<br>*(주연, 청의, 카이사르, 야나기, 라이터)* |
+| **Preset 2 (1.0 단위 픽업)** | `[0, 1, 2, 3, 4, 5, 6]` | 0돌 무료, 돌파당 +1.0코스트<br>*(엘렌, 제인, 버니스, 하루마사)* |
+| **Preset 3 (1코 시작 강력형)**| `[1, 2, 3, 4, 5, 6, 7]` | 0돌부터 1코스트, 돌파당 +1.0코스트<br>*(호시미 미야비)* |
+| **Preset 4 (4돌 1코 상시형)** | `[0, 0, 0, 0, 1, 1, 1]` | 0~3돌 무료, 4돌부터 1코스트<br>*(11호, 리카온, 네코마타)* |
+| **Preset 5 (0코스트 무료형)** | `[0, 0, 0, 0, 0, 0, 0]` | 전 돌파 무료 (0 코스트)<br>*(콜레다 및 A급 캐릭터 전원)* |
 
+---
+
+### 2) W-엔진 코스트 표준 프리셋 (참고용 기본값)
+
+W-엔진 역시 1~5돌파 5개 레코드가 개별 관리되며, 기본 프리셋은 아래와 같습니다:
+
+| 프리셋 명칭 | 1돌 ~ 5돌 코스트 배열 | 적용 기준 및 예시 |
+| :--- | :--- | :--- |
+| **S급 전용 무기 프리셋** | `[1.0, 1.5, 2.0, 2.5, 3.0]` | 기본 1.0코스트, 돌파당 +0.5코스트<br>*(맑은 옥주전자, 우아한 베니티백 등)* |
+| **S급 상시 무기 프리셋** | `[0.0, 0.0, 0.0, 1.0, 1.0]` | 1~3돌 무료, 4~5돌 1.0코스트<br>*(스틸 쿠션, 유황석 등)* |
+| **A급 / B급 무기 프리셋** | `[0.0, 0.0, 0.0, 0.0, 0.0]` | 전 돌파 무료 (0 코스트) |
+
+## 2. 런타임 데이터 구조 (`apps/renew`)
+
+`apps/renew`는 DB의 마스터 데이터와 선수의 실시간 선택 슬롯을 결합하여 `useCost` 훅을 통해 즉시 코스트를 계산합니다.
+
+### 1) 데이터베이스 스키마 (`agentCost`, `engineCost`)
+Supabase 테이블에 돌파 단계별 코스트가 미리 계산되어 저장되어 있습니다.
 ```typescript
-type AgentCostSetting = {
-  agentId: AgentId
-  engineId: EngineId | null
-  agentRate: number
-  engineRate: number
+type AgentCostRecord = {
+  agentId: number
+  rate: number  // 0 ~ 6
+  cost: number  // 산정된 코스트
 }
 
-type Cost = {
-  A: Map<number, AgentCostSetting>
-  B: Map<number, AgentCostSetting>
-}
-```
-
-상태에서 사용하는 Cost는 Map 형식이며, `AgentId`를 Key로 활용하여 통해 각 Side에서 설정한 값들을 기록합니다.
-
-경기 타입과 상관없이 하나로 관리됩니다.
-
-### localStorage 활용시
-
-localStorage에는 Map이 저장이 안되는 것을 감안하여, 데이터 셋을 정제합니다.
-
-```json
-{
-  "A": [
-    [
-      155659,
-      {
-        "agentId": 155659,
-        "engineId": null,
-        "agentRate": 0,
-        "engineRate": 1
-      }
-    ],
-    [
-      113671,
-      {
-        "agentId": 113671,
-        "engineId": null,
-        "agentRate": 0,
-        "engineRate": 1
-      }
-    ]
-  ],
-  "B": []
+type EngineCostRecord = {
+  engineId: string
+  rate: number  // 1 ~ 5
+  cost: number  // 산정된 코스트
 }
 ```
 
-위와 같이 Map 형식에서 각각의 Side별 배열로 담은 객체를 활용합니다.
+### 2) 선수 슬롯 상태 구조 (`Player`)
+```typescript
+type AgentSlot = {
+  id: number   // agentId
+  rate: number // 0 ~ 6 돌파
+}
 
-## 관련 룰
+type EngineSlot = {
+  id: string   // engineId
+  rate: number // 1 ~ 5 돌파
+}
 
-- [캐릭터(에이전트) 정의 (Agent Definition)](./zzz-agent.md)
+// Player 객체 내부에 1R/2R 2차원 배열로 보관
+player.agentSlot  // [ [슬롯1, 슬롯2, 슬롯3], [슬롯1, 슬롯2, 슬롯3] ]
+player.engineSlot // [ [슬롯1, 슬롯2, 슬롯3], [슬롯1, 슬롯2, 슬롯3] ]
+```
+
+### 3) 코스트 합산 훅 (`useCost`)
+`apps/renew/app/hooks/index.ts`의 `useCost(round)`를 통해 특정 라운드 또는 양 라운드 전체의 에이전트 및 엔진 코스트 합계를 함수형 파이프라인(`@fxts/core`)으로 실시간 산출합니다.
 
