@@ -1,7 +1,6 @@
 ---
 name: migration-index
 description: zzz-picker의 데이터베이스 마이그레이션 작업 원칙 및 일자별 마이그레이션 명세서 아카이브 인덱스입니다.
-trigger: model_decision
 ---
 
 # 데이터베이스 마이그레이션 허브 (Migration Index)

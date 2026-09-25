@@ -1,10 +1,9 @@
 ---
 name: renew-realtime
 description: @zzz-picker/renew의 Supabase Realtime 브로드캐스트 이벤트 명세와 경기 페이즈 상태 머신을 설명합니다.
-trigger: model_decision
 ---
 
-# Renew Realtime Architecture
+# renew 실시간 통신 구조
 
 `apps/renew`는 Supabase의 **Realtime Channel Broadcast** 기능을 활용하여 호스트와 선수(A/B) 간의 상태를 초저지연으로 동기화합니다.
 

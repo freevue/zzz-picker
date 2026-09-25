@@ -3,7 +3,7 @@ name: operations-wiki
 description: zzz-picker의 운영 자동화 파이프라인, 5대 무결성 동기화(sync-match-integrity), 호요버스 공식 API 기반 로스터 등록, R2 이미지 업로드, 디스코드 웹훅 알림 규격을 정리한 컴파일된 도메인 위키 문서입니다.
 ---
 
-# 운영 및 자동화 파이프라인 (Operations & Automation)
+# 운영 및 자동화 파이프라인
 
 `zzz-picker`는 안정적인 경기 데이터 수명주기 관리와 신속한 신규 콘텐츠 확장을 위해 고도화된 자동화 스킬(Skills) 및 운영 파이프라인을 갖추고 있습니다.
 
@@ -103,4 +103,18 @@ graph LR
 
 - [데이터베이스 스키마 명세 (database.md)](./database.md)
 - [경기 규칙 및 점수 체계 (game-rules.md)](./game-rules.md)
+- [등록 및 유지보수 상세 문서](operations/roster-auto-registration.md)
 - [위키 인덱스로 돌아가기 (index.md)](./index.md)
+
+## 상세 운영 문서
+
+| 작업 | 상세 문서 |
+| :--- | :--- |
+| 공통 등록 안전 수칙 | [roster-auto-registration.md](operations/roster-auto-registration.md) |
+| 에이전트 / W-엔진 / 보스 등록 | [agent](operations/agent-registration.md) · [engine](operations/engine-registration.md) · [boss](operations/boss-registration.md) |
+| 진영 / 특성 / 강습전 시즌 등록 | [faction](operations/faction-registration.md) · [specialty](../.agent/skills/register-specialty/SKILL.md) · [assault](operations/assault-registration.md) |
+| 호요버스 데이터 출처 | [hoyoverse-character-api.md](operations/hoyoverse-character-api.md) |
+| 경기 무결성 및 웹훅 | [data-integrity-cleanup.md](operations/data-integrity-cleanup.md) · [discord-webhook-notification.md](operations/discord-webhook-notification.md) |
+| DB 이관 이력 | [migrations/index.md](operations/migrations/index.md) |
+
+실제 등록·동기화·알림 실행은 상세 지식 문서와 대응하는 [레포 스킬](../.agent/skills/)을 함께 확인합니다. 문서는 검증 기준과 결정 사항을, 스킬은 현재 런타임에서 실행할 절차를 설명합니다.

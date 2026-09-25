@@ -1,7 +1,6 @@
 ---
 name: migration-2026-09-06-legacy-match-log
 description: 2026-09-06에 확정된 과거 레거시 경기 로그(match_log 등) 3단계 분류 기준 및 1차 무결성 이관(match, play) 상세 명세서입니다.
-trigger: model_decision
 ---
 
 # 2026-09-06 레거시 경기 로그 1차 무결성 이관 명세서

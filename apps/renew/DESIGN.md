@@ -271,5 +271,6 @@ components:
 
 | Rule / Doc | Description |
 | :--- | :--- |
-| [최상위 룰 인덱스 (GEMINI.md)](../../.agent/rules/GEMINI.md) | zzz-picker 전체 룰 및 지식 아키텍처 SSOT |
-| [루트 LLM 위키 (wiki/index.md)](../../wiki/index.md) | 컴파일된 전체 도메인 지식 베이스 |
+| [공용 에이전트 지침 (AGENTS.md)](../../AGENTS.md) | 모든 에이전트가 따르는 프로젝트 지침 |
+| [LLM Wiki 인덱스](../../wiki/index.md) | 프로젝트 도메인·시스템·운영 지식 |
+| [ZPDS 개발 가이드](../../wiki/packages/zpds.md) | 공유 UI 패키지와 Storybook 규칙 |

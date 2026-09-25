@@ -1,65 +1,10 @@
 ---
-description: zzz-picker 프로젝트 진입점 — renew 중심 Gemini 룰 인덱스 및 모노레포 구조 안내
+description: zzz-picker 저장소의 공용 에이전트 지침 및 프로젝트 지식 진입점
 alwaysApply: true
 ---
 
-# zzz-picker 프로젝트 가이드
+# zzz-picker 프로젝트 안내
 
-> Gemini 에이전트용 원본 룰은 `.agent/rules/`에 그대로 유지됩니다. 이 문서는 Cursor·Claude·Codex가 동일한 맥락을 빠르게 파악하기 위한 **읽기용 인덱스**입니다.
-> 현재 최신 단일 진실 공급원(SSOT)이자 실제 서비스 앱은 **`@zzz-picker/renew` (`apps/renew`)**입니다.
+모든 프로젝트 공통 지침은 [`AGENTS.md`](../../AGENTS.md)에 있습니다. 작업에 필요한 컴파일된 도메인·아키텍처 지식은 [`wiki/index.md`](../../wiki/index.md)에서 찾아 읽습니다.
 
-## 프로젝트 개요
-
-젠레스 존 제로(Zenless Zone Zero) 강습전 밴픽·경기 운영 사이트. 2명의 선수(A/B)와 1명의 호스트가 실시간으로 참여하며, 라운드별 점수, 시간 보너스, 코스트 보너스/페널티를 합산하여 승패를 결정합니다.
-
-## 룰 문서 맵
-
-| 구분 | 경로 | 내용 |
-| :--- | :--- | :--- |
-| **진입점 (Gemini)** | `.agent/rules/GEMINI.md` | 전체 룰 목차 및 구조 (SSOT) |
-| **디자인 시스템** | `.agent/rules/DESIGN.md` | 다크 테크니컬 테마, 컬러 토큰, 레이아웃 규격 |
-| **게임 규칙** | `.agent/rules/game-rule.md` | 3개 경기 모드, 시간/코스트 점수 계산식 |
-| **밴픽 규칙** | `.agent/rules/banpick-rule.md` | 4단계 Phase 진행 절차 (공용보스, 1차밴, 2차밴, 픽) |
-| **에이전트 정의** | `.agent/rules/zzz-agent.md` | 캐릭터 특성, 돌파(0~6), 포지션(딜러/서포터) |
-| **엔진 정의** | `.agent/rules/zzz-engine.md` | W-엔진 등급, 돌파(1~5), 전용 무기 |
-| **코스트 설정** | `.agent/rules/cost-schema.md` | 캐릭터·엔진 코스트 산정식 및 런타임 구조 |
-| **DB 스키마** | `.agent/rules/database-schema.md` | Supabase 테이블 명세 (`match`, `play`, `agent` 등) |
-| **Renew 앱 개요** | `.agent/rules/apps/renew/overview.md` | `apps/renew` 기술 스택, 구조, 의존성 정책 |
-| **Renew 라우트** | `.agent/rules/apps/renew/routes.md` | `_index`, `$roomId`, `room.$id`, `wallpaper`, `calc` 등 |
-| **Renew 컴포넌트**| `.agent/rules/apps/renew/components.md`| PlayGround, HostDashboard, CreateRoom 등 UI 구성 |
-| **Renew 실시간** | `.agent/rules/apps/renew/realtime.md` | Supabase Realtime 브로드캐스트 이벤트 및 페이즈 머신 |
-| **Supabase 패키지**| `.agent/rules/packages/supabase.md` | 클라이언트 단일 인스턴스 연동 |
-| **R2 스토리지** | `.agent/rules/packages/r2-storage.md` | Cloudflare R2 이미지 업로드 및 유틸리티 |
-| **DB 마이그레이션**| `.agent/rules/operations/migrations/index.md` | 일자별 DB 마이그레이션 및 레거시 데이터 이관 허브 |
-| **무결성 & 수명주기**| `.agent/rules/operations/data-integrity-cleanup.md` | 고아 룸 및 미완료 세션 자동 정리(pg_cron) 규칙 |
-| **등록 가이드 허브**| `.agent/rules/operations/roster-auto-registration.md` | 캐릭터/엔진/보스/강습전 데이터 등록 허브 및 공통 안전 수칙 |
-| **진영 등록**     | `.agent/rules/operations/faction-registration.md` | 진영 마스터, 호요버스 Camp API 연동 및 로고 이미지 매핑 |
-| **에이전트 등록**  | `.agent/rules/operations/agent-registration.md` | 에이전트 프로필 및 0~6돌 7개 코스트(5대 프리셋) 등록 규격 |
-| **W-엔진 등록**   | `.agent/rules/operations/engine-registration.md` | W-엔진 스펙, 전용 무기 연결 및 1~5돌 코스트 등록 규격 |
-| **보스 등록**     | `.agent/rules/operations/boss-registration.md` | 보스 마스터 및 체력(HP) 배열 등록 규격 |
-| **강습전 등록**   | `.agent/rules/operations/assault-registration.md` | 강습전 시즌 및 4종 보스(trial/adversity) 라인업 매핑 규격 |
-| **호요버스 공식 API**| `.agent/rules/operations/hoyoverse-character-api.md` | 호요버스 공식 사이트 API 구조도, 속성/특성 한자 변환 사전 |
-| **디스코드 웹훅 알림** | `.agent/rules/operations/discord-webhook-notification.md` | 디스코드 웹훅 3대 블록 규격 및 페어리 알림 운영 규칙 |
-
-## Skills (에이전트 실행)
-
-| Skill | 경로 | 용도 |
-| :--- | :--- | :--- |
-| **에이전트 정보 취합/등록** | `.agent/skills/register-agent/SKILL.md` | 호요버스 공식 API 및 Fandom Wiki URL 기반 에이전트 메타데이터 정밀 취합 및 등록 |
-| **경기 무결성 동기화** | `.agent/skills/sync-match-integrity/SKILL.md` | 5대 체크리스트 기반 정상 경기 승격(`phase='done'`) 및 방치 세션 소프트 딜리트(`isHide=true`) |
-| **진영 등록** | `.agent/skills/register-faction/SKILL.md` | 호요버스 Camp API 조회 기반 신규 진영 메타데이터 및 로고 자동 등록 |
-| **특성 등록** | `.agent/skills/register-specialty/SKILL.md` | 호요랩 위키 필터 API 기반 신규 특성 메타데이터 및 아이콘 자동 동기화 |
-| **디스코드 웹훅 알림** | `.agent/skills/send-discord-webhook/SKILL.md` | 규격화된 블록 기반 디스코드 알림 및 무결성 브리핑 전송 |
-| **R2 이미지 업로드** | `.cursor/skills/upload-r2-image/SKILL.md` | 이미지/정적 파일 R2 업로드 → 공개 URL 반환 |
-
-## 실행 명령
-
-```bash
-pnpm install
-pnpm dev:renew        # localhost:5173 (메인 서비스 앱)
-pnpm --filter storybook storybook  # localhost:6006
-```
-
-## 환경 변수
-
-- `SUPABASE_URL` / `SUPABASE_ANON_KEY`: `apps/renew/.env`에 필수 설정
+`.cursor/rules/`에는 Cursor 전용 활성화 메타데이터만 둡니다. 실행 절차는 레포 스킬에, 프로젝트 지식은 `wiki/`에 유지합니다.

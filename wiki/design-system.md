@@ -6,7 +6,7 @@ description: zzz-picker의 퓨어 다크 테크니컬 디자인 시스템 가이
 # 디자인 시스템 가이드 (Design System)
 
 `zzz-picker`의 디자인 시스템은 젠레스 존 제로(Zenless Zone Zero) 특유의 카본 다크와 네온 시그니처 톤을 차용한 **퓨어 다크 테크니컬(Pure Dark Technical)** 테마를 채택하고 있습니다.  
-상세한 기계 가독형 토큰 스키마와 와이어프레임은 [표준 DESIGN.md](../.agent/rules/DESIGN.md)에서 단일 진실 공급원(SSOT)으로 관리됩니다.
+이 페이지는 디자인 원칙과 탐색 요약입니다. renew의 상세 토큰, 레이아웃과 컴포넌트 규격은 [`apps/renew/DESIGN.md`](../apps/renew/DESIGN.md)를 기준으로 확인합니다.
 
 ---
 
@@ -101,6 +101,7 @@ graph LR
 
 ## 6. 연관 위키 문서
 
-- [표준 DESIGN.md 명세서 (Two Layers)](../.agent/rules/DESIGN.md)
+- [renew 디자인 명세서](../apps/renew/DESIGN.md)
+- [ZPDS 개발 가이드](packages/zpds.md)
 - [시스템 아키텍처 및 라우트 (architecture.md)](./architecture.md)
 - [위키 인덱스로 돌아가기 (index.md)](./index.md)

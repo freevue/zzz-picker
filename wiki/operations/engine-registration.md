@@ -1,12 +1,13 @@
 ---
 name: engine-registration
 description: 신규 W-엔진 등록, 전용 에이전트 매핑, 1~5돌파 코스트(5개 행) 산정 및 운영 표준 SQL 명세입니다.
-trigger: model_decision
 ---
 
 # W-엔진 등록 및 코스트 설정 규칙 (Engine Registration)
 
 이 문서는 젠레스 존 제로(ZZZ)의 신규 W-엔진(무기)이 추가되거나 픽업이 시작될 때, Supabase 데이터베이스의 `engine` 및 `engineCost` 테이블에 안전하게 등록하기 위한 **운영 표준 규격서**입니다.
+
+엔진 정보는 사용자가 제공한 [Fandom W-Engine 문서](https://zenless-zone-zero.fandom.com/wiki/Bloodmarrow_Coffer)와 해당 문서의 언어·스탯·입수 정보에서 취합합니다. Fandom은 커뮤니티 편집 위키이므로 모호하거나 충돌하는 정보는 공식 출처로 확인합니다. DB 이미지에는 사용자가 별도로 제공한 일러스트와 아이콘의 로컬 경로나 URL을 사용하며, 사용자가 직접 준 URL이라면 위키 갤러리 파일도 사용할 수 있습니다.
 
 ---
 
@@ -74,6 +75,7 @@ INSERT INTO public.engine (
   "isPickup",
   "isTeaser",
   "specialtyId",
+  "attributeId",
   "imageId",
   "iconImageId"
 ) VALUES (
@@ -85,13 +87,20 @@ INSERT INTO public.engine (
   true,
   false,
   '26366ea7-2daa-4f5e-9e62-785165174c55', -- 강공 (Attack)
+  null,                                   -- 해당 엔진에 연결할 속성 UUID가 없을 때
   'c1111111-1111-1111-1111-111111111111',
   'c2222222-2222-2222-2222-222222222222'
 ) ON CONFLICT (id) DO UPDATE SET
   "nameKo" = EXCLUDED."nameKo",
   "nameEn" = EXCLUDED."nameEn",
+  rank = EXCLUDED.rank,
   "exclusiveAgentId" = EXCLUDED."exclusiveAgentId",
-  "isPickup" = EXCLUDED."isPickup";
+  "isPickup" = EXCLUDED."isPickup",
+  "isTeaser" = EXCLUDED."isTeaser",
+  "specialtyId" = EXCLUDED."specialtyId",
+  "attributeId" = EXCLUDED."attributeId",
+  "imageId" = EXCLUDED."imageId",
+  "iconImageId" = EXCLUDED."iconImageId";
 
 -- 2. engineCost 1~5돌파 5개 레코드 일괄 생성 ([1.0, 1.5, 2.0, 2.5, 3.0])
 INSERT INTO public."engineCost" ("engineId", rate, cost) VALUES
@@ -124,3 +133,5 @@ WHERE e.id = '6f1828e6-047d-4b55-8bdf-0eaf9042249e'
 GROUP BY e.id, e."nameKo", e.rank, e."isPickup", e."exclusiveAgentId";
 ```
 - **기대 결과**: `cost_record_count: 5`, `cost_array: [1, 1.5, 2, 2.5, 3]`
+
+등록 자동화 절차와 사용자가 제공하는 일러스트·아이콘 경로의 적용은 [register-engine skill](../../.agent/skills/register-engine/SKILL.md)을 따른다.

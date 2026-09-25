@@ -1,10 +1,9 @@
 ---
 name: r2-storage
 description: Cloudflare R2 버킷과 상호작용하기 위한 클라이언트 설정 및 파일 관리 유틸리티입니다.
-trigger: model_decision
 ---
 
-# R2 Storage Guide (`@zzz-picker/r2-storage`)
+# R2 Storage 패키지 가이드 (`@zzz-picker/r2-storage`)
 
 `packages/r2-storage`는 Cloudflare R2 스토리지 버킷에 캐릭터, 엔진, 보스 등의 이미지를 저장하고 관리하기 위한 AWS SDK S3 호환 클라이언트 및 유틸리티를 제공합니다.
 

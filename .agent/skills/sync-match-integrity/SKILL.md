@@ -164,7 +164,7 @@ node --experimental-strip-types .agent/skills/send-discord-webhook/scripts/send.
 
 | 문서명 | 경로 | 설명 |
 | :--- | :--- | :--- |
-| **디스코드 웹훅 알림 규격** | [discord-webhook-notification.md](../../rules/operations/discord-webhook-notification.md) | 3대 블록 규격 및 페어리 알림 운영 규칙 |
+| **디스코드 웹훅 알림 규격** | [discord-webhook-notification.md](../../../wiki/operations/discord-webhook-notification.md) | 3대 블록 규격 및 페어리 알림 운영 규칙 |
 | **디스코드 웹훅 발송 스킬** | [send-discord-webhook](../send-discord-webhook/SKILL.md) | 규격화된 블록 기반 디스코드 알림 및 무결성 브리핑 전송 |
-| **데이터 무결성 관리 규칙** | [data-integrity-cleanup.md](../../rules/operations/data-integrity-cleanup.md) | 수명주기 및 5대 체크리스트 상세 규격 |
-| **데이터베이스 스키마** | [database-schema.md](../../rules/database-schema.md) | `match.isHide` 컬럼 스펙 |
+| **데이터 무결성 관리 규칙** | [data-integrity-cleanup.md](../../../wiki/operations/data-integrity-cleanup.md) | 수명주기 및 5대 체크리스트 상세 규격 |
+| **데이터베이스 스키마** | [database.md](../../../wiki/database.md) | `match.isHide` 컬럼 스펙 |

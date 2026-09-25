@@ -139,8 +139,8 @@ WHERE f.id = {id};
 
 | 문서명 | 경로 | 설명 |
 | :--- | :--- | :--- |
-| **진영 등록 규칙** | [faction-registration.md](../../rules/operations/faction-registration.md) | 진영 마스터 및 운영 상세 규격 |
-| **공통 등록 안전 수칙** | [roster-auto-registration.md](../../rules/operations/roster-auto-registration.md) | 승인, 트랜잭션, 재시도 및 입력 검증 |
-| **호요버스 공식 API** | [hoyoverse-character-api.md](../../rules/operations/hoyoverse-character-api.md) | 호요버스 공식 API 및 Camp ID 체계 |
+| **진영 등록 지식** | [faction-registration.md](../../../wiki/operations/faction-registration.md) | 진영 마스터 및 운영 상세 규격 |
+| **공통 등록 안전 수칙** | [roster-auto-registration.md](../../../wiki/operations/roster-auto-registration.md) | 승인, 트랜잭션, 재시도 및 입력 검증 |
+| **호요버스 공식 API** | [hoyoverse-character-api.md](../../../wiki/operations/hoyoverse-character-api.md) | 호요버스 공식 API 및 Camp ID 체계 |
 | **에이전트 등록 스킬** | [register-agent](../register-agent/SKILL.md) | 진영 등록 후속 에이전트 등록 스킬 |
 | **R2 업로드 스킬** | [upload-r2-image](../../../.cursor/skills/upload-r2-image/SKILL.md) | 로고 R2 스토리지 업로드 도구 |

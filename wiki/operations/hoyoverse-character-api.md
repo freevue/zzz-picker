@@ -1,7 +1,6 @@
 ---
 name: hoyoverse-character-api
 description: 호요버스 공식 캐릭터 사이트 구조도, 콘텐츠 API 엔드포인트 규격 및 Supabase DB 1:1 매핑 명세서입니다.
-trigger: model_decision
 ---
 
 # 호요버스 캐릭터 데이터 API 구조도 및 매핑 규격서

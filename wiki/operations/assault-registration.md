@@ -1,7 +1,6 @@
 ---
 name: assault-registration
 description: 신규 강습전 시즌 오픈, 버전 등록 및 4종 보스 라인업(trial/adversity) 매핑을 위한 운영 표준 SQL 명세입니다.
-trigger: model_decision
 ---
 
 # 강습전 시즌 및 보스 라인업 등록 규칙 (Deadly Assault Registration)

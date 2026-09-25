@@ -28,26 +28,14 @@ export const useCanvasPanZoom = () => {
     setIsDragging(false)
   }
 
-  const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    // Ctrl 키 또는 Meta(Mac Cmd) 키가 눌려있으면 줌 동작
-    if (e.ctrlKey || e.metaKey) {
-      e.preventDefault()
-      const zoomFactor = e.deltaY < 0 ? 1.08 : 0.92
-      setTransform((prev) => {
-        const nextScale = Math.min(Math.max(prev.scale * zoomFactor, 0.4), 2.5)
-        return {
-          ...prev,
-          scale: nextScale,
-        }
-      })
-      return
-    }
+  const onWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    if (event.deltaY === 0) return
 
-    // 일반 휠 스크롤 시 화면 상하/좌우 팬 이동
+    const zoomFactor = event.deltaY < 0 ? 1.08 : 0.92
     setTransform((prev) => ({
       ...prev,
-      x: prev.x - e.deltaX,
-      y: prev.y - e.deltaY,
+      scale: Math.min(Math.max(prev.scale * zoomFactor, 0.4), 2.5),
     }))
   }
 

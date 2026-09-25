@@ -1,10 +1,9 @@
 ---
 name: renew-overview
 description: zzz-picker의 최신 메인 서비스 애플리케이션인 @zzz-picker/renew의 아키텍처 및 전반적인 구조를 설명합니다.
-trigger: model_decision
 ---
 
-# Renew App Overview
+# renew 앱 개요
 
 `@zzz-picker/renew`(`apps/renew`)는 zzz-picker의 최신 단일 진실 공급원(SSOT)이자 실제 경기가 진행되는 메인 웹 애플리케이션입니다.
 젠레스 존 제로(Zenless Zone Zero)의 강습전 콘텐츠를 2명의 선수(A, B)와 1명의 호스트(H)가 참가하여 실시간으로 밴픽 및 파티 구성을 진행하고 승패를 가리는 환경을 제공합니다.

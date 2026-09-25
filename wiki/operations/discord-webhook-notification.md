@@ -1,7 +1,6 @@
 ---
 name: discord-webhook-notification
 description: zzz-picker 시스템의 디스코드 웹훅 알림 규격 및 블록 표준(경기 기록 점검 브리핑, 단순 공지, 시스템 작업 실패 알림)과 페어리 프로필 연동 가이드입니다.
-trigger: model_decision
 ---
 
 # 디스코드 웹훅 알림 규격 및 운영 규칙 (Discord Webhook Notification)
@@ -89,4 +88,4 @@ zzz-picker는 경기 진행 현황, 무결성 점검 브리핑, 시스템 장애
 
 | 스킬명 | 경로 | 설명 |
 | :--- | :--- | :--- |
-| **디스코드 웹훅 발송 스킬** | [send-discord-webhook](../../skills/send-discord-webhook/SKILL.md) | 3대 블록 규격 검증 및 전송 실행 도구 |
+| **디스코드 웹훅 발송 스킬** | [send-discord-webhook](../../.agent/skills/send-discord-webhook/SKILL.md) | 3대 블록 규격 검증 및 전송 실행 도구 |

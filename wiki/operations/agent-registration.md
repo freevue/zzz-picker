@@ -1,7 +1,6 @@
 ---
 name: agent-registration
 description: 신규 에이전트 등록, 개별 돌파 코스트(0~6돌 7개 행) 산정 및 R2 이미지 연계를 위한 운영 표준 SQL 명세입니다.
-trigger: model_decision
 ---
 
 # 에이전트 등록 및 코스트 설정 규칙 (Agent Registration)
@@ -38,7 +37,7 @@ trigger: model_decision
 ---
 
 ### 2) `agentCost` 코스트 테이블
-클라이언트(`apps/renew`)의 [`useCost`](file:///Users/freevue/Desktop/Project/zzz-picker/apps/renew/app/hooks/index.ts#L41) 훅에서 실시간으로 참조하는 돌파 단계별 코스트 테이블입니다.
+클라이언트(`apps/renew`)의 [`useCost`](../../apps/renew/app/hooks/index.ts) 훅에서 실시간으로 참조하는 돌파 단계별 코스트 테이블입니다.
 
 > [!IMPORTANT]
 > **7개 레코드 무결성 필수 원칙**:  

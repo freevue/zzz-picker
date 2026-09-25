@@ -1,59 +1,50 @@
-# AGENTS.md
+# zzz-picker 에이전트 안내
 
-## 프로젝트 룰 인덱스
+이 문서는 Codex, Cursor, Claude Code, Gemini 등 저장소에서 작업하는 모든 에이전트의 공용 진입점입니다. 프로젝트 지식과 도메인 규칙은 [`wiki/index.md`](wiki/index.md)를 기준으로 탐색합니다.
 
-| 대상 | 경로 | 설명 |
+## 작업 원칙
+
+- 대화, 주석, 문서, 작업 산출물은 한국어로 작성합니다. 코드 식별자와 통용 기술 용어는 영어를 사용합니다.
+- 기존 코드와 패키지를 먼저 살펴보고, 요구된 범위에서 가장 단순한 변경을 합니다.
+- TypeScript에서는 `any`와 한 글자 식별자를 사용하지 않고, 단일 파일은 150줄 이내로 유지합니다.
+- 변수·상수·함수는 `camelCase`, 클래스는 `PascalCase`로 작성합니다. 폴더는 barrel export, 단일 파일은 named export를 사용합니다.
+- Early Return, 불변성, 함수형 스타일을 우선하고 문자열 결합은 template literal을 사용합니다.
+- UI 작업 전 [`apps/renew/DESIGN.md`](apps/renew/DESIGN.md) 또는 해당 패키지의 디자인 문서를 확인합니다.
+- 중요한 도메인·아키텍처 결정을 대화에만 남기지 말고 관련 위키 문서에 반영합니다.
+- 문서와 코드가 다르면 코드 및 운영 데이터의 현재 상태를 확인하고, 확인된 동작에 맞게 위키를 갱신합니다.
+
+## 지식 탐색
+
+1. [`wiki/index.md`](wiki/index.md)에서 작업 유형에 맞는 문서를 찾습니다.
+2. UI·라우트는 [앱 개요](wiki/apps/renew/overview.md)와 [라우트 상세](wiki/apps/renew/routes.md), DB는 [`wiki/database.md`](wiki/database.md), 경기 규칙은 [`wiki/game-rules.md`](wiki/game-rules.md)와 [`wiki/banpick-system.md`](wiki/banpick-system.md)를 확인합니다.
+3. 등록·운영 작업은 [`wiki/operations.md`](wiki/operations.md)와 관련 스킬 문서를 함께 읽습니다.
+
+`wiki/`는 프로젝트 지식의 단일 문서 저장소입니다. `.agent/rules/`와 `.cursor/rules/`는 각 도구가 공용 안내를 자동으로 찾도록 연결하는 어댑터이며, 도메인 규칙을 복제하지 않습니다. 실행 절차는 스킬 디렉터리에 유지합니다.
+
+## 레포 스킬
+
+| 작업 | 스킬 |
+| :--- | :--- |
+| 에이전트 정보 취합/등록 | [register-agent](.agent/skills/register-agent/SKILL.md) |
+| 보스 등록 | [register-boss](.agent/skills/register-boss/SKILL.md) |
+| W-엔진 등록 | [register-engine](.agent/skills/register-engine/SKILL.md) |
+| 경기 무결성 동기화 | [sync-match-integrity](.agent/skills/sync-match-integrity/SKILL.md) |
+| 진영 등록 | [register-faction](.agent/skills/register-faction/SKILL.md) |
+| 특성 등록 | [register-specialty](.agent/skills/register-specialty/SKILL.md) |
+| 디스코드 웹훅 알림 | [send-discord-webhook](.agent/skills/send-discord-webhook/SKILL.md) |
+| R2 이미지 업로드 | [upload-r2-image](.cursor/skills/upload-r2-image/SKILL.md) |
+| 에이전트 프로필 마이그레이션(레거시) | [migrate-agent-profiles](.agent/skills/migrate-agent-profiles/SKILL.md) |
+
+일반 Markdown 스킬을 실행할 때 현재 런타임이 제공하지 않는 DB·HTTP·파일·스토리지 권한을 가정하지 않습니다. 필요한 권한이 없으면 쓰기 작업 전에 보고합니다.
+
+## 실행 환경
+
+`zzz-picker`는 pnpm 워크스페이스 모노레포이며, 메인 서비스는 `apps/renew`입니다.
+
+| 대상 | 명령 | 주소 |
 | :--- | :--- | :--- |
-| **LLM Wiki (도메인 지식 베이스)** | `wiki/index.md` | Andrej Karpathy 패턴 기반 컴파일 우선 도메인/시스템/운영 통합 지식 베이스 |
-| **Gemini (최상위 루트)** | `.agent/rules/GEMINI.md` | `apps/renew` 기준 게임·밴픽·디자인·앱·패키지 전체 룰 (SSOT) |
-| **Cursor / Claude / Codex** | `.cursor/rules/zzz-picker.mdc` | 위 룰의 읽기용 인덱스 + 모노레포 구조 |
-| **ZPDS UI 개발** | `.cursor/rules/zpds-components.mdc` | 디자인 시스템 컴포넌트·스토리북 규칙 |
+| 메인 앱 | `pnpm dev:renew` | `http://localhost:5173` |
+| 관리자 앱 | `pnpm --filter @zzz-picker/admin dev` | `http://localhost:3001` |
+| Storybook | `pnpm --filter storybook storybook` | `http://localhost:6006` |
 
----
-
-## 레포 Skills (에이전트 실행 가이드)
-
-이미지·정적 파일을 R2에 올릴 때는 아래 skill 문서를 먼저 읽고 실행한다. 업로드 대상 조사·DB UPDATE는 에이전트가 담당하고, skill은 **업로드 + 공개 URL 반환**만 담당한다.
-
-| Skill | 경로 | 용도 |
-| :--- | :--- | :--- |
-| **에이전트 정보 취합/등록** | `.agent/skills/register-agent/SKILL.md` | 호요버스 공식 API 및 Fandom Wiki URL 기반 에이전트 메타데이터 정밀 취합 및 등록 |
-| **경기 무결성 동기화** | `.agent/skills/sync-match-integrity/SKILL.md` | 5대 체크리스트 기반 정상 경기 승격(`phase='done'`) 및 방치 세션 소프트 딜리트(`isHide=true`) |
-| **진영 등록** | `.agent/skills/register-faction/SKILL.md` | 호요버스 Camp API 조회 기반 신규 진영 메타데이터 및 로고 자동 등록 |
-| **특성 등록** | `.agent/skills/register-specialty/SKILL.md` | 호요랩 위키 필터 API 기반 신규 특성 메타데이터 및 아이콘 자동 동기화 |
-| **디스코드 웹훅 알림** | `.agent/skills/send-discord-webhook/SKILL.md` | 규격화된 블록 기반 디스코드 알림 및 무결성 브리핑 전송 |
-| **R2 이미지 업로드** | `.cursor/skills/upload-r2-image/SKILL.md` | 로컬/웹 URL 이미지를 R2에 단건·다건 업로드 (Cloudflare REST API) |
-| 에이전트 프로필 마이그레이션 | `.agent/skills/migrate-agent-profiles/SKILL.md` | 에이전트 프로필 이미지 R2 이관 + SQL 생성 (레거시) |
-
-### `upload-r2-image` 실행 요약
-
-```bash
-npx tsx .cursor/skills/upload-r2-image/scripts/upload.ts \
-  --url <원본URL> --path <R2경로prefix>
-```
-
-- 자격증명: **Cursor Cloud Secrets** — `CLOUDFLARE_API_TOKEN`, `R2_ACCOUNT_ID`(또는 `CLOUDFLARE_ACCOUNT_ID`)
-- 선택: `R2_BUCKET_NAME`(기본 `zzz-picker`), `R2_PUBLIC_URL`(기본 `https://images.zzz.freevue.dev`)
-- `.env` / S3 Access Key는 사용하지 않음
-- 대량 작업은 manifest 없이 **단건 skill을 반복 실행**
-
----
-
-## 개발 환경 및 실행 가이드
-
-`zzz-picker`는 pnpm 워크스페이스 모노레포입니다.
-
-### 서비스 실행 방법
-
-- **renew (메인 서비스 앱, Remix+Tailwind v4)**: `pnpm dev:renew` → http://localhost:5173  
-  *현재 실제 운영 및 밴픽 경기가 진행되는 최신 메인 애플리케이션입니다.*
-- **admin** (Remix+Vite, R2 파일 관리): `pnpm --filter @zzz-picker/admin dev` → http://localhost:3001
-- **storybook**: `pnpm --filter storybook storybook` → http://localhost:6006
-
-### 환경 변수 (중요)
-
-- 각 앱 디렉터리(`apps/renew/.env` 등)에 Supabase 연동 환경변수가 필요합니다:
-  - `SUPABASE_URL`: Supabase 프로젝트 URL
-  - `SUPABASE_ANON_KEY`: Supabase 익명 API 키
-- 모듈 로드 시점에 Supabase 클라이언트가 초기화되므로 유효한 값(로컬 테스트 시 플레이스홀더 가능)이 설정되어 있어야 부팅됩니다.
-- 캐릭터, 보스, 엔진 데이터는 Supabase의 `agent`, `engine`, `boss`, `deadlyAssault` 테이블에서 실시간 조회됩니다.
+`apps/renew/.env`에는 Supabase 연동용 `SUPABASE_URL`, `SUPABASE_ANON_KEY`가 필요합니다.

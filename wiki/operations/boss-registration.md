@@ -1,12 +1,13 @@
 ---
 name: boss-registration
 description: 신규 보스 마스터 등록, 체력(hp) 배열 설정 및 이미지 연계를 위한 운영 표준 SQL 명세입니다.
-trigger: model_decision
 ---
 
 # 보스 마스터 등록 규칙 (Boss Registration)
 
 이 문서는 젠레스 존 제로(ZZZ)의 신규 보스가 추가되거나 강습전용 보스 데이터가 갱신될 때, Supabase 데이터베이스의 `boss` 테이블에 안전하게 등록하기 위한 **운영 표준 규격서**입니다.
+
+실제 정보 취합, 사용자 승인, 이미지 R2 업로드 및 DB 반영 절차는 [register-boss 스킬](../../.agent/skills/register-boss/SKILL.md)을 따릅니다.
 
 ---
 
@@ -24,6 +25,8 @@ trigger: model_decision
 | **`imageId`** | `uuid` | FK (`image.id`) | 보스 썸네일/초상화 이미지 UUID |
 | **`legacy_id`** | `bigint` | NULL | 레거시 시즌 보스 ID 번호 (e.g. 6, 12, 16) |
 | **`createdAt`** | `timestamptz` | DEFAULT now() | 등록 일시 |
+
+> Fandom 적 문서의 `Enemy Stats`에 표시된 `hp`는 일반 적 스탯일 수 있습니다. 등록 대상 모드와 페이즈 HP라는 근거가 확인될 때만 `boss.hp` 배열에 반영하고, 그렇지 않으면 `null`로 둡니다. 보스 대표 이미지는 사용자가 첨부한 파일을 사용합니다.
 
 ---
 

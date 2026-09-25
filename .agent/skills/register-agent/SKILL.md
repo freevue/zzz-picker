@@ -9,7 +9,7 @@ description: 4개 사이트(호요버스 공식, Fandom Wiki, 네이버 게임 �
 
 > [!NOTE]
 > **엔진(W-Engine) 주입 배제 원칙**:  
-> W-엔진 등록 및 전용 무기 연결은 본 스킬 범위에서 제외합니다. 별도 엔진 등록 skill은 없으며 `.agent/rules/operations/engine-registration.md`를 따릅니다.
+> W-엔진 등록 및 전용 무기 연결은 본 스킬 범위에서 제외합니다. `.agent/skills/register-engine/SKILL.md`와 [엔진 등록 지식 문서](../../../wiki/operations/engine-registration.md)를 따릅니다.
 
 ---
 
@@ -111,7 +111,7 @@ HTTP 오류, 비정상 `retcode`, JSON 파싱 오류 또는 필수 필드 누락
 
 ### [승인 전 사전 확인]
 
-`.agent/rules/operations/roster-auto-registration.md`의 공통 안전 수칙을 적용합니다.
+[공통 등록 안전 수칙](../../../wiki/operations/roster-auto-registration.md)을 적용합니다.
 
 1. DB에서 동일 에이전트 ID와 연결 이미지 행을 조회합니다. 기존 이미지 URL이 정상 연결된 에이전트는 기본적으로 재사용합니다.
 2. `specialtyId`, `attributeId`, `factionId` 대상 행이 존재하는지 확인합니다. 외래키 대상이 없거나 이름·ID 매핑이 모호하면 등록을 중단합니다.
@@ -281,9 +281,9 @@ GROUP BY a.id, a."nameKo", a.rarity, a.color, a.version, a."isPickup", f."nameKo
 
 | 문서명 | 경로 | 설명 |
 | :--- | :--- | :--- |
-| **에이전트 등록 규칙** | [agent-registration.md](../../rules/operations/agent-registration.md) | 에이전트 7개 돌파 코스트 5대 프리셋 및 DB 등록 규격 |
-| **공통 등록 안전 수칙** | [roster-auto-registration.md](../../rules/operations/roster-auto-registration.md) | 승인, 트랜잭션, 재시도 및 입력 검증 |
-| **호요버스 공식 API** | [hoyoverse-character-api.md](../../rules/operations/hoyoverse-character-api.md) | 호요버스 공식 API 엔드포인트 및 한자 변환 사전 |
-| **진영 등록 규칙** | [faction-registration.md](../../rules/operations/faction-registration.md) | 소속 진영 매핑 및 신규 진영 등록 규격 |
+| **에이전트 등록 지식** | [agent-registration.md](../../../wiki/operations/agent-registration.md) | 에이전트 7개 돌파 코스트 5대 프리셋 및 DB 등록 규격 |
+| **공통 등록 안전 수칙** | [roster-auto-registration.md](../../../wiki/operations/roster-auto-registration.md) | 승인, 트랜잭션, 재시도 및 입력 검증 |
+| **호요버스 공식 API** | [hoyoverse-character-api.md](../../../wiki/operations/hoyoverse-character-api.md) | 호요버스 공식 API 엔드포인트 및 한자 변환 사전 |
+| **진영 등록 지식** | [faction-registration.md](../../../wiki/operations/faction-registration.md) | 소속 진영 매핑 및 신규 진영 등록 규격 |
 | **R2 업로드 스킬** | [upload-r2-image](../../../.cursor/skills/upload-r2-image/SKILL.md) | 이미지 R2 버킷 업로드 및 공개 CDN URL 발급 |
-| **데이터베이스 스키마** | [database-schema.md](../../rules/database-schema.md) | `agent`, `agentCost`, `image`, `faction` 테이블 구조 |
+| **데이터베이스 스키마** | [database.md](../../../wiki/database.md) | `agent`, `agentCost`, `image`, `faction` 테이블 구조 |

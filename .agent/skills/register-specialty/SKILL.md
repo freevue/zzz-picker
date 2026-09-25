@@ -12,7 +12,7 @@ description: 호요랩 위키 에이전트 필터 API를 내장하여, 실행 �
 
 ## 1. 내장 공식 원천 링크 (Hardcoded Sources)
 
-`.agent/rules/operations/roster-auto-registration.md`의 공통 안전 수칙을 적용합니다. API 실패나 미완료 응답을 빈 목록으로 취급하지 말고 동기화를 중단합니다.
+[공통 등록 안전 수칙](../../../wiki/operations/roster-auto-registration.md)을 적용합니다. API 실패나 미완료 응답을 빈 목록으로 취급하지 말고 동기화를 중단합니다.
 
 스킬 실행 시 아래 공식 엔드포인트를 호출하여 한국어/영어 특성 메타데이터 및 공식 아이콘 URL을 수집합니다:
 
@@ -141,8 +141,8 @@ WHERE s."nameKo" = '{nameKo}';
 
 | 문서명 | 경로 | 설명 |
 | :--- | :--- | :--- |
-| **에이전트 정의 규칙** | [zzz-agent.md](../../rules/zzz-agent.md) | 캐릭터 특성 및 밴픽 포지션(딜러/서포터) 정의 |
-| **공통 등록 안전 수칙** | [roster-auto-registration.md](../../rules/operations/roster-auto-registration.md) | 승인, 트랜잭션, 재시도 및 입력 검증 |
+| **밴픽 시스템** | [banpick-system.md](../../../wiki/banpick-system.md) | 캐릭터 특성 및 밴픽 포지션(딜러/서포터) 정의 |
+| **공통 등록 안전 수칙** | [roster-auto-registration.md](../../../wiki/operations/roster-auto-registration.md) | 승인, 트랜잭션, 재시도 및 입력 검증 |
 | **진영 등록 스킬** | [register-faction](../register-faction/SKILL.md) | 선행 진영 등록 자동 싱크 스킬 |
 | **에이전트 등록 스킬** | [register-agent](../register-agent/SKILL.md) | 캐릭터 등록 시 특성(specialtyId) 외래키 연결 |
 | **R2 업로드 스킬** | [upload-r2-image](../../../.cursor/skills/upload-r2-image/SKILL.md) | 공개 CDN URL을 반환하는 이미지 업로드 절차 |

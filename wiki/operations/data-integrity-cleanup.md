@@ -1,7 +1,6 @@
 ---
 name: data-integrity-cleanup
 description: 실시간 경기 데이터(match, play)의 무결성을 5대 항목별로 정밀 검사하여 정상 경기는 phase='done'으로 자동 보정하고 비정상/방치 세션은 isHide=true로 소프트 딜리트(은닉)하는 수명주기 관리 규칙입니다.
-trigger: model_decision
 ---
 
 # 데이터 무결성 검사 및 소프트 딜리트 수명주기 규칙 (Data Integrity & Soft-Delete Lifecycle)
@@ -67,7 +66,7 @@ graph TD
    - **조치**: 어떤 플래그도 변경하지 않고 원형 유지.
 
 4. **📢 디스코드 브리핑 연동 ([discord-webhook-notification.md](./discord-webhook-notification.md))**:
-   - **조치**: 동기화 완료 후 [`send-discord-webhook`](../../skills/send-discord-webhook/SKILL.md) 스킬을 호출하여 디스코드 채널에 대민 친화적 요약 카드를 자동 전송.
+   - **조치**: 동기화 완료 후 [`send-discord-webhook`](../../.agent/skills/send-discord-webhook/SKILL.md) 스킬을 호출하여 디스코드 채널에 대민 친화적 요약 카드를 자동 전송.
    - **장애 대응**: 동기화 중 오류 발생 시 즉시 `system-failure` 카드로 실패 작업명과 에러 로그 긴급 보고.
 
 ---
@@ -166,5 +165,5 @@ const query = supabase
 
 | 스킬 | 경로 | 설명 |
 | :--- | :--- | :--- |
-| **경기 무결성 동기화 스킬** | [sync-match-integrity](../../skills/sync-match-integrity/SKILL.md) | 5대 체크리스트 기반 무결성 동기화 실행 AI Skill |
-| **디스코드 웹훅 발송 스킬** | [send-discord-webhook](../../skills/send-discord-webhook/SKILL.md) | 규격화된 블록 기반 디스코드 알림 및 무결성 브리핑 전송 |
+| **경기 무결성 동기화 스킬** | [sync-match-integrity](../../.agent/skills/sync-match-integrity/SKILL.md) | 5대 체크리스트 기반 무결성 동기화 실행 AI Skill |
+| **디스코드 웹훅 발송 스킬** | [send-discord-webhook](../../.agent/skills/send-discord-webhook/SKILL.md) | 규격화된 블록 기반 디스코드 알림 및 무결성 브리핑 전송 |

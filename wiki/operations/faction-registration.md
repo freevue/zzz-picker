@@ -1,7 +1,6 @@
 ---
 name: faction-registration
 description: 신규 진영(Faction) 등록, 호요버스 Camp API 연계 및 이미지 매핑을 위한 운영 표준 SQL 명세입니다.
-trigger: model_decision
 ---
 
 # 진영 등록 규칙 (Faction Registration)

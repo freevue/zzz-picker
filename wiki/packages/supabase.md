@@ -1,10 +1,9 @@
 ---
 name: supabase-package
 description: Supabase 클라이언트 단일 인스턴스 설정 및 AI 데이터베이스 연동 도구를 제공합니다.
-trigger: model_decision
 ---
 
-# Supabase Package Guide (`@zzz-picker/supabase`)
+# Supabase 패키지 가이드 (`@zzz-picker/supabase`)
 
 `packages/supabase`는 Supabase 클라이언트와 데이터베이스 연동 인스턴스를 관리하며, `@zzz-picker/renew`가 직접 의존하는 핵심 워크스페이스 패키지입니다.
 
@@ -47,4 +46,3 @@ const { data, error } = await supabase.from('agent').select('*')
 // 실시간 브로드캐스트 채널 구독
 const channel: RealtimeChannel = supabase.channel(`room:${roomId}`)
 ```
-

@@ -1,10 +1,9 @@
 ---
 name: renew-components
 description: @zzz-picker/renew의 핵심 도메인 및 UI 컴포넌트 아키텍처와 상세 역할을 설명합니다.
-trigger: model_decision
 ---
 
-# Renew Components Guide
+# renew 주요 컴포넌트
 
 `apps/renew/app/components/` 디렉토리에 위치한 도메인 컴포넌트 인벤토리입니다.
 
@@ -17,6 +16,7 @@ trigger: model_decision
 | **CreateRoom** | `components/CreateRoom/` | 경기 모드 선택 및 선수 닉네임 입력 기반 방 생성 모달 |
 | **CostDashboard** | `components/CostDashboard/` | 캐릭터 및 무기 코스트 실시간 표시 및 상세 내역 대시보드 |
 | **Calc** | `components/Calc/` | 경기 종료 후 라운드 점수, 시간, 코스트 보너스/페널티 합산 계산기 |
+| **Bracket** | `components/Bracket/` | 8강 토너먼트 대진 입력, 승자 진출, 경기 방 생성. 대진 상태는 브라우저 로컬 저장소에 유지 |
 | **Background** | `components/Background.tsx` | -40도 각도로 역방향 교차 회전하는 키네틱 사선 롤링 텍스트 배경 |
 | **Chip** | `components/Chip/` | 실시간 연결 상태(`isConnected`), 역할, 라운드 정보 칩 |
 | **AgentButton / EngineButton** | `components/*.tsx` | 캐릭터/엔진 선택 및 돌파 수치 조절 모달 트리거 버튼 |
