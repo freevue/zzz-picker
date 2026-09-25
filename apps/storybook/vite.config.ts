@@ -7,7 +7,12 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [tailwindcss()],
-    resolve: {},
+    resolve: {
+      alias: {
+        '~': path.resolve(__dirname, '../renew/app'),
+        '@': path.resolve(__dirname, '../renew/app'),
+      },
+    },
     define: {
       'process.env.SUPABASE_URL': JSON.stringify(env.SUPABASE_URL),
       'process.env.SUPABASE_ANON_KEY': JSON.stringify(env.SUPABASE_ANON_KEY),

@@ -1,8 +1,35 @@
-@import url('//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css');
-@import '@zzz-picker/tailwind-config';
-@import '@zzz-picker/components/styles';
+@import url('https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.1/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css');
+
+@font-face {
+  font-family: 'Ria';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2410-1@1.0/RiaSans-ExtraBold.woff2')
+    format('woff2');
+  font-weight: normal;
+  font-display: swap;
+}
+
+.ft-ria {
+  font-family: 'Ria', sans-serif;
+}
+.ft-pre {
+  font-family: 'Wanted Sans Variable', sans-serif;
+}
+
+:root, html.v2 {
+  --color-base: #0c0f12;
+  --color-content: #141920;
+  --color-netural: #1c2331;
+  --color-elevated: #252f42;
+  --color-primary: #ffd215;
+  --color-secondary: #00f0ff;
+  --color-tertiary: #ff4500;
+  --color-ink: #ffffff;
+  --color-disabled: #374151;
+  --color-chip: #a855f7;
+}
 
 @source '../../../packages/zpds/src';
+@source '../../renew/app';
 
 /* Storybook V3 파스텔 테마 (apps/v3와 동일) */
 html.v3 {
