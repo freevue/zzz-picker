@@ -1,13 +1,13 @@
 import Row from './Row'
 import { calcTimeScore, calcCostBonuse } from '@/lib/utils'
-import { map, pipe, toArray, zipWithIndex } from '@fxts/core'
+import { map, pipe, range, sum, toArray, zipWithIndex } from '@fxts/core'
 import { useSearchParams } from '@remix-run/react'
 import { useMemo } from 'react'
-import { MatchType, Role, SETTING } from '~/constant'
+import { MatchType, Role } from '~/constant'
 import { useCost, useMatch } from '~/hooks'
 
 const Round: React.FC<{ round: number }> = (props) => {
-  const { play } = useMatch()
+  const { play, setting } = useMatch()
   const cost = useCost(props.round)
 
   return (
@@ -22,10 +22,14 @@ const Round: React.FC<{ round: number }> = (props) => {
       />
       <Row
         title="시간 보너스"
-        value={[
-          calcTimeScore(play[Role.A_SIDE].time[props.round]),
-          calcTimeScore(play[Role.B_SIDE].time[props.round]),
-        ]}
+        value={
+          pipe(
+            [play[Role.A_SIDE], play[Role.B_SIDE]],
+            map((player) => player.time[props.round]),
+            map(calcTimeScore(setting.ROUND_TIME_LIMIT, setting.TIME_BONUS_PER_SECOND)),
+            toArray
+          ) as [number, number]
+        }
       />
       <Row
         title="Round 점수"
@@ -36,7 +40,7 @@ const Round: React.FC<{ round: number }> = (props) => {
 }
 const Result: React.FC = () => {
   const [searchParams] = useSearchParams()
-  const { play, match } = useMatch()
+  const { play, match, setting } = useMatch()
   const cost = useCost()
   const totalCost = useMemo(() => {
     return [
@@ -45,19 +49,29 @@ const Result: React.FC = () => {
     ] as [number, number]
   }, [cost])
   const costBonuse = useMemo(() => {
-    return pipe(totalCost, map(calcCostBonuse(24)), toArray) as [number, number]
-  }, [totalCost, searchParams])
+    return pipe(
+      totalCost,
+      map(calcCostBonuse(setting.TOTAL_COST, setting.PLUS_RATE, setting.MINUS_RATE)),
+      toArray
+    ) as [number, number]
+  }, [totalCost, searchParams, setting])
   const timeBounse = useMemo(() => {
-    return [
-      calcTimeScore(play[Role.A_SIDE].time[0]) + calcTimeScore(play[Role.A_SIDE].time[1]),
-      calcTimeScore(play[Role.B_SIDE].time[0]) + calcTimeScore(play[Role.B_SIDE].time[1]),
-    ] as [number, number]
-  }, [play])
+    return pipe(
+      [play[Role.A_SIDE], play[Role.B_SIDE]],
+      map((player) =>
+        map(calcTimeScore(setting.ROUND_TIME_LIMIT, setting.TIME_BONUS_PER_SECOND), player.time)
+      ),
+      map(sum),
+      toArray
+    ) as [number, number]
+  }, [play, setting])
   const totalRoundScore = useMemo(() => {
-    return [
-      play[Role.A_SIDE].score[0] + play[Role.A_SIDE].score[1],
-      play[Role.B_SIDE].score[0] + play[Role.B_SIDE].score[1],
-    ] as [number, number]
+    return pipe(
+      [play[Role.A_SIDE], play[Role.B_SIDE]],
+      map((player) => player.score),
+      map(sum),
+      toArray
+    ) as [number, number]
   }, [play])
   const totalScore = useMemo(() => {
     return pipe(
@@ -76,8 +90,12 @@ const Result: React.FC = () => {
   return (
     <div className="card rounded-3xl w-full h-full relative flex flex-col gap-4">
       <div className="flex flex-col flex-1 p-4 gap-4">
-        <Round round={0} />
-        <Round round={1} />
+        {pipe(
+          setting.ROUND_COUNT,
+          range,
+          map((index) => <Round round={index} key={index} />),
+          toArray
+        )}
       </div>
       <div className="flex flex-col flex-1 p-4">
         <h2 className="text-center text-primary ft-ria text-3xl mb-4">결과</h2>
@@ -85,7 +103,7 @@ const Result: React.FC = () => {
           title="총 사용 Cost"
           value={totalCost}
           error={(value) => {
-            if (match.matchType === MatchType.ORIGINAL) return value > 24
+            if (match.matchType === MatchType.ORIGINAL) return value > setting.TOTAL_COST
 
             return false
           }}

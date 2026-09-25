@@ -1,6 +1,7 @@
 import AllowAgent from './AllowAgent'
 import Ban from './Ban'
 import CommonBoss from './CommonBoss'
+import CuteAlice from './CuteAlice'
 import MatchType from './MatchType'
 import PlayerName from './PlayerName'
 import Result from './Result'
@@ -8,14 +9,14 @@ import Round from './Round'
 import SpecialRule from './SpecialRule'
 import UnlimitedCard from './UnlimitedCard'
 import { MatchType as MatchTypeEnum } from '@/constant'
-import { concat, pipe, join } from '@fxts/core'
+import { concat, pipe, join, range, map, toArray } from '@fxts/core'
 import { Link } from '@remix-run/react'
 import { ArrowLeft, Info, ChevronsRight } from 'lucide-react'
 import { useState } from 'react'
 import { useMatch } from '~/hooks'
 
 const HostDashboard: React.FC = () => {
-  const { match } = useMatch()
+  const { match, setting } = useMatch()
   const [isResult, setIsResult] = useState<boolean>(false)
 
   const onResultClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -50,15 +51,7 @@ const HostDashboard: React.FC = () => {
           <CommonBoss />
           <AllowAgent />
           <Ban />
-          {match.matchType === MatchTypeEnum.UNLIMITED ? (
-            <UnlimitedCard />
-          ) : (
-            <img
-              className="absolute top-[78%] left-1/2 -translate-x-1/2 scale-200 origin-top"
-              src="https://images.zzz.freevue.dev/images/agents/156728/3edd3a9c-8886-4147-89b5-f2e3c01d7be7.webp"
-              alt=""
-            />
-          )}
+          {match.matchType === MatchTypeEnum.UNLIMITED ? <UnlimitedCard /> : <CuteAlice />}
         </div>
       </div>
       <div className="flex-1 flex flex-col gap-4 min-w-xl py-4">
@@ -71,8 +64,12 @@ const HostDashboard: React.FC = () => {
               join(' ')
             )}
           >
-            <Round round={0} />
-            <Round round={1} />
+            {pipe(
+              setting.ROUND_COUNT,
+              range,
+              map((index) => <Round round={index} key={index} />),
+              toArray
+            )}
           </div>
           <div
             className={pipe(

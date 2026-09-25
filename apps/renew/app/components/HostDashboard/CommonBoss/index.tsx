@@ -7,14 +7,14 @@ import { useMatch, useStore } from '~/hooks'
 
 const CommonBoss: React.FC = () => {
   const store = useStore()
-  const { play, select, match } = useMatch()
+  const { play, select, match, setting } = useMatch()
   const bossData = useMemo(() => {
     return pipe(
       select[Phase.COMMON_BOSS_SELECT],
-      when(isNull, () => play[Role.B_SIDE].boss[1]),
+      when(isNull, () => play[Role.B_SIDE].boss[setting.ROUND_COUNT - 1]),
       (bossId) => store.deadlyAssault.get(bossId || '')
     )
-  }, [play, select])
+  }, [play, select, setting])
 
   return (
     <div className="">

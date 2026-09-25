@@ -21,7 +21,7 @@ type Props = {
 
 const Boss: React.FC<Props> = (props) => {
   const store = useStore()
-  const { select, send, match } = useMatch()
+  const { select, send, match, setting } = useMatch()
 
   const onBossClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -37,7 +37,7 @@ const Boss: React.FC<Props> = (props) => {
       BroadcastEvent.COMMON_BOSS_CONFIRM,
       await pipe(
         select[Phase.COMMON_BOSS_SELECT],
-        updateCommonBoss(match.matchId),
+        updateCommonBoss(match.matchId, setting.ROUND_COUNT),
         map((play) => [play.role, play] as [PlayerRole, Player]),
         fromEntries
       )

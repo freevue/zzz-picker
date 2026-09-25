@@ -16,7 +16,6 @@ import {
   pipe,
   sort,
   sum,
-  toArray,
   toAsync,
 } from '@fxts/core'
 import { DEALER, Position, Role, Specialty, SETTING } from '~/constant'
@@ -32,6 +31,16 @@ export function hook(callback: (state: never) => void) {
     callback(state as never)
 
     return state
+  }
+}
+
+export function replaceAt(index: number, value: unknown) {
+  return function* <T>(iterable: Iterable<T>): Generator {
+    for (const item of iterable) {
+      yield index === 0 ? value : item
+
+      index--
+    }
   }
 }
 
@@ -104,20 +113,26 @@ export function engineCost(rate: Record<string, number>) {
   }
 }
 
-export function calcTimeScore(time: number) {
-  if (time === 0) return 0
+export function calcTimeScore(
+  maxTime: number = SETTING.ROUND_TIME_LIMIT,
+  bonus: number = SETTING.TIME_BONUS_PER_SECOND
+) {
+  return (time: number) => {
+    if (time === 0) return 0
 
-  const MAX_TIME = 180
-  const BONUSE_SCORE = 333
-
-  return pipe([MAX_TIME - time, 0], max, (value) => value * BONUSE_SCORE)
+    return pipe([maxTime - time, 0], max, (value) => value * bonus)
+  }
 }
 
-export function calcCostBonuse(MAX_COST: number = 24, minusRate: number = SETTING.MINUS_RATE) {
+export function calcCostBonuse(
+  maxCost: number = SETTING.TOTAL_COST,
+  plusRate: number = SETTING.PLUS_RATE,
+  minusRate: number = SETTING.MINUS_RATE
+) {
   return (cost: number) => {
-    if (cost > MAX_COST) return (MAX_COST - cost) * minusRate
+    if (cost > maxCost) return (maxCost - cost) * minusRate
 
-    return (MAX_COST - cost) * 0.05
+    return (maxCost - cost) * plusRate
   }
 }
 

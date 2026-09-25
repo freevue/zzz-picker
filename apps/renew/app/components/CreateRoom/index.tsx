@@ -1,9 +1,9 @@
 import { Dialog } from '..'
 import { insertMatch, insertPlayer, selectAdversityBoss, selectValidAuthKey } from '@/lib/DB'
-import { concat, join, map, pipe, toAsync, toArray, peek } from '@fxts/core'
+import { concat, join, map, pipe, toAsync, toArray, peek, when } from '@fxts/core'
 import { useNavigate } from '@remix-run/react'
 import { useEffect } from 'react'
-import { BossType, MatchType, Phase, Role } from '~/constant'
+import { BossType, MatchType, Phase, Role, SETTING } from '~/constant'
 
 type Props = {
   acvite: boolean
@@ -16,6 +16,7 @@ const MATCH = [
   { value: MatchType.UNLIMITED, label: '공허사냥꾼' },
 ]
 const ROUNDS = [
+  { value: 'NONE', label: '없음' },
   { value: BossType.TRIAL, label: '일반 모드' },
   { value: BossType.ADVERSITY, label: '절망 모드' },
 ]
@@ -26,11 +27,18 @@ const CreateRoom: React.FC<Props> = (props) => {
     event.preventDefault()
 
     const formData = new FormData(event.currentTarget)
-    const round = formData.get('round') as BossType
+    const round = formData.get('round') as BossType | 'NONE'
     // const { isApproval: isTest } = await pipe(
     //   window.localStorage.getItem(LOCAL_STORAGE_KEY) || '',
     //   selectValidAuthKey
     // )
+    const setting = pipe(
+      SETTING,
+      when(
+        () => round === 'NONE',
+        (prev) => ({ ...prev, ROUND_COUNT: 1, TOTAL_COST: 12, PLUS_RATE: 0.035, MINUS_RATE: 0.04 })
+      )
+    )
 
     const { id: matchId } = await pipe(
       formData.get('match') as MatchType,
@@ -42,6 +50,7 @@ const CreateRoom: React.FC<Props> = (props) => {
             : round === BossType.ADVERSITY
               ? Phase.BAN
               : Phase.COMMON_BOSS_SELECT,
+        setting,
       }),
       insertMatch
     )
@@ -113,7 +122,7 @@ const CreateRoom: React.FC<Props> = (props) => {
           </ul>
         </div>
         <div>
-          <p className="text-3xl font-bold ft-pre mb-4">2Round 타입</p>
+          <p className="text-3xl font-bold ft-pre mb-4">2Round</p>
           <ul className="flex rounded-full overflow-hidden h-12 w-full mb-4">
             {pipe(
               ROUNDS,

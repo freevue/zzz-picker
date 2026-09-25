@@ -14,7 +14,7 @@ type Props = {
 
 const BossSelector: React.FC<Props> = (props) => {
   const store = useStore()
-  const { match, currentPlay } = useMatch()
+  const { match, currentPlay, setting } = useMatch()
   const [open, setOpen] = useState<boolean>(false)
   const commonBossData = useMemo(() => {
     if (isUndefined(currentPlay)) return undefined
@@ -28,14 +28,14 @@ const BossSelector: React.FC<Props> = (props) => {
     if (isUndefined(bossData)) return undefined
     if (bossData.type === BossType.ADVERSITY) return bossData
     if (match.matchType === MatchType.UNLIMITED) return undefined
-    if (props.round === 0) return undefined
+    if (props.round < setting.ROUND_COUNT - 1) return undefined
 
     return pipe(
       currentPlay.boss,
       (boss) => boss[props.round],
       (bossId) => store.deadlyAssault.get(bossId || '')!
     )
-  }, [match, currentPlay, props.round])
+  }, [match, currentPlay, props.round, setting])
   const bossData = useMemo(() => {
     if (isUndefined(currentPlay)) return undefined
 

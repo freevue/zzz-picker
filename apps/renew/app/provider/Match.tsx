@@ -7,6 +7,8 @@ import {
   isNumber,
   isUndefined,
   map,
+  omit,
+  pick,
   pipe,
   range,
   toArray,
@@ -48,11 +50,12 @@ type Props = {
   play: Array<Player>
 }
 type State = {
-  match: Match
+  match: Omit<Match, 'setting'>
   select: typeof INITIAL_SELECT_STATE
   currentPlay?: Player
   play: Record<PlayerRole, Player>
   send: <T extends BroadcastEvent>(event: T, payload: BroadcastPayloadMap[T]) => void
+  setting: typeof SETTING
 }
 
 export const Context = createContext<State>({
@@ -64,6 +67,7 @@ export const Context = createContext<State>({
   select: INITIAL_SELECT_STATE,
   play: { [Role.A_SIDE]: INITIAL_PLAY, [Role.B_SIDE]: INITIAL_PLAY },
   send: () => {},
+  setting: SETTING,
 })
 
 /**
@@ -74,7 +78,7 @@ const MatchState: React.FC<Props> = (props) => {
   const timeOut = useRef<NodeJS.Timeout | null>(null)
   const channel = useRef<null | RealtimeChannel>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [match, setMatch] = useState<Match>(props.match)
+  const [match, setMatch] = useState<Omit<Match, 'setting'>>(pipe(props.match, omit(['setting'])))
   const [select, setSelect] = useState<typeof INITIAL_SELECT_STATE>(INITIAL_SELECT_STATE)
   const [play, setPlay] = useState<Record<PlayerRole, Player>>(
     pipe(
@@ -155,17 +159,30 @@ const MatchState: React.FC<Props> = (props) => {
         }))
       })
       .on('broadcast', { event: BroadcastEvent.COMMON_BOSS_CONFIRM }, (response) => {
-        setPlay(response.payload as BroadcastPayloadMap[BroadcastEvent.COMMON_BOSS_CONFIRM])
+        setPlay((prev) => {
+          return pipe(
+            response.payload as BroadcastPayloadMap[BroadcastEvent.COMMON_BOSS_CONFIRM],
+            entries,
+            map(([role, value]) => [role, { ...prev[role], ...value }] as const),
+            fromEntries,
+            (payload) => ({ ...prev, ...payload })
+          )
+        })
         setMatch((prev) => ({ ...prev, phase: Phase.BAN }))
       })
       .on('broadcast', { event: BroadcastEvent.BAN_SELECT }, (response) => {
         setSelect((prev) => ({ ...prev, [Phase.BAN]: response.payload }))
       })
       .on('broadcast', { event: BroadcastEvent.BAN_PROPOSE }, (response) => {
-        setPlay((prev) => ({
-          ...prev,
-          ...(response.payload as BroadcastPayloadMap[BroadcastEvent.BAN_PROPOSE]),
-        }))
+        setPlay((prev) => {
+          return pipe(
+            response.payload as BroadcastPayloadMap[BroadcastEvent.BAN_PROPOSE],
+            entries,
+            map(([role, value]) => [role, { ...prev[role], ...value }] as const),
+            fromEntries,
+            (payload) => ({ ...prev, ...payload })
+          )
+        })
         setSelect((prev) => ({ ...prev, [Phase.BAN]: [null, null] }))
       })
       .on('broadcast', { event: BroadcastEvent.BAN_FIX }, (response) => {
@@ -173,10 +190,13 @@ const MatchState: React.FC<Props> = (props) => {
       })
       .on('broadcast', { event: BroadcastEvent.BAN_CONFIRM }, (response) => {
         setPlay((prev) => {
-          const newState = {
-            ...prev,
-            ...(response.payload as BroadcastPayloadMap[BroadcastEvent.BAN_CONFIRM]),
-          }
+          const newState = pipe(
+            response.payload as BroadcastPayloadMap[BroadcastEvent.BAN_CONFIRM],
+            entries,
+            map(([role, value]) => [role, { ...prev[role], ...value }] as const),
+            fromEntries,
+            (payload) => ({ ...prev, ...payload })
+          )
           const isAllSelect = pipe(
             newState,
             entries,
@@ -191,34 +211,59 @@ const MatchState: React.FC<Props> = (props) => {
         setSelect((prev) => ({ ...prev, [Phase.BAN_FIX]: [null] }))
       })
       .on('broadcast', { event: BroadcastEvent.BOSS_SELECT }, (response) => {
-        setPlay((prev) => ({
-          ...prev,
-          ...(response.payload as BroadcastPayloadMap[BroadcastEvent.BOSS_SELECT]),
-        }))
+        setPlay((prev) => {
+          return pipe(
+            response.payload as BroadcastPayloadMap[BroadcastEvent.BOSS_SELECT],
+            entries,
+            map(([role, value]) => [role, { ...prev[role], ...value }] as const),
+            fromEntries,
+            (payload) => ({ ...prev, ...payload })
+          )
+        })
       })
       .on('broadcast', { event: BroadcastEvent.AGENT_PICK }, (response) => {
-        setPlay((prev) => ({
-          ...prev,
-          ...(response.payload as BroadcastPayloadMap[BroadcastEvent.AGENT_PICK]),
-        }))
+        setPlay((prev) => {
+          return pipe(
+            response.payload as BroadcastPayloadMap[BroadcastEvent.AGENT_PICK],
+            entries,
+            map(([role, value]) => [role, { ...prev[role], ...value }] as const),
+            fromEntries,
+            (payload) => ({ ...prev, ...payload })
+          )
+        })
       })
       .on('broadcast', { event: BroadcastEvent.ENGINE_PICK }, (response) => {
-        setPlay((prev) => ({
-          ...prev,
-          ...(response.payload as BroadcastPayloadMap[BroadcastEvent.ENGINE_PICK]),
-        }))
+        setPlay((prev) => {
+          return pipe(
+            response.payload as BroadcastPayloadMap[BroadcastEvent.ENGINE_PICK],
+            entries,
+            map(([role, value]) => [role, { ...prev[role], ...value }] as const),
+            fromEntries,
+            (payload) => ({ ...prev, ...payload })
+          )
+        })
       })
       .on('broadcast', { event: BroadcastEvent.SCORE }, (response) => {
-        setPlay((prev) => ({
-          ...prev,
-          ...(response.payload as BroadcastPayloadMap[BroadcastEvent.SCORE]),
-        }))
+        setPlay((prev) => {
+          return pipe(
+            response.payload as BroadcastPayloadMap[BroadcastEvent.SCORE],
+            entries,
+            map(([role, value]) => [role, { ...prev[role], ...value }] as const),
+            fromEntries,
+            (payload) => ({ ...prev, ...payload })
+          )
+        })
       })
       .on('broadcast', { event: BroadcastEvent.TIME }, (response) => {
-        setPlay((prev) => ({
-          ...prev,
-          ...(response.payload as BroadcastPayloadMap[BroadcastEvent.TIME]),
-        }))
+        setPlay((prev) => {
+          return pipe(
+            response.payload as BroadcastPayloadMap[BroadcastEvent.TIME],
+            entries,
+            map(([role, value]) => [role, { ...prev[role], ...value }] as const),
+            fromEntries,
+            (payload) => ({ ...prev, ...payload })
+          )
+        })
       })
       .on('broadcast', { event: BroadcastEvent.MATCH_TYPE }, (response) => {
         setMatch((prev) => ({
@@ -247,6 +292,7 @@ const MatchState: React.FC<Props> = (props) => {
         select,
         play,
         currentPlay,
+        setting: { ...SETTING, ...props.match.setting },
         send(event, payload) {
           if (channel.current === null) return
 

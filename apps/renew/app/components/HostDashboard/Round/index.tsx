@@ -153,6 +153,7 @@ const Round: React.FC<Props> = (props) => {
           'flex-col',
           'justify-around',
           'relative',
+          'max-h-1/2',
         ],
         join(' ')
       )}
@@ -166,9 +167,9 @@ const Round: React.FC<Props> = (props) => {
             <div className="flex gap-2">
               <Timer round={props.round} role={Role.A_SIDE} id={match.matchId} />
               <Score round={props.round} role={Role.A_SIDE} id={match.matchId} />
-              <button className="ml-2" type="button" onClick={onPopupOpen} value={Role.A_SIDE}>
+              {/* <button className="ml-2" type="button" onClick={onPopupOpen} value={Role.A_SIDE}>
                 <SquareArrowOutUpRight className="size-8" />
-              </button>
+              </button> */}
             </div>
             <div className="flex-1 flex gap-4 items-start">
               <AgentList
@@ -192,9 +193,9 @@ const Round: React.FC<Props> = (props) => {
         <div className="flex items-center gap-8 flex-row-reverse">
           <div className="flex flex-col items-end gap-4">
             <div className="flex gap-2">
-              <button className="mr-2" type="button" onClick={onPopupOpen} value={Role.B_SIDE}>
+              {/* <button className="mr-2" type="button" onClick={onPopupOpen} value={Role.B_SIDE}>
                 <SquareArrowOutUpRight className="size-8" />
-              </button>
+              </button> */}
               <Score round={props.round} role={Role.B_SIDE} id={match.matchId} />
               <Timer round={props.round} role={Role.B_SIDE} id={match.matchId} />
             </div>

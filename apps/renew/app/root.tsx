@@ -3,6 +3,17 @@ import { Links, Meta, Outlet, Scripts } from '@remix-run/react'
 import { Background } from '~/components'
 import styles from '~/index.css?url'
 
+/**
+ * TODO:
+ *
+ * - 클라렛 데이터 추가
+ * - 월페이퍼 데이터 추가
+ * - 계정 데이터 연동기 개발
+ * - 대진표 개발
+ *   - 무한 캔버스
+ *   - 대진표 생성후 방을 자동으로 생성 (생성하기 버튼을 누를 경우)
+ */
+
 export const links: LinksFunction = () => [
   { rel: 'icon', type: 'image/svg+xml', href: '/favicon.png' },
   { rel: 'stylesheet', href: styles },

@@ -1,4 +1,4 @@
-import { Role, MatchType, BroadcastEvent } from '@/constant'
+import { Role, MatchType, BroadcastEvent, SETTING } from '@/constant'
 
 export type AgentSlot = {
   id: number
@@ -13,6 +13,7 @@ export type Match = {
   matchType: MatchType
   matchId: string
   phase: Phase
+  setting: typeof SETTING
 }
 
 export type Player = {

@@ -1,13 +1,14 @@
+import { replaceAt } from '../utils'
 import { TableName } from './constant'
 import type { Match, Player, AgentSlot, EngineSlot } from '@/type'
-import { pipe } from '@fxts/core'
+import { map, pipe, range, repeat, toArray } from '@fxts/core'
 import { supabase } from '@zzz-picker/supabase'
-import { MatchType, Phase, Role } from '~/constant'
+import { MatchType, Phase, Role, SETTING } from '~/constant'
 
 export async function selectHostMatch(hostId: string) {
   const { data } = await supabase
     .from(TableName.MATCH)
-    .select<string, Match>(`matchId: id, matchType, phase`)
+    .select<string, Match>(`matchId: id, matchType, phase, setting`)
     .eq('hostId', hostId)
 
   return data?.[0]
@@ -39,7 +40,7 @@ export async function selectMatchPlayer(matchId: string) {
 export async function selectMatchPlayerId(playerId: string) {
   const { data } = await supabase
     .from(TableName.PLAY)
-    .select<string, Match>(`matchId, ...${TableName.MATCH}(matchType, phase)`)
+    .select<string, Match>(`matchId, ...${TableName.MATCH}(matchType, phase, setting)`)
     .eq('id', playerId)
 
   if (data === null) throw Error('')
@@ -89,11 +90,18 @@ export function updateEngine(id: string) {
   }
 }
 
-export function updateCommonBoss(matchId: string) {
+export function updateCommonBoss(matchId: string, roundCount: number = SETTING.ROUND_COUNT) {
   return async (id: string) => {
+    const boss = pipe(
+      roundCount,
+      range,
+      map(() => null),
+      replaceAt(roundCount - 1, id),
+      toArray
+    )
     const { data } = await supabase
       .from(TableName.PLAY)
-      .update({ boss: [null, id] })
+      .update({ boss })
       .eq('matchId', matchId)
       .select<string, Player>('*')
 
