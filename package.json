@@ -6,6 +6,7 @@
     "dev:www": "pnpm --filter @zzz-picker/www dev",
     "build:www": "pnpm --filter @zzz-picker/www build",
     "preview:www": "pnpm --filter @zzz-picker/www preview",
+    "storybook": "pnpm --filter storybook storybook",
     "test": "vitest"
   },
   "dependencies": {
