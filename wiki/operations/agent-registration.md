@@ -22,7 +22,7 @@ description: 신규 에이전트 등록, 개별 돌파 코스트(0~6돌 7개 행
 | **`fullNameKo`** | `text` | NULL | 한글 풀네임 (e.g. `'호시미 미야비'`, `'츠키시로 야나기'`) |
 | **`fullNameEn`** | `text` | NULL | 영문 풀네임 (e.g. `'Hoshimi Miyabi'`) |
 | **`rarity`** | `text` | NOT NULL | 에이전트 등급 (`'S'` 또는 `'A'`) |
-| **`specialtyId`** | `uuid` | FK (`specialty.id`) | 전투 특성 UUID (강공, 격파, 이상, 지원, 방어, 명파) |
+| **`specialtyId`** | `uuid` | FK (`specialty.id`) | 전투 특성 UUID (강공, 격파, 이상, 지원, 방어, 명파, 단조) |
 | **`attributeId`** | `uuid` | FK (`attribute.id`) | 속성 UUID (물리, 불, 얼음, 전기, 에테르 등 10종) |
 | **`factionId`** | `bigint` | FK (`faction.id`) | 소속 진영 ID (e.g. 5, 164854) |
 | **`color`** | `text` | NULL | 캐릭터 고유 테마 헥스컬러 (e.g. `'#30ae9e'`) |

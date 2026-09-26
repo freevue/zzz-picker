@@ -123,7 +123,7 @@ erDiagram
 - `nameKo` / `nameEn`: 캐릭터 단축명 (미야비 / Miyabi).
 - `fullNameKo` / `fullNameEn`: 캐릭터 공식 풀네임 (호시미 미야비 / Hoshimi Miyabi).
 - `rarity` (`text`): 등급 (`'S'`, `'A'`).
-- `specialtyId` (`uuid`, FK): 6대 특성 (강공, 격파, 이상, 지원, 방어, 명파).
+- `specialtyId` (`uuid`, FK): 전투 특성 (강공, 격파, 이상, 지원, 방어, 명파, 단조).
 - `attributeId` (`uuid`, FK): 속성 (물리, 불, 얼음, 전기, 에테르, 바람, 루멘 등).
 - `factionId` (`bigint`, FK): 소속 진영 (e.g. 165576 대공동 6과).
 - `isPickup` (`boolean`): 한정 픽업 여부 (1차/2차 밴 대상 필터링에 필수).
