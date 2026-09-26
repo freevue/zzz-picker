@@ -59,9 +59,10 @@ export enum Specialty {
   STUN = '격파',
   ANOMALY = '이상',
   DEFENSE = '방어',
+  ARMORER = '단조',
 }
 
-export const DEALER = [Specialty.ATTACK, Specialty.RUPTURE, Specialty.ANOMALY]
+export const DEALER = [Specialty.ATTACK, Specialty.RUPTURE, Specialty.ANOMALY, Specialty.ARMORER]
 export const SUPPORT = [Specialty.SUPPORT, Specialty.STUN, Specialty.DEFENSE]
 
 export enum Position {
