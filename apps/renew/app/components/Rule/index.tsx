@@ -108,7 +108,7 @@ const Rule: React.FC<Props> = (props) => {
                   <Typo>
                     <Strong>B선수</Strong>는 이전에 밴이 된 캐릭터와 다른 포지션의{' '}
                     <Strong>S급픽업 캐릭터 2개</Strong>를 선택합니다. <br />
-                    <Caption>딜러 포지션 (강공, 이상, 명파)</Caption> <br />
+                    <Caption>딜러 포지션 (강공, 이상, 명파, 단조)</Caption> <br />
                     <Caption>서포터 포지션 (지원, 격파, 방어)</Caption>
                   </Typo>,
                   <Typo>

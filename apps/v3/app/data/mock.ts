@@ -5,7 +5,7 @@
  */
 
 export type GridAttribute = 'Fire' | 'Electric' | 'Ice' | 'Physical' | 'Ether'
-export type GridSpecialty = 'Dps' | 'Stun' | 'Support' | 'Anomaly' | 'Defense'
+export type GridSpecialty = 'Dps' | 'Stun' | 'Support' | 'Anomaly' | 'Defense' | 'Armorer'
 
 export type MockAgent = {
   id: number
@@ -19,9 +19,9 @@ export type MockAgent = {
   isTeaser: boolean
 }
 
-// 포지션: 딜러(강공/이상/명파) · 서포터(지원/격파/방어)
-const DEALER: GridSpecialty[] = ['Dps', 'Anomaly']
-export const isDealer = (s: GridSpecialty) => DEALER.includes(s)
+// 포지션: 딜러(강공/이상/명파/단조) · 서포터(지원/격파/방어)
+const DEALER: GridSpecialty[] = ['Dps', 'Anomaly', 'Armorer']
+export const isDealer = (specialty: GridSpecialty) => DEALER.includes(specialty)
 
 const A_ROW = (
   id: number,
