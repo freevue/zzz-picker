@@ -1,28 +1,28 @@
 ---
 name: upload-r2-image
-description: 로컬 파일 또는 웹(http/https) 이미지를 Cloudflare R2에 단건·다건 업로드하고 공개 URL을 반환한다. Cloudflare REST API를 사용하며 AWS SDK는 쓰지 않는다. 사용자가 이미지를 R2 경로에 올려 달라고 하거나, 업로드 결과 URL을 요청할 때 사용한다. 자격증명은 Cursor Cloud Secrets에서 읽는다.
+description: 로컬 파일 또는 웹(http/https) 이미지를 Cloudflare R2에 단건·다건 업로드하고 공개 URL을 반환한다. Cloudflare REST API를 사용하며 AWS SDK는 쓰지 않는다. 사용자가 이미지를 R2 경로에 올려 달라고 하거나 업로드 URL을 요청할 때 사용한다.
 ---
 
 # R2 이미지 단건·다건 업로드
 
 로컬 파일 경로 또는 **웹 서버 이미지 URL**을 Cloudflare R2 버킷에 업로드한다. **경로(prefix)는 사용자가 지정**하고, **파일명은 항상 UUID**로 바꾼다.
 
-프로젝트 `.env`에 의존하지 않는다. 자격증명은 **Cursor Cloud Secrets**에 등록된 환경변수만 사용한다.
+특정 AI 에이전트나 IDE에 종속되지 않는다. 현재 실행 환경의 안전한 secret 저장소에서 업로드 프로세스로 주입된 환경변수만 사용한다. 프로젝트 `.env`는 읽지 않는다.
 
-## Cursor Cloud Secrets 설정
+## 자격증명
 
-[Cloud Agents 대시보드](https://cursor.com/dashboard/cloud-agents) → Secrets 탭에 아래를 등록한다.
+업로드 프로세스에 다음 환경변수를 제공한다.
 
 | 이름                   | 타입                 | 필수 | 설명                                                   |
 | ---------------------- | -------------------- | ---- | ------------------------------------------------------ |
-| `CLOUDFLARE_API_TOKEN` | Runtime Secret       | ✅   | Cloudflare API Token (R2 Edit)                         |
-| `R2_ACCOUNT_ID`        | Environment Variable | ✅   | Cloudflare Account ID (`CLOUDFLARE_ACCOUNT_ID`도 허용) |
-| `R2_BUCKET_NAME`       | Environment Variable | ❌   | 기본값 `zzz-picker`                                    |
-| `R2_PUBLIC_URL`        | Environment Variable | ❌   | 기본값 `https://images.zzz.freevue.dev`                |
+| `CLOUDFLARE_API_TOKEN` | 필수 | Cloudflare API Token (R2 Edit) |
+| `R2_ACCOUNT_ID` | 필수 | Cloudflare Account ID (`CLOUDFLARE_ACCOUNT_ID`도 허용) |
+| `R2_BUCKET_NAME` | 선택 | 기본값 `zzz-picker` |
+| `R2_PUBLIC_URL` | 선택 | 기본값 `https://images.zzz.freevue.dev` |
 
 - 토큰 권한: Account → Workers R2 Storage → Edit (또는 Object Read & Write)
-- Secrets 변경 후 Cloud Agent 환경을 **Update Existing Env** 또는 **Start Fresh**로 갱신해야 반영된다
-- `.env` / `--env-file`은 사용하지 않는다. `process.env`에 주입된 값만 읽는다
+- 변수는 업로드 프로세스의 환경에서 읽는다. 값이 없으면 필요한 변수명만 알리고 멈춘다.
+- 자격증명 값은 로그·사용자 응답·커맨드 출력에 노출하지 않는다.
 
 ## 기본값
 
@@ -58,13 +58,13 @@ description: 로컬 파일 또는 웹(http/https) 이미지를 Cloudflare R2에 
 ## 워크플로우
 
 1. 사용자 요청에서 `(로컬 경로 또는 웹 URL, R2 경로)` 쌍을 추출한다.
-2. `CLOUDFLARE_API_TOKEN`, `R2_ACCOUNT_ID`(또는 `CLOUDFLARE_ACCOUNT_ID`)가 `process.env`에 있는지 확인한다. 없으면 Cursor Cloud Secrets 등록을 안내하고 중단한다.
+2. `CLOUDFLARE_API_TOKEN`, `R2_ACCOUNT_ID`(또는 `CLOUDFLARE_ACCOUNT_ID`)가 업로드 프로세스 환경에 있는지 확인한다. 없으면 필요한 변수명만 안내하고 중단한다.
 3. 아래 스크립트로 업로드한다 (한 번에 여러 쌍 가능). 웹 URL이면 먼저 다운로드한 뒤 R2에 PUT한다.
 4. 성공한 항목의 **공개 URL**을 사용자에게 표로 보여준다. 실패한 항목은 이유를 함께 표시한다.
 
 ### 실행 명령
 
-프로젝트 루트에서 실행한다. `--env-file`은 붙이지 않는다. `--file` / `--url` / `--source`는 동일하게 로컬·URL을 받는다.
+프로젝트 루트에서 실행한다. 프로젝트 `.env`를 주입하지 않는다. `--file` / `--url` / `--source`는 동일하게 로컬·URL을 받는다.
 
 ```bash
 npx tsx .cursor/skills/upload-r2-image/scripts/upload.ts \
